@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "902416299879",
+    "firebase_url": "https://dremfoo-fdias.firebaseio.com",
+    "project_id": "dremfoo-fdias",
+    "storage_bucket": "dremfoo-fdias.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902416299879:android:cdc0dcab1107a9d786a1c2",
+        "android_client_info": {
+          "package_name": "br.com.dias.dremfoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902416299879-cebvgo2ggf75ha96hgufcapcs0bguda6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.dias.dremfoo",
+            "certificate_hash": "99cb6b6c6aef6ad0decd1e566690c3438d8a3caa"
+          }
+        },
+        {
+          "client_id": "902416299879-goolj1nr57jbt7lrfkjd0bhdlqttm662.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTIxfb63P8nvBJa32MfHvyUVvlIimfwoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902416299879-goolj1nr57jbt7lrfkjd0bhdlqttm662.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

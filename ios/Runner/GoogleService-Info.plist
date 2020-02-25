@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>902416299879-2it7ke3b9v06rlgu621vduu2l62kqc4q.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.902416299879-2it7ke3b9v06rlgu621vduu2l62kqc4q</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>902416299879-cebvgo2ggf75ha96hgufcapcs0bguda6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDS3-7JYRPr7LlFzSecblTKVvTq_t2cBDw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>902416299879</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.dias.dremfoo</string>
+	<key>PROJECT_ID</key>
+	<string>dremfoo-fdias</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dremfoo-fdias.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:902416299879:ios:c6e43d2294504f9b86a1c2</string>
+	<key>DATABASE_URL</key>
+	<string>https://dremfoo-fdias.firebaseio.com</string>
+</dict>
+</plist>
