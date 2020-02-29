@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/resources/strings.dart';
+import 'package:dremfoo/utils/file_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -16,8 +17,8 @@ class FirebaseService {
   final _googleSign = GoogleSignIn();
   final _auth = FirebaseAuth.instance;
 
-  Future<ResponseApi> loginWithEmailAndPassword(
-      BuildContext context, String email, String password) async {
+  Future<ResponseApi> loginWithEmailAndPassword(BuildContext context,
+      String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -49,7 +50,8 @@ class FirebaseService {
             break;
         }
         print(
-            "Login with Google COD: ${exception.code} MSG: ${exception.message}");
+            "Login with Google COD: ${exception.code} MSG: ${exception
+                .message}");
       } else {
         print("Login with Google error: $error");
       }
@@ -71,13 +73,13 @@ class FirebaseService {
 
       return ResponseApi<FirebaseUser>.ok(result: user);
     } catch (error) {
-      print("Erro ao criar o usuário: ${error}");
+      print("Erro ao atualizar o usuário: ${error}");
       return ResponseApi<FirebaseUser>.error(msg: error.toString());
     }
   }
 
-  Future<ResponseApi> createUserWithEmailAndPassword(
-      BuildContext context, String email, String password,
+  Future<ResponseApi> createUserWithEmailAndPassword(BuildContext context,
+      String email, String password,
       {String name, File photo}) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
@@ -88,6 +90,7 @@ class FirebaseService {
       saveUser(context, name, email);
 
       var urlPhotoUser = null;
+
       if (photo != null) {
         urlPhotoUser = await FirebaseStorageService()
             .uploadFileUserOn(photo, id: "user_photo");
@@ -104,13 +107,23 @@ class FirebaseService {
 
       return ResponseApi<FirebaseUser>.ok(result: currentUser);
     } catch (error) {
+      String msg = error.toString();
       if (error is PlatformException) {
+
+        PlatformException exception = error as PlatformException;
+
+        switch (exception.code) {
+          case 'ERROR_EMAIL_ALREADY_IN_USE':
+            msg = Strings.msgErroEmailAlReadyInUse;
+            break;
+        }
+
         print(
-            "Erro ao criar o usuário: cod - ${error.code} mensagem - ${error.message}");
-        return ResponseApi<FirebaseUser>.error(msg: error.toString());
+            "Erro ao criar o usuário: cod - ${error.code} mensagem - ${error
+                .message}");
       }
-      print("Erro ao criar o usuário: ${error}");
-      return ResponseApi<FirebaseUser>.error(msg: error.toString());
+
+      return ResponseApi<FirebaseUser>.error(msg: msg);
     }
   }
 
@@ -118,7 +131,7 @@ class FirebaseService {
     try {
       final GoogleSignInAccount account = await _googleSign.signIn();
       final GoogleSignInAuthentication authentication =
-          await account.authentication;
+      await account.authentication;
 
       print("Google User: ${account.email}");
 
@@ -141,14 +154,14 @@ class FirebaseService {
     }
   }
 
-  void setUidUser(uid){
-    if(uid != null){
+  void setUidUser(uid) {
+    if (uid != null) {
       fireBaseUserUid = uid;
     }
   }
 
   void saveUser(BuildContext context, name, email) {
-    if(name != null && email != null){
+    if (name != null && email != null) {
       DocumentReference refUsers =
       Firestore.instance.collection("users").document(fireBaseUserUid);
       refUsers.setData(

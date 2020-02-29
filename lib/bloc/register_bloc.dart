@@ -56,7 +56,11 @@ class RegisterBloc extends BaseBloc {
   }
 
   onAddImage() async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File image = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 300,
+      imageQuality: 80
+    );
 
     user.picture = image;
 

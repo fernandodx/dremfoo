@@ -5,5 +5,6 @@ class Strings {
   static const String msgErroEmailInvalid = "E-mail inválido.";
   static const String titleRegisterEmail = "Cadastro";
   static const String labelNotRegister = "Não tenho conta";
+  static const String msgErroEmailAlReadyInUse = "Você já possue uma conta com esse e-mail.";
 
 }
