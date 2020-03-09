@@ -49,7 +49,7 @@ class RegisterBloc extends BaseBloc {
         return user;
       } else {
         alertBottomSheet(context,
-            msg: responseApi.msg, title: "Ops", tipoAlert: TipoAlert.ERROR);
+            msg: responseApi.msg, title: "Ops", type: TypeAlert.ERROR);
         return null;
       }
     }

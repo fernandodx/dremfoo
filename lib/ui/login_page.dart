@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/bloc/login_bloc.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/strings.dart';
@@ -85,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
         icon: Icons.email,
         inputAction: TextInputAction.next,
         onSaved: (value) => _bloc.user.email = value,
+        controller: _bloc.textEmailController,
         name: "E-mail",
       ),
       SizedBox(height: 16),
@@ -109,11 +109,22 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
       SizedBox(height: 16),
-      AppButtonDefault(
-          decoration: TextDecoration.underline,
-          label: Strings.labelNotRegister,
-          type: TypeButton.FLAT,
-          onPressed: () => push(context, RegisterPage())),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          AppButtonDefault(
+              decoration: TextDecoration.underline,
+              label: Strings.labelNotRegister,
+              type: TypeButton.FLAT,
+              onPressed: () => push(context, RegisterPage())),
+          AppButtonDefault(
+              decoration: TextDecoration.underline,
+              label: Strings.labelRemenberPassword,
+              type: TypeButton.FLAT,
+              onPressed: () => _bloc.rememberPassword(context)),
+        ],
+      ),
+
       Row(
         children: <Widget>[
           Expanded(
@@ -152,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Expanded(
             child: GoogleSignInButton(
-              onPressed: () => print(""),
+              onPressed: () => onClickLoginWithGoogle(context),
               borderRadius: 8.0,
               text: "Login com Google",
             ),
@@ -164,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Expanded(
             child: FacebookSignInButton(
-              onPressed: () => print(""),
+              onPressed: () => onClickLoginWithFacebook(context),
               borderRadius: 8.0,
               text: "Login com Facebook",
             ),
@@ -178,8 +189,8 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: <Widget>[
         Container(
-          width: 100,
-          height: 100,
+          width: 80,
+          height: 80,
           child: Image.asset("assets/images/logoSomnia.png"),
         ),
         TextUtil.textTitulo("Dremfo", color: Colors.white)
@@ -189,7 +200,23 @@ class _LoginPageState extends State<LoginPage> {
 
   void onClickLogin(BuildContext context) {
     _bloc.login(context).then((user) {
-      if(user != null){
+      if (user != null) {
+        push(context, HomePage());
+      }
+    });
+  }
+
+  void onClickLoginWithFacebook(BuildContext context) {
+    _bloc.loginWithFacebook(context).then((user) {
+      if (user != null) {
+        push(context, HomePage());
+      }
+    });
+  }
+
+  void onClickLoginWithGoogle(BuildContext context) {
+    _bloc.loginWithGoogle(context).then((user) {
+      if (user != null) {
         push(context, HomePage());
       }
     });

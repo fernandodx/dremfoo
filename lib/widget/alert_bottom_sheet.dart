@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 alertBottomSheet(BuildContext context,
     {@required String msg,
-    TipoAlert tipoAlert = TipoAlert.ALERT,
+    TypeAlert type = TypeAlert.ALERT,
     Function onTapDefaultButton,
     String nameButtonDefault = "OK",
     String title = "Alerta",
@@ -71,7 +71,7 @@ alertBottomSheet(BuildContext context,
                   Container(
                     width: 100,
                     height: 100,
-                    child: animationFlareForType(tipoAlert),
+                    child: animationFlareForType(type),
                   ),
                 ],
               )
@@ -149,13 +149,13 @@ titleWidget(String titulo) {
   );
 }
 
-animationFlareForType(TipoAlert tipoAlert){
+animationFlareForType(TypeAlert tipoAlert){
 
   switch(tipoAlert){
-    case TipoAlert.SUCESS:
+    case TypeAlert.SUCESS:
       return animationflareSucess();
 
-    case TipoAlert.ERROR:
+    case TypeAlert.ERROR:
       return animationflareError();
 
     default:
@@ -269,4 +269,4 @@ Container body(BuildContext context) {
   );
 }
 
-enum TipoAlert { SUCESS, ALERT, ERROR }
+enum TypeAlert { SUCESS, ALERT, ERROR }
