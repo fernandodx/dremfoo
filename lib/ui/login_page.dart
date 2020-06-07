@@ -1,3 +1,4 @@
+import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/bloc/login_bloc.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/strings.dart';
@@ -19,14 +20,23 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _bloc = LoginBloc();
+  Widget pageInit;
 
   @override
   void initState() {
     super.initState();
 
-    List<Widget> listBody = [];
+    pageInit = Center(child: CircularProgressIndicator(),);
 
-    listBody.add(body(context));
+    FirebaseService().checkLoginOn().then((isLoginOk){
+      if(isLoginOk){
+        push(context, HomePage(), isReplace: true);
+      }else{
+        setState(() {
+          pageInit = body(context);
+        });
+      }
+    });
   }
 
   @override
@@ -37,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Stack(
           children: <Widget>[
             background(),
-            body(context),
+            Scrollbar(child: pageInit),
             _bloc.loading(),
           ],
         ),

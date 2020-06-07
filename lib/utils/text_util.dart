@@ -13,19 +13,32 @@ class TextUtil {
     );
   }
 
-  static Text textDefault(String value) {
+  static Text textDefault(String value, {Color color = Colors.blueGrey, double fontSize = 14, TextAlign align = TextAlign.start}) {
     return Text(
       value,
+      textAlign: align,
+      overflow: TextOverflow.clip,
       style: TextStyle(
-        fontSize: 14,
-        color: Colors.blueGrey,
+        fontSize: fontSize,
+        color: color,
       ),
     );
   }
 
-  static Text textTitulo(String value, {color = AppColors.colorPrimaryDark}) {
+  static Text textAccent(String value) {
     return Text(
       value,
+      style: TextStyle(
+        fontSize: 14,
+        color: AppColors.colorAcent,
+      ),
+    );
+  }
+
+  static Text textTitulo(String value, {color = AppColors.colorPrimaryDark,  TextAlign align = TextAlign.start}) {
+    return Text(
+      value,
+      textAlign: align,
       style: TextStyle(fontSize: 20, color: color, fontWeight: FontWeight.bold),
     );
   }

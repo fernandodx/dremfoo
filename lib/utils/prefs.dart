@@ -18,6 +18,11 @@ class Prefs {
     return prefs.getString(key) ?? "";
   }
 
+  static Future<List<String>> getListString(String key) async {
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(key) ?? null;
+  }
+
   static void putBool(String key, bool valor) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool(key, valor);
@@ -31,6 +36,16 @@ class Prefs {
   static void putString(String key, String valor) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString(key, valor);
+  }
+
+  static void putListString(String key, List<String> valor) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(key, valor);
+  }
+
+  static void removePref(String key) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
   }
 
 

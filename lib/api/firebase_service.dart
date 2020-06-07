@@ -1,8 +1,16 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/eventbus/main_event_bus.dart';
+import 'package:dremfoo/model/chart_goals.dart';
+import 'package:dremfoo/model/daily_goal.dart';
+import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/response_api.dart';
+import 'package:dremfoo/model/step_dream.dart';
+import 'package:dremfoo/model/user.dart';
 import 'package:dremfoo/resources/strings.dart';
+import 'package:dremfoo/utils/prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +34,7 @@ class FirebaseService {
     try {
       final GoogleSignInAccount account = await _googleSign.signIn();
       final GoogleSignInAuthentication authentication =
-      await account.authentication;
+          await account.authentication;
 
       print("Google User: ${account.email}");
 
@@ -40,10 +48,12 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi<FirebaseUser>> _loginWithCredential(AuthCredential credential, BuildContext context) async {
-     AuthResult result = await _auth.signInWithCredential(credential);
+  Future<ResponseApi<FirebaseUser>> _loginWithCredential(
+      AuthCredential credential, BuildContext context) async {
+    AuthResult result = await _auth.signInWithCredential(credential);
     final FirebaseUser user = await result.user;
-    saveUser(context, user.displayName, user.email);
+    MainEventBus().get(context).updateUser(user);
+    saveUser(context, user);
     print("Login realizado com sucesso!!!");
     print("Nome: ${user.displayName}");
     print("E-mail: ${user.email}");
@@ -53,9 +63,9 @@ class FirebaseService {
   }
 
   Future<ResponseApi> loginWithFacebook(BuildContext context) async {
-    try{
-
-      FacebookLoginResult result = await _fbLogin.logIn(['email', 'public_profile']);
+    try {
+      FacebookLoginResult result =
+          await _fbLogin.logIn(['email', 'public_profile']);
       String msg = "";
 
       switch (result.status) {
@@ -74,12 +84,10 @@ class FirebaseService {
           return ResponseApi.error(msg: msg);
           break;
       }
-
     } catch (error) {
       print("Login with Google error: $error");
       return ResponseApi.error(msg: error.toString());
     }
-
   }
 
   Future<ResponseApi> loginWithEmailAndPassword(
@@ -88,11 +96,12 @@ class FirebaseService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       final FirebaseUser user = await result.user;
+      MainEventBus().get(context).updateUser(user);
       print("Login realizado com sucesso!!!");
       print("Nome: ${user.displayName}");
       print("E-mail: ${user.email}");
       print("Foto: ${user.photoUrl}");
-      saveUser(context, user.displayName, user.email);
+      saveUser(context, user);
 
       return ResponseApi<FirebaseUser>.ok(result: user);
     } catch (error) {
@@ -132,8 +141,9 @@ class FirebaseService {
       updateUser.displayName = name ?? "";
 
       var user = await FirebaseAuth.instance.currentUser();
+      MainEventBus().get(context).updateUser(user);
       user.updateProfile(updateUser);
-      saveUser(context, user.displayName, user.email);
+      saveUser(context, user);
 
       return ResponseApi<FirebaseUser>.ok(result: user);
     } catch (error) {
@@ -150,8 +160,8 @@ class FirebaseService {
           email: email, password: password);
 
       FirebaseUser user = await result.user;
-      setUidUser(user.uid);
-      saveUser(context, name, email);
+      MainEventBus().get(context).updateUser(user);
+      saveUser(context, user);
 
       var urlPhotoUser = null;
 
@@ -189,25 +199,453 @@ class FirebaseService {
     }
   }
 
-
-
   void setUidUser(uid) {
     if (uid != null) {
       fireBaseUserUid = uid;
     }
   }
 
-  void saveUser(BuildContext context, name, email) {
-    if (name != null && email != null) {
-      DocumentReference refUsers =
-          Firestore.instance.collection("users").document(fireBaseUserUid);
-      refUsers.setData({"name": name, "e-mail": email}).catchError((error) {
+  void saveUser(BuildContext context, FirebaseUser user) {
+    if (user.displayName != null && user.email != null) {
+      try {
+        Firestore.instance
+            .collection("users")
+            .document(user.uid)
+            .setData({"name": user.displayName, "e-mail": user.displayName});
+        savePrefsUser(user);
+        setUidUser(user.uid);
+      } catch (error) {
         print("ERRO AO SALVAR O USUARIO : $error");
-      });
+      }
+    }
+  }
+
+  void savePrefsUser(FirebaseUser user) {
+    List<String> listData = List();
+    listData.add(user.uid);
+    listData.add(user.displayName);
+    listData.add(user.email);
+    listData.add(user.photoUrl);
+
+    Prefs.putListString("USER_PREF", listData);
+  }
+
+  Future<User> getPrefsUser() async {
+    List<String> listData = await Prefs.getListString("USER_PREF");
+
+    if (listData == null || listData.isEmpty) {
+      return null;
     }
 
-//      MainEventBus().get(context).updateUser(user);
+    User user = User();
+    user.uid = listData[0];
+    user.name = listData[1];
+    user.email = listData[2];
+    user.urlPicture = listData[3];
+
+    return user;
   }
+
+  void removeUserPref() {
+    Prefs.removePref("USER_PREF");
+  }
+
+  Future<bool> checkLoginOn() async {
+    User user = await getPrefsUser();
+    if (user != null) {
+      setUidUser(user.uid);
+      return true;
+    }
+
+    return false;
+  }
+
+  ResponseApi<CollectionReference> findDreams() {
+    try {
+      DocumentReference refUsers =
+          Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      CollectionReference listDreamRef = refUsers.collection("dreams");
+
+      return ResponseApi.ok(result: listDreamRef);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  ResponseApi<CollectionReference> findSteps(Dream dream) {
+    try {
+      DocumentReference refUsers =
+          Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      CollectionReference listStepsRef = refUsers
+          .collection("dreams")
+          .document(dream.uid)
+          .collection("steps");
+
+      return ResponseApi.ok(result: listStepsRef);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  ResponseApi<CollectionReference> findDailyGoals(Dream dream) {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      CollectionReference listStepsRef = refUsers
+          .collection("dreams")
+          .document(dream.uid)
+          .collection("dailyGoals");
+
+      return ResponseApi.ok(result: listStepsRef);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<List<DailyGoal>>> findDailyGoalsCompletedHist(Dream dream, DateTime dateStart, DateTime dateEnd) async {
+    try {
+      DocumentReference dreamRef = dream.reference;
+      Timestamp start = Timestamp.fromDate(DateTime(dateStart.year, dateStart.month, dateStart.day));
+      Timestamp end = Timestamp.fromDate(DateTime(dateEnd.year, dateEnd.month, dateEnd.day).add(Duration(days: 1)));
+
+      QuerySnapshot query = await dreamRef.collection("dailyCompletedHist")
+                            .where("lastDateCompleted", isGreaterThanOrEqualTo: start)
+                            .where("lastDateCompleted", isLessThanOrEqualTo: end)
+                            .getDocuments();
+
+      List<DailyGoal> list = List();
+
+      for(DocumentSnapshot snapshot in query.documents){
+        list.add(DailyGoal.fromMap(snapshot.data));
+      }
+
+      return ResponseApi.ok(result: list);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<Dream>> findDream(String dreamPropouse) async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DocumentSnapshot dreamRef = await refUsers.collection("dreams")
+                                               .document(dreamPropouse).get();
+
+      return ResponseApi.ok(result: Dream.fromMap(dreamRef.data));
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<List<StepDream>>> findStepsForDream(String dreamPropouse) async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      CollectionReference listStepsRef = refUsers
+          .collection("dreams")
+          .document(dreamPropouse)
+          .collection("steps");
+
+       List<StepDream> listSteps = List();
+       QuerySnapshot querySnapshot = await listStepsRef.getDocuments();
+
+       for(DocumentSnapshot snapshot in querySnapshot.documents){
+          listSteps.add(StepDream.fromMap(snapshot.data));
+       }
+
+      return ResponseApi.ok(result: listSteps);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<bool>> findStepToday(String nameStep) async {
+    try {
+      DocumentReference refUsers =
+          Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DateTime dateTime = DateTime.now();
+
+      DocumentSnapshot listStepsRef =  await refUsers
+          .collection("stepsCompletedToday")
+          .document("${dateTime.year}-${dateTime.month}-${dateTime.day}")
+          .collection("steps")
+      .document(nameStep).get();
+
+      return ResponseApi.ok(result: listStepsRef.exists);
+
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  ResponseApi<Void> updateStepToday(String nameStep, bool isSelected) {
+    try {
+      DocumentReference refUsers =
+          Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DateTime dateTime = DateTime.now();
+
+      DocumentReference stepCompleted = refUsers
+          .collection("stepsCompletedToday")
+          .document("${dateTime.year}-${dateTime.month}-${dateTime.day}")
+          .collection("steps")
+          .document(nameStep);
+
+      stepCompleted.setData({"isOK": true});
+
+      if (!isSelected) {
+        stepCompleted.delete();
+      }
+
+      return ResponseApi.ok();
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  ResponseApi<Void> updateStepDream(StepDream stepDream) {
+    try {
+
+      DocumentReference stepUpdate = stepDream.reference;
+      stepUpdate.setData(stepDream.toMap());
+
+      return ResponseApi.ok();
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<Void>> updateDailyGoal(DailyGoal dailyGoal) async {
+    try {
+
+      DocumentReference dailyRef = dailyGoal.reference;
+      dailyGoal.uid = dailyRef.documentID;
+
+      dailyRef.setData(dailyGoal.toMap());
+
+      DocumentReference dreamRef = dailyRef.parent().parent();
+      CollectionReference histRef = dreamRef.collection("dailyCompletedHist");
+
+      if(dailyGoal.lastDateCompleted != null){
+        histRef.add(dailyGoal.toMap());
+      }else{
+        QuerySnapshot query = await histRef.where("uid", isEqualTo: dailyGoal.uid).getDocuments();
+        for(DocumentSnapshot snapshot in query.documents){
+          if(snapshot.exists){
+            snapshot.reference.delete();
+          }
+        }
+      }
+
+      return ResponseApi.ok();
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+
+  Future<ResponseApi<DocumentReference>> updateDream(BuildContext context, Dream dream) async {
+    try {
+
+      DocumentReference dreamRef = dream.reference;
+      dreamRef.setData(dream.toMap());
+
+      CollectionReference stepsListRef = dreamRef.collection("steps");
+      CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
+
+      QuerySnapshot queryStep = await stepsListRef.getDocuments();
+      QuerySnapshot queryDaily = await dailyGoalRef.getDocuments();
+
+      List<StepDream> stepsOld = List();
+      List<DailyGoal> dailysOld = List();
+
+      for(DocumentSnapshot stepOld in queryStep.documents){
+        StepDream step = StepDream.fromMap(stepOld.data);
+        step.reference = stepOld.reference;
+
+        stepsOld.add(step);
+        if(!dream.steps.contains(step)){
+          step.reference.delete();
+        }
+      }
+
+      for(DocumentSnapshot dailyOld in queryDaily.documents){
+        DailyGoal daily = DailyGoal.fromMap(dailyOld.data);
+        daily.reference = dailyOld.reference;
+
+        dailysOld.add(daily);
+        if(!dream.dailyGoals.contains(daily)){
+          daily.reference.delete();
+        }
+      }
+
+      for(StepDream stepDream in dream.steps){
+        if(!stepsOld.contains(stepDream)){
+          stepsListRef.add(stepDream.toMap());
+        }else{
+          int index = stepsOld.indexOf(stepDream);
+
+          StepDream dreamCurrent = stepsOld[index];
+          dreamCurrent.position = stepDream.position;
+          dreamCurrent.reference.setData(dreamCurrent.toMap());
+        }
+      }
+
+      for(DailyGoal dailyGoal in dream.dailyGoals){
+        if(!dailysOld.contains(dailyGoal)){
+          dailyGoalRef.add(dailyGoal.toMap());
+        }else{
+          int index = dailysOld.indexOf(dailyGoal);
+
+          DailyGoal dailyCurrent = dailysOld[index];
+          dailyCurrent.position = dailyGoal.position;
+          dailyCurrent.reference.setData(dailyCurrent.toMap());
+        }
+      }
+
+      return ResponseApi.ok(result: dreamRef);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+
+  Future<ResponseApi<String>> saveDream(BuildContext context, Dream dream) async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DocumentReference dreamRef = await refUsers.collection("dreams").add(dream.toMap());
+      CollectionReference stepsListRef = dreamRef.collection("steps");
+      CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
+
+      for(StepDream stepDream in dream.steps){
+        stepsListRef.add(stepDream.toMap());
+      }
+
+      for(DailyGoal dailyGoal in dream.dailyGoals){
+        dailyGoalRef.add(dailyGoal.toMap());
+      }
+
+      return ResponseApi.ok(result: dreamRef.documentID);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<bool>> isStatusStepCompleted(StepDream stepDream, DateTime date) async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DocumentReference dreamRef =
+      refUsers.collection("dreams").document(stepDream.dreamPropose);
+
+      CollectionReference stepsListRef = dreamRef.collection("steps");
+      DocumentReference stepRef = stepsListRef.document(stepDream.step);
+
+      CollectionReference statusDreamListHistRef = stepRef.collection("years");
+
+      DocumentSnapshot histRef = await statusDreamListHistRef
+          .document("${date.year}")
+          .collection("mouth") //Arrumar esse cara
+          .document("${date.month}")
+          .collection("days")
+          .document("${date.day}").get();
+
+      return ResponseApi.ok(result: histRef.exists);
+      
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<List<int>>> findDaysStepCompletedForMonth(StepDream stepDream, DateTime date) async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      DocumentReference dreamRef =
+      refUsers.collection("dreams").document(stepDream.dreamPropose);
+
+      CollectionReference stepsListRef = dreamRef.collection("steps");
+      DocumentReference stepRef = stepsListRef.document(stepDream.step);
+
+      CollectionReference statusDreamListHistRef = stepRef.collection("years");
+
+      QuerySnapshot histRef = await statusDreamListHistRef
+          .document("${date.year}")
+          .collection("mouth") //Arrumar esse cara
+          .document("${date.month}")
+          .collection("days").getDocuments();
+
+      List<int> listDays = List();
+      histRef.documents.forEach((daySnapshot){
+        listDays.add(int.parse(daySnapshot.documentID));
+      });
+
+      return ResponseApi.ok(result: listDays);
+
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+
+//  ResponseApi updateStepDream(StepDream stepDream, bool isSelected,
+//      {DateTime date}) {
+//    try {
+//      DocumentReference refUsers =
+//          Firestore.instance.collection("users").document(fireBaseUserUid);
+//
+//      DocumentReference dreamRef =
+//          refUsers.collection("dreams").document(stepDream.dreamPropose);
+//
+//      CollectionReference stepsListRef = dreamRef.collection("steps");
+//      DocumentReference stepRef = stepsListRef.document(stepDream.step);
+//
+//      CollectionReference statusDreamListRef =
+//          stepRef.collection("statusDream");
+//      CollectionReference statusDreamListHistRef = stepRef.collection("years");
+//
+//      if (date == null) {
+//        date = DateTime.now();
+//      }
+//      int year = date.year;
+//      int mouth = date.month;
+//      int day = date.day;
+//
+//      DocumentReference dayOkRef =
+//          statusDreamListRef.document("$year-$mouth-$day");
+//
+//      dayOkRef.setData({"isOK": true});
+//
+//      DocumentReference histRef = statusDreamListHistRef
+//          .document("$year")
+//          .collection("mouth")
+//          .document("$mouth")
+//          .collection("days")
+//          .document("$day");
+//
+//      histRef.setData({"isOK": true});
+//
+//      if (!isSelected) {
+//        dayOkRef.delete();
+//        histRef.delete();
+//      }
+//
+//      return ResponseApi.ok();
+//    } catch (error) {
+//      return ResponseApi.error(msg: "$error");
+//    }
+//  }
 
   logout() {
     _auth.signOut();

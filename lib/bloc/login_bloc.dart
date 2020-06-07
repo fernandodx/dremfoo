@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/user.dart';
@@ -9,6 +11,12 @@ import 'package:flutter/services.dart';
 import 'base_bloc.dart';
 
 class LoginBloc extends BaseBloc {
+
+  final _loginIsOnStremController = StreamController<bool>();
+
+  Stream<bool> get streamLoginOn => _loginIsOnStremController.stream;
+
+
   final formKey = GlobalKey<FormState>();
 
   User user = User();
@@ -95,4 +103,9 @@ class LoginBloc extends BaseBloc {
     hideLoading();
     return checkResponseApiOnLogin(responseApi, context);
   }
+
+
+
+
+
 }

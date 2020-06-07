@@ -5,6 +5,7 @@ import 'dart:io';
 
 class User {
 
+  String uid;
   String email;
   String name;
   String password;
@@ -14,6 +15,7 @@ class User {
   User();
 
   User.fromMap(Map<String, dynamic> map) {
+    uid = map["uid"];
     email = map["email"];
     name = map["name"];
     password = map["password"];
@@ -22,6 +24,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
+    map["uid"] = this.uid;
     map['email'] = this.email;
     map["name"] = this.name;
     map["password"] = this.password;
@@ -32,5 +35,7 @@ class User {
   String toJson() {
     return convert.json.encode(toMap());
   }
+
+
 
 }

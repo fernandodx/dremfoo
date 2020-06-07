@@ -14,6 +14,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+
   final _bloc = RegisterBloc();
 
   @override

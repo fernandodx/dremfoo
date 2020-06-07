@@ -26,11 +26,14 @@ dependencies:
   connectivity: ^0.4.6+2 #verificar conexão com internet - no web
   shared_preferences: ^0.5.6+1
   cached_network_image: ^2.0.0
-  provider: ^4.0.2
+  provider: ^3.1.0+1
   flutter_auth_buttons: ^0.6.0
   bloc_pattern: ^2.5.1
   flare_flutter: ^2.0.1 # animações
   loading: ^1.0.2
+  flutter_native_image: ^0.0.5
+  fl_chart: ^0.9.4
+  date_util: ^0.1.4
 
   #Exigem configuração no Android ou IOS
   image_picker: ^0.6.3+1

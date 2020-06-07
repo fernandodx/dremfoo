@@ -12,6 +12,7 @@ class AppTextDefault extends StatelessWidget {
   FocusNode nextFocus;
   Function onSaved;
   IconData icon;
+  Function onFieldSubmitted;
 
   AppTextDefault(
       {@required this.name,
@@ -25,6 +26,7 @@ class AppTextDefault extends StatelessWidget {
       this.nextFocus,
       this.onSaved,
       this.icon,
+      this.onFieldSubmitted
       });
 
   @override
@@ -39,6 +41,9 @@ class AppTextDefault extends StatelessWidget {
       onSaved: onSaved,
       onFieldSubmitted: (value) {
         print(value);
+        if(onFieldSubmitted != null){
+          onFieldSubmitted(value);
+        }
         if (nextFocus != null) {
           FocusScope.of(context).requestFocus(nextFocus);
         }
