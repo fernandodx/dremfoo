@@ -34,6 +34,12 @@ dependencies:
   flutter_native_image: ^0.0.5
   fl_chart: ^0.9.4
   date_util: ^0.1.4
+  flutter_youtube: ^2.0.0
+  date_format: ^1.0.8
+  social_media_buttons: ^0.1.2
+  email_launcher: ^1.0.0
+  flutter_share: ^1.0.2+1
+
 
   #Exigem configuração no Android ou IOS
   image_picker: ^0.6.3+1
@@ -45,6 +51,8 @@ dependencies:
   flutter_facebook_login: ^3.0.0
   cloud_firestore: ^0.13.3
   firebase_storage: ^3.1.1
+  smooth_page_indicator: ^0.1.5
+
 
 dev_dependencies:
   flutter_test:

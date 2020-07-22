@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/utils/text_util.dart';
+import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/app_text_default.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +171,9 @@ class ChartGoals {
       Color color = null;
 
       chartGoals.forEach((dataChart) {
-        color = dataChart.color;
+        color = dataChart.color; //Cor gráfico semanal
+//        color = Colors.green;
+        print("Cor Grafico semanal: ${Utils.colorToHex(color)}");
         listDataSpots.add(FlSpot(dataChart.step, dataChart.percentStepCompleted));
       });
 
@@ -232,7 +235,7 @@ class ChartGoals {
 
         barRods.add(BarChartRodData(
           y: goals[mouth].percentStepCompleted,
-          color: goals[mouth].color,
+          color: goals[mouth].color, //Cor da barra mês
           width: width,
         ));
 

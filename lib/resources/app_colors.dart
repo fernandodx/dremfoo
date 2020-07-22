@@ -28,6 +28,14 @@ class AppColors {
             end: FractionalOffset.bottomCenter));
   }
 
+  static BoxDecoration backgroundBoxDecorationImg() {
+    return BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Colors.transparent, Colors.black87],
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter));
+  }
+
 
   static BoxDecoration backgroundDrawerDecoration() {
     return BoxDecoration(
@@ -44,12 +52,6 @@ class AppColors {
         end: FractionalOffset.bottomCenter);
   }
 
-  static Color colorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    return Color(int.parse(hexColor, radix: 16));
-  }
+
 
 }

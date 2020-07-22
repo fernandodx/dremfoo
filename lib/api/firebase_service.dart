@@ -6,11 +6,15 @@ import 'package:dremfoo/eventbus/main_event_bus.dart';
 import 'package:dremfoo/model/chart_goals.dart';
 import 'package:dremfoo/model/daily_goal.dart';
 import 'package:dremfoo/model/dream.dart';
+import 'package:dremfoo/model/hist_goal_month.dart';
+import 'package:dremfoo/model/hist_goal_week.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/step_dream.dart';
 import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/model/video.dart';
 import 'package:dremfoo/resources/strings.dart';
 import 'package:dremfoo/utils/prefs.dart';
+import 'package:dremfoo/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -214,9 +218,21 @@ class FirebaseService {
             .setData({"name": user.displayName, "e-mail": user.displayName});
         savePrefsUser(user);
         setUidUser(user.uid);
+        saveLastAcess();
       } catch (error) {
         print("ERRO AO SALVAR O USUARIO : $error");
       }
+    }
+  }
+  
+  Future<ResponseApi<List<Video>>> findAllVideos() async{
+    try{
+      QuerySnapshot querySnapshot =  await Firestore.instance.collection("videos").orderBy("date", descending: true).getDocuments();
+      List<Video> list = Video.fromListDocumentSnapshot(querySnapshot.documents);
+      return ResponseApi.ok(result: list);
+    }catch(error){
+      print("ERRO AO CONSULTAR VIDEOS : $error");
+      return ResponseApi.error(msg: error.toString());
     }
   }
 
@@ -254,6 +270,7 @@ class FirebaseService {
     User user = await getPrefsUser();
     if (user != null) {
       setUidUser(user.uid);
+      saveLastAcess();
       return true;
     }
 
@@ -273,6 +290,22 @@ class FirebaseService {
     }
   }
 
+  Future<ResponseApi<List<Dream>>> findDreamsGoalWeekOk() async {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      QuerySnapshot querySnapshot =  await refUsers.collection("dreams")
+          .where("isGoalWeekOk", isEqualTo: true)
+          .getDocuments();
+
+      List<Dream> list = Dream.fromListDocumentSnapshot(querySnapshot.documents);
+      return ResponseApi.ok(result: list);
+    } catch (error) {
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
   ResponseApi<CollectionReference> findSteps(Dream dream) {
     try {
       DocumentReference refUsers =
@@ -286,6 +319,37 @@ class FirebaseService {
       return ResponseApi.ok(result: listStepsRef);
     } catch (error) {
       return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  void saveLastAcess() {
+    try {
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      refUsers.collection("hits").add({"dateAcess": Timestamp.now()});
+    } catch (error) {
+      print("$error");
+    }
+  }
+
+  Future<bool> isExistAcessPreviousMonth() async {
+    try {
+      DateTime date = DateTime.now();
+      DocumentReference refUsers =
+      Firestore.instance.collection("users").document(fireBaseUserUid);
+
+      Timestamp firdDayMonth = Timestamp.fromDate(DateTime(date.year, date.month, 1));
+
+      QuerySnapshot query = await refUsers.collection("hits")
+                                  .where("dateAcess", isLessThan: firdDayMonth)
+                                  .getDocuments();
+
+      return query.documents.isNotEmpty;
+
+    } catch (error) {
+      print("$error");
+      return false;
     }
   }
 
@@ -455,7 +519,7 @@ class FirebaseService {
     try {
 
       DocumentReference dreamRef = dream.reference;
-      dreamRef.setData(dream.toMap());
+      dreamRef.updateData(dream.toMap());
 
       CollectionReference stepsListRef = dreamRef.collection("steps");
       CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
@@ -598,57 +662,94 @@ class FirebaseService {
     }
   }
 
-
-//  ResponseApi updateStepDream(StepDream stepDream, bool isSelected,
-//      {DateTime date}) {
-//    try {
-//      DocumentReference refUsers =
-//          Firestore.instance.collection("users").document(fireBaseUserUid);
-//
-//      DocumentReference dreamRef =
-//          refUsers.collection("dreams").document(stepDream.dreamPropose);
-//
-//      CollectionReference stepsListRef = dreamRef.collection("steps");
-//      DocumentReference stepRef = stepsListRef.document(stepDream.step);
-//
-//      CollectionReference statusDreamListRef =
-//          stepRef.collection("statusDream");
-//      CollectionReference statusDreamListHistRef = stepRef.collection("years");
-//
-//      if (date == null) {
-//        date = DateTime.now();
-//      }
-//      int year = date.year;
-//      int mouth = date.month;
-//      int day = date.day;
-//
-//      DocumentReference dayOkRef =
-//          statusDreamListRef.document("$year-$mouth-$day");
-//
-//      dayOkRef.setData({"isOK": true});
-//
-//      DocumentReference histRef = statusDreamListHistRef
-//          .document("$year")
-//          .collection("mouth")
-//          .document("$mouth")
-//          .collection("days")
-//          .document("$day");
-//
-//      histRef.setData({"isOK": true});
-//
-//      if (!isSelected) {
-//        dayOkRef.delete();
-//        histRef.delete();
-//      }
-//
-//      return ResponseApi.ok();
-//    } catch (error) {
-//      return ResponseApi.error(msg: "$error");
-//    }
-//  }
-
   logout() {
     _auth.signOut();
     _googleSign.signOut();
   }
+
+  void updateOnlyField(String field, value,  DocumentReference ref) {
+    ref.updateData({
+       field: value
+    });
+  }
+
+  void updateDataDream(Dream dream) {
+    dream.reference.updateData(dream.toMap());
+  }
+
+  void saveHistWeekCompleted(Dream dream, DateTime firsDayWeek, bool isWonReward) {
+    var hist = HistGoalWeek();
+    hist.firsDayWeek = Timestamp.fromDate(firsDayWeek);
+    hist.numberWeek = Utils.getNumberWeek(firsDayWeek);
+    hist.difficulty = dream.goalWeek;
+    hist.reward = dream.reward;
+    hist.inflection = dream.inflection;
+    hist.isWonReward = isWonReward;
+    hist.isNeedInflection = !isWonReward;
+    hist.isShow = false;
+    
+    dream.reference.collection("histGoalWeekReached").add(hist.toMap());
+  }
+
+  void saveHistMonthCompleted(Dream dream, DateTime date, bool isWonReward) {
+    var hist = HistGoalMonth();
+    hist.dateCompleted = Timestamp.fromDate(date);
+    hist.numberMonth = date.month;
+    hist.difficulty = dream.goalWeek;
+    hist.reward = dream.reward;
+    hist.inflection = dream.inflection;
+    hist.isWonReward = isWonReward;
+    hist.isNeedInflection = !isWonReward;
+    hist.isShow = false;
+
+    dream.reference.collection("histGoalMonthReached").add(hist.toMap());
+  }
+
+  Future<ResponseApi<HistGoalMonth>> findLastHistMonth(Dream dream, {bool isShow = false}) async {
+    try{
+
+      Query query = dream.reference.collection("histGoalMonthReached")
+          .where("isShow", isEqualTo: isShow)
+          .orderBy("numberMonth", descending: true);
+
+      if(query != null){
+        QuerySnapshot querySnapshot = await query.getDocuments();
+        List<HistGoalMonth> list = HistGoalMonth.fromListDocumentSnapshot(querySnapshot.documents);
+        if(list != null && list.isNotEmpty){
+          HistGoalMonth hist = list[0];
+          hist.dream = dream;
+          return ResponseApi.ok(result: hist);
+        }
+      }
+      return ResponseApi.ok(result: null);
+
+    }catch(error){
+      ResponseApi.error(msg: error.toString());
+    }
+  }
+
+  Future<ResponseApi<HistGoalWeek>> findLastHistWeek(Dream dream, {bool isShow = false}) async {
+    try{
+
+      Query query = dream.reference.collection("histGoalWeekReached")
+          .where("isShow", isEqualTo: isShow)
+          .orderBy("numberWeek", descending: true);
+
+      if(query != null){
+        QuerySnapshot querySnapshot = await query.getDocuments();
+        List<HistGoalWeek> list = HistGoalWeek.fromListDocumentSnapshot(querySnapshot.documents);
+        if(list != null && list.isNotEmpty){
+          HistGoalWeek hist = list[0];
+          hist.dream = dream;
+          return ResponseApi.ok(result: hist);
+        }
+      }
+      return ResponseApi.ok(result: null);
+
+    }catch(error){
+      ResponseApi.error(msg: error.toString());
+    }
+  }
+
+
 }

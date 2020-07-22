@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/bloc/base_bloc.dart';
+import 'package:dremfoo/eventbus/main_event_bus.dart';
 import 'package:dremfoo/model/daily_goal.dart';
 import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/step_dream.dart';
@@ -28,13 +28,15 @@ class RegisterDreamsBloc extends BaseBloc {
   TextEditingController dailyGoalTextEditController = TextEditingController();
   TextEditingController dreamTextEditController = TextEditingController();
   TextEditingController rewardTextEditController = TextEditingController();
+  TextEditingController rewardWeekTextEditController = TextEditingController();
   TextEditingController inflectionTextEditController = TextEditingController();
+  TextEditingController inflectionWeekTextEditController = TextEditingController();
 
   final _addimgDreamController = StreamController<Widget>();
 
   Stream<Widget> get streamImgDream => _addimgDreamController.stream;
 
-  void fetch(dreamEdit, Function onRefresh)  {
+  void fetch(dreamEdit, context)  {
     if (dreamEdit == null) {
       dream = Dream();
       final imgDefault = Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"));
@@ -47,8 +49,8 @@ class RegisterDreamsBloc extends BaseBloc {
       dreamForEdit = Dream.copy(dreamEdit);
       dreamTextEditController.text = dream.dreamPropose;
       _addimgDreamController.add(Utils.string64ToImage(dream.imgDream));
-      initStepForWin(dream, onRefresh);
-      initDailyGoals(dream, onRefresh);
+      initStepForWin(dream, context);
+      initDailyGoals(dream, context);
       rewardTextEditController.text = dream.reward;
       inflectionTextEditController.text = dream.inflection;
     }
@@ -84,13 +86,13 @@ class RegisterDreamsBloc extends BaseBloc {
     }
   }
 
-  void initStepForWin(Dream dream, Function onRefresh) {
+  void initStepForWin(Dream dream, context) {
     var inputText = AppTextDefault(
         name: "Passo",
         icon: Icons.queue,
         inputAction: TextInputAction.done,
         controller: stepTextEditController,
-        onFieldSubmitted: (value) => addStepForWin(value, stepsForWin.length, onRefresh));
+        onFieldSubmitted: (value) => addStepForWin(value, stepsForWin.length, context));
 
     stepsForWin.add(inputText);
 
@@ -108,7 +110,7 @@ class RegisterDreamsBloc extends BaseBloc {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.colorAcent,
-        onDeleted: () => removeStepForWin(step.position, onRefresh),
+        onDeleted: () => removeStepForWin(step.position, context),
         deleteIconColor: Colors.white,
       );
 
@@ -118,13 +120,13 @@ class RegisterDreamsBloc extends BaseBloc {
     });
   }
 
-  void initDailyGoals(Dream dream, Function onRefresh) {
+  void initDailyGoals(Dream dream, context) {
     var inputText = AppTextDefault(
         name: "Meta diária",
         icon: Icons.queue,
         inputAction: TextInputAction.done,
         controller: dailyGoalTextEditController,
-        onFieldSubmitted: (value) => addDailyGoals(value, dailyGoals.length, onRefresh));
+        onFieldSubmitted: (value) => addDailyGoals(value, dailyGoals.length, context));
 
     dailyGoals.add(inputText);
 
@@ -142,17 +144,16 @@ class RegisterDreamsBloc extends BaseBloc {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.colorAcent,
-        onDeleted: () => removeDailyGoals(daily.position, onRefresh),
+        onDeleted: () => removeDailyGoals(daily.position, context),
         deleteIconColor: Colors.white,
       );
 
       dailyGoalTextEditController.clear();
       dailyGoals.add(newChip);
-//      onRefresh();
     });
   }
 
-  removeStepForWin(position, Function onRefresh) {
+  removeStepForWin(position, context) {
     stepsForWin.removeAt(position);
     List<Widget> stepTmp = List.of(stepsForWin);
 
@@ -163,12 +164,13 @@ class RegisterDreamsBloc extends BaseBloc {
     for (var position = 1; position < stepTmp.length; position++) {
       Chip chip = stepTmp[position];
       Text text = chip.label;
-      addStepForWinOnly(text.data, position, onRefresh);
+      addStepForWinOnly(text.data, position, context);
     }
-    onRefresh();
+//    onRefresh();
+    MainEventBus().get(context).sendEventUpdateRegisterApp(false);
   }
 
-  removeDailyGoals(position, Function onRefresh) {
+  removeDailyGoals(position, context) {
     dailyGoals.removeAt(position);
     List<Widget> dailyTmp = List.of(dailyGoals);
 
@@ -179,65 +181,14 @@ class RegisterDreamsBloc extends BaseBloc {
     for (var position = 1; position < dailyTmp.length; position++) {
       Chip chip = dailyTmp[position];
       Text text = chip.label;
-      addDailyGoalOnly(text.data, position, onRefresh);
+      addDailyGoalOnly(text.data, position, context);
     }
-    onRefresh();
+//    onRefresh();
+    MainEventBus().get(context).sendEventUpdateRegisterApp(false);
   }
 
 
-  List<Widget> addStepForWinOnly(nameStep, position, Function onRefresh) {
-    var newChip = Chip(
-      avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimaryLight,
-        child: Text(
-          '${position}˚',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      label: Text(
-        nameStep,
-        style: TextStyle(color: Colors.white),
-      ),
-      backgroundColor: AppColors.colorAcent,
-      onDeleted: () => removeStepForWin(position, onRefresh),
-      deleteIconColor: Colors.white,
-    );
-
-    StepDream sd = StepDream();
-    sd.step = nameStep;
-    sd.position = position;
-    dream.steps.add(sd);
-
-    stepsForWin.add(newChip);
-  }
-
-  List<Widget> addDailyGoalOnly(nameStep, position, Function onRefresh) {
-    var newChip = Chip(
-      avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimaryLight,
-        child: Text(
-          '${position}˚',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      label: Text(
-        nameStep,
-        style: TextStyle(color: Colors.white),
-      ),
-      backgroundColor: AppColors.colorAcent,
-      onDeleted: () => removeDailyGoals(position, onRefresh),
-      deleteIconColor: Colors.white,
-    );
-
-    DailyGoal dg = DailyGoal();
-    dg.nameDailyGoal = nameStep;
-    dg.position = position;
-    dream.dailyGoals.add(dg);
-
-    dailyGoals.add(newChip);
-  }
-
-  void addStepForWin(nameStep, position, Function onRefresh) {
+  List<Widget> addStepForWinOnly(nameStep, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
         backgroundColor: AppColors.colorPrimary,
@@ -251,7 +202,59 @@ class RegisterDreamsBloc extends BaseBloc {
         style: TextStyle(color: Colors.white),
       ),
       backgroundColor: AppColors.colorAcent,
-      onDeleted: () => removeStepForWin(position, onRefresh),
+      onDeleted: () => removeStepForWin(position, context),
+      deleteIconColor: Colors.white,
+    );
+
+    StepDream sd = StepDream();
+    sd.step = nameStep;
+    sd.position = position;
+    dream.steps.add(sd);
+
+    stepsForWin.add(newChip);
+  }
+
+  List<Widget> addDailyGoalOnly(nameStep, position, context) {
+    var newChip = Chip(
+      avatar: CircleAvatar(
+        backgroundColor: AppColors.colorPrimary,
+        child: Text(
+          '${position}˚',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      label: Text(
+        nameStep,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: AppColors.colorAcent,
+      onDeleted: () => removeDailyGoals(position, context),
+      deleteIconColor: Colors.white,
+    );
+
+    DailyGoal dg = DailyGoal();
+    dg.nameDailyGoal = nameStep;
+    dg.position = position;
+    dream.dailyGoals.add(dg);
+
+    dailyGoals.add(newChip);
+  }
+
+  void addStepForWin(nameStep, position, context) {
+    var newChip = Chip(
+      avatar: CircleAvatar(
+        backgroundColor: AppColors.colorPrimary,
+        child: Text(
+          '${position}˚',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      label: Text(
+        nameStep,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: AppColors.colorAcent,
+      onDeleted: () => removeStepForWin(position, context),
       deleteIconColor: Colors.white,
     );
 
@@ -264,10 +267,11 @@ class RegisterDreamsBloc extends BaseBloc {
     stepTextEditController.clear();
     stepsForWin.add(newChip);
 
-    onRefresh();
+//    onRefresh();
+  MainEventBus().get(context).sendEventUpdateRegisterApp(false);
   }
 
-  void addDailyGoals(nameGoal, position, Function onRefresh) {
+  void addDailyGoals(nameGoal, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
         backgroundColor: AppColors.colorPrimary,
@@ -281,7 +285,7 @@ class RegisterDreamsBloc extends BaseBloc {
         style: TextStyle(color: Colors.white),
       ),
       backgroundColor: AppColors.colorAcent,
-      onDeleted: () => removeDailyGoals(position, onRefresh),
+      onDeleted: () => removeDailyGoals(position, context),
       deleteIconColor: Colors.white,
     );
 
@@ -293,7 +297,8 @@ class RegisterDreamsBloc extends BaseBloc {
     dailyGoalTextEditController.clear();
     dailyGoals.add(newChip);
 
-    onRefresh();
+//    onRefresh();
+    MainEventBus().get(context).sendEventUpdateRegisterApp(false);
   }
 
 

@@ -1,9 +1,16 @@
 import 'dart:ui';
 
+import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/eventbus/main_event_bus.dart';
 import 'package:dremfoo/resources/app_colors.dart';
+import 'package:dremfoo/ui/info_media_social_page.dart';
+import 'package:dremfoo/ui/list_video_page.dart';
+import 'package:dremfoo/ui/login_page.dart';
+import 'package:dremfoo/utils/nav.dart';
+import 'package:dremfoo/utils/text_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 
 class AppDrawerMenu extends StatelessWidget {
 
@@ -35,50 +42,41 @@ class AppDrawerMenu extends StatelessWidget {
                     },
                   );
                 }),
+            SizedBox(height: 16.0,),
             ListTile(
               leading: Icon(
-                Icons.edit,
+                Icons.live_tv,
                 color: Colors.white,
               ),
-              title: Text(
-                "Editar",
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                "Alterar informações da conta",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () => print("EDITAR"),
+              title: TextUtil.textDefault("Conteúdo gratuito - REVO", color: Colors.white),
+              subtitle: TextUtil.textDefault("Série de vídeos por trás do seu funcionamento, aprenda a dominar seus hábitos", color: Colors.white70),
+              onTap: () => push(context, ListVideoPage()),
             ),
             ListTile(
               leading: Icon(
-                Icons.edit,
+                Icons.people,
                 color: Colors.white,
               ),
-              title: Text(
-                "Editar",
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                "Alterar informações da conta",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () => print("EDITAR"),
+              title: TextUtil.textDefault("Redes Sociais", color: Colors.white),
+              subtitle: TextUtil.textDefault("Siga nos nas nossos canais de comunicação", color: Colors.white70),
+              onTap: () => push(context, InfoMediaSocialPage()),
             ),
             ListTile(
               leading: Icon(
-                Icons.edit,
+                Icons.share,
                 color: Colors.white,
               ),
-              title: Text(
-                "Editar",
-                style: TextStyle(color: Colors.white),
+              title: TextUtil.textDefault("Compartilhe", color: Colors.white),
+              subtitle: TextUtil.textDefault("Compartilhe Revo com os seus amigos", color: Colors.white70),
+              onTap: () => share(),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.exit_to_app,
+                color: Colors.white,
               ),
-              subtitle: Text(
-                "Alterar informações da conta",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () => print("EDITAR"),
+              title: TextUtil.textDefault("Sair", color: Colors.white),
+              onTap: () => exit(context),
             ),
           ],
         ),
@@ -110,5 +108,22 @@ class AppDrawerMenu extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'App Revo',
+        text: 'Olha esse app, ele vai te ajudar a realizar seus sonhos, atráves de foco e metas.',
+        linkUrl: 'https://flutter.dev/',
+        chooserTitle: 'Revo  - Foco com metas'
+    );
+  }
+
+  exit(context) {
+
+    FirebaseService().logout();
+    FirebaseService().removeUserPref();
+    push(context, LoginPage(), isReplace: true);
+
   }
 }

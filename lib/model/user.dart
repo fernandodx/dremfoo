@@ -2,6 +2,8 @@ import 'dart:convert' as convert;
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class User {
 
@@ -11,6 +13,7 @@ class User {
   String password;
   String urlPicture;
   File picture;
+  Timestamp lastAcess;
 
   User();
 
@@ -20,6 +23,7 @@ class User {
     name = map["name"];
     password = map["password"];
     urlPicture = map["urlPicture"];
+    lastAcess = map["lastAcess"];
   }
 
   Map<String, dynamic> toMap() {
@@ -29,6 +33,7 @@ class User {
     map["name"] = this.name;
     map["password"] = this.password;
     map["urlPicture"] = this.urlPicture;
+    map["lastAcess"] = this.lastAcess;
     return map;
   }
 

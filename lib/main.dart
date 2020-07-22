@@ -1,7 +1,9 @@
+import 'package:dremfoo/model/hist_goal_week.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
 import 'package:dremfoo/ui/home_page.dart';
 import 'package:dremfoo/ui/login_page.dart';
+import 'package:dremfoo/ui/report_dreams_week.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
       home: LoginPage(),
 //      home: HomePage(),
-//      home: CadastroSonhoPage(),
+
       ),
     );
   }

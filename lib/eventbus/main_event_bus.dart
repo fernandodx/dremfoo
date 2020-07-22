@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,11 @@ class MainEventBus {
 
   final _eventBusUserController = StreamController<FirebaseUser>.broadcast();
 
+  final _eventBusRegisterDreamController = StreamController<bool>.broadcast();
+
   Stream<TipoEvento> get stream => _eventBusController.stream;
   Stream<FirebaseUser> get streamUser => _eventBusUserController.stream;
+  Stream<bool> get streamRegisterDream => _eventBusRegisterDreamController.stream;
 
   MainEventBus get(context) => Provider.of<MainEventBus>(context, listen: false);
 
@@ -24,6 +28,9 @@ class MainEventBus {
     _eventBusController.add(tipo);
   }
 
+  void sendEventUpdateRegisterApp(bool isFetch){
+    _eventBusRegisterDreamController.add(isFetch);
+  }
 
   void dispose() {
     _eventBusController.close();

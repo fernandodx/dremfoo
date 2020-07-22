@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _bloc.fetch();
+    _bloc.fetch(context);
   }
 
   @override

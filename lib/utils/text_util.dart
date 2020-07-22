@@ -42,4 +42,12 @@ class TextUtil {
       style: TextStyle(fontSize: 20, color: color, fontWeight: FontWeight.bold),
     );
   }
+
+  static Text textTituloVideo(String value, {color = AppColors.colorPrimaryDark,  TextAlign align = TextAlign.start}) {
+    return Text(
+      value,
+      textAlign: align,
+      style: TextStyle(fontSize: 14, color: color, fontWeight: FontWeight.normal),
+    );
+  }
 }
