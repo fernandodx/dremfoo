@@ -26,9 +26,9 @@ class Video {
     return map;
   }
 
-  static List<Video> fromListDocumentSnapshot(List<DocumentSnapshot> list){
+  static List<Video> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      Video video = Video.fromMap(snapshot.data);
+      Video video = Video.fromMap(snapshot.data());
       video.reference = snapshot.reference;
       return video;
     }).toList();

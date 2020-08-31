@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'firebase_service.dart';
 
 class FirebaseStorageService {
+
   Future<String> uploadFileUserOn(File file, {String id}) async {
     return uploadFile("users", file, id: id);
   }

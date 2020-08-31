@@ -26,8 +26,8 @@ class CardChart extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 child: SizedBox(
-                  height: 200,
-                  width: 300, //Colocar o tamnho da tela
+                  height: 150,
+                  width: 200, //Colocar o tamnho da tela
                   child: chart,
                 )
               ),

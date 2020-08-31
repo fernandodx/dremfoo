@@ -1,16 +1,20 @@
+import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Future push(BuildContext context, Widget page, {bool isReplace = false}) {
+Future push(BuildContext context, Widget page, {bool isReplace = false}) async {
   if (isReplace) {
-    return Navigator.pushReplacement(
+    final result = Navigator.pushReplacement(
         context, FadeRoute(builder: (context) => page));
+    return result;
   }
-  return Navigator.push(context, FadeRoute(builder: (context) => page));
+  final result = await Navigator.push(context, FadeRoute(builder: (context) => page));
+  AnalyticsUtil.setCurrentScreen(page.toString(), page.toString());
+  return result;
 }
 
-bool pop(BuildContext context, result) {
-  return Navigator.pop(context, result);
+void pop(BuildContext context, result) {
+   Navigator.pop(context, result);
 }
 
 class FadeRoute<T> extends MaterialPageRoute<T> {
@@ -21,9 +25,9 @@ class FadeRoute<T> extends MaterialPageRoute<T> {
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
 
-    if (settings.isInitialRoute) {
-      return child;
-    }
+//    if (settings.isInitialRoute) {
+//      return child;
+//    }
     return FadeTransition(
       opacity: animation,
       child: child,

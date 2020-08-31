@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/model/dream.dart';
 
 class DailyGoal {
 
@@ -7,6 +8,7 @@ class DailyGoal {
   String descriptionDailyGoal;
   int position;
   Timestamp lastDateCompleted;
+  Dream dreamParent;
   DocumentReference reference;
 
 //  Set<StatusDream> statusDream = Set();
@@ -31,6 +33,15 @@ class DailyGoal {
     status.descriptionDailyGoal = data['descriptionDailyGoal'];
     status.lastDateCompleted = data['lastDateCompleted'];
     return status;
+  }
+
+  static List<DailyGoal> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
+    return list.map((snapshot) {
+      DailyGoal dailyGoal = fromMap(snapshot.data());
+      dailyGoal.reference = snapshot.reference;
+      dailyGoal.uid = snapshot.id;
+      return dailyGoal;
+    }).toList();
   }
 
   bool isCompletedToday(){

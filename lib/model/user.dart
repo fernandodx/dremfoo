@@ -3,27 +3,34 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/model/user_focus.dart';
 
 
-class User {
+class UserRevo {
 
   String uid;
   String email;
   String name;
   String password;
   String urlPicture;
+  Timestamp initNotification;
+  Timestamp finishNotification;
+  bool isEnableNotification;
   File picture;
-  Timestamp lastAcess;
+  UserFocus focus;
 
-  User();
+  UserRevo();
 
-  User.fromMap(Map<String, dynamic> map) {
+  UserRevo.fromMap(Map<String, dynamic> map) {
     uid = map["uid"];
     email = map["email"];
     name = map["name"];
     password = map["password"];
     urlPicture = map["urlPicture"];
-    lastAcess = map["lastAcess"];
+    initNotification = map["initNotification"];
+    finishNotification = map["finishNotification"];
+    isEnableNotification = map["isEnableNotification"];
+    focus = UserFocus.fromMap(map['focus']);
   }
 
   Map<String, dynamic> toMap() {
@@ -33,7 +40,10 @@ class User {
     map["name"] = this.name;
     map["password"] = this.password;
     map["urlPicture"] = this.urlPicture;
-    map["lastAcess"] = this.lastAcess;
+    map["initNotification"] = this.initNotification;
+    map["finishNotification"] = this.finishNotification;
+    map["isEnableNotification"] = this.isEnableNotification;
+    map["focus"] = this.focus != null ? this.focus.toMap() : null;
     return map;
   }
 

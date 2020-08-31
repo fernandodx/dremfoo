@@ -71,6 +71,8 @@
       <false />
       <key>io.flutter.embedded_views_preview</key>
       <true />
+      <key>FirebaseAppDelegateProxyEnabled</key>
+      <false/>
       <key>FacebookAppID</key>
       <string>496928280999044</string>
       <key>FacebookDisplayName</key>

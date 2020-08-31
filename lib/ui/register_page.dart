@@ -26,6 +26,12 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -55,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: <Widget>[
                         AppTextDefault(
                           name: "Nome",
+                          maxLength: 40,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.text,
                           onSaved: (name) => _bloc.user.name = name,
@@ -65,6 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         AppTextDefault(
                           name: "E-mal",
+                          maxLength: 50,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.emailAddress,
                           onSaved: (email) => _bloc.user.email = email,
@@ -75,6 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         AppTextDefault(
                           name: "Confirme o e-mail",
+                          maxLength: 50,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.emailAddress,
                           controller: _bloc.validatedEmailController,
@@ -88,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         AppTextDefault(
                           name: "Senha",
+                          maxLength: 12,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.visiblePassword,
                           isPassword: true,

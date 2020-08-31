@@ -1,8 +1,13 @@
 import 'dart:async';
 
+import 'package:date_util/date_util.dart';
 import 'package:dremfoo/api/firebase_service.dart';
+import 'package:dremfoo/eventbus/user_event_bus.dart';
+import 'package:dremfoo/model/level_revo.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/model/user_focus.dart';
+import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,11 +24,11 @@ class LoginBloc extends BaseBloc {
 
   final formKey = GlobalKey<FormState>();
 
-  User user = User();
+  UserRevo user = UserRevo();
 
   var textEmailController = TextEditingController();
 
-  Future<FirebaseUser> login(BuildContext context) async {
+  Future<User> login(BuildContext context) async {
     if (!formKey.currentState.validate()) {
       print("Erro na validação");
       return null;
@@ -37,10 +42,10 @@ class LoginBloc extends BaseBloc {
     return checkResponseApiOnLogin(responseApi, context);
   }
 
-  FirebaseUser checkResponseApiOnLogin(ResponseApi responseApi, BuildContext context) {
+  User checkResponseApiOnLogin(ResponseApi responseApi, BuildContext context) {
      if (responseApi.ok) {
-      FirebaseUser user = responseApi.result;
-      print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoUrl}");
+      User user = responseApi.result;
+      print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoURL}");
       return user;
     } else {
       alertBottomSheet(context,
@@ -65,6 +70,7 @@ class LoginBloc extends BaseBloc {
     showLoading();
 
     try {
+      AnalyticsUtil.sendAnalyticsEvent(EventRevo.forgotPassword, parameters: {"user": textEmailController.text});
       await FirebaseService()
           .sendResetPassword(context, textEmailController.text);
 
@@ -97,11 +103,17 @@ class LoginBloc extends BaseBloc {
     return checkResponseApiOnLogin(responseApi, context);
   }
 
-  Future<FirebaseUser> loginWithFacebook(BuildContext context) async {
+  Future<User> loginWithFacebook(BuildContext context) async {
     showLoading();
     ResponseApi responseApi = await FirebaseService().loginWithFacebook(context);
     hideLoading();
     return checkResponseApiOnLogin(responseApi, context);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _loginIsOnStremController.close();
   }
 
 

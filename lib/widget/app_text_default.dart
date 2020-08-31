@@ -1,8 +1,10 @@
+import 'package:dremfoo/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppTextDefault extends StatelessWidget {
   String name;
   String hint;
+  int maxLength;
   bool isPassword;
   TextEditingController controller;
   FormFieldValidator<String> validator;
@@ -14,20 +16,21 @@ class AppTextDefault extends StatelessWidget {
   IconData icon;
   Function onFieldSubmitted;
 
-  AppTextDefault(
-      {@required this.name,
-      this.hint = "",
-      this.isPassword = false,
-      this.controller,
-      this.validator,
-      this.inputType,
-      this.inputAction,
-      this.focus,
-      this.nextFocus,
-      this.onSaved,
-      this.icon,
-      this.onFieldSubmitted
-      });
+  AppTextDefault({
+    @required this.name,
+    @required this.maxLength,
+    this.hint = "",
+    this.isPassword = false,
+    this.controller,
+    this.validator,
+    this.inputType,
+    this.inputAction,
+    this.focus,
+    this.nextFocus,
+    this.onSaved,
+    this.icon,
+    this.onFieldSubmitted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +42,11 @@ class AppTextDefault extends StatelessWidget {
       focusNode: focus,
       textInputAction: inputAction,
       onSaved: onSaved,
+      maxLength: maxLength,
+      style: TextStyle(color: AppColors.colorDark, fontSize: 15, ),
       onFieldSubmitted: (value) {
         print(value);
-        if(onFieldSubmitted != null){
+        if (onFieldSubmitted != null) {
           onFieldSubmitted(value);
         }
         if (nextFocus != null) {
@@ -53,26 +58,21 @@ class AppTextDefault extends StatelessWidget {
   }
 
   InputDecoration inputDecotaration() {
-
-    if(icon != null){
+    if (icon != null) {
       return InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), gapPadding: 8, ),
+        contentPadding: EdgeInsets.all(10),
         labelText: name,
         hintText: hint,
-        prefixIcon: Icon(icon),
+        labelStyle: TextStyle(fontSize: 16, ),
+        prefixIcon: Icon(icon, color: AppColors.colorDark, size: 18,),
       );
-    }else{
+    } else {
       return InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         labelText: name,
         hintText: hint,
       );
     }
-
-
   }
 }

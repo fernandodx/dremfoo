@@ -21,14 +21,14 @@ alertBottomSheet(BuildContext context,
           child: Stack(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 50),
+                margin: EdgeInsets.only(top: 40),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-                      height: 50,
+                      height: 40,
                       color: AppColors.colorAcent,
-                      padding: EdgeInsets.only(left: 16),
+                      padding: EdgeInsets.only(left: 8),
                       child: subTitle != null
                           ? titleWithSubtitleWidget(title, subTitle)
                           : titleWidget(title),
@@ -38,13 +38,13 @@ alertBottomSheet(BuildContext context,
                       children: <Widget>[
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(8),
                             color: Colors.white,
                             child: Text(
                               msg,
                               style: TextStyle(
                                   color: AppColors.colorPrimaryDark,
-                                  fontSize: 18),
+                                  fontSize: 14),
                             ),
                           ),
                         ),
@@ -52,7 +52,7 @@ alertBottomSheet(BuildContext context,
                     ),
                     ButtonBarTheme(
                       data: ButtonBarThemeData(
-                          buttonPadding: EdgeInsets.all(12),
+                          buttonPadding: EdgeInsets.all(8),
                           buttonTextTheme: ButtonTextTheme.accent),
                       child: Container(
                         color: Colors.white,
@@ -69,8 +69,8 @@ alertBottomSheet(BuildContext context,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 80,
+                    height: 80,
                     child: animationFlareForType(type),
                   ),
                 ],
@@ -88,10 +88,10 @@ List<Widget> buttonsAlert(BuildContext context, String nameDefaultButton,
   listButtons.add(FlatButton(
     child: Text(nameDefaultButton),
     onPressed: () {
+      Navigator.pop(context);
       if (onTapDefaultButton != null) {
         onTapDefaultButton();
       }
-      Navigator.pop(context);
     },
     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
   ));

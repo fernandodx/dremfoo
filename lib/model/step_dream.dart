@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
+import 'package:dremfoo/model/dream.dart';
 
 class StepDream {
 
   String uid;
-  String dreamPropose;
   String step;
   int position;
   int color;
   bool isCompleted = false;
   Timestamp dateCompleted;
+  Dream dreamParent;
   DocumentReference reference;
 
 //  Set<StatusDream> statusDream = Set();
@@ -33,6 +35,15 @@ class StepDream {
     status.isCompleted = data['isCompleted'] == null ? false : data['isCompleted'];
     status.dateCompleted = data['dateCompleted'];
     return status;
+  }
+
+  static List<StepDream> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
+    return list.map((snapshot) {
+      StepDream step = fromMap(snapshot.data);
+      step.reference = snapshot.reference;
+      step.uid = snapshot.id;
+      return step;
+    }).toList();
   }
 
   @override

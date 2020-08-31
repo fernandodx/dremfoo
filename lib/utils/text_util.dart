@@ -13,11 +13,12 @@ class TextUtil {
     );
   }
 
-  static Text textDefault(String value, {Color color = Colors.blueGrey, double fontSize = 14, TextAlign align = TextAlign.start}) {
+  static Text textDefault(String value, {int maxLines = 10, Color color = Colors.blueGrey, double fontSize = 14, TextAlign align = TextAlign.start}) {
     return Text(
       value,
       textAlign: align,
-      overflow: TextOverflow.clip,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: fontSize,
         color: color,

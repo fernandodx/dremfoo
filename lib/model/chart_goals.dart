@@ -2,8 +2,6 @@ import 'dart:collection';
 
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/utils/text_util.dart';
-import 'package:dremfoo/utils/utils.dart';
-import 'package:dremfoo/widget/app_text_default.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -11,15 +9,17 @@ class ChartGoals {
   double step;
   double percentStepCompleted;
   Color color;
+  double levelWeek;
+  double levelMonth;
 
-  ChartGoals(this.step, this.percentStepCompleted, this.color);
+  ChartGoals(this.step, this.percentStepCompleted, this.color, this.levelWeek, this.levelMonth);
 
   static Widget createChartWeek(
       String titleChart, List<List<ChartGoals>> listDataChart) {
     return AspectRatio(
       aspectRatio: 1.1,
       child: Container(
-        margin: EdgeInsets.only(top: 4, bottom: 8, left: 4, right: 4),
+        margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           gradient: LinearGradient(
@@ -172,8 +172,6 @@ class ChartGoals {
 
       chartGoals.forEach((dataChart) {
         color = dataChart.color; //Cor gráfico semanal
-//        color = Colors.green;
-        print("Cor Grafico semanal: ${Utils.colorToHex(color)}");
         listDataSpots.add(FlSpot(dataChart.step, dataChart.percentStepCompleted));
       });
 
@@ -194,9 +192,38 @@ class ChartGoals {
       );
 
       listLineChart.add(lineChart);
+
+      creatLineGoalLevel(chartGoals[0].levelWeek, listLineChart, color);
+
     });
 
     return listLineChart;
+  }
+
+  static void creatLineGoalLevel(double levelWeek, List<LineChartBarData> listLineChart, Color color) {
+     List<FlSpot> listDataSpotsGoal = List();
+    for(int i =1; i<=7; i++){
+      listDataSpotsGoal.add(FlSpot(i.toDouble(),levelWeek));
+    }
+
+    final LineChartBarData lineChartGoal = LineChartBarData(
+      spots: listDataSpotsGoal,
+      isCurved: false,
+      dashArray: [5,5],
+      colors: [
+        color,
+      ],
+      barWidth: 1,
+      isStrokeCapRound: true,
+      dotData: FlDotData(
+        show: false,
+      ),
+      belowBarData: BarAreaData(
+        show: false,
+      ),
+    );
+
+    listLineChart.add(lineChartGoal);
   }
 
   static List<BarChartGroupData> createBarGroup(List<ChartGoals> listGoals) {
@@ -280,6 +307,11 @@ class ChartGoals {
   static Widget createBarChartMouth(List<ChartGoals> listChartGoals) {
     List<BarChartGroupData> rawBarGroups;
     List<BarChartGroupData> showingBarGroups;
+    List<int> listGoalMonth = [];
+
+    listChartGoals.forEach((dataChart){
+      listGoalMonth.add(dataChart.levelMonth.toInt());
+    });
 
     rawBarGroups = createBarGroup(listChartGoals);
 //    rawBarGroups = items;
@@ -289,9 +321,9 @@ class ChartGoals {
     showingBarGroups = List.of(rawBarGroups);
 
     return AspectRatio(
-      aspectRatio: 1.2,
+      aspectRatio: 1.1,
       child: Container(
-        margin: EdgeInsets.only(top: 4, bottom: 8, left: 4, right: 4),
+        margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           gradient: LinearGradient(
@@ -325,14 +357,6 @@ class ChartGoals {
                     BarChartData(
                       maxY: 100,
                       minY: 0,
-                      barTouchData: BarTouchData(
-                          touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.grey,
-                            getTooltipItem: (_a, _b, _c, _d) => null,
-                          ),
-                          touchCallback: (response) {
-                            //TOUCH
-                          }),
                       titlesData: FlTitlesData(
                         show: true,
                         bottomTitles: SideTitles(
@@ -372,6 +396,18 @@ class ChartGoals {
                                 return '';
                             }
                           },
+                        ),
+                        rightTitles: SideTitles(
+                            showTitles: true,
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                            ),
+                          getTitles: (value){
+                            if(listGoalMonth.contains(value.toInt())){
+                              return "🥳";
+                            }
+                            return "";
+                          }
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
@@ -423,6 +459,11 @@ class ChartGoals {
   static Widget createBarChartJoinMouth(List<List<ChartGoals>> listChartGoals) {
     List<BarChartGroupData> rawBarGroups;
     List<BarChartGroupData> showingBarGroups;
+    List<int> listGoalMonth = [];
+
+    listChartGoals.forEach((dataChart){
+      listGoalMonth.add(dataChart[0].levelMonth.toInt());
+    });
 
     int countBar = listChartGoals[0].length * listChartGoals.length;
     double width = 12;
@@ -487,16 +528,20 @@ class ChartGoals {
                     BarChartData(
                       maxY: 100,
                       minY: 0,
-                      barTouchData: BarTouchData(
-                          touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.grey,
-                            getTooltipItem: (_a, _b, _c, _d) => null,
-                          ),
-                          touchCallback: (response) {
-                            //TOUCH
-                          }),
                       titlesData: FlTitlesData(
                         show: true,
+                        rightTitles: SideTitles(
+                          showTitles: true,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                          ),
+                          getTitles: (double value){
+                            if(listGoalMonth.contains(value.toInt())){
+                              return "🥳";
+                            }
+                            return "";
+                          }
+                        ),
                         bottomTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(

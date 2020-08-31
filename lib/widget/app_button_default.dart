@@ -7,12 +7,16 @@ class AppButtonDefault extends StatelessWidget {
   bool isShowProgress;
   TypeButton type;
   TextDecoration decoration;
+  Icon icon;
+  MainAxisSize mainAxisSize;
 
   AppButtonDefault(
       {this.label,
       @required this.onPressed,
       this.isShowProgress = false,
       this.type = TypeButton.RAISE,
+      this.icon,
+      this.mainAxisSize = MainAxisSize.min,
       this.decoration = TextDecoration.none});
 
   @override
@@ -20,26 +24,53 @@ class AppButtonDefault extends StatelessWidget {
     switch (type) {
       case TypeButton.FLAT:
         return FlatButton(
-          child: Container(
-            padding: EdgeInsets.all(2),
-            child: getTextButton(),
+          child: Row(
+            mainAxisSize: mainAxisSize,
+            children: <Widget>[
+              Visibility(
+                visible: icon != null,
+                child: Container(
+                  child: icon,
+                  margin: EdgeInsets.only(right: 8),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(2),
+                child: getTextButton(),
+              ),
+            ],
           ),
           textColor: AppColors.colorAcent,
           onPressed: onPressed,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         );
         break;
       case TypeButton.RAISE:
         return RaisedButton(
-          child: Container(
-            padding: EdgeInsets.all(2),
-            child: getTextButton(),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Visibility(
+                visible: icon != null,
+                child: Container(
+                  child: icon,
+                  margin: EdgeInsets.only(right: 8),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(2),
+                child: getTextButton(),
+              ),
+            ],
           ),
           color: AppColors.colorAcent,
           textColor: Colors.white,
           onPressed: onPressed,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0)
-          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         );
     }
   }
@@ -57,7 +88,8 @@ class AppButtonDefault extends StatelessWidget {
 
     return Text(
       label,
-      style: TextStyle(fontSize: 18, decoration: decoration),
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 14, decoration: decoration,),
     );
   }
 }

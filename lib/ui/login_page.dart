@@ -3,8 +3,10 @@ import 'package:dremfoo/bloc/login_bloc.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/strings.dart';
 import 'package:dremfoo/ui/register_page.dart';
+import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/text_util.dart';
+import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/utils/validator_util.dart';
 import 'package:dremfoo/widget/app_button_default.dart';
 import 'package:dremfoo/widget/app_text_default.dart';
@@ -26,17 +28,26 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    pageInit = Center(child: CircularProgressIndicator(),);
+    pageInit = Center(
+      child: CircularProgressIndicator(),
+    );
 
-    FirebaseService().checkLoginOn().then((isLoginOk){
-      if(isLoginOk){
+    FirebaseService().checkLoginOn().then((isLoginOk) {
+      if (isLoginOk) {
+        AnalyticsUtil.sendLogLogin(MethodLogin.sharedPrefs);
         push(context, HomePage(), isReplace: true);
-      }else{
+      } else {
         setState(() {
           pageInit = body(context);
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
   }
 
   @override
@@ -47,7 +58,34 @@ class _LoginPageState extends State<LoginPage> {
         child: Stack(
           children: <Widget>[
             background(),
-            Scrollbar(child: pageInit),
+            NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool isScroll) {
+                  return [
+                    SliverAppBar(
+                      backgroundColor: Colors.transparent,
+                      title: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            Utils.getPathAssetsImg("logoSomnia.png"),
+                            width: 40,
+                            height: 40,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          TextUtil.textAppbar("REVO - Metas com foco"),
+                        ],
+                      ),
+                      centerTitle: true,
+                    )
+                  ];
+                },
+                body: SingleChildScrollView(
+                  child: pageInit,
+                )),
             _bloc.loading(),
           ],
         ),
@@ -59,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        containerLogo(),
         containerBody(context),
       ],
     );
@@ -76,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           margin: EdgeInsets.all(16),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: getFields(context),
           ),
         ),
@@ -95,12 +132,14 @@ class _LoginPageState extends State<LoginPage> {
         inputAction: TextInputAction.next,
         onSaved: (value) => _bloc.user.email = value,
         controller: _bloc.textEmailController,
+        maxLength: 60,
         name: "E-mail",
       ),
       SizedBox(height: 16),
       AppTextDefault(
         validator: ValidatorUtil.validatorPassword,
         inputAction: TextInputAction.done,
+        maxLength: 12,
         icon: Icons.lock,
         isPassword: true,
         inputType: TextInputType.text,
@@ -108,15 +147,12 @@ class _LoginPageState extends State<LoginPage> {
         name: "Senha",
       ),
       SizedBox(height: 16),
-      Row(
-        children: <Widget>[
-          Expanded(
-            child: AppButtonDefault(
-              label: "Entrar",
-              onPressed: () => onClickLogin(context),
-            ),
-          ),
-        ],
+      Container(
+        child: AppButtonDefault(
+          label: "Entrar",
+          mainAxisSize: MainAxisSize.max,
+          onPressed: () => onClickLogin(context),
+        ),
       ),
       SizedBox(height: 16),
       Row(
@@ -134,7 +170,6 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () => _bloc.rememberPassword(context)),
         ],
       ),
-
       Row(
         children: <Widget>[
           Expanded(
@@ -195,41 +230,28 @@ class _LoginPageState extends State<LoginPage> {
     ];
   }
 
-  containerLogo() {
-    return Column(
-      children: <Widget>[
-        Container(
-          width: 80,
-          height: 80,
-          child: Image.asset("assets/images/logoSomnia.png"),
-        ),
-        TextUtil.textTitulo("Dremfo", color: Colors.white)
-      ],
-    );
-  }
-
   void onClickLogin(BuildContext context) {
     _bloc.login(context).then((user) {
-      if (user != null) {
-        push(context, HomePage());
-      }
+      goToHome(user, context);
     });
   }
 
   void onClickLoginWithFacebook(BuildContext context) {
     _bloc.loginWithFacebook(context).then((user) {
-      if (user != null) {
-        push(context, HomePage());
-      }
+      goToHome(user, context);
     });
   }
 
   void onClickLoginWithGoogle(BuildContext context) {
     _bloc.loginWithGoogle(context).then((user) {
-      if (user != null) {
-        push(context, HomePage());
-      }
+      goToHome(user, context);
     });
+  }
+
+  void goToHome(user, BuildContext context) {
+     if (user != null) {
+      push(context, HomePage(), isReplace: true);
+    }
   }
 
   Container background() {

@@ -6,6 +6,7 @@ import 'package:dremfoo/model/video.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
+import 'package:dremfoo/widget/app_drawer_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_youtube/flutter_youtube.dart';
@@ -23,6 +24,7 @@ class _ListVideoPageState extends State<ListVideoPage> {
       appBar: AppBar(
         title: TextUtil.textAppbar("Conteúdo gratuito"),
       ),
+      drawer: AppDrawerMenu(),
       body: Container(
         color: Colors.white,
         child: FutureBuilder(
@@ -63,8 +65,7 @@ class _ListVideoPageState extends State<ListVideoPage> {
             fit: StackFit.passthrough,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl:
-                    getUrlImgVideo(video.id),
+                imageUrl: getUrlImgVideo(video.id),
                 height: 200,
                 fit: BoxFit.cover,
               ),
@@ -107,7 +108,7 @@ class _ListVideoPageState extends State<ListVideoPage> {
         autoPlay: true,
         //default false
         fullScreen: true,
-        backgroundColor: Colors.blueGrey //default false
+        backgroundColor: Colors.blueGrey, //default false
     );
   }
 }

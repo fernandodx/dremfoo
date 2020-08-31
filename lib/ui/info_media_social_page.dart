@@ -6,6 +6,7 @@ import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
+import 'package:dremfoo/widget/app_drawer_menu.dart';
 import 'package:email_launcher/email_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
       appBar: AppBar(
         title: TextUtil.textAppbar("Mídias sociais"),
       ),
+      drawer: AppDrawerMenu(),
       body: Stack(
         children: <Widget>[
           Image.asset(Utils.getPathAssetsImg("background_media.jpg"), width: double.infinity, height: double.infinity, fit: BoxFit.cover,),

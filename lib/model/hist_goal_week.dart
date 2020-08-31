@@ -34,7 +34,7 @@ class HistGoalWeek {
 
   static List<HistGoalWeek> fromListDocumentSnapshot(List<DocumentSnapshot> list){
     return list.map((snapshot) {
-      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data);
+      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data());
       hist.reference = snapshot.reference;
       return hist;
     }).toList();
@@ -42,7 +42,7 @@ class HistGoalWeek {
 
   static List<HistGoalWeek> fromListDocumentSnapshotWithDream(List<DocumentSnapshot> list, Dream dream){
     return list.map((snapshot) {
-      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data);
+      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data());
       hist.reference = snapshot.reference;
       hist.dream = dream;
       return hist;

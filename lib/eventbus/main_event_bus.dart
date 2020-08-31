@@ -4,23 +4,26 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-enum TipoEvento {event1, event2}
+enum TipoEvento {FETCH,REFRESH}
 
 class MainEventBus {
 
   final _eventBusController = StreamController<TipoEvento>.broadcast();
 
-  final _eventBusUserController = StreamController<FirebaseUser>.broadcast();
+  final _eventBusUserController = StreamController<User>.broadcast();
 
-  final _eventBusRegisterDreamController = StreamController<bool>.broadcast();
+  final _eventBusRegisterDreamController = StreamController<TipoEvento>.broadcast();
+
+  final _eventBusHomeDreamController = StreamController<TipoEvento>.broadcast();
 
   Stream<TipoEvento> get stream => _eventBusController.stream;
-  Stream<FirebaseUser> get streamUser => _eventBusUserController.stream;
-  Stream<bool> get streamRegisterDream => _eventBusRegisterDreamController.stream;
+  Stream<User> get streamUser => _eventBusUserController.stream;
+  Stream<TipoEvento> get streamRegisterDream => _eventBusRegisterDreamController.stream;
+  Stream<TipoEvento> get streamHomeDream => _eventBusHomeDreamController.stream;
 
   MainEventBus get(context) => Provider.of<MainEventBus>(context, listen: false);
 
-  void updateUser(FirebaseUser user) {
+  void updateUser(User user) {
     _eventBusUserController.add(user);
   }
 
@@ -28,8 +31,12 @@ class MainEventBus {
     _eventBusController.add(tipo);
   }
 
-  void sendEventUpdateRegisterApp(bool isFetch){
-    _eventBusRegisterDreamController.add(isFetch);
+  void sendEventHomeDream(TipoEvento tipo){
+    _eventBusHomeDreamController.add(tipo);
+  }
+
+  void sendEventRegisterDreamApp(TipoEvento tipo){
+    _eventBusRegisterDreamController.add(tipo);
   }
 
   void dispose() {

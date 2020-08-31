@@ -4,26 +4,32 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_util/date_util.dart';
 import 'package:dremfoo/api/firebase_service.dart';
+import 'package:dremfoo/bloc/base_bloc.dart';
+import 'package:dremfoo/eventbus/main_event_bus.dart';
+import 'package:dremfoo/eventbus/user_event_bus.dart';
 import 'package:dremfoo/model/chart_goals.dart';
 import 'package:dremfoo/model/daily_goal.dart';
 import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/hist_goal_month.dart';
 import 'package:dremfoo/model/hist_goal_week.dart';
+import 'package:dremfoo/model/level_revo.dart';
+import 'package:dremfoo/model/notification_revo.dart';
 import 'package:dremfoo/model/response_api.dart';
-import 'package:dremfoo/model/status_dream.dart';
 import 'package:dremfoo/model/step_dream.dart';
+import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/model/user_focus.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
 import 'package:dremfoo/ui/report_dreams_month.dart';
 import 'package:dremfoo/ui/report_dreams_week.dart';
 import 'package:dremfoo/utils/nav.dart';
+import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
-import 'package:dremfoo/widget/alert.dart';
 import 'package:dremfoo/widget/card_dream.dart';
 import 'package:flutter/material.dart';
 
-class HomePageBloc {
+class HomePageBloc extends BaseBloc {
   final _addDreamStreamController = StreamController<List<Dream>>();
   final _addChipStepsStreamController = StreamController<List<Widget>>();
   final _addChipDailyStreamController = StreamController<List<Widget>>();
@@ -40,87 +46,119 @@ class HomePageBloc {
 
   List<Dream> listDream = [];
 
-  void fetch(context) {
-
-    getSteps(context);
+  void fetch(context) async {
+    showLoading();
+    await getSteps(context);
+    hideLoading();
   }
 
-  CollectionReference getDream() {
-    ResponseApi<CollectionReference> responseApi =
-        FirebaseService().findDreams();
+  dispose(){
+    super.dispose();
+    _addChartStreamController.close();
+    _addChipStepsStreamController.close();
+    _addChipDailyStreamController.close();
+    _addChartStreamController.close();
+  }
 
-    if (responseApi.ok) {
-      return responseApi.result;
+  void saveLastFocus() async {
+
+    ResponseApi<UserRevo> responseApi = await FirebaseService().findDataUser();
+    if(responseApi.ok) {
+      UserFocus focus = responseApi.result.focus;
+
+      if(focus == null){
+        focus = UserFocus();
+      }
+
+      //Save data
+      if(focus.dateInit == null){
+        focus.dateInit = Timestamp.now();
+      }
+
+      DateTime dateInit = focus.dateInit.toDate();
+      DateTime dateNow = DateTime.now();
+
+      int countDayInit =  DateUtil().totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
+      int countDayNow =  DateUtil().totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
+
+      focus.dateLastFocus = Timestamp.now();
+      focus.countDaysFocus = countDayNow - countDayInit;
+
+      FirebaseService().saveLastFocus(focus);
     }
 
-    return null; // verificar como tratar erros
   }
 
+  UserFocus getMockLastFocus(DateTime dateInit, DateTime dateLast) {
+     UserFocus focus = UserFocus();
+    focus.dateInit = Timestamp.fromDate(dateInit);
+    focus.dateLastFocus = Timestamp.fromDate(dateLast);
+    int countDayInit =  DateUtil().totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
+    int countDayLast=  DateUtil().totalLengthOfDays(dateLast.month, dateLast.day, dateLast.year);
+    focus.countDaysFocus = countDayInit - countDayLast;
+    return focus;
+  }
+
+  Future<NotificationRevo> getNotificationRandomDailyInit() async {
+    ResponseApi<List<NotificationRevo>> responseApi = await FirebaseService().findAllNotificationDailyInit();
+    if(responseApi.ok){
+      List<NotificationRevo> list = responseApi.result;
+      return list[Random().nextInt(list.length)];
+    }
+  }
+
+  Future<NotificationRevo> getNotificationRandomDailyFinish() async {
+    ResponseApi<List<NotificationRevo>> responseApi = await FirebaseService().findAllNotificationDailyFinish();
+    if(responseApi.ok){
+      List<NotificationRevo> list = responseApi.result;
+      return list[Random().nextInt(list.length)];
+    }
+  }
+
+
+  //Esta chamando 2 vezes
   getSteps(context) async {
-    CollectionReference dreamsRef = getDream();
 
-    QuerySnapshot querySnapshot = await dreamsRef.getDocuments();
+    ResponseApi<List<Dream>> responseApi = await FirebaseService().findAllDreams();
 
-    List<Dream> listDream = List();
+    List<Dream> listDream = responseApi.result;
     List<Widget> listChartWidget = List();
     List<StepDream> listAllStep = List();
     List<DailyGoal> listAllDailyGoal = List();
 
-    if(querySnapshot.documents.isEmpty) {
-      _addDreamStreamController.add(listDream);
+    if(listDream == null || listDream.isEmpty) {
+      _addDreamStreamController.add(List<Dream>());
+      NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
+      NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
       return;
     }
 
-    for (DocumentSnapshot dreamSnapshot in querySnapshot.documents) {
+    for(Dream dream in listDream) {
       List<StepDream> listStep = List();
       List<DailyGoal> listDailyGoals = List();
-      Dream dream = Dream.fromMap(dreamSnapshot.data);
-      dream.uid = dreamSnapshot.documentID;
-      dream.reference = dreamSnapshot.reference;
 
-      ResponseApi<CollectionReference> responseStepApi = FirebaseService().findSteps(dream);
-      ResponseApi<CollectionReference> responseDailyApi= FirebaseService().findDailyGoals(dream);
+      if(!dream.isDreamWait){
+        ResponseApi<CollectionReference> responseStepApi = FirebaseService().findSteps(dream);
+        ResponseApi<CollectionReference> responseDailyApi= FirebaseService().findDailyGoals(dream);
 
-      if (responseDailyApi.ok) {
-        QuerySnapshot querySnapshotSteps = await responseDailyApi.result.orderBy("position").getDocuments();
-
-        for (DocumentSnapshot daily in querySnapshotSteps.documents) {
-          DailyGoal dailyGoal = DailyGoal.fromMap(daily.data);
-          dailyGoal.reference = daily.reference;
-          listDailyGoals.add(dailyGoal);
+        if (responseDailyApi.ok) {
+          await loadDailyGoal(responseDailyApi, dream, listDailyGoals);
         }
 
-        dream.dailyGoals = listDailyGoals;
-      }
-
-      if (responseStepApi.ok) {
-        QuerySnapshot querySnapshotSteps = await responseStepApi.result.orderBy("position").getDocuments();
-
-        for (DocumentSnapshot step in querySnapshotSteps.documents) {
-          StepDream stepDream = StepDream.fromMap(step.data);
-          stepDream.uid = step.documentID;
-          stepDream.reference = step.reference;
-          stepDream.dreamPropose = dream.dreamPropose;
-          listStep.add(stepDream);
+        if (responseStepApi.ok) {
+          await loadSteps(responseStepApi, dream, listStep);
         }
 
-        dream.steps = listStep;
       }
-
-      listDream.add(dream);
       listAllStep.addAll(listStep);
       listAllDailyGoal.addAll(listDailyGoals);
     }
 
-    getStepChips(listAllStep, () {
-      getSteps(context);
-    });
-
-    getDailyChips(listAllDailyGoal, (){
-      getSteps(context);
-    });
-
     _addDreamStreamController.add(listDream);
+
+    getStepChips(context, listAllStep);
+    getDailyChips(context, listAllDailyGoal);
+
     List<List<ChartGoals>> listGoalsWeek = await getDataChartWeek(listDream);
 
     Widget chartWeek = ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
@@ -172,6 +210,33 @@ class HomePageBloc {
     }
   }
 
+  Future loadSteps(ResponseApi<CollectionReference> responseStepApi, Dream dream, List<StepDream> listStep) async {
+     QuerySnapshot querySnapshotSteps = await responseStepApi.result.orderBy("position").get();
+    
+    for (QueryDocumentSnapshot step in querySnapshotSteps.docs) {
+      StepDream stepDream = StepDream.fromMap(step.data());
+      stepDream.uid = step.id;
+      stepDream.reference = step.reference;
+      stepDream.dreamParent = dream;
+      listStep.add(stepDream);
+    }
+    
+    dream.steps = listStep;
+  }
+
+  Future loadDailyGoal(ResponseApi<CollectionReference> responseDailyApi, Dream dream, List<DailyGoal> listDailyGoals) async {
+      QuerySnapshot querySnapshotSteps = await responseDailyApi.result.orderBy("position").get();
+    
+    for (QueryDocumentSnapshot daily in querySnapshotSteps.docs) {
+      DailyGoal dailyGoal = DailyGoal.fromMap(daily.data());
+      dailyGoal.reference = daily.reference;
+      dailyGoal.dreamParent = dream;
+      listDailyGoals.add(dailyGoal);
+    }
+    
+    dream.dailyGoals = listDailyGoals;
+  }
+
   Future<List<HistGoalWeek>> findLastHistWeek(List<Dream> listDream) async {
      List<HistGoalWeek> listHist = List();
     for(Dream dream in listDream){
@@ -200,11 +265,13 @@ class HomePageBloc {
 
     for (Dream dream in listDream) {
       CardDream cardDream = CardDream(
+        color: dream.color,
         imgBase64: dream.imgDream,
         selected: false,
         onTap: () => _editDream(context, dream),
         title: dream.dreamPropose,
         subTitle: dream.descriptionPropose,
+        isDreamWait: dream.isDreamWait,
       );
 
       listCardDream.add(cardDream);
@@ -219,10 +286,12 @@ class HomePageBloc {
 
     for (Dream dream in listDream) {
       CardDream cardDream = CardDream(
+        color: dream.color,
         imgBase64: dream.imgDream,
         selected: false,
         onTap: () => _editDream(context, dream),
         title: dream.dreamPropose,
+        isDreamWait: dream.isDreamWait,
         subTitle: dream.descriptionPropose != null
             ? dream.descriptionPropose
             : "Falta implementar",
@@ -241,19 +310,19 @@ class HomePageBloc {
     return listCardDream;
   }
 
-  Future<List<Widget>> getStepChips(List<StepDream> steps, Function restart) async {
-    List<Widget> listWidget = await verifyCheckChipStep(steps, restart);
+  Future<List<Widget>> getStepChips(context, List<StepDream> steps) async {
+    List<Widget> listWidget = await verifyCheckChipStep(context, steps);
     _addChipStepsStreamController.add(listWidget);
     return listWidget;
   }
 
-  Future<List<Widget>> getDailyChips(List<DailyGoal> dailys, Function restart) async {
-    List<Widget> listWidget = await verifyCheckChipDaily(dailys, restart);
+  Future<List<Widget>> getDailyChips(context, List<DailyGoal> dailys) async {
+    List<Widget> listWidget = await verifyCheckChipDaily(context, dailys);
     _addChipDailyStreamController.add(listWidget);
     return listWidget;
   }
 
-  Future verifyCheckChipStep(List<StepDream> steps, Function restart) async {
+  Future verifyCheckChipStep(context, List<StepDream> steps) async {
     List<Widget> listWidget = List();
 
     for (StepDream stepDream in steps) {
@@ -267,7 +336,7 @@ class HomePageBloc {
           stepDream.step,
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.secondary),
         selectedColor: AppColors.colorPrimary,
         selected: stepDream.isCompleted,
         avatar: stepDream.isCompleted
@@ -276,14 +345,12 @@ class HomePageBloc {
                 color: Colors.white,
               )
             : CircleAvatar(
-          backgroundColor: AppColors.colorDarkLight,
+          backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.primary),
           child: TextUtil.textDefault("${stepDream.position}˚", color: Colors.white),),
         onSelected: (selected) {
           stepDream.isCompleted = selected;
           stepDream.dateCompleted = Timestamp.now();
-//          FirebaseService().updateStepToday(stepDream.step, selected);
-          FirebaseService().updateStepDream(stepDream);
-          restart();
+          updatStepDream(context, stepDream, selected);
         },
       );
 
@@ -294,7 +361,14 @@ class HomePageBloc {
     return listWidget;
   }
 
-  Future verifyCheckChipDaily(List<DailyGoal> listDailyGoals, Function restart) async {
+  void updatStepDream(context, StepDream stepDream, bool selected) async {
+    showLoading(description: "Calculando etapas...");
+    ResponseApi responseApi = await FirebaseService().updateStepDream(stepDream);
+    hideLoading();
+    MainEventBus().get(context).sendEventHomeDream(TipoEvento.FETCH);
+  }
+
+  Future verifyCheckChipDaily(context, List<DailyGoal> listDailyGoals) async {
     List<Widget> listWidget = List();
 
     for (DailyGoal daily in listDailyGoals) {
@@ -304,7 +378,7 @@ class HomePageBloc {
           daily.nameDailyGoal,
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor:Utils.colorFromHex(daily.dreamParent.color.secondary),
         selectedColor: AppColors.colorPrimary,
         selected: daily.isCompletedToday(),
         avatar: daily.isCompletedToday()
@@ -313,14 +387,14 @@ class HomePageBloc {
           color: Colors.white,
         )
             : CircleAvatar(
-          backgroundColor: AppColors.colorDarkLight,
+          backgroundColor: Utils.colorFromHex(daily.dreamParent.color.primary),
           child: TextUtil.textDefault("${daily.position}˚", color: Colors.white),),
         onSelected: (selected) {
-
+          if(selected){
+            saveLastFocus();
+          }
           daily.lastDateCompleted = selected ? Timestamp.now() : null;
-          FirebaseService().updateDailyGoal(daily);
-          restart();
-
+          updateDailyGoal(context, daily, selected);
         },
       );
 
@@ -331,10 +405,21 @@ class HomePageBloc {
     return listWidget;
   }
 
+  Future updateDailyGoal(context, DailyGoal daily, bool selected) async {
+    showLoading(description: "Calculando Metas...");
+    await FirebaseService().updateDailyGoal(daily);
+    hideLoading();
+    MainEventBus().get(context).sendEventHomeDream(TipoEvento.FETCH);
+  }
+
   Future<List<List<ChartGoals>>> getDataChartWeek(List<Dream> listDream) async {
     List<List<ChartGoals>> listDataChartGoals = List();
 
     for (Dream dream in listDream) {
+
+      if(dream.isDreamWait){
+        continue;
+      }
 
       List<ChartGoals> listWeek = List();
       List<DailyGoal> listDaily = dream.dailyGoals;
@@ -372,8 +457,7 @@ class HomePageBloc {
         if (totalDaysOk > 0) {
           percent = percent + (totalDaysOk / maxPointsWeek) * 100;
         }
-        listWeek.add(ChartGoals(
-            i.toDouble(), percent, Utils.colorFromHex(dream.colorHex)));
+        listWeek.add(ChartGoals(i.toDouble(), percent, Utils.colorFromHex(dream.color.primary), dream.goalWeek, dream.goalMonth));
         firstDay = firstDay.add(Duration(days: 1));
       }
 
@@ -405,11 +489,12 @@ class HomePageBloc {
   Future<List<ChartGoals>> getDataChartMouth(List<Dream> listDream) async {
 
     List<ChartGoals> listMouth = List();
-
     int maxStep = 0;
 
     listDream.forEach((dream) {
-      maxStep = maxStep + dream.steps.length;
+      if(!dream.isDreamWait){
+        maxStep = maxStep + dream.steps.length;
+      }
     });
 
     double percent = 0;
@@ -419,13 +504,22 @@ class HomePageBloc {
 
     for (int i = 1; i <= now.month; i++) {
       int countDailyOk = 0;
+      double countLevelWeek = 0;
+      double countLevelMonth = 0;
+
       List<DailyGoal> listAllDaily = List();
+      double mediaGoal = 0;
 
       for(Dream dream in listDream){
+        if(dream.isDreamWait){
+          continue;
+        }
         ResponseApi<List<DailyGoal>> responseApi = await FirebaseService().findDailyGoalsCompletedHist(dream, firstMouth, now);
         if(responseApi.ok){
           listAllDaily.addAll(responseApi.result);
         }
+        countLevelMonth += dream.goalMonth;
+        countLevelWeek += dream.goalWeek;
       }
 
       for(DailyGoal daily in listAllDaily){
@@ -440,7 +534,7 @@ class HomePageBloc {
       if (countDailyOk > 0) {
         percent = (countDailyOk / maxPointsMouth) * 100;
       }
-      listMouth.add(ChartGoals(i.toDouble(), percent, Colors.lightGreenAccent));
+      listMouth.add(ChartGoals(i.toDouble(), percent, Colors.lightGreenAccent, (countLevelWeek/listDream.length), (countLevelMonth/listDream.length)));
       firstMouth =
           DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
     }
@@ -452,6 +546,11 @@ class HomePageBloc {
 
     List<List<ChartGoals>> listData = List();
     for(Dream dream in listDream) {
+
+      if(dream.isDreamWait){
+        continue;
+      }
+
       List<ChartGoals> listGoals = await _getDataChartForDreamMouth(dream);
 
       ChartGoals last = listGoals.last;
@@ -497,14 +596,14 @@ class HomePageBloc {
       if (countDailyOk > 0) {
         percent = (countDailyOk / maxPointsMouth) * 100;
       }
-      listMouth.add(ChartGoals(i.toDouble(), percent, Utils.colorFromHex(dream.colorHex)));
+      listMouth.add(ChartGoals(i.toDouble(), percent, Utils.colorFromHex(dream.color.primary), dream.goalWeek, dream.goalMonth));
       firstMouth = DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
     }
 
     return listMouth;
   }
 
-  _editDream(BuildContext context, Dream dream) {
+  _editDream(BuildContext context, Dream dream) async {
     RegisterDreamPage pageEdit = RegisterDreamPage(
       dream: dream,
     );

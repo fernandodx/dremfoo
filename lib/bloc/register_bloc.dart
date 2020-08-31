@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,38 +15,28 @@ import 'base_bloc.dart';
 
 class RegisterBloc extends BaseBloc {
   final formKey = GlobalKey<FormState>();
-  final user = User();
+  final user = UserRevo();
   final validatedEmailController = TextEditingController();
+  final _pictureStreamController = StreamController<Widget>();
 
-  final pictureStreamController = StreamController<Widget>();
-
-  Stream get pictureStream => pictureStreamController.stream;
+  Stream get pictureStream => _pictureStreamController.stream;
 
   void fetch() async {
-//    if (user != null) {
-//      urlPhotoUser = user.photoUrl;
-//      nameTextController.text = user.displayName;
-//      emailTextController.text = user.email;
-//    }
-
-    pictureStreamController.add(userPhotoEdit());
+    _pictureStreamController.add(userPhotoEdit());
   }
 
-  Future<FirebaseUser> resgisterUser(BuildContext context) async {
+  Future<User> resgisterUser(BuildContext context) async {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-
       showLoading();
-
       ResponseApi responseApi = await FirebaseService()
           .createUserWithEmailAndPassword(context, user.email, user.password,
               name: user.name, photo: user.picture);
-
       hideLoading();
-
       if (responseApi.ok) {
-        FirebaseUser user = responseApi.result;
-        print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoUrl}");
+        User user = responseApi.result;
+        print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoURL}");
+        AnalyticsUtil.sendAnalyticsEvent(EventRevo.registerLogin, parameters: {"user":user.email});
         return user;
       } else {
         alertBottomSheet(context,
@@ -74,7 +65,7 @@ class RegisterBloc extends BaseBloc {
       child: circleImage,
     );
 
-    pictureStreamController.sink.add(picture);
+    _pictureStreamController.sink.add(picture);
   }
 
   userPhotoEdit() {
@@ -105,5 +96,11 @@ class RegisterBloc extends BaseBloc {
         ],
       ),
     );
+  }
+  
+  @override
+  dispose() {
+    super.dispose();
+    _pictureStreamController.close();
   }
 }

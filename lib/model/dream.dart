@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/model/color_dream.dart';
 import 'package:dremfoo/model/daily_goal.dart';
 import 'package:dremfoo/model/step_dream.dart';
+import 'dart:convert';
 
 class Dream {
 
@@ -12,14 +14,17 @@ class Dream {
   String rewardWeek;
   String inflection;
   String inflectionWeek;
-  String colorHex;
-  double goalWeek = 0;
-  double goalMonth = 0;
+  double goalWeek = 25;
+  double goalMonth = 25;
   bool isGoalWeekOk = false;
   bool isGoalMonthOk = false;
   bool isRewardWeek = false;
   bool isInflectionWeek = false;
+  bool isDeleted = false;
+  bool isDreamWait = false;
+  ColorDream color;
   Timestamp dateRegister;
+  Timestamp dateFinish;
   List<StepDream> steps = List();
   List<DailyGoal> dailyGoals = List();
   DocumentReference reference;
@@ -31,11 +36,11 @@ class Dream {
     dream.imgDream = data.imgDream;
     dream.reward = data.reward;
     dream.inflection = data.inflection;
-    dream.colorHex = data.colorHex;
     dream.dreamPropose = data.dreamPropose;
     dream.steps = data.steps;
     dream.dailyGoals = data.dailyGoals;
     dream.dateRegister = data.dateRegister;
+    dream.dateFinish = data.dateFinish;
     dream.reference = data.reference;
     dream.uid = data.uid;
     dream.goalWeek = data.goalWeek;
@@ -46,6 +51,9 @@ class Dream {
     dream.isRewardWeek = data.isRewardWeek;
     dream.inflectionWeek = data.inflectionWeek;
     dream.rewardWeek = data.rewardWeek;
+    dream.isDeleted = data.isDeleted;
+    dream.color = data.color;
+    dream.isDreamWait = data.isDreamWait;
     return dream;
   }
 
@@ -56,9 +64,9 @@ class Dream {
     dream.imgDream = data['imgDream'];
     dream.reward = data['reward'];
     dream.inflection = data['inflection'];
-    dream.colorHex = data['colorHex'];
     dream.dreamPropose = data['dreamPropose'];
     dream.dateRegister = data['dateRegister'];
+    dream.dateFinish = data['dateFinish'];
     dream.goalWeek = data['goalWeek'];
     dream.goalMonth = data['goalMonth'];
     dream.isGoalWeekOk = data['isGoalWeekOk'];
@@ -67,13 +75,17 @@ class Dream {
     dream.isRewardWeek = data['isRewardWeek'];
     dream.inflectionWeek = data['inflectionWeek'];
     dream.rewardWeek = data['rewardWeek'];
+    dream.isDeleted = data['isDeleted'];
+    dream.isDreamWait = data['isDreamWait'];
+    dream.color = ColorDream.fromMap(data['color']);
     return dream;
   }
 
-  static List<Dream> fromListDocumentSnapshot(List<DocumentSnapshot> list){
+  static List<Dream> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-       Dream dream = Dream.fromMap(snapshot.data);
+       Dream dream = Dream.fromMap(snapshot.data());
        dream.reference = snapshot.reference;
+       dream.uid = snapshot.id;
        return dream;
     }).toList();
   }
@@ -85,7 +97,6 @@ class Dream {
     data['imgDream'] = this.imgDream;
     data['reward'] = this.reward;
     data['inflection'] = this.inflection;
-    data['colorHex'] = this.colorHex;
     data['dreamPropose'] = this.dreamPropose;
     data['dateRegister'] = this.dateRegister;
     data['goalWeek'] = this.goalWeek;
@@ -96,17 +107,14 @@ class Dream {
     data['isRewardWeek'] = this.isRewardWeek;
     data['inflectionWeek'] = this.inflectionWeek;
     data['rewardWeek'] = this.rewardWeek;
+    data['isDeleted'] = this.isDeleted;
+    data['color'] = this.color.toMap();
+    data['isDreamWait'] = this.isDreamWait;
 //    data['steps'] = this.steps;
     return data;
   }
 
 
-
-
-//  String toJson() {
-//    String json = convert.json.encode(toMap());
-//    return json;
-//  }
 
 
 }

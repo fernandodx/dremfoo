@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "902416299879-5l0puic4lg8b4moej4avkkbi440clq2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.dias.dremfoo",
+            "certificate_hash": "d9cc554bb59cdf27709820a580707cb6e578d754"
+          }
+        },
+        {
           "client_id": "902416299879-cebvgo2ggf75ha96hgufcapcs0bguda6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "902416299879-goolj1nr57jbt7lrfkjd0bhdlqttm662.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "902416299879-2it7ke3b9v06rlgu621vduu2l62kqc4q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.dias.dremfoo"
+              }
             }
           ]
         }
