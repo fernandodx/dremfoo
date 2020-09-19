@@ -12,7 +12,8 @@ class ChartGoals {
   double levelWeek;
   double levelMonth;
 
-  ChartGoals(this.step, this.percentStepCompleted, this.color, this.levelWeek, this.levelMonth);
+  ChartGoals(this.step, this.percentStepCompleted, this.color, this.levelWeek,
+      this.levelMonth);
 
   static Widget createChartWeek(
       String titleChart, List<List<ChartGoals>> listDataChart) {
@@ -21,15 +22,14 @@ class ChartGoals {
       child: Container(
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          gradient: LinearGradient(
-            colors: const [
-              Color(0xff173D4E),
-              Color(0xff0D505B),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10),),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 10.0,
+            ),
+          ],
         ),
         padding: EdgeInsets.all(4),
         child: Stack(
@@ -41,9 +41,7 @@ class ChartGoals {
                   height: 4,
                 ),
                 TextUtil.textDefault(titleChart,
-                    fontSize: 16,
-                    color: Color(0xff8EC786),
-                    align: TextAlign.center),
+                    fontSize: 14, align: TextAlign.center),
                 const SizedBox(
                   height: 5,
                 ),
@@ -84,8 +82,8 @@ class ChartGoals {
           showTitles: true,
           reservedSize: 16,
           textStyle: const TextStyle(
-            color: Color(0xff8EC786),
-            fontWeight: FontWeight.bold,
+            color: Color(0xff0D7282),
+            fontWeight: FontWeight.normal,
             fontSize: 12,
           ),
           margin: 7,
@@ -112,9 +110,9 @@ class ChartGoals {
         leftTitles: SideTitles(
           showTitles: true,
           textStyle: const TextStyle(
-            color: Color(0xff8EC786),
-            fontWeight: FontWeight.normal,
-            fontSize: 12,
+            color: Color(0xff0D7282),
+            fontWeight: FontWeight.bold,
+            fontSize: 10,
           ),
           getTitles: (value) {
             switch (value.toInt()) {
@@ -172,7 +170,8 @@ class ChartGoals {
 
       chartGoals.forEach((dataChart) {
         color = dataChart.color; //Cor gráfico semanal
-        listDataSpots.add(FlSpot(dataChart.step, dataChart.percentStepCompleted));
+        listDataSpots
+            .add(FlSpot(dataChart.step, dataChart.percentStepCompleted));
       });
 
       final LineChartBarData lineChart = LineChartBarData(
@@ -194,22 +193,22 @@ class ChartGoals {
       listLineChart.add(lineChart);
 
       creatLineGoalLevel(chartGoals[0].levelWeek, listLineChart, color);
-
     });
 
     return listLineChart;
   }
 
-  static void creatLineGoalLevel(double levelWeek, List<LineChartBarData> listLineChart, Color color) {
-     List<FlSpot> listDataSpotsGoal = List();
-    for(int i =1; i<=7; i++){
-      listDataSpotsGoal.add(FlSpot(i.toDouble(),levelWeek));
+  static void creatLineGoalLevel(
+      double levelWeek, List<LineChartBarData> listLineChart, Color color) {
+    List<FlSpot> listDataSpotsGoal = List();
+    for (int i = 1; i <= 7; i++) {
+      listDataSpotsGoal.add(FlSpot(i.toDouble(), levelWeek));
     }
 
     final LineChartBarData lineChartGoal = LineChartBarData(
       spots: listDataSpotsGoal,
       isCurved: false,
-      dashArray: [5,5],
+      dashArray: [5, 5],
       colors: [
         color,
       ],
@@ -309,7 +308,7 @@ class ChartGoals {
     List<BarChartGroupData> showingBarGroups;
     List<int> listGoalMonth = [];
 
-    listChartGoals.forEach((dataChart){
+    listChartGoals.forEach((dataChart) {
       listGoalMonth.add(dataChart.levelMonth.toInt());
     });
 
@@ -326,14 +325,13 @@ class ChartGoals {
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
-          gradient: LinearGradient(
-            colors: const [
-              Color(0xff173D4E),
-              Color(0xff0D505B),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 10.0,
+            )
+          ],
         ),
         padding: EdgeInsets.all(4),
         child: Padding(
@@ -344,9 +342,7 @@ class ChartGoals {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               TextUtil.textDefault("Seu mês (Todas as metas)",
-                  color: Color(0xff8EC786),
-                  fontSize: 16,
-                  align: TextAlign.center),
+                  fontSize: 14, align: TextAlign.center),
               const SizedBox(
                 height: 12,
               ),
@@ -362,7 +358,7 @@ class ChartGoals {
                         bottomTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(
-                              color: Color(0xff8EC786),
+                              color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
                           margin: 8,
@@ -402,17 +398,16 @@ class ChartGoals {
                             textStyle: TextStyle(
                               fontSize: 16,
                             ),
-                          getTitles: (value){
-                            if(listGoalMonth.contains(value.toInt())){
-                              return "🥳";
-                            }
-                            return "";
-                          }
-                        ),
+                            getTitles: (value) {
+                              if (listGoalMonth.contains(value.toInt())) {
+                                return "🥳";
+                              }
+                              return "";
+                            }),
                         leftTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(
-                              color: Color(0xff8EC786),
+                              color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
                           margin: 32,
@@ -461,7 +456,7 @@ class ChartGoals {
     List<BarChartGroupData> showingBarGroups;
     List<int> listGoalMonth = [];
 
-    listChartGoals.forEach((dataChart){
+    listChartGoals.forEach((dataChart) {
       listGoalMonth.add(dataChart[0].levelMonth.toInt());
     });
 
@@ -497,29 +492,35 @@ class ChartGoals {
         margin: EdgeInsets.only(top: 4, bottom: 8, left: 4, right: 4),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
-          gradient: LinearGradient(
-            colors: const [
-              Color(0xff173D4E),
-              Color(0xff0D505B),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 10.0,
+            )
+          ],
         ),
         padding: EdgeInsets.all(4),
         child: Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
+          padding: const EdgeInsets.only(left: 12, right: 12, top: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               TextUtil.textDefault("Seu mês",
-                  color: Color(0xff8EC786),
-                  fontSize: 16,
-                  align: TextAlign.center),
-              const SizedBox(
-                height: 12,
+                  fontSize: 14, align: TextAlign.center),
+              SizedBox(
+                height: 2,
+              ),
+              SizedBox(
+                height: 1,
+                child: Container(
+                  color: AppColors.colorPrimaryDark,
+                ),
+              ),
+              SizedBox(
+                height: 14,
               ),
               Expanded(
                 child: Padding(
@@ -531,21 +532,20 @@ class ChartGoals {
                       titlesData: FlTitlesData(
                         show: true,
                         rightTitles: SideTitles(
-                          showTitles: true,
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                          ),
-                          getTitles: (double value){
-                            if(listGoalMonth.contains(value.toInt())){
-                              return "🥳";
-                            }
-                            return "";
-                          }
-                        ),
+                            showTitles: true,
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                            ),
+                            getTitles: (double value) {
+                              if (listGoalMonth.contains(value.toInt())) {
+                                return "🥳";
+                              }
+                              return "";
+                            }),
                         bottomTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(
-                              color: Color(0xff8EC786),
+                              color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
                           margin: 8,
@@ -583,7 +583,7 @@ class ChartGoals {
                         leftTitles: SideTitles(
                           showTitles: true,
                           textStyle: TextStyle(
-                              color: Color(0xff8EC786),
+                              color: AppColors.colorText,
                               fontWeight: FontWeight.bold,
                               fontSize: 10),
                           margin: 16,

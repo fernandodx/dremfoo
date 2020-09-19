@@ -39,7 +39,7 @@ class StepDream {
 
   static List<StepDream> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      StepDream step = fromMap(snapshot.data);
+      StepDream step = fromMap(snapshot.data());
       step.reference = snapshot.reference;
       step.uid = snapshot.id;
       return step;

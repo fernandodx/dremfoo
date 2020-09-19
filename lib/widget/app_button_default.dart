@@ -65,7 +65,6 @@ class AppButtonDefault extends StatelessWidget {
               ),
             ],
           ),
-          color: AppColors.colorAcent,
           textColor: Colors.white,
           onPressed: onPressed,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

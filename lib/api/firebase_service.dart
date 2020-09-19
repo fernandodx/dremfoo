@@ -67,15 +67,19 @@ class FirebaseService {
       UserCredential result = await _auth.signInWithCredential(credential);
       final User user = await result.user;
       await saveUser(context, user);
-      print("Login realizado com sucesso!!!");
-      print("Nome: ${user.displayName}");
-      print("E-mail: ${user.email}");
-      print("Foto: ${user.photoURL}");
       MainEventBus().get(context).updateUser(user);
       return ResponseApi<User>.ok(result: user);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
-      return ResponseApi.error(msg: error.toString());
+      if(error is FirebaseAuthException){
+        FirebaseAuthException fbException = error as FirebaseAuthException;
+        switch(fbException.code){
+          case "account-exists-with-different-credential" :
+            return ResponseApi.error(msg: "Já existe uma conta com o mesmo endereço de e-mail, mas com credenciais de login diferentes. Faça login usando um provedor associado a este endereço de e-mail.");
+        }
+      }else{
+        return ResponseApi.error(msg: error.toString());
+      }
     }
   }
 
@@ -115,10 +119,6 @@ class FirebaseService {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       final User user = await result.user;
       MainEventBus().get(context).updateUser(user);
-      print("Login realizado com sucesso!!!");
-      print("Nome: ${user.displayName}");
-      print("E-mail: ${user.email}");
-      print("Foto: ${user.photoURL}");
       saveUser(context, user);
 
       return ResponseApi<User>.ok(result: user);
@@ -178,7 +178,7 @@ class FirebaseService {
 
       User user = await result.user;
       MainEventBus().get(context).updateUser(user);
-      saveUser(context, user);
+      await saveUser(context, user);
 
       var urlPhotoUser = null;
       if (photo != null) {
@@ -206,9 +206,15 @@ class FirebaseService {
             msg = Strings.msgErroEmailAlReadyInUse;
             break;
         }
+      }
+      if(error is FirebaseAuthException){
+        FirebaseAuthException exception = error as FirebaseAuthException;
 
-        print(
-            "Erro ao criar o usuário: cod - ${error.code} mensagem - ${error.message}");
+        switch (exception.code) {
+          case 'email-already-in-use':
+            msg = Strings.msgErroEmailAlReadyInUse;
+            break;
+        }
       }
 
       return ResponseApi<User>.error(msg: msg);
@@ -223,8 +229,7 @@ class FirebaseService {
 
   Future<bool> isUserUidExist(String uid) async {
     try{
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection(
-          "users").doc(uid).get();
+      DocumentSnapshot snapshot = await getRefCurrentUser(uid).get();
       return snapshot.exists;
     }catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
@@ -232,9 +237,16 @@ class FirebaseService {
 
   }
 
+  DocumentReference getRefCurrentUser(String uid) {
+    return FirebaseFirestore.instance
+        .collection(Constants.ENVIRONMENT)
+        .doc(Constants.ENVIRONMENT_NOW)
+        .collection("users").doc(uid);
+  }
+
 
   void saveUser(BuildContext context, User user) async {
-    if (user.displayName != null && user.email != null) {
+    if (user.email != null) {
       DateTime now = DateTime.now();
       DateTime initTime = DateTime(
           now.year, now.month, now.day, Constants.HOUR_INIT_NOTIFICATION);
@@ -258,7 +270,7 @@ class FirebaseService {
      bool isExist = await isUserUidExist(user.uid);
     //TEstar sem conta cadastrada
     if(!isExist){
-      FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+     getRefCurrentUser(user.uid).set({
         "name": user.displayName,
         "email": user.email,
         "urlPicture": user.photoURL,
@@ -330,8 +342,7 @@ class FirebaseService {
   ResponseApi<bool> updateConfigUser(bool isEnableNotification,
       Timestamp initNotification, Timestamp finishNotification) {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
       refUsers.update({
         "isEnableNotification": isEnableNotification,
         "initNotification": initNotification,
@@ -347,10 +358,7 @@ class FirebaseService {
 
   Future<ResponseApi<UserRevo>> findDataUser() async {
     try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(fireBaseUserUid)
-          .get();
+      DocumentSnapshot snapshot = await getRefCurrentUser(fireBaseUserUid).get();
       UserRevo user = UserRevo.fromMap(snapshot.data());
       user.uid = snapshot.id;
       return ResponseApi.ok(result: user);
@@ -510,12 +518,12 @@ class FirebaseService {
 
   Future<ResponseApi<List<Dream>>> findAllDreams() async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       QuerySnapshot querySnapshot = await refUsers
           .collection("dreams")
           .where("isDeleted", isEqualTo: false)
+          .where("dateFinish", isNull: true)
           .get()
           .catchError((error) => CrashlyticsUtil.logErro(error, error));
 
@@ -526,10 +534,26 @@ class FirebaseService {
     }
   }
 
+  Future<ResponseApi<List<Dream>>> findAllDreamsCompleted() async {
+    try {
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
+
+      QuerySnapshot querySnapshot = await refUsers
+          .collection("dreams")
+          .where("dateFinish", isLessThanOrEqualTo: Timestamp.now())
+          .get();
+
+      return ResponseApi.ok(
+          result: Dream.fromListDocumentSnapshot(querySnapshot.docs));
+    } catch (error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
   Future<ResponseApi<List<Dream>>> findAllDreamsDeleted() async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       QuerySnapshot querySnapshot = await refUsers
           .collection("dreams")
@@ -546,8 +570,7 @@ class FirebaseService {
 
   Future<ResponseApi<List<Dream>>> findDreamsGoalWeekOk() async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       QuerySnapshot querySnapshot = await refUsers
           .collection("dreams")
@@ -565,8 +588,7 @@ class FirebaseService {
 
   ResponseApi<CollectionReference> findSteps(Dream dream) {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       CollectionReference listStepsRef =
           refUsers.collection("dreams").doc(dream.uid).collection("steps");
@@ -580,8 +602,7 @@ class FirebaseService {
 
   Future<ResponseApi<List<StepDream>>> findAllStepsForDream(Dream dream) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       QuerySnapshot querySnapshot = await refUsers
           .collection("dreams")
@@ -602,8 +623,7 @@ class FirebaseService {
 
   void saveLastAcess() {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       refUsers.collection("hits").add({"dateAcess": Timestamp.now()});
     } catch (error, stack) {
@@ -615,8 +635,7 @@ class FirebaseService {
   Future<bool> isExistAcessPreviousMonth() async {
     try {
       DateTime date = DateTime.now();
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       Timestamp firdDayMonth =
           Timestamp.fromDate(DateTime(date.year, date.month, 1));
@@ -636,8 +655,7 @@ class FirebaseService {
 
   ResponseApi<CollectionReference> findDailyGoals(Dream dream) {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       CollectionReference listStepsRef = refUsers
           .collection("dreams")
@@ -677,8 +695,7 @@ class FirebaseService {
 
   Future<ResponseApi<Dream>> findDream(String dreamPropouse) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DocumentSnapshot dreamRef =
           await refUsers.collection("dreams").doc(dreamPropouse).get();
@@ -693,8 +710,7 @@ class FirebaseService {
   Future<ResponseApi<List<StepDream>>> findStepsForDream(
       String dreamPropouse) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       CollectionReference listStepsRef = refUsers
           .collection("dreams")
@@ -717,8 +733,7 @@ class FirebaseService {
 
   Future<ResponseApi<bool>> findStepToday(String nameStep) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DateTime dateTime = DateTime.now();
 
@@ -738,8 +753,7 @@ class FirebaseService {
 
   ResponseApi<Void> updateStepToday(String nameStep, bool isSelected) {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DateTime dateTime = DateTime.now();
 
@@ -874,8 +888,7 @@ class FirebaseService {
     try {
       dream.dateRegister = Timestamp.now();
 
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DocumentReference dreamRef =
           await refUsers.collection("dreams").add(dream.toMap());
@@ -900,8 +913,7 @@ class FirebaseService {
   Future<ResponseApi<bool>> isStatusStepCompleted(
       StepDream stepDream, DateTime date) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DocumentReference dreamRef = refUsers
           .collection("dreams")
@@ -930,8 +942,7 @@ class FirebaseService {
   Future<ResponseApi<List<int>>> findDaysStepCompletedForMonth(
       StepDream stepDream, DateTime date) async {
     try {
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
       DocumentReference dreamRef = refUsers
           .collection("dreams")
@@ -1066,8 +1077,7 @@ class FirebaseService {
   Future<ResponseApi<bool>> saveLastFocus(UserFocus userFocus) async {
 
     try{
-      DocumentReference refUsers =
-      FirebaseFirestore.instance.collection("users").doc(fireBaseUserUid);
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
       refUsers.update({"focus" : userFocus.toMap()})
           .catchError((error) => CrashlyticsUtil.logErro(error, error));
 

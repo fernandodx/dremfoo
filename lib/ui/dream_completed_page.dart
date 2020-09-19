@@ -75,7 +75,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                         Container(
                           decoration: AppColors.backgroundBoxDecorationImg(),
                           child: TextUtil.textDefault("Sonho conquistado",
-                              fontSize: 16, color: Colors.white),
+                              fontSize: 16),
                           width: double.infinity,
                           height: 100,
                           padding: EdgeInsets.all(12),
@@ -185,11 +185,11 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextUtil.textDefault("Sonho realizado em: ",
-            fontSize: 20, color: AppColors.colorPrimaryDark),
+            fontSize: 20),
         TextUtil.textDefault("$countDays",
-            fontSize: 22, color: AppColors.colorAcent),
+            fontSize: 22),
         TextUtil.textDefault(" dias :)",
-            fontSize: 20, color: AppColors.colorPrimaryDark),
+            fontSize: 20),
       ],
     );
   }
@@ -200,12 +200,11 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorDark,
-          child: TextUtil.textDefault("${stepDream.position}˚",
-              color: Colors.white),
+          backgroundColor: AppColors.colorChipSecundary,
+          child: TextUtil.textChip("${stepDream.position}˚",),
         ),
-        label: TextUtil.textDefault(stepDream.step, color: Colors.white),
-        backgroundColor: AppColors.colorPrimary,
+        label: TextUtil.textChip(stepDream.step),
+        backgroundColor: AppColors.colorChipPrimary,
       );
 
       listWidget.add(Container(

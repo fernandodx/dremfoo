@@ -6,7 +6,20 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BaseBloc {
+class BaseBloc<T> {
+
+  final _controller = StreamController<T>();
+  Stream<T> get stream => _controller.stream;
+
+  void add(T obj) {
+    _controller.add(obj);
+  }
+
+  void addError(T obj){
+    if(!_controller.isClosed){
+      _controller.addError(obj);
+    }
+  }
 
   static String descriptionLoading = "Carregando...";
   final _loadingStreamController = StreamController<bool>.broadcast();
@@ -53,7 +66,7 @@ class BaseBloc {
               ),
             ),
           ),
-          TextUtil.textTitulo(description, color: Colors.white),
+          TextUtil.textLight(description),
         ],
       ),
     );
@@ -70,6 +83,7 @@ class BaseBloc {
 
   dispose() {
     _loadingStreamController.close();
+    _controller.close();
   }
 
   loading() {
@@ -102,7 +116,7 @@ class BaseBloc {
                     ),
                   ),
                 ),
-                TextUtil.textTitulo(descriptionLoading, color: Colors.white),
+                TextUtil.textLight(descriptionLoading),
               ],
             ),
           ),

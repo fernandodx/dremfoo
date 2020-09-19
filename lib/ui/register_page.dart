@@ -1,12 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/bloc/register_bloc.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/strings.dart';
+import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/utils/validator_util.dart';
 import 'package:dremfoo/widget/app_text_default.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -42,7 +45,8 @@ class _RegisterPageState extends State<RegisterPage> {
               icon: Icon(
                 Icons.check,
               ),
-              onPressed: () => _bloc.resgisterUser(context)),
+              onPressed: () => registerUserOnPress(context),
+          ),
         ],
       ),
       body: Stack(
@@ -71,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 20,
                         ),
                         AppTextDefault(
-                          name: "E-mal",
+                          name: "E-mail",
                           maxLength: 50,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.emailAddress,
@@ -86,11 +90,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           maxLength: 50,
                           inputAction: TextInputAction.next,
                           inputType: TextInputType.emailAddress,
+                          validator: ValidatorUtil.validatorEmail,
                           controller: _bloc.validatedEmailController,
-                          validator: ValidatorUtil.requiredField,
-                          onSaved: (emailConfirmated) =>
-                              ValidatorUtil.fieldsEquals(emailConfirmated,
-                                  _bloc.validatedEmailController),
                         ),
                         SizedBox(
                           height: 20,
@@ -120,13 +121,22 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+
+
+  Future registerUserOnPress(BuildContext context) async {
+     User user = await _bloc.resgisterUser(context);
+     if(user != null){
+       push(context, HomePage(), isReplace: true);
+     }
+  }
+
   Container headerRegister() {
     return Container(
       color: Colors.white,
       child: Stack(
         children: <Widget>[
           Container(
-            height: 150,
+            height: 90,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [AppColors.colorPrimary, AppColors.colorPrimaryDark],
@@ -141,13 +151,13 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 60),
+                margin: EdgeInsets.only(top: 23),
                 decoration: BoxDecoration(
                   color: Colors.white, // border color
                   shape: BoxShape.circle,
                 ),
-                width: 130,
-                height: 130,
+                width: 100,
+                height: 100,
                 child: createStreamBuilderPhotoUser(),
               ),
             ],
@@ -159,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   StreamBuilder<Widget> createStreamBuilderPhotoUser() {
     return StreamBuilder<Widget>(
-      stream: _bloc.pictureStream,
+      stream: _bloc.stream,
       builder: (context, snapshot) {
 
         if (snapshot.hasData) {

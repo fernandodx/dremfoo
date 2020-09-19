@@ -5,6 +5,10 @@ class ValidatorUtil {
     if (value.isEmpty) {
       return "E-mail é obrigatório";
     }
+
+    if(!value.contains("@")){
+      return "E-mail é inválido";
+    }
     return null;
   }
 
@@ -41,13 +45,5 @@ class ValidatorUtil {
     return null;
   }
 
-  static String fieldsEquals(String value, TextEditingController controller) {
-    if (value.isEmpty) {
-      return "Campo obrigatório";
-    }
-    if(value != controller.value.text){
-      return "O campo não confere";
-    }
-    return null;
-  }
+
 }

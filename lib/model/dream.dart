@@ -110,6 +110,7 @@ class Dream {
     data['isDeleted'] = this.isDeleted;
     data['color'] = this.color.toMap();
     data['isDreamWait'] = this.isDreamWait;
+    data['dateFinish'] = this.dateFinish;
 //    data['steps'] = this.steps;
     return data;
   }

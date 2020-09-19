@@ -40,25 +40,18 @@ class RegisterDreamsBloc extends BaseBloc {
   TextEditingController inflectionTextEditController = TextEditingController();
   TextEditingController inflectionWeekTextEditController =
       TextEditingController();
+  List<bool> listInfoExpanted = [];
 
-  final _addimgDreamController = StreamController<Widget>();
-
-  Stream<Widget> get streamImgDream => _addimgDreamController.stream;
 
   void fetch(dreamEdit, context) {
     if (dreamEdit == null) {
       dream = Dream();
-      final imgDefault =
-          Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"));
-//    await Future.delayed(Duration(seconds: 4));
       dream.steps = [];
       steps = [];
-      _addimgDreamController.add(imgDefault);
     } else {
       dream = Dream.copy(dreamEdit);
       dreamForEdit = Dream.copy(dreamEdit);
       dreamTextEditController.text = dream.dreamPropose;
-      _addimgDreamController.add(Utils.string64ToImage(dream.imgDream));
       initStepForWin(dream, context);
       initDailyGoals(dream, context);
       rewardTextEditController.text = dream.reward;
@@ -67,12 +60,12 @@ class RegisterDreamsBloc extends BaseBloc {
       inflectionWeekTextEditController.text = dream.inflectionWeek;
       rewardWeekTextEditController.text = dream.rewardWeek;
     }
+
   }
 
   @override
   dispose(){
     super.dispose();
-    _addimgDreamController.close();
   }
 
   deleteDream(context) {
@@ -91,21 +84,11 @@ class RegisterDreamsBloc extends BaseBloc {
     }
   }
 
-  addImage(context) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    File compressedImg = await FlutterNativeImage.compressImage(image.path,
-        quality: 80, targetWidth: 600, targetHeight: 500);
-
-    List<int> imageBytes = compressedImg.readAsBytesSync();
-    String base64Image = base64Encode(imageBytes);
-    dream.imgDream = base64Image;
-
-//    var imgBytes = base64Decode(base64Image);
-
-    if (image != null) {
-      _addimgDreamController.add(Image.file(image));
-//      _addimgDreamController.add(Image.memory(imgBytes));
-      AnalyticsUtil.sendAnalyticsEvent(EventRevo.addImageDream);
+ Widget getImageDream() {
+    if(dream.imgDream != null && dream.imgDream.isNotEmpty){
+     return  Utils.string64ToImage(dream.imgDream);
+    }else{
+      return Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"));
     }
   }
 
@@ -134,11 +117,11 @@ class RegisterDreamsBloc extends BaseBloc {
     dream.steps.forEach((step) {
       var newChip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorPrimary,
-          child: TextUtil.textDefault('${step.position}˚', color: Colors.white, maxLines: 1),
+          backgroundColor: AppColors.colorChipSecundary,
+          child: TextUtil.textChip('${step.position}˚', maxLines: 1),
         ),
-        label: TextUtil.textDefault('${step.step}˚', color: Colors.white, maxLines: 1),
-        backgroundColor: AppColors.colorAcent,
+        label: TextUtil.textChip('${step.step}˚', maxLines: 1),
+        backgroundColor: AppColors.colorChipPrimary,
         onDeleted: () => removeStepForWin(step.position, context),
         deleteIconColor: Colors.white,
       );
@@ -164,11 +147,11 @@ class RegisterDreamsBloc extends BaseBloc {
     dream.dailyGoals.forEach((daily) {
       var newChip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorPrimary,
-          child: TextUtil.textDefault('${daily.position}˚', color: Colors.white, maxLines: 1),
+          backgroundColor: AppColors.colorChipSecundary,
+          child: TextUtil.textChip('${daily.position}˚', maxLines: 1),
         ),
-        label: TextUtil.textDefault('${daily.nameDailyGoal}˚', color: Colors.white, maxLines: 1),
-        backgroundColor: AppColors.colorAcent,
+        label: TextUtil.textChip('${daily.nameDailyGoal}˚', maxLines: 1),
+        backgroundColor: AppColors.colorChipPrimary,
         onDeleted: () => removeDailyGoals(daily.position, context),
         deleteIconColor: Colors.white,
       );
@@ -215,11 +198,11 @@ class RegisterDreamsBloc extends BaseBloc {
   List<Widget> addStepForWinOnly(nameStep, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimary,
-        child: TextUtil.textDefault('${position}˚', color: Colors.white, maxLines: 1),
+        backgroundColor: AppColors.colorChipSecundary,
+        child: TextUtil.textChip('${position}˚', maxLines: 1),
       ),
-      label: TextUtil.textDefault(nameStep, color: Colors.white, maxLines: 1),
-      backgroundColor: AppColors.colorAcent,
+      label: TextUtil.textChip(nameStep, maxLines: 1),
+      backgroundColor: AppColors.colorChipPrimary,
       onDeleted: () => removeStepForWin(position, context),
       deleteIconColor: Colors.white,
     );
@@ -235,11 +218,11 @@ class RegisterDreamsBloc extends BaseBloc {
   List<Widget> addDailyGoalOnly(nameStep, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimary,
-        child:TextUtil.textDefault('${position}˚', color: Colors.white, maxLines: 1),
+        backgroundColor: AppColors.colorChipSecundary,
+        child:TextUtil.textChip('${position}˚', maxLines: 1),
       ),
-      label: TextUtil.textDefault(nameStep, color: Colors.white, maxLines: 1),
-      backgroundColor: AppColors.colorAcent,
+      label: TextUtil.textChip(nameStep, maxLines: 1),
+      backgroundColor: AppColors.colorChipPrimary,
       onDeleted: () => removeDailyGoals(position, context),
       deleteIconColor: Colors.white,
     );
@@ -255,11 +238,11 @@ class RegisterDreamsBloc extends BaseBloc {
   void addStepForWin(nameStep, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimary,
-        child: TextUtil.textDefault('${position}˚', color: Colors.white, maxLines: 1),
+        backgroundColor: AppColors.colorChipSecundary,
+        child: TextUtil.textChip('${position}˚', maxLines: 1),
       ),
-      label: TextUtil.textDefault(nameStep, color: Colors.white, maxLines: 1),
-      backgroundColor: AppColors.colorAcent,
+      label: TextUtil.textChip(nameStep, maxLines: 1),
+      backgroundColor: AppColors.colorChipPrimary,
       onDeleted: () => removeStepForWin(position, context),
       deleteIconColor: Colors.white,
     );
@@ -267,7 +250,6 @@ class RegisterDreamsBloc extends BaseBloc {
     StepDream sd = StepDream();
     sd.step = nameStep;
     sd.position = position;
-    print(dream.steps);
     dream.steps.add(sd);
 
     stepTextEditController.clear();
@@ -281,11 +263,11 @@ class RegisterDreamsBloc extends BaseBloc {
   void addDailyGoals(nameGoal, position, context) {
     var newChip = Chip(
       avatar: CircleAvatar(
-        backgroundColor: AppColors.colorPrimary,
-        child: TextUtil.textDefault('${position}˚', color: Colors.white, maxLines: 1)
+        backgroundColor: AppColors.colorChipSecundary,
+        child: TextUtil.textChip('${position}˚', maxLines: 1)
       ),
-      label: TextUtil.textDefault('${nameGoal}˚', color: Colors.white, maxLines: 1),
-      backgroundColor: AppColors.colorAcent,
+      label: TextUtil.textChip('${nameGoal}˚', maxLines: 1),
+      backgroundColor: AppColors.colorChipPrimary,
       onDeleted: () => removeDailyGoals(position, context),
       deleteIconColor: Colors.white,
     );

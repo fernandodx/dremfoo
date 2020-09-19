@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/resources/app_colors.dart';
+import 'package:dremfoo/utils/remoteconfig_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
@@ -85,56 +84,65 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
     );
   }
 
-  Column getAppSocialInstagram() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        SocialMediaButton.instagram(
-          color: AppColors.colorDark,
-          size: 35,
-          onTap: () {
-            launch("https://www.instagram.com/priscila_torres/");
-          },
-        ),
-        TextUtil.textDefault("Instagram")
-      ],
+  Widget getAppSocialInstagram() {
+    return Visibility(
+      visible: RemoteConfigUtil().isEnableMediaInstagram(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SocialMediaButton.instagram(
+            color: AppColors.colorDark,
+            size: 35,
+            onTap: () {
+              launch("https://www.instagram.com/priscila_torres/");
+            },
+          ),
+          TextUtil.textDefault("Instagram")
+        ],
+      ),
     );
   }
 
-  Column getAppSocialYoutube() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        SocialMediaButton.youtube(
-          color: AppColors.colorDark,
-          size: 35,
-          onTap: () {
-            launch("https://www.youtube.com/user/fernandodxx");
-          },
-        ),
-        TextUtil.textDefault("Youtube")
-      ],
+  Widget getAppSocialYoutube() {
+    return Visibility(
+      visible: RemoteConfigUtil().isEnableMediaYoutube(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SocialMediaButton.youtube(
+            color: AppColors.colorDark,
+            size: 35,
+            onTap: () {
+              launch("https://www.youtube.com/user/fernandodxx");
+            },
+          ),
+          TextUtil.textDefault("Youtube")
+        ],
+      ),
     );
   }
 
-  Column getAppSocialSite() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 9, top: 9),
-          child: InkWell(
-            onTap: () => launch(
-                "https://play.google.com/store/apps/dev?id=7876738907056259315"),
-            child: Icon(
-              Icons.restore_page,
-              color: AppColors.colorDark,
-              size: 35,
+  Widget getAppSocialSite() {
+    return Visibility(
+      visible: RemoteConfigUtil().isEnableMediaSite(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 9, top: 9),
+            child: InkWell(
+              onTap: () => launch(
+                  "https://play.google.com/store/apps/dev?id=7876738907056259315"),
+              child: Icon(
+                Icons.restore_page,
+                color: AppColors.colorDark,
+                size: 35,
+              ),
             ),
           ),
-        ),
-        TextUtil.textDefault("Site")
-      ],
+          TextUtil.textDefault("Site")
+        ],
+      ),
     );
   }
 
@@ -144,10 +152,10 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
 
       Email email = Email(
           to: ['fernandodx@hotmail.com'],
-          cc: ['nando.djx@gmail.com'],
-          bcc: ['fdias@outlook.com'],
-          subject: 'REVO App',
-          body: 'Olá esse e-mail'
+          // cc: ['nando.djx@gmail.com'],
+          // bcc: ['fdias@outlook.com'],
+          subject: 'REVO - Metas com foco',
+          body: 'Olá Fernando, '
       );
       await EmailLauncher.launch(email);
 
@@ -159,27 +167,28 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
 
   }
 
-  Column getAppSocialContato() {
-    var url = 'mailto:fernandodx@hotmail.com?subject=Revo&body=OlÁ';
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 9, top: 9),
-          child: InkWell(
-            onTap: () {
-              sendEmail();
-            },
-            child: Icon(
-              Icons.email,
-              color: AppColors.colorDark,
-              size: 35,
+  Widget getAppSocialContato() {
+    return Visibility(
+      visible: RemoteConfigUtil().isEnableMediaContato(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 9, top: 9),
+            child: InkWell(
+              onTap: () {
+                sendEmail();
+              },
+              child: Icon(
+                Icons.email,
+                color: AppColors.colorDark,
+                size: 35,
+              ),
             ),
           ),
-        ),
-        TextUtil.textDefault("Contato")
-      ],
+          TextUtil.textDefault("Contato")
+        ],
+      ),
     );
   }
 }

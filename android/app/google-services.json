@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "902416299879-cebvgo2ggf75ha96hgufcapcs0bguda6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.com.dias.dremfoo",
-            "certificate_hash": "99cb6b6c6aef6ad0decd1e566690c3438d8a3caa"
-          }
-        },
-        {
           "client_id": "902416299879-goolj1nr57jbt7lrfkjd0bhdlqttm662.apps.googleusercontent.com",
           "client_type": 3
         }

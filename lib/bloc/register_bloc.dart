@@ -13,21 +13,33 @@ import 'package:image_picker/image_picker.dart';
 
 import 'base_bloc.dart';
 
-class RegisterBloc extends BaseBloc {
+class RegisterBloc extends BaseBloc<Widget> {
   final formKey = GlobalKey<FormState>();
   final user = UserRevo();
   final validatedEmailController = TextEditingController();
-  final _pictureStreamController = StreamController<Widget>();
-
-  Stream get pictureStream => _pictureStreamController.stream;
 
   void fetch() async {
-    _pictureStreamController.add(userPhotoEdit());
+    add(userPhotoEdit());
+  }
+
+  bool validFields(BuildContext context) {
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save();
+      if (fieldsEquals(user.email, validatedEmailController.text.toString())) {
+        return true;
+      } else {
+        alertBottomSheet(context, msg: "O e-mail não confere",
+            title: "Ops",
+            type: TypeAlert.ERROR);
+        return false;
+      }
+    }
   }
 
   Future<User> resgisterUser(BuildContext context) async {
-    if (formKey.currentState.validate()) {
-      formKey.currentState.save();
+
+    bool isOk = validFields(context);
+    if(isOk){
       showLoading();
       ResponseApi responseApi = await FirebaseService()
           .createUserWithEmailAndPassword(context, user.email, user.password,
@@ -35,7 +47,6 @@ class RegisterBloc extends BaseBloc {
       hideLoading();
       if (responseApi.ok) {
         User user = responseApi.result;
-        print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoURL}");
         AnalyticsUtil.sendAnalyticsEvent(EventRevo.registerLogin, parameters: {"user":user.email});
         return user;
       } else {
@@ -43,7 +54,17 @@ class RegisterBloc extends BaseBloc {
             msg: responseApi.msg, title: "Ops", type: TypeAlert.ERROR);
         return null;
       }
+     }
+  }
+
+  static bool fieldsEquals(String value, String value2) {
+    if (value.isEmpty) {
+      return false;
     }
+    if(value != value2){
+      return false;
+    }
+    return true;
   }
 
   onAddImage() async {
@@ -65,7 +86,7 @@ class RegisterBloc extends BaseBloc {
       child: circleImage,
     );
 
-    _pictureStreamController.sink.add(picture);
+    add(picture);
   }
 
   userPhotoEdit() {
@@ -78,8 +99,8 @@ class RegisterBloc extends BaseBloc {
           Image.asset(
             "assets/images/icon_user.png",
             fit: BoxFit.contain,
-            height: 60,
-            width: 60,
+            height: 40,
+            width: 40,
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
@@ -88,8 +109,8 @@ class RegisterBloc extends BaseBloc {
               Image.asset(
                 "assets/images/icon_edit.png",
                 fit: BoxFit.contain,
-                height: 30,
-                width: 30,
+                height: 20,
+                width: 20,
               ),
             ],
           ),
@@ -101,6 +122,5 @@ class RegisterBloc extends BaseBloc {
   @override
   dispose() {
     super.dispose();
-    _pictureStreamController.close();
   }
 }

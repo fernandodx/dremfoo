@@ -80,10 +80,10 @@ class CardDream extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: CircleAvatar(
                   maxRadius: 12,
-                  backgroundColor: Colors.black54,
+                  backgroundColor: Utils.colorFromHex(color.secondary),
                   child: Icon(
                     Icons.settings,
-                    color: Utils.colorFromHex(color.primary),
+                    color: Colors.white,
                     size: 15,
                   ),
                 ),
@@ -149,9 +149,9 @@ class CardDream extends StatelessWidget {
   }
 
   Widget _getImg() {
-    BoxFit fit = isCardAdd ? BoxFit.contain : BoxFit.cover;
-    double width = isCardAdd ? 100 : 160;
-    double height = isCardAdd ? 100 : 110;
+    BoxFit fit = isCardAdd ? BoxFit.contain : BoxFit.fill;
+    double width = isCardAdd ? 80 : 160;
+    double height = isCardAdd ? 80 : 110;
 
     if (urlImg != null) {
       return CachedNetworkImage(

@@ -1,12 +1,44 @@
+import 'package:dremfoo/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const colorPrimary = Color.fromARGB(255, 0, 127, 130);
+
+  static Color get colorPrimary => Utils.colorFromHex("#13ABC4");
+  static Color get colorPrimaryDark => Utils.colorFromHex("#0D7282");
+  static Color get colorAcent => Utils.colorFromHex("#00B1B8");
+  static Color get colorCard => Utils.colorFromHex("#FCFFFE");
+  static Color get colorText => Utils.colorFromHex("#0D7282");
+  static Color get colorSubText => Utils.colorFromHex("#D90D7282");
+  static Color get colorStartGradient => Utils.colorFromHex("#6E5A7D");
+  static Color get colorEndGradient => Utils.colorFromHex("#1397A9");
+  static Color get colorDrawer => Utils.colorFromHex("#13ABC4");
+  static Color get colorIconDrawer => Utils.colorFromHex("#6E5773");
+  static Color get colorlight => Utils.colorFromHex("#E9E2D0");
+  static Color get colorTextTitleMenu => Utils.colorFromHex("#2C232F");
+  static Color get colorTextSubTitleMenu => Utils.colorFromHex("#D92C232F");
+  static Color get colorChipPrimary => Utils.colorFromHex("#EA9085");
+  static Color get colorChipSecundary => Utils.colorFromHex("#E9E2D0");
+  static Color get colorTextChip => Utils.colorFromHex("#211A23");
+
+  static Color get colorViolet => Utils.colorFromHex("#6E5773");
+  static Color get colorSatin => Utils.colorFromHex("#D45D79");
+  static Color get colorPink => Utils.colorFromHex("#EA9085");
+  static Color get colorEggShell => Utils.colorFromHex("#E9E2D0");
+  static Color get colorLazulli => Utils.colorFromHex("#3161A3");
+  static Color get colorPacific => Utils.colorFromHex("#13ABC4");
+  static Color get colorEletric => Utils.colorFromHex("#7EFAFF");
+  static Color get colorWebColor => Utils.colorFromHex("#EBFFFB");
+
+
+
+
+
+  // static const colorPrimary = Color.fromARGB(255, 0, 127, 130);
   static const colorPrimaryLight = Color.fromARGB(255, 78, 183, 185);
-  static const colorPrimaryDark = Color.fromARGB(255, 19, 98, 107);
+  // static const colorPrimaryDark = Color.fromARGB(255, 19, 98, 107);
   static const colorPrimaryDarkLight = Color.fromARGB(255, 98, 167, 172);
-  static const colorAcent = Color.fromARGB(255, 232, 202, 104);
+  // static const colorAcent = Color.fromARGB(255, 232, 202, 104);
   static const colorAcentLight = Color.fromARGB(255, 242, 224, 125);
 
   static const colorDark = Color.fromARGB(255, 38, 69, 84);
@@ -23,8 +55,8 @@ class AppColors {
   static BoxDecoration backgroundBoxDecoration() {
     return BoxDecoration(
         gradient: LinearGradient(
-            colors: [colorPrimaryDark, colorPrimaryLight],
-            begin: FractionalOffset.center,
+            colors: [colorStartGradient, colorEndGradient],
+            begin: FractionalOffset.topCenter,
             end: FractionalOffset.bottomCenter));
   }
 
@@ -40,7 +72,15 @@ class AppColors {
   static BoxDecoration backgroundDrawerDecoration() {
     return BoxDecoration(
         gradient: LinearGradient(
-            colors: [colorPrimaryDark, colorPrimaryLight],
+            colors: [colorDrawer ,colorDrawer],
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter));
+  }
+
+  static BoxDecoration backgroundDrawerHeaderDecoration() {
+    return BoxDecoration(
+        gradient: LinearGradient(
+            colors: [colorDrawer, colorStartGradient],
             begin: FractionalOffset.topCenter,
             end: FractionalOffset.bottomCenter));
   }

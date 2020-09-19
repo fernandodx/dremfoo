@@ -77,17 +77,15 @@ class _ListVideoPageState extends State<ListVideoPage> {
             ],
           ),
           Container(
-            padding: EdgeInsets.only(left: 16, bottom: 18, top: 16, right: 16),
+            padding: EdgeInsets.only(left: 12, bottom: 18, top: 20, right: 12),
             decoration: AppColors.backgroundBoxDecorationImg(),
             child: TextUtil.textTituloVideo(
                 "${video.name} | ${video.time}",
-                color: Colors.white,
                 align: TextAlign.left),
           ),
           Container(
-            padding: EdgeInsets.only(left: 16, bottom: 2, right: 16),
-            child: TextUtil.textDefault("Publicado em: ${Utils.dateToString(video.date.toDate())}",
-                color: Colors.white70, fontSize: 10, align: TextAlign.right),
+            padding: EdgeInsets.only(left: 12, bottom: 4, right: 12, top: 12),
+            child: TextUtil.textTituloVideo("Publicado em: ${Utils.dateToString(video.date.toDate())}", fontSize: 10, align: TextAlign.right),
           ),
         ],
       ),
@@ -107,8 +105,10 @@ class _ListVideoPageState extends State<ListVideoPage> {
         videoId: video.id,
         autoPlay: true,
         //default false
-        fullScreen: true,
-        backgroundColor: Colors.blueGrey, //default false
+        fullScreen: false,
+        appBarColor: AppColors.colorPrimary,
+        appBarVisible: true,
+        backgroundColor: AppColors.colorPrimaryDark, //default false
     );
   }
 }

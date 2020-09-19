@@ -65,13 +65,15 @@ class AppTextDefault extends StatelessWidget {
         labelText: name,
         hintText: hint,
         labelStyle: TextStyle(fontSize: 16, ),
-        prefixIcon: Icon(icon, color: AppColors.colorDark, size: 18,),
+        prefixIcon: Icon(icon, color: AppColors.colorPrimaryDark, size: 18,),
       );
     } else {
       return InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), gapPadding: 8, ),
+        contentPadding: EdgeInsets.all(10),
         labelText: name,
         hintText: hint,
+        labelStyle: TextStyle(fontSize: 16, ),
       );
     }
   }

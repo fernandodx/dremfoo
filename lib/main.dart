@@ -5,7 +5,6 @@ import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/ui/login_page.dart';
 import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:dremfoo/utils/crashlytics_util.dart';
-import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/remoteconfig_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,9 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
-import 'api/firebase_service.dart';
 import 'eventbus/main_event_bus.dart';
-import 'model/user.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -39,7 +36,7 @@ class ReceivedNotification {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  RemoteConfigUtil.init();
+  await RemoteConfigUtil.init();
   CrashlyticsUtil.init();
   AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
   initConfigNotification();
@@ -117,6 +114,8 @@ class _MyAppState extends State<MyApp> {
           accentColor: AppColors.colorAcent,
           primaryColorDark: AppColors.colorPrimaryDark,
           canvasColor: Colors.transparent,
+          buttonColor: AppColors.colorPrimaryDark,
+          cardColor: AppColors.colorCard
         ),
         home: LoginPage(),
 //      home: HomePage(),

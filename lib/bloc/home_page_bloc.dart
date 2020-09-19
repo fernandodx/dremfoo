@@ -27,6 +27,7 @@ import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/card_dream.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class HomePageBloc extends BaseBloc {
@@ -137,18 +138,17 @@ class HomePageBloc extends BaseBloc {
       List<StepDream> listStep = List();
       List<DailyGoal> listDailyGoals = List();
 
-      if(!dream.isDreamWait){
+      if(dream != null && !dream.isDreamWait){
         ResponseApi<CollectionReference> responseStepApi = FirebaseService().findSteps(dream);
         ResponseApi<CollectionReference> responseDailyApi= FirebaseService().findDailyGoals(dream);
-
-        if (responseDailyApi.ok) {
-          await loadDailyGoal(responseDailyApi, dream, listDailyGoals);
-        }
 
         if (responseStepApi.ok) {
           await loadSteps(responseStepApi, dream, listStep);
         }
 
+        if (responseDailyApi.ok) {
+          await loadDailyGoal(responseDailyApi, dream, listDailyGoals);
+        }
       }
       listAllStep.addAll(listStep);
       listAllDailyGoal.addAll(listDailyGoals);
@@ -159,15 +159,26 @@ class HomePageBloc extends BaseBloc {
     getStepChips(context, listAllStep);
     getDailyChips(context, listAllDailyGoal);
 
-    List<List<ChartGoals>> listGoalsWeek = await getDataChartWeek(listDream);
 
-    Widget chartWeek = ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
-    listChartWidget.add(chartWeek);
+    if(listAllDailyGoal == null || listAllDailyGoal.isEmpty){
 
-    Widget chartMonth = await _createBarMouth(listDream);
-    listChartWidget.add(chartMonth);
+      _addChartStreamController.add([
+        Container()
+      ]);
+    }else{
 
-    _addChartStreamController.add(listChartWidget);
+      List<List<ChartGoals>> listGoalsWeek = await getDataChartWeek(listDream);
+
+      Widget chartWeek = ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
+      listChartWidget.add(chartWeek);
+
+      Widget chartMonth = await _createBarMouth(listDream);
+      listChartWidget.add(chartMonth);
+
+      _addChartStreamController.add(listChartWidget);
+    }
+
+
 
     DateTime now = DateTime.now();
     DateTime firstDay = now.subtract(Duration(days: now.weekday));
@@ -311,12 +322,31 @@ class HomePageBloc extends BaseBloc {
   }
 
   Future<List<Widget>> getStepChips(context, List<StepDream> steps) async {
+    if(steps == null || steps.isEmpty){
+      _addChipStepsStreamController.add([
+        Container(
+            margin: EdgeInsets.only(left: 12),
+            child: TextUtil.textDefault("Etapas ainda não definidas")
+        )
+      ]);
+      return [];
+    }
+
     List<Widget> listWidget = await verifyCheckChipStep(context, steps);
     _addChipStepsStreamController.add(listWidget);
     return listWidget;
   }
 
   Future<List<Widget>> getDailyChips(context, List<DailyGoal> dailys) async {
+    if(dailys == null || dailys.isEmpty){
+      _addChipDailyStreamController.add([
+        Container(
+            margin: EdgeInsets.only(left: 12),
+            child: TextUtil.textDefault("Metas ainda não definidas")
+        )
+      ]);
+      return [];
+    }
     List<Widget> listWidget = await verifyCheckChipDaily(context, dailys);
     _addChipDailyStreamController.add(listWidget);
     return listWidget;
@@ -332,21 +362,18 @@ class HomePageBloc extends BaseBloc {
 
       ChoiceChip chip = ChoiceChip(
         elevation: 8,
-        label: Text(
-          stepDream.step,
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.secondary),
+        label: TextUtil.textChipLight(stepDream.step),
+        backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.primary),
         selectedColor: AppColors.colorPrimary,
         selected: stepDream.isCompleted,
         avatar: stepDream.isCompleted
             ? Icon(
                 Icons.check,
-                color: Colors.white,
+                color: AppColors.colorlight,
               )
             : CircleAvatar(
-          backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.primary),
-          child: TextUtil.textDefault("${stepDream.position}˚", color: Colors.white),),
+          backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.secondary),
+          child: TextUtil.textChipLight("${stepDream.position}˚"),),
         onSelected: (selected) {
           stepDream.isCompleted = selected;
           stepDream.dateCompleted = Timestamp.now();
@@ -374,21 +401,18 @@ class HomePageBloc extends BaseBloc {
     for (DailyGoal daily in listDailyGoals) {
       ChoiceChip chip = ChoiceChip(
         elevation: 8,
-        label: Text(
-          daily.nameDailyGoal,
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor:Utils.colorFromHex(daily.dreamParent.color.secondary),
+        label: TextUtil.textChipLight(daily.nameDailyGoal),
+        backgroundColor:Utils.colorFromHex(daily.dreamParent.color.primary),
         selectedColor: AppColors.colorPrimary,
         selected: daily.isCompletedToday(),
         avatar: daily.isCompletedToday()
             ? Icon(
           Icons.check,
-          color: Colors.white,
+          color: AppColors.colorlight,
         )
             : CircleAvatar(
-          backgroundColor: Utils.colorFromHex(daily.dreamParent.color.primary),
-          child: TextUtil.textDefault("${daily.position}˚", color: Colors.white),),
+          backgroundColor: Utils.colorFromHex(daily.dreamParent.color.secondary),
+          child: TextUtil.textChipLight("${daily.position}˚"),),
         onSelected: (selected) {
           if(selected){
             saveLastFocus();

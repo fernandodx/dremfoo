@@ -1,3 +1,4 @@
+import 'package:dremfoo/bloc/dreams_completed_bloc.dart';
 import 'package:dremfoo/bloc/dreams_deleted_bloc.dart';
 import 'package:dremfoo/eventbus/main_event_bus.dart';
 import 'package:dremfoo/model/dream.dart';
@@ -12,13 +13,13 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DreamsDeletedPage extends StatefulWidget {
+class DreamsCompletedPage extends StatefulWidget {
   @override
-  _DreamsDeletedPageState createState() => _DreamsDeletedPageState();
+  _DreamsCompletedPageState createState() => _DreamsCompletedPageState();
 }
 
-class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
-  final _bloc = DreamsDeletedBloc();
+class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
+  final _bloc = DreamsCompletedBloc();
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextUtil.textAppbar("Sonhos arquivados"),
+        title: TextUtil.textAppbar("Sonhos realizados"),
       ),
       drawer: AppDrawerMenu(),
       body: bodyWithDreamDeleted(),
@@ -45,7 +46,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
     return Container(
       color: Colors.white,
       child: FutureBuilder(
-        future: _bloc.findDreamsDeleted(),
+        future: _bloc.findDreamsCompleted(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Container(
@@ -74,7 +75,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
                     margin: EdgeInsets.all(16),
                     child: Center(
                       child: TextUtil.textTitulo(
-                          "Nenhum sonho foi arquivado."),
+                          "Nenhum sonho foi realizado ainda, mas tenho certeza que vai conseguir! ;)"),
                     ),
                   ),
                 ],
@@ -144,18 +145,18 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
                   Wrap(
                     children: createChipStep(dream.steps),
                   ),
-                  ButtonBarTheme(
-                    data: ButtonBarTheme.of(context),
-                    child: ButtonBar(
-                      children: <Widget>[
-                        AppButtonDefault(
-                          onPressed: () => _restoredDream(dream),
-                          label: "RESTAURAR",
-                          type: TypeButton.FLAT,
-                        )
-                      ],
-                    ),
-                  ),
+                  // ButtonBarTheme(
+                  //   data: ButtonBarTheme.of(context),
+                  //   child: ButtonBar(
+                  //     children: <Widget>[
+                  //       AppButtonDefault(
+                  //         onPressed: () => _restoredDream(dream),
+                  //         label: "RESTAURAR",
+                  //         type: TypeButton.FLAT,
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -183,11 +184,11 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorChipPrimary,
+          backgroundColor: AppColors.colorChipSecundary,
           child: TextUtil.textChip("${stepDream.position}˚",),
         ),
         label: TextUtil.textChip(stepDream.step),
-        backgroundColor: AppColors.colorChipSecundary,
+        backgroundColor: AppColors.colorChipPrimary,
       );
 
       listWidget.add(Container(
@@ -195,12 +196,5 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
     }
 
     return listWidget;
-  }
-
-  _restoredDream(Dream dream) {
-    setState(() {
-      _bloc.restoredDream(dream);
-      MainEventBus().get(context).sendEventHomeDream(TipoEvento.FETCH);
-    });
   }
 }

@@ -1,16 +1,13 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:date_util/date_util.dart';
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/eventbus/main_event_bus.dart';
 import 'package:dremfoo/eventbus/user_event_bus.dart';
-import 'package:dremfoo/model/level_revo.dart';
-import 'package:dremfoo/model/response_api.dart';
-import 'package:dremfoo/model/user.dart';
 import 'package:dremfoo/model/user_focus.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/ui/config_notification_page.dart';
+import 'package:dremfoo/ui/dreams_completed_page.dart';
 import 'package:dremfoo/ui/dreams_deleted_page.dart';
 import 'package:dremfoo/ui/home_page.dart';
 import 'package:dremfoo/ui/info_media_social_page.dart';
@@ -37,18 +34,11 @@ class AppDrawerMenu extends StatefulWidget {
 }
 
 class _AppDrawerMenuState extends State<AppDrawerMenu> {
-  
-  
-
-
   @override
   void initState() {
     super.initState();
     FirebaseService().checkFocusContinuos(context);
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,102 +59,140 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
             SizedBox(
               height: 16.0,
             ),
-            ListTile(
-              leading: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              title: TextUtil.textDefault("Painel", color: Colors.white),
-              subtitle: TextUtil.textDefault("Acompanhe seus sonhos",
-                  color: Colors.white70),
-              onTap: () {
+            itemMenu(
+              context,
+              Icons.home,
+              "Painel",
+              () {
                 AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuPainel);
                 push(context, HomePage(), isReplace: true);
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.delete,
-                color: Colors.white,
+            Visibility(
+                visible: RemoteConfigUtil().isEnableMenuArchive(),
+                child: itemMenu(
+                  context,
+                  Icons.delete,
+                  "Sonhos arquivados",
+                  () {
+                    AnalyticsUtil.sendAnalyticsEvent(
+                        EventRevo.menuDreamDeleted);
+                    push(context, DreamsDeletedPage(), isReplace: true);
+                  },
+                )),
+            Visibility(
+              visible: RemoteConfigUtil().isEnableMenuDreamCompleted(),
+              child: itemMenu(
+                context,
+                Icons.cloud_done,
+                "Sonhos realizados",
+                () {
+                  AnalyticsUtil.sendAnalyticsEvent(
+                      EventRevo.menuDreamCompleted);
+                  push(context, DreamsCompletedPage(), isReplace: true);
+                },
               ),
-              title: TextUtil.textDefault("Sonhos arquivados",
-                  color: Colors.white),
-              onTap: () {
-                AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuDreamDeleted);
-                push(context, DreamsDeletedPage(), isReplace: true);
-              },
             ),
-            ListTile(
-              leading: Icon(
+            Visibility(
+              visible: RemoteConfigUtil().isEnableMenuNotificacao(),
+              child: itemMenu(
+                context,
                 Icons.notifications,
-                color: Colors.white,
+                "Notificações",
+                () {
+                  AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuNotification);
+                  push(context, ConfigNotificationPage(), isReplace: true);
+                },
               ),
-              title: TextUtil.textDefault("Notificações", color: Colors.white),
-              onTap: () {
-                AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuNotification);
-                push(context, ConfigNotificationPage(), isReplace: true);
-              },
             ),
             Visibility(
               visible: RemoteConfigUtil().isEnableMenuVideoRevo(),
-              child: ListTile(
-                leading: Icon(
-                  Icons.live_tv,
-                  color: Colors.white,
-                ),
-                title: TextUtil.textDefault("Conteúdo gratuito - REVO",
-                    color: Colors.white),
-                subtitle: TextUtil.textDefault(
-                    "Série de vídeos por trás do seu funcionamento, aprenda a dominar seus hábitos",
-                    color: Colors.white70),
-                onTap: () {
+              child: itemMenuWithSubTitle(
+                context,
+                Icons.live_tv,
+                "Conteúdo gratuito - REVO",
+                "Aprenda a criar hábitos com os videos",
+                () {
                   AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuYoutube);
                   push(context, ListVideoPage(), isReplace: true);
                 },
               ),
             ),
-            ListTile(
-              leading: Icon(
+            Visibility(
+              visible: RemoteConfigUtil().isEnableMenuSocialMedia(),
+              child: itemMenuWithSubTitle(
+                context,
                 Icons.people,
-                color: Colors.white,
+                "Redes Sociais",
+                "Nos siga nos nossos canais de comunicação",
+                () {
+                  AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuMediaSocial);
+                  push(context, InfoMediaSocialPage(), isReplace: true);
+                },
               ),
-              title: TextUtil.textDefault("Redes Sociais", color: Colors.white),
-              subtitle: TextUtil.textDefault(
-                  "Siga nos nas nossos canais de comunicação",
-                  color: Colors.white70),
-              onTap: () {
-                AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuMediaSocial);
-                push(context, InfoMediaSocialPage(), isReplace: true);
-              },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.share,
-                color: Colors.white,
-              ),
-              title: TextUtil.textDefault("Compartilhe", color: Colors.white),
-              subtitle: TextUtil.textDefault(
-                  "Compartilhe Revo com os seus amigos",
-                  color: Colors.white70),
-              onTap: () {
+            Visibility(
+              visible: RemoteConfigUtil().isEnableMenuShare(),
+              child: itemMenuWithSubTitle(context, Icons.share, "Compartilhe",
+                  "Compartilhe Revo e nos ajude", () {
                 AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuShare);
                 share();
-              },
+              }),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.exit_to_app,
-                color: Colors.white,
-              ),
-              title: TextUtil.textDefault("Sair", color: Colors.white),
-              onTap: () {
+            itemMenu(
+              context,
+              Icons.exit_to_app,
+              "Sair",
+              () {
                 AnalyticsUtil.sendAnalyticsEvent(EventRevo.menuExit);
                 exit(context);
               },
-            ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  ListTile itemMenu(
+      BuildContext context, IconData icon, String title, Function onTap) {
+    return ListTile(
+      dense: false,
+      leading: CircleAvatar(
+        maxRadius: 18,
+        backgroundColor: AppColors.colorIconDrawer,
+        child: Icon(
+          icon,
+          color: AppColors.colorlight,
+          size: 18,
+        ),
+      ),
+      title: TextUtil.textTitleMenu(title),
+      onTap: onTap,
+    );
+  }
+
+  ListTile itemMenuWithSubTitle(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subTitle,
+    Function onTap,
+  ) {
+    return ListTile(
+      dense: false,
+      leading: CircleAvatar(
+        maxRadius: 18,
+        backgroundColor: AppColors.colorIconDrawer,
+        child: Icon(
+          icon,
+          color: AppColors.colorlight,
+          size: 18,
+        ),
+      ),
+      title: TextUtil.textTitleMenu(title),
+      subtitle: TextUtil.textSubTitleMenu(subTitle),
+      onTap: onTap,
     );
   }
 
@@ -173,51 +201,45 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
       alignment: Alignment.topRight,
       children: [
         Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(
-                    widget.urlImgBackgound,
-                  ))),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaY: 4,
-              sigmaX: 4,
-            ),
-            child: UserAccountsDrawerHeader(
-              decoration: BoxDecoration(),
-              accountName: Text(user.displayName ?? ""),
-              accountEmail: Text(user.email),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(user.photoURL ??
-                    "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Bearded_Man-17-512.png"),
+          margin: EdgeInsets.only(top:16),
+          child: UserAccountsDrawerHeader(
+            decoration: AppColors.backgroundDrawerHeaderDecoration(),
+            accountName: Text(user.displayName ?? "", style: TextStyle(color: AppColors.colorlight),),
+            accountEmail: Text(user.email, style: TextStyle(color: AppColors.colorlight),),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: AppColors.colorlight,
+              radius: 55,
+              child: CircleAvatar(
+                radius: 34,
+                backgroundImage: AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
               ),
             ),
           ),
         ),
         StreamBuilder(
-            stream:  UserEventBus().get(context).streamLevel,
-            builder: (context, snapshot){
-
-              if(snapshot.hasData){
-                UserFocus userFocus = snapshot.data;
-                if(userFocus.level.urlIcon != null){
-                  return getAreaLevel(context, userFocus);
-                }
+          stream: UserEventBus().get(context).streamLevel,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              UserFocus userFocus = snapshot.data;
+              if (userFocus.level.urlIcon != null) {
+                return getAreaLevel(context, userFocus);
               }
-              return Container();
-
-            },),
+            }
+            return Container();
+          },
+        ),
       ],
     );
   }
 
   Widget getAreaLevel(BuildContext context, UserFocus userFocus) {
     return Container(
-        margin: EdgeInsets.only(right: 8, top: 16),
+        margin: EdgeInsets.only(right: 16, top: 32),
         decoration: BoxDecoration(
-             borderRadius: BorderRadius.all(Radius.circular(4),),
-            border: Border.all(color: Colors.white, width: 1.5),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4),
+          ),
+          border: Border.all(color: AppColors.colorlight, width: 1.5),
         ),
         width: MediaQuery.of(context).size.width / 2.5,
         alignment: Alignment.topLeft,
@@ -228,7 +250,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
               children: [
                 CircleAvatar(
                   radius: 13,
-                  backgroundColor: Colors.white54,
+                  backgroundColor: Colors.white12,
                   child: ClipOval(
                     child: CachedNetworkImage(
                         width: 20,
@@ -236,38 +258,47 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
                         imageUrl: userFocus.level.urlIcon),
                   ),
                 ),
-                SizedBox(width: 10,),
-                TextUtil.textDefault("Nível ${userFocus.level.name}", color: Colors.white, fontSize: 13),
+                SizedBox(
+                  width: 10,
+                ),
+                TextUtil.textLight("Nível ${userFocus.level.name}",
+                    fontSize: 13),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: 12, left: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(Icons.hourglass_empty, color: Colors.white, size: 15,),
-                  SizedBox(width: 1,),
-                  TextUtil.textDefault(getDaysFocusStr(userFocus), color: Colors.white, fontSize: 11),
-
+                  Icon(
+                    Icons.hourglass_empty,
+                    color: AppColors.colorlight,
+                    size: 15,
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  TextUtil.textLight(getDaysFocusStr(userFocus),
+                      fontSize: 11),
                 ],
               ),
             )
-
           ],
-        )
-      );
+        ));
   }
 
-  String getDaysFocusStr(UserFocus userFocus){
+  String getDaysFocusStr(UserFocus userFocus) {
     int countDays = userFocus.countDaysFocus;
-    return (countDays > 1) ? "$countDays dias de foco" : "$countDays dia de foco";
+    return (countDays > 1)
+        ? "$countDays dias de foco"
+        : "$countDays dia de foco";
   }
 
   Future<void> share() async {
     await FlutterShare.share(
         title: 'App Revo',
         text:
-            'Olha esse app, ele vai te ajudar a realizar seus sonhos, atráves de foco e metas.',
+            'Olha esse app, ele vai te ajudar a realizar seus sonhos, através de metas com foco ;)',
         linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Revo  - Foco com metas');
   }

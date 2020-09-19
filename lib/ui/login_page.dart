@@ -28,9 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    pageInit = Center(
-      child: CircularProgressIndicator(),
-    );
+    pageInit = _bloc.getLoadingFindWidget();
 
     FirebaseService().checkLoginOn().then((isLoginOk) {
       if (isLoginOk) {
@@ -58,34 +56,17 @@ class _LoginPageState extends State<LoginPage> {
         child: Stack(
           children: <Widget>[
             background(),
-            NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool isScroll) {
-                  return [
-                    SliverAppBar(
-                      backgroundColor: Colors.transparent,
-                      title: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            Utils.getPathAssetsImg("logoSomnia.png"),
-                            width: 40,
-                            height: 40,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          TextUtil.textAppbar("REVO - Metas com foco"),
-                        ],
-                      ),
-                      centerTitle: true,
-                    )
-                  ];
-                },
-                body: SingleChildScrollView(
-                  child: pageInit,
-                )),
+            Container(
+              alignment: Alignment.topCenter,
+              width: double.infinity,
+              child: Image.asset(
+                Utils.getPathAssetsImg("logo_background.png",),
+                fit: BoxFit.cover,
+              ),
+            ),
+            SingleChildScrollView(
+              child: body(context),
+            ),
             _bloc.loading(),
           ],
         ),
@@ -96,7 +77,21 @@ class _LoginPageState extends State<LoginPage> {
   Column body(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              Utils.getPathAssetsImg("logo.png"),
+              width: 140,
+              height: 140,
+            ),
+          ],
+        ),
         containerBody(context),
       ],
     );
@@ -104,8 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Container containerBody(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(16),
-      constraints: BoxConstraints(minWidth: 500.0, minHeight: 300.0),
+      margin: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 16),
       child: Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -114,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: getFields(context),
           ),
         ),
@@ -249,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void goToHome(user, BuildContext context) {
-     if (user != null) {
+    if (user != null) {
       push(context, HomePage(), isReplace: true);
     }
   }

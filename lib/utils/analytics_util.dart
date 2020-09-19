@@ -86,6 +86,7 @@ class EventRevo {
   static String addStepforDream = "add_step_for_dream";
   static String menuPainel = "menu_painel";
   static String menuDreamDeleted = "menu_dream_deleted";
+  static String menuDreamCompleted = "menu_dream_completed";
   static String menuNotification = "menu_notification";
   static String menuYoutube = "menu_youtube";
   static String menuMediaSocial = "menu_media_social";

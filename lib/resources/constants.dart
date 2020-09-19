@@ -9,6 +9,11 @@ class Constants {
   static const LEVEL_NAME_USER = "LEVEL_NAME_USER";
   static const LEVEL_URL_ICON = "LEVEL_URL_ICON";
   static const LEVEL_DAYS_FOCUS = "LEVEL_DAYS_FOCUS";
+  static const ENVIRONMENT = "ENVIRONMENT";
+  static const DEBUG = "DEBUG";
+  static const RELEASE = "RELEASE";
+  static const ENVIRONMENT_NOW = Constants.DEBUG;
+
 
 
 

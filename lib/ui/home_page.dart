@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                   if (snapshot.hasData) {
                     return Wrap(children: snapshot.data);
                   }
-                  return _bloc.getSimpleLoadingWidget(size: 20);
+                  return _bloc.getSimpleLoadingWidget(size: 60);
                 },
               ),
             ),
@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                       return Wrap(children: snapshot.data);
                     }
 
-                    return _bloc.getSimpleLoadingWidget();
+                    return _bloc.getSimpleLoadingWidget(size: 60);
                   }),
             ),
             Container(

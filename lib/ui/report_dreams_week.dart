@@ -132,7 +132,7 @@ class _ReportDreamsWeekState extends State<ReportDreamsWeek> {
                         Container(
                           decoration: AppColors.backgroundBoxDecorationImg(),
                           child: TextUtil.textDefault("Sonho em progresso",
-                              fontSize: 16, color: Colors.white),
+                              fontSize: 16),
                           width: double.infinity,
                           height: 100,
                           padding: EdgeInsets.all(12),
@@ -166,7 +166,6 @@ class _ReportDreamsWeekState extends State<ReportDreamsWeek> {
                       backgroundColor: AppColors.colorYellow,
                       label: TextUtil.textDefault(
                           "${hist.numberWeek}˚ Semana",
-                          color: AppColors.colorDark,
                           fontSize: 16),
                       avatar: CircleAvatar(
                         backgroundColor: AppColors.colorDark,
@@ -254,11 +253,11 @@ class _ReportDreamsWeekState extends State<ReportDreamsWeek> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextUtil.textDefault("Já se passaram ",
-              fontSize: 14, color: AppColors.colorPrimaryDark),
+              fontSize: 14, ),
           TextUtil.textDefault("$countDays",
-              fontSize: 16, color: AppColors.colorAcent),
+              fontSize: 16, ),
           TextUtil.textDefault(" dias com foco no seu sonho ;)",
-              fontSize: 14, color: AppColors.colorPrimaryDark),
+              fontSize: 14, ),
         ],
       ),
     );
@@ -272,10 +271,9 @@ class _ReportDreamsWeekState extends State<ReportDreamsWeek> {
         Chip chip = Chip(
           avatar: CircleAvatar(
             backgroundColor: AppColors.colorDark,
-            child: TextUtil.textDefault("${stepDream.position}˚",
-                color: Colors.white),
+            child: TextUtil.textDefault("${stepDream.position}˚",),
           ),
-          label: TextUtil.textDefault(stepDream.step, color: Colors.white),
+          label: TextUtil.textDefault(stepDream.step,),
           backgroundColor: AppColors.colorPrimary,
         );
 
