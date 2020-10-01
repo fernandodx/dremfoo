@@ -277,7 +277,7 @@ class NotificationUtil {
         'repeating body', RepeatInterval.EveryMinute, platformChannelSpecifics);
   }
 
-  static Future<void> showDailyAtTime(String title, String body, Time time) async {
+  static Future<void> showDailyAtTime(int id, String title, String body, Time time) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         ID_NOTIFICATION_DAILY,
         CHANNEL_NOTIFICATION_DAILY,
@@ -286,7 +286,7 @@ class NotificationUtil {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
+        id,
         title,
         body,
         time,

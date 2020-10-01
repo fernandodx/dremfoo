@@ -211,7 +211,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
               radius: 55,
               child: CircleAvatar(
                 radius: 34,
-                backgroundImage: AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
+                backgroundImage: (user.photoURL != null && user.photoURL.isNotEmpty) ?  NetworkImage(user.photoURL) :  AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
               ),
             ),
           ),

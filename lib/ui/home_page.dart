@@ -9,6 +9,8 @@ import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/notification_revo.dart';
 import 'package:dremfoo/model/push_notification.dart';
 import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/resources/constants.dart';
+import 'package:dremfoo/ui/check_type_dream_page.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
 import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/notification_util.dart';
@@ -62,10 +64,10 @@ class _HomePageState extends State<HomePage> {
       },
     );
     _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print("FIREBASE MENSSAGE -> Settings registered: $settings");
+    //  print("FIREBASE MENSSAGE -> Settings registered: $settings");
     });
     _firebaseMessaging.getToken().then((String token) {
-      print("FIREBASE MENSSAGE -> $token");
+     // print("FIREBASE MENSSAGE -> $token");
     });
 
   }
@@ -115,11 +117,11 @@ class _HomePageState extends State<HomePage> {
           NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
           NotificationRevo initNotification = await _bloc.getNotificationRandomDailyInit();
           NotificationRevo finishNotification = await _bloc.getNotificationRandomDailyFinish();
-          //TODO trazer textos do firebase
+
           DateTime init = user.initNotification.toDate();
           DateTime finish = user.finishNotification.toDate();
-          NotificationUtil.showDailyAtTime(initNotification.title, initNotification.msg, Time(init.hour, init.minute, init.second));
-          NotificationUtil.showDailyAtTime(finishNotification.title, finishNotification.title, Time(finish.hour, finish.minute, finish.second));
+          NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_INIT, initNotification.title, initNotification.msg, Time(init.hour, init.minute, init.second));
+          NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_FINISH, finishNotification.title, finishNotification.msg, Time(finish.hour, finish.minute, finish.second));
         }
         break;
     }
@@ -171,7 +173,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             Image.asset(Utils.getPathAssetsImg("icon_with_out_dream.png")),
             SizedBox(
-              height: 20,
+              height: 16,
             ),
             TextUtil.textDefault(
                 "Vamos começar sua jornada para realizar seus sonhos. Agora adicione o seu primeiro!",
@@ -284,8 +286,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _startRegisterDream(BuildContext context) async {
-    RegisterDreamPage registerDreamPage = RegisterDreamPage();
-    final result = await push(context, registerDreamPage, isReplace: true);
-    print(result);
+    push(context, CheckTypeDreamPage());
   }
 }

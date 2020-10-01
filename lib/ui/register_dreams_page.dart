@@ -27,8 +27,11 @@ import 'package:image_picker/image_picker.dart';
 
 class RegisterDreamPage extends StatefulWidget {
   Dream dream;
+  bool isWait = false;
 
   RegisterDreamPage({this.dream});
+
+  RegisterDreamPage.fromIsWait(this.isWait);
 
   @override
   _RegisterDreamPageState createState() => _RegisterDreamPageState();
@@ -36,6 +39,34 @@ class RegisterDreamPage extends StatefulWidget {
 
 class _RegisterDreamPageState extends State<RegisterDreamPage> {
   final _bloc = RegisterDreamsBloc();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bloc.fetch(context, widget.dream, widget.isWait);
+
+    MainEventBus().get(context).streamRegisterDream.listen((TipoEvento tipo) {
+      switch (tipo) {
+        case TipoEvento.FETCH:
+          _bloc.fetch(context, widget.dream, widget.isWait);
+          break;
+        case TipoEvento.REFRESH:
+          refresh();
+          break;
+      }
+    });
+
+    StepsEnum.values.forEach((element) {
+      _bloc.listInfoExpanted.add(false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +126,17 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           onFieldSubmitted: (value) =>
               _bloc.addStepForWin(value, _bloc.stepsForWin.length, context),
         ),
+        Container(
+          margin: EdgeInsets.only(top: 8, bottom: 8),
+          child: AppButtonDefault(
+            onPressed: () => _bloc.addStepForWin(
+                _bloc.stepTextEditController.value.text,
+                _bloc.stepsForWin.length,
+                context),
+            icon: Icon(Icons.add_circle),
+            label: "Adicionar",
+          ),
+        ),
       ];
     }
 
@@ -112,6 +154,17 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           controller: _bloc.dailyGoalTextEditController,
           onFieldSubmitted: (value) =>
               _bloc.addDailyGoals(value, _bloc.dailyGoals.length, refresh),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 8, bottom: 8),
+          child: AppButtonDefault(
+            onPressed: () => _bloc.addDailyGoals(
+                _bloc.dailyGoalTextEditController.value.text,
+                _bloc.dailyGoals.length,
+                context),
+            icon: Icon(Icons.add_circle),
+            label: "Adicionar",
+          ),
         ),
       ];
     }
@@ -220,64 +273,6 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     return true;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _bloc.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _bloc.fetch(widget.dream, context);
-
-    Timer _timerStep;
-    Timer _timerDaily;
-
-    onChangeEditController(_timerStep, _bloc.stepTextEditController, () {
-      _bloc.addStepForWin(
-          _bloc.stepTextEditController.text, _bloc.stepsForWin.length, context);
-    });
-
-    onChangeEditController(_timerDaily, _bloc.dailyGoalTextEditController, () {
-      _bloc.addDailyGoals(_bloc.dailyGoalTextEditController.text,
-          _bloc.dailyGoals.length, context);
-    });
-
-    MainEventBus().get(context).streamRegisterDream.listen((TipoEvento tipo) {
-      switch (tipo) {
-        case TipoEvento.FETCH:
-          _bloc.fetch(widget.dream, context);
-          break;
-        case TipoEvento.REFRESH:
-          refresh();
-          break;
-      }
-    });
-
-    StepsEnum.values.forEach((element) {
-      _bloc.listInfoExpanted.add(false);
-    });
-  }
-
-  void onChangeEditController(Timer _timer,
-      TextEditingController textEditingController, Function callback) {
-    textEditingController.addListener(() {
-      if (textEditingController.text.isNotEmpty) {
-        if (_timer != null) {
-          _timer.cancel();
-        }
-        _timer = Timer.periodic(Duration(milliseconds: 1300), (Timer timer) {
-          timer.cancel();
-          if (textEditingController.text.isNotEmpty) {
-            callback();
-          }
-        });
-      }
-    });
-  }
-
   Container bodyRegisterDreamPage() {
     return Container(
       color: Colors.white,
@@ -339,14 +334,21 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   List<Step> getSteps() {
-    _bloc.steps = [
-      stepInfoDream(),
-      stepGoalDream(),
-      stepGoalDaily(),
-      stepRewardDream(),
-      stepInflectionDream(),
-      stepConfigDream(),
-    ];
+    if (widget.isWait) {
+      _bloc.steps = [
+        stepInfoDream(),
+        stepConfigDream(),
+      ];
+    } else {
+      _bloc.steps = [
+        stepInfoDream(),
+        stepGoalDream(),
+        stepGoalDaily(),
+        stepRewardDream(),
+        stepInflectionDream(),
+        stepConfigDream(),
+      ];
+    }
 
     return _bloc.steps;
   }
@@ -357,91 +359,113 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
       state: getStateStep(StepsEnum.CONFIG),
       title: TextUtil.textTituloStep("Configurações"),
       content: Column(
-        children: <Widget>[
-          expansionPanelListInfo(StepsEnum.CONFIG.index, "Defina o nível que você gostaria de ser cobrado. Lembre-se de começar aos poucos, pois isso vai validar a sua performace para uma meta extraordinária."),
-          SizedBox(height: 20,),
-          TextUtil.textTitulo("Meta semanal"),
-          Container(
-            padding: EdgeInsets.only(
-              top: 50,
-            ),
-            child: Slider(
-              value: _bloc.dream.goalWeek,
-              onChanged: (newValue) {
-                setState(() {
-                  _bloc.dream.goalWeek = newValue;
-                });
-              },
-              min: 25,
-              max: 100,
-              divisions: 3,
-              activeColor: AppColors.colorPink,
-              inactiveColor: AppColors.colorEggShell,
-              label: getLabelSlide(_bloc.dream.goalWeek),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextUtil.textTitulo("Meta mensal"),
-          Container(
-            padding: EdgeInsets.only(
-              top: 50,
-            ),
-            child: Slider(
-              value: _bloc.dream.goalMonth,
-              onChanged: (newValue) {
-                setState(() {
-                  _bloc.dream.goalMonth = newValue;
-                });
-              },
-              min: 25,
-              max: 100,
-              divisions: 3,
-              activeColor: AppColors.colorPink,
-              inactiveColor: AppColors.colorEggShell,
-              label: getLabelSlide(_bloc.dream.goalMonth),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: <Widget>[
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: AppColors.colorPrimaryLight,
-                child: ClipOval(
-                  child: Image.asset(
-                    Utils.getPathAssetsImg("icon_paint.png"),
-                    width: 35,
-                  ),
-                ),
-              ),
-              Container(
-                  margin: EdgeInsets.only(left: 12),
-                  child: TextUtil.textAccent("Cor no gráfico")),
-            ],
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 100,
-            child: FutureBuilder(
-                future: FirebaseService().findAllColorsDream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    ResponseApi<List<ColorDream>> responseApi = snapshot.data;
-                    if (responseApi.ok) {
-                      return getListviewColors(responseApi.result);
-                    }
-                  }
-
-                  return _bloc.getSimpleLoadingWidget(size: 100);
-                }),
-          ),
-        ],
+        children: getListWidgetsConfig(),
       ),
     );
+  }
+
+  List<Widget> getListWidgetsConfig() {
+    if (widget.isWait) {
+      return listDefinitionColors();
+    } else {
+      List<Widget> list = listDefinitionGoal();
+      list.addAll(listDefinitionColors());
+      return list;
+    }
+  }
+
+  List<Widget> listDefinitionGoal() {
+    return [
+      expansionPanelListInfo(StepsEnum.CONFIG.index,
+          "Defina o nível que você gostaria de ser cobrado. Lembre-se de começar aos poucos, pois isso vai validar a sua performace para uma meta extraordinária."),
+      SizedBox(
+        height: 20,
+      ),
+      TextUtil.textTitulo("Meta semanal"),
+      Container(
+        padding: EdgeInsets.only(
+          top: 50,
+        ),
+        child: Slider(
+          value: _bloc.dream.goalWeek,
+          onChanged: (newValue) {
+            setState(() {
+              _bloc.dream.goalWeek = newValue;
+            });
+          },
+          min: 25,
+          max: 100,
+          divisions: 3,
+          activeColor: AppColors.colorPink,
+          inactiveColor: AppColors.colorEggShell,
+          label: getLabelSlide(_bloc.dream.goalWeek),
+        ),
+      ),
+      SizedBox(
+        height: 20,
+      ),
+      TextUtil.textTitulo("Meta mensal"),
+      Container(
+        padding: EdgeInsets.only(
+          top: 50,
+        ),
+        child: Slider(
+          value: _bloc.dream.goalMonth,
+          onChanged: (newValue) {
+            setState(() {
+              _bloc.dream.goalMonth = newValue;
+            });
+          },
+          min: 25,
+          max: 100,
+          divisions: 3,
+          activeColor: AppColors.colorPink,
+          inactiveColor: AppColors.colorEggShell,
+          label: getLabelSlide(_bloc.dream.goalMonth),
+        ),
+      ),
+      SizedBox(
+        height: 20,
+      ),
+    ];
+  }
+
+  List<Widget> listDefinitionColors() {
+    return [
+      Row(
+        children: <Widget>[
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: AppColors.colorPrimaryLight,
+            child: ClipOval(
+              child: Image.asset(
+                Utils.getPathAssetsImg("icon_paint.png"),
+                width: 35,
+              ),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 12),
+              child: TextUtil.textAccent("Escolha uma cor de representação")),
+        ],
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        child: FutureBuilder(
+            future: FirebaseService().findAllColorsDream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                ResponseApi<List<ColorDream>> responseApi = snapshot.data;
+                if (responseApi.ok) {
+                  return getListviewColors(responseApi.result);
+                }
+              }
+
+              return _bloc.getSimpleLoadingWidget(size: 100);
+            }),
+      ),
+    ];
   }
 
   Step stepInflectionDream() {
@@ -453,8 +477,11 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         margin: EdgeInsets.only(top: 16),
         child: Column(
           children: <Widget>[
-            expansionPanelListInfo(StepsEnum.INFLECTION.index, "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcansadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
-            SizedBox(height: 20,),
+            expansionPanelListInfo(StepsEnum.INFLECTION.index,
+                "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcansadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
+            SizedBox(
+              height: 20,
+            ),
             AppTextDefault(
               name: "Ponto de inflexão",
               icon: Icons.build,
@@ -463,7 +490,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             SwitchListTile(
               value: _bloc.dream.isInflectionWeek,
               title: TextUtil.textDefault(
-                  "Escolher ponto de inflexão diferente para a semana.",),
+                "Escolher ponto de inflexão diferente para a semana.",
+              ),
               // secondary: Icon(Icons.autorenew),
               onChanged: (isInflectionWeek) {
                 setState(() {
@@ -490,8 +518,11 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         margin: EdgeInsets.only(top: 16),
         child: Column(
           children: <Widget>[
-            expansionPanelListInfo(StepsEnum.REWARD.index, "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
-            SizedBox(height: 20,),
+            expansionPanelListInfo(StepsEnum.REWARD.index,
+                "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
+            SizedBox(
+              height: 20,
+            ),
             AppTextDefault(
               name: "Recompensa",
               icon: Icons.thumb_up,
@@ -530,7 +561,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         margin: EdgeInsets.only(top: 16),
         child: Column(
           children: [
-            expansionPanelListInfo(StepsEnum.DAILY_GOALS.index, "Agora defina metas diárias para conquistar seus passos, se concentre no primeiro passo e trace suas metas, após a conclusão você pode adicionar outras metas diárias."),
+            expansionPanelListInfo(StepsEnum.DAILY_GOALS.index,
+                "Agora defina metas diárias para conquistar seus passos, se concentre no primeiro passo e trace suas metas, após a conclusão você pode adicionar outras metas diárias."),
             SizedBox(
               height: 20,
             ),
@@ -566,7 +598,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     );
   }
 
-  ExpansionPanelList expansionPanelListInfo(int indexList, String subtitle) {
+  Widget expansionPanelListInfo(int indexList, String subtitle) {
     return ExpansionPanelList(
       expansionCallback: (index, isExpansive) {
         setState(() {
@@ -638,18 +670,6 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             ),
             SizedBox(
               height: Constants.SIZE_HEIGHT_DEFAULT,
-            ),
-            SwitchListTile(
-              title: TextUtil.textDefault("Sonho em espera"),
-              value: _bloc.dream.isDreamWait,
-              secondary: Icon(
-                Icons.snooze,
-                color: AppColors.colorPrimaryDark,
-              ),
-              onChanged: (value) {
-                _bloc.dream.isDreamWait = value;
-                refresh();
-              },
             ),
           ],
         ));

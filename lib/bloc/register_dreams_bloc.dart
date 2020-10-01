@@ -43,9 +43,10 @@ class RegisterDreamsBloc extends BaseBloc {
   List<bool> listInfoExpanted = [];
 
 
-  void fetch(dreamEdit, context) {
+  void fetch(context, dreamEdit, isWait) {
     if (dreamEdit == null) {
       dream = Dream();
+      dream.isDreamWait = isWait;
       dream.steps = [];
       steps = [];
     } else {
@@ -168,8 +169,9 @@ class RegisterDreamsBloc extends BaseBloc {
     stepsForWin.clear();
     dream.steps.clear();
     stepsForWin.add(stepTmp[0]);
+    stepsForWin.add(stepTmp[1]);
 
-    for (var position = 1; position < stepTmp.length; position++) {
+    for (var position = 2; position < stepTmp.length; position++) {
       Chip chip = stepTmp[position];
       Text text = chip.label;
       addStepForWinOnly(text.data, position, context);
@@ -185,8 +187,9 @@ class RegisterDreamsBloc extends BaseBloc {
     dailyGoals.clear();
     dream.dailyGoals.clear();
     dailyGoals.add(dailyTmp[0]);
+    dailyGoals.add(dailyTmp[1]);
 
-    for (var position = 1; position < dailyTmp.length; position++) {
+    for (var position = 2; position < dailyTmp.length; position++) {
       Chip chip = dailyTmp[position];
       Text text = chip.label;
       addDailyGoalOnly(text.data, position, context);
@@ -235,7 +238,11 @@ class RegisterDreamsBloc extends BaseBloc {
     dailyGoals.add(newChip);
   }
 
-  void addStepForWin(nameStep, position, context) {
+  void addStepForWin(String nameStep, position, context) {
+    if(nameStep == null || nameStep.isEmpty){
+      return;
+    }
+
     var newChip = Chip(
       avatar: CircleAvatar(
         backgroundColor: AppColors.colorChipSecundary,

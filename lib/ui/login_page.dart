@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/bloc/login_bloc.dart';
 import 'package:dremfoo/resources/app_colors.dart';
@@ -211,16 +214,19 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
       SizedBox(height: 16),
-      Row(
-        children: <Widget>[
-          Expanded(
-            child: FacebookSignInButton(
-              onPressed: () => onClickLoginWithFacebook(context),
-              borderRadius: 8.0,
-              text: "Login com Facebook",
+      Visibility(
+        visible: Platform.isIOS,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: FacebookSignInButton(
+                onPressed: () => onClickLoginWithFacebook(context),
+                borderRadius: 8.0,
+                text: "Login com Facebook",
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ];
   }

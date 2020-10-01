@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "902416299879-191uu01fn2ffgmujrjkpoq3mnaol0am4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.dias.dremfoo",
+            "certificate_hash": "fb0bd4f59422ff5b116181e734206f062e539548"
+          }
+        },
+        {
+          "client_id": "902416299879-9mfm83e4v1kvacm008ff6n7j2khifkoh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.dias.dremfoo",
+            "certificate_hash": "92a8cb6603d456e3d5a5007780d1691ebb09b460"
+          }
+        },
+        {
           "client_id": "902416299879-5l0puic4lg8b4moej4avkkbi440clq2q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
