@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dremfoo/api/firebase_service.dart';
@@ -39,7 +38,9 @@ class _LoginPageState extends State<LoginPage> {
         push(context, HomePage(), isReplace: true);
       } else {
         setState(() {
-          pageInit = body(context);
+          pageInit = SingleChildScrollView(
+            child: body(context),
+          );
         });
       }
     });
@@ -63,13 +64,13 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.topCenter,
               width: double.infinity,
               child: Image.asset(
-                Utils.getPathAssetsImg("logo_background.png",),
+                Utils.getPathAssetsImg(
+                  "logo_background.png",
+                ),
                 fit: BoxFit.cover,
               ),
             ),
-            SingleChildScrollView(
-              child: body(context),
-            ),
+            pageInit,
             _bloc.loading(),
           ],
         ),

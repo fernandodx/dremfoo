@@ -81,14 +81,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   @override
   void initState() {
     super.initState();
 
-//    WidgetsBinding.instance
-//        .addPostFrameCallback((_) {
-//
-//    });
 
   }
 
@@ -118,8 +116,13 @@ class _MyAppState extends State<MyApp> {
           cardColor: AppColors.colorCard
         ),
         home: LoginPage(),
-//      home: HomePage(),
       ),
     );
   }
+
+
+
 }
+
+
+

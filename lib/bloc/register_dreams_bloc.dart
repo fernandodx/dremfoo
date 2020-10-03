@@ -87,9 +87,9 @@ class RegisterDreamsBloc extends BaseBloc {
 
  Widget getImageDream() {
     if(dream.imgDream != null && dream.imgDream.isNotEmpty){
-     return  Utils.string64ToImage(dream.imgDream);
+     return  Utils.string64ToImage(dream.imgDream, fit: BoxFit.cover);
     }else{
-      return Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"));
+      return Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"), width: 100, height: 100,scale: 5,);
     }
   }
 

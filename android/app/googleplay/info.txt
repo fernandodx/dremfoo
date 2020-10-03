@@ -1,0 +1,5 @@
+Key alias - revokey
+Password - Roller2836
+
+//Gerar nova release
+flutter build appbundle --build-name=1.0.1 --build-number=2

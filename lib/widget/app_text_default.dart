@@ -43,6 +43,7 @@ class AppTextDefault extends StatelessWidget {
       textInputAction: inputAction,
       onSaved: onSaved,
       maxLength: maxLength,
+      textCapitalization: TextCapitalization.sentences,
       style: TextStyle(color: AppColors.colorDark, fontSize: 15, ),
       onFieldSubmitted: (value) {
         print(value);

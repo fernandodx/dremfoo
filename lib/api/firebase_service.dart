@@ -57,7 +57,7 @@ class FirebaseService {
       return await _loginWithCredential(credential, context);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
-      return ResponseApi.error(msg: error.toString());
+      return ResponseApi.error(msg: "Ops! Não foi possível realizar o login com a Google.");
     }
   }
 

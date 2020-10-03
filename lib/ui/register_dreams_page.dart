@@ -478,7 +478,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         child: Column(
           children: <Widget>[
             expansionPanelListInfo(StepsEnum.INFLECTION.index,
-                "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcansadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
+                "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcançadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
             SizedBox(
               height: 20,
             ),
@@ -659,6 +659,9 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
               height: Constants.SIZE_HEIGHT_DEFAULT,
             ),
             TextUtil.textAccent("Escolha uma imagem que lembra esse sonho."),
+            SizedBox(
+              height: Constants.SIZE_HEIGHT_DEFAULT,
+            ),
             Container(
               padding: EdgeInsets.all(8),
               height: 180,
@@ -678,7 +681,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   addPickImage(context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     File compressedImg = await FlutterNativeImage.compressImage(image.path,
-        quality: 80, targetWidth: 600, targetHeight: 500);
+        quality: 90, targetWidth: 600, targetHeight: 600);
 
     List<int> imageBytes = compressedImg.readAsBytesSync();
     String base64Image = base64Encode(imageBytes);

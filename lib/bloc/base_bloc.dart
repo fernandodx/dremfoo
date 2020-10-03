@@ -60,9 +60,9 @@ class BaseBloc<T> {
             height: 200,
             child: Center(
               child: FlareActor(
-                Utils.getPathAssetsAnim("loading-walking.flr"),
+                Utils.getPathAssetsAnim("loading-load.flr"),
                 shouldClip: true,
-                animation: "walking",
+                animation: "load",
               ),
             ),
           ),

@@ -14,7 +14,7 @@ class ValidatorUtil {
 
   static String validatorPassword(String value) {
     if (value.isEmpty) {
-      return "Senha é obrigatório";
+      return "Senha é obrigatória";
     }
     if (value.length < 4) {
       return "Sua senha tem que ter no minímo 8 dígitos";
@@ -26,7 +26,7 @@ class ValidatorUtil {
       String value, TextEditingController controllerRepit) {
 
     if (value.isEmpty) {
-      return "Senha é obrigatório";
+      return "Senha é obrigatória";
     }
     if (value.length < 4) {
       return "Sua senha tem que ter no minímo 8 dígitos";
@@ -38,7 +38,7 @@ class ValidatorUtil {
     return null;
   }
 
-  static String requiredField(String value) {
+  static String  requiredField(String value) {
     if (value.isEmpty) {
       return "Campo obrigatório";
     }

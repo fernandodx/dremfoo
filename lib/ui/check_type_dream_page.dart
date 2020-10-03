@@ -19,7 +19,7 @@ class _CheckTypeDreamPageState extends State<CheckTypeDreamPage> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 new SliverAppBar(
-                  pinned: false,
+                  pinned: true,
                   title: TextUtil.textAppbar("Escolha do sonho"),
                 ),
               ];
@@ -40,7 +40,7 @@ class _CheckTypeDreamPageState extends State<CheckTypeDreamPage> {
                             SizedBox(height: 10,),
                             TextUtil.textTitulo("Sonho em espera"),
                             SizedBox(height: 16,),
-                            TextUtil.textDefault("No sonho em espera, você não precisa definir ainda metas, os passos para conquistar. Apenas definir uma prévia do seu sonho para que seu subconsciente saiba o que você quer."),
+                            TextUtil.textDefault("Nessa seção, você ainda não precisa definir metas e/ou os passos para a conquista. Apenas definir uma prévia de seu sonho para que seu subconsciente saiba o que você quer."),
                           ],
                         ),
                       ),
@@ -59,7 +59,7 @@ class _CheckTypeDreamPageState extends State<CheckTypeDreamPage> {
                             SizedBox(height: 16,),
                             TextUtil.textTitulo("Sonho com foco"),
                             SizedBox(height: 16,),
-                            TextUtil.textDefault("Nessa tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fosse uma escada, além de criar metas diárias que vão em rumo ao seu sonho."),
+                            TextUtil.textDefault("Nesse tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fossem degraus de uma escada, além de criar metas diárias que vão em direção ao seu sonho."),
                           ],
                         ),
                       ),

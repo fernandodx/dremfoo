@@ -149,9 +149,9 @@ class CardDream extends StatelessWidget {
   }
 
   Widget _getImg() {
-    BoxFit fit = isCardAdd ? BoxFit.contain : BoxFit.fill;
-    double width = isCardAdd ? 80 : 160;
-    double height = isCardAdd ? 80 : 110;
+    BoxFit fit = isCardAdd ? BoxFit.contain : BoxFit.cover;
+    double width = isCardAdd ? 75 : 160;
+    double height = isCardAdd ? 75 : 110;
 
     if (urlImg != null) {
       return CachedNetworkImage(

@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(Utils.getPathAssetsImg("icon_with_out_dream.png")),
+            Image.asset(Utils.getPathAssetsImg("icon_start_dream.png"), width: 150, height: 150,),
             SizedBox(
               height: 16,
             ),
