@@ -39,10 +39,11 @@ dependencies:
   email_launcher: ^1.0.0
   flutter_share: ^1.0.2+1
   esys_flutter_share: ^1.0.2
-  flutter_local_notifications: ^1.4.4+4
+  flutter_local_notifications: ^2.0.0
   path_provider: ^1.6.11
   smooth_page_indicator: ^0.2.0
   url_launcher: ^5.5.0
+  flutter_native_timezone: ^1.0.4
 
 
   #Exigem configuração no Android ou IOS

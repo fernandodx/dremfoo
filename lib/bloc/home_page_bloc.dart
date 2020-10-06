@@ -23,6 +23,7 @@ import 'package:dremfoo/ui/check_type_dream_page.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
 import 'package:dremfoo/ui/report_dreams_month.dart';
 import 'package:dremfoo/ui/report_dreams_week.dart';
+import 'package:dremfoo/utils/crashlytics_util.dart';
 import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
@@ -50,9 +51,13 @@ class HomePageBloc extends BaseBloc {
   List<Dream> listDream = [];
 
   void fetch(context) async {
-    showLoading();
-    await getSteps(context);
-    hideLoading();
+    try{
+      showLoading();
+      await getSteps(context);
+      hideLoading();
+    }catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
   }
 
   dispose() {

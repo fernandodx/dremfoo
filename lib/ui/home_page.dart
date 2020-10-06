@@ -12,6 +12,7 @@ import 'package:dremfoo/model/user.dart';
 import 'package:dremfoo/resources/constants.dart';
 import 'package:dremfoo/ui/check_type_dream_page.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
+import 'package:dremfoo/utils/crashlytics_util.dart';
 import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
@@ -73,12 +74,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future verifyNotification() async {
+
       UserRevo user = await FirebaseService().getPrefsUser();
-    if(user.isEnableNotification != null && user.isEnableNotification){
-      UserEventBus().get(context).sendEvent(TipoAcao.UPDATE_NOTIFICATION);
-    }else{
-      UserEventBus().get(context).sendEvent(TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY);
+
+    if(user != null){
+      if(user.isEnableNotification){
+        UserEventBus().get(context).sendEvent(TipoAcao.UPDATE_NOTIFICATION);
+      }else{
+        UserEventBus().get(context).sendEvent(TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY);
+      }
     }
+
   }
 
   @override
@@ -94,7 +100,7 @@ class _HomePageState extends State<HomePage> {
           _bloc.fetch(context);
         });
         break;
-    
+
       case TipoEvento.REFRESH:
         setState(() {
           _bloc.fetch(context);
@@ -105,25 +111,30 @@ class _HomePageState extends State<HomePage> {
 
 
   Future configUserEvent(TipoAcao tipo) async {
-    switch(tipo){
-      case TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY:
-        NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
-        NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
-        break;
-      case TipoAcao.UPDATE_NOTIFICATION:
-        UserRevo user = await FirebaseService().getPrefsUser();
-        if(user.isEnableNotification){
-          NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
-          NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
-          NotificationRevo initNotification = await _bloc.getNotificationRandomDailyInit();
-          NotificationRevo finishNotification = await _bloc.getNotificationRandomDailyFinish();
 
-          DateTime init = user.initNotification.toDate();
-          DateTime finish = user.finishNotification.toDate();
-          NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_INIT, initNotification.title, initNotification.msg, Time(init.hour, init.minute, init.second));
-          NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_FINISH, finishNotification.title, finishNotification.msg, Time(finish.hour, finish.minute, finish.second));
-        }
-        break;
+    try{
+      switch(tipo){
+        case TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY:
+          NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
+          // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
+          break;
+        case TipoAcao.UPDATE_NOTIFICATION:
+          UserRevo user = await FirebaseService().getPrefsUser();
+          if(user != null && user.isEnableNotification){
+            NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
+            // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
+            NotificationRevo initNotification = await _bloc.getNotificationRandomDailyInit();
+            NotificationRevo finishNotification = await _bloc.getNotificationRandomDailyFinish();
+
+            DateTime init = user.initNotification.toDate();
+            DateTime finish = user.finishNotification.toDate();
+            NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_INIT, initNotification.title, initNotification.msg, Time(init.hour, init.minute, init.second));
+            NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_FINISH, finishNotification.title, finishNotification.msg, Time(finish.hour, finish.minute, finish.second));
+          }
+          break;
+      }
+    }catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
     }
   }
 
@@ -212,7 +223,7 @@ class _HomePageState extends State<HomePage> {
     }else{
       return _bodyDreams(listDreams);
     }
-  } 
+  }
 
   SingleChildScrollView _bodyDreams(List<Dream> listDreams) {
     return SingleChildScrollView(

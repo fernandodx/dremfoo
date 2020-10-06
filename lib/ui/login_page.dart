@@ -30,7 +30,12 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    pageInit = _bloc.getLoadingFindWidget();
+    pageInit = Container(
+       decoration: AppColors.backgroundBoxDecoration(),
+      child: Center(
+        child: TextUtil.textDefault("Carregando..."),
+      ),
+    );
 
     FirebaseService().checkLoginOn().then((isLoginOk) {
       if (isLoginOk) {
@@ -55,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.colorPrimaryDark,
       body: Form(
         key: _bloc.formKey,
         child: Stack(

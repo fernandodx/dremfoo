@@ -4,6 +4,7 @@ import 'package:dremfoo/bloc/config_notification_bloc.dart';
 import 'package:dremfoo/eventbus/user_event_bus.dart';
 import 'package:dremfoo/model/user.dart';
 import 'package:dremfoo/resources/app_colors.dart';
+import 'package:dremfoo/utils/crashlytics_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/widget/app_drawer_menu.dart';
 import 'package:flutter/cupertino.dart';
@@ -124,28 +125,38 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
   }
 
   Future _updateInitNotificationTime(BuildContext context) async {
-    TimeOfDay time = await _showTimePicker24h(context);
-    setState(() {
-      DateTime now = DateTime.now();
-      DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
+    try{
+      TimeOfDay time = await _showTimePicker24h(context);
+      setState(() {
+        DateTime now = DateTime.now();
+        DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
 
-      _bloc.descInitHourNotification = _bloc.formatTimeStr(dateTime);
-      _bloc.initHourNotification = Timestamp.fromDate(dateTime);
+        _bloc.descInitHourNotification = _bloc.formatTimeStr(dateTime);
+        _bloc.initHourNotification = Timestamp.fromDate(dateTime);
 
-      _bloc.updateConfigNotification(context);
-    });
+        _bloc.updateConfigNotification(context);
+      });
+    }catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
   }
 
   Future _updateFinishNotificationTime(BuildContext context) async {
-    TimeOfDay time = await _showTimePicker24h(context);
-    setState(() {
-      DateTime now = DateTime.now();
-      DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
-      _bloc.descFinishHourNotification = _bloc.formatTimeStr(dateTime);
-      _bloc.finishHourNotification = Timestamp.fromDate(dateTime);
+    try{
+      TimeOfDay time = await _showTimePicker24h(context);
+      setState(() {
+        DateTime now = DateTime.now();
+        DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
+        _bloc.descFinishHourNotification = _bloc.formatTimeStr(dateTime);
+        _bloc.finishHourNotification = Timestamp.fromDate(dateTime);
 
-      _bloc.updateConfigNotification(context);
-    });
+        _bloc.updateConfigNotification(context);
+      });
+    }catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
   }
 
   Future<TimeOfDay> _showTimePicker24h(BuildContext context) async {
