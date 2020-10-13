@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
           buttonColor: AppColors.colorPrimaryDark,
           cardColor: AppColors.colorCard
         ),
-        home: LoginPage(),
+         home: LoginPage(),
       ),
     );
   }

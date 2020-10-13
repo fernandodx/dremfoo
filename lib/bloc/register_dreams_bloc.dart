@@ -16,6 +16,7 @@ import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
+import 'package:dremfoo/widget/app_button_default.dart';
 import 'package:dremfoo/widget/app_text_default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
@@ -24,7 +25,7 @@ import 'package:image_picker/image_picker.dart';
 class RegisterDreamsBloc extends BaseBloc {
   Dream dream;
   Dream dreamForEdit;
-  List<int> stepErrors = [];
+  Set<int> stepErrors = Set();
   int currentStep = 0;
   bool complete = false;
   List<Step> steps = [];
@@ -41,7 +42,6 @@ class RegisterDreamsBloc extends BaseBloc {
   TextEditingController inflectionWeekTextEditController =
       TextEditingController();
   List<bool> listInfoExpanted = [];
-
 
   void fetch(context, dreamEdit, isWait) {
     if (dreamEdit == null) {
@@ -61,11 +61,10 @@ class RegisterDreamsBloc extends BaseBloc {
       inflectionWeekTextEditController.text = dream.inflectionWeek;
       rewardWeekTextEditController.text = dream.rewardWeek;
     }
-
   }
 
   @override
-  dispose(){
+  dispose() {
     super.dispose();
   }
 
@@ -85,11 +84,16 @@ class RegisterDreamsBloc extends BaseBloc {
     }
   }
 
- Widget getImageDream() {
-    if(dream.imgDream != null && dream.imgDream.isNotEmpty){
-     return  Utils.string64ToImage(dream.imgDream, fit: BoxFit.cover);
-    }else{
-      return Image.asset(Utils.getPathAssetsImg("icon_gallery_add.png"), width: 100, height: 100,scale: 5,);
+  Widget getImageDream() {
+    if (dream.imgDream != null && dream.imgDream.isNotEmpty) {
+      return Utils.string64ToImage(dream.imgDream, fit: BoxFit.cover);
+    } else {
+      return Image.asset(
+        Utils.getPathAssetsImg("icon_gallery_add.png"),
+        width: 100,
+        height: 100,
+        scale: 5,
+      );
     }
   }
 
@@ -113,7 +117,20 @@ class RegisterDreamsBloc extends BaseBloc {
         onFieldSubmitted: (value) =>
             addStepForWin(value, stepsForWin.length, context));
 
+    var inputButtonAdd = Container(
+      margin: EdgeInsets.only(top: 8, bottom: 8),
+      child: AppButtonDefault(
+        onPressed: () => addStepForWin(
+            stepTextEditController.value.text,
+            stepsForWin.length,
+            context),
+        icon: Icon(Icons.add_circle),
+        label: "Adicionar",
+      ),
+    );
+
     stepsForWin.add(inputText);
+    stepsForWin.add(inputButtonAdd);
 
     dream.steps.forEach((step) {
       var newChip = Chip(
@@ -143,7 +160,20 @@ class RegisterDreamsBloc extends BaseBloc {
         onFieldSubmitted: (value) =>
             addDailyGoals(value, dailyGoals.length, context));
 
+    var inputButtonAdd =  Container(
+      margin: EdgeInsets.only(top: 8, bottom: 8),
+      child: AppButtonDefault(
+        onPressed: () => addDailyGoals(
+            dailyGoalTextEditController.value.text,
+            dailyGoals.length,
+            context),
+        icon: Icon(Icons.add_circle),
+        label: "Adicionar",
+      ),
+    );
+
     dailyGoals.add(inputText);
+    dailyGoals.add(inputButtonAdd);
 
     dream.dailyGoals.forEach((daily) {
       var newChip = Chip(
@@ -198,55 +228,60 @@ class RegisterDreamsBloc extends BaseBloc {
     MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
   }
 
-  List<Widget> addStepForWinOnly(nameStep, position, context) {
-    var newChip = Chip(
-      avatar: CircleAvatar(
-        backgroundColor: AppColors.colorChipSecundary,
-        child: TextUtil.textChip('${position}˚', maxLines: 1),
-      ),
-      label: TextUtil.textChip(nameStep, maxLines: 1),
-      backgroundColor: AppColors.colorChipPrimary,
-      onDeleted: () => removeStepForWin(position, context),
-      deleteIconColor: Colors.white,
-    );
+  List<Widget> addStepForWinOnly(String nameStep, int position, BuildContext context) {
+    if (nameStep.isNotEmpty) {
+      var newChip = Chip(
+        avatar: CircleAvatar(
+          backgroundColor: AppColors.colorChipSecundary,
+          child: TextUtil.textChip('${position - 1}˚', maxLines: 1),
+        ),
+        label: TextUtil.textChip(nameStep, maxLines: 1),
+        backgroundColor: AppColors.colorChipPrimary,
+        onDeleted: () => removeStepForWin(position, context),
+        deleteIconColor: Colors.white,
+      );
 
-    StepDream sd = StepDream();
-    sd.step = nameStep;
-    sd.position = position;
-    dream.steps.add(sd);
+      StepDream sd = StepDream();
+      sd.step = nameStep;
+      sd.position = position;
+      dream.steps.add(sd);
 
-    stepsForWin.add(newChip);
+      stepsForWin.add(newChip);
+    }
   }
 
-  List<Widget> addDailyGoalOnly(nameStep, position, context) {
-    var newChip = Chip(
-      avatar: CircleAvatar(
-        backgroundColor: AppColors.colorChipSecundary,
-        child:TextUtil.textChip('${position}˚', maxLines: 1),
-      ),
-      label: TextUtil.textChip(nameStep, maxLines: 1),
-      backgroundColor: AppColors.colorChipPrimary,
-      onDeleted: () => removeDailyGoals(position, context),
-      deleteIconColor: Colors.white,
-    );
+  List<Widget> addDailyGoalOnly(
+      String nameStep, int position, BuildContext context) {
+    if (nameStep.isNotEmpty) {
+      var newChip = Chip(
+        avatar: CircleAvatar(
+          backgroundColor: AppColors.colorChipSecundary,
+          child: TextUtil.textChip('${position - 1}˚', maxLines: 1),
+        ),
+        label: TextUtil.textChip(nameStep, maxLines: 1),
+        backgroundColor: AppColors.colorChipPrimary,
+        onDeleted: () => removeDailyGoals(position, context),
+        deleteIconColor: Colors.white,
+      );
 
-    DailyGoal dg = DailyGoal();
-    dg.nameDailyGoal = nameStep;
-    dg.position = position;
-    dream.dailyGoals.add(dg);
+      DailyGoal dg = DailyGoal();
+      dg.nameDailyGoal = nameStep;
+      dg.position = position;
+      dream.dailyGoals.add(dg);
 
-    dailyGoals.add(newChip);
+      dailyGoals.add(newChip);
+    }
   }
 
-  void addStepForWin(String nameStep, position, context) {
-    if(nameStep == null || nameStep.isEmpty){
+  void addStepForWin(String nameStep, int position, BuildContext context) {
+    if (nameStep == null || nameStep.isEmpty) {
       return;
     }
 
     var newChip = Chip(
       avatar: CircleAvatar(
         backgroundColor: AppColors.colorChipSecundary,
-        child: TextUtil.textChip('${position}˚', maxLines: 1),
+        child: TextUtil.textChip('${position - 1}˚', maxLines: 1),
       ),
       label: TextUtil.textChip(nameStep, maxLines: 1),
       backgroundColor: AppColors.colorChipPrimary,
@@ -267,34 +302,34 @@ class RegisterDreamsBloc extends BaseBloc {
     MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
   }
 
-  void addDailyGoals(nameGoal, position, context) {
-    var newChip = Chip(
-      avatar: CircleAvatar(
-        backgroundColor: AppColors.colorChipSecundary,
-        child: TextUtil.textChip('${position}˚', maxLines: 1)
-      ),
-      label: TextUtil.textChip('${nameGoal}˚', maxLines: 1),
-      backgroundColor: AppColors.colorChipPrimary,
-      onDeleted: () => removeDailyGoals(position, context),
-      deleteIconColor: Colors.white,
-    );
+  void addDailyGoals(String nameGoal, int position, BuildContext context) {
+    if (nameGoal.isNotEmpty) {
+      var newChip = Chip(
+        avatar: CircleAvatar(
+            backgroundColor: AppColors.colorChipSecundary,
+            child: TextUtil.textChip('${position - 1}˚', maxLines: 1)),
+        label: TextUtil.textChip('${nameGoal}', maxLines: 1),
+        backgroundColor: AppColors.colorChipPrimary,
+        onDeleted: () => removeDailyGoals(position, context),
+        deleteIconColor: Colors.white,
+      );
 
-    DailyGoal dg = DailyGoal();
-    dg.nameDailyGoal = nameGoal;
-    dg.position = position;
-    dream.dailyGoals.add(dg);
+      DailyGoal dg = DailyGoal();
+      dg.nameDailyGoal = nameGoal;
+      dg.position = position;
+      dream.dailyGoals.add(dg);
 
-    dailyGoalTextEditController.clear();
-    dailyGoals.add(newChip);
-    AnalyticsUtil.sendAnalyticsEvent(EventRevo.addDailyForDream);
+      dailyGoalTextEditController.clear();
+      dailyGoals.add(newChip);
+      AnalyticsUtil.sendAnalyticsEvent(EventRevo.addDailyForDream);
 
 //    onRefresh();
-    MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
+      MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
+    }
   }
 
   void dreamCompleted() {
-    FirebaseService().updateOnlyField("dateFinish", Timestamp.now(), dream.reference);
+    FirebaseService()
+        .updateOnlyField("dateFinish", Timestamp.now(), dream.reference);
   }
-
-
 }

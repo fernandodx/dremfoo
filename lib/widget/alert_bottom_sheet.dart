@@ -12,7 +12,6 @@ alertBottomSheet(BuildContext context,
     String subTitle,
     List<Widget> listButtonsAddtional,
     bool isWillPop = true}) {
-
   showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -85,16 +84,18 @@ List<Widget> buttonsAlert(BuildContext context, String nameDefaultButton,
     Function onTapDefaultButton, List<Widget> listButtonsAdtional) {
   List<Widget> listButtons = [];
 
-  listButtons.add(FlatButton(
-    child: Text(nameDefaultButton),
-    onPressed: () {
-      Navigator.pop(context);
-      if (onTapDefaultButton != null) {
-        onTapDefaultButton();
-      }
-    },
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  ));
+  listButtons.add(
+    FlatButton(
+      child: Text(nameDefaultButton),
+      onPressed: () {
+        Navigator.pop(context);
+        if (onTapDefaultButton != null) {
+          onTapDefaultButton();
+        }
+      },
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ),
+  );
 
   if (listButtonsAdtional != null) {
     listButtons.addAll(listButtonsAdtional);
@@ -149,9 +150,8 @@ titleWidget(String titulo) {
   );
 }
 
-animationFlareForType(TypeAlert tipoAlert){
-
-  switch(tipoAlert){
+animationFlareForType(TypeAlert tipoAlert) {
+  switch (tipoAlert) {
     case TypeAlert.SUCESS:
       return animationflareSucess();
 
@@ -159,9 +159,8 @@ animationFlareForType(TypeAlert tipoAlert){
       return animationflareError();
 
     default:
-    return animationflareAlert();
+      return animationflareAlert();
   }
-
 }
 
 animationflareError() {

@@ -19,6 +19,7 @@ import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/alert_bottom_sheet.dart';
 import 'package:dremfoo/widget/app_button_default.dart';
 import 'package:dremfoo/widget/app_text_default.dart';
+import 'package:dremfoo/widget/search_picture_internet.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           inputAction: TextInputAction.done,
           controller: _bloc.dailyGoalTextEditController,
           onFieldSubmitted: (value) =>
-              _bloc.addDailyGoals(value, _bloc.dailyGoals.length, refresh),
+              _bloc.addDailyGoals(value, _bloc.dailyGoals.length, context),
         ),
         Container(
           margin: EdgeInsets.only(top: 8, bottom: 8),
@@ -228,43 +229,58 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   bool validDataStream() {
+
+    String msg = "";
+
     setState(() {
       _bloc.stepErrors.clear();
 
-      if ((_bloc.dream.imgDream == null || _bloc.dream.imgDream.isEmpty) ||
-          (_bloc.dream.dreamPropose == null ||
-              _bloc.dream.dreamPropose.isEmpty) ||
-          (_bloc.dream.descriptionPropose == null ||
-              _bloc.dream.descriptionPropose.isEmpty)) {
+      if(_bloc.dream.dreamPropose == null || _bloc.dream.dreamPropose.isEmpty){
         _bloc.stepErrors.add(StepsEnum.DREAM.index);
+        msg += "O sonho é obrigatório\n";
+      }
+
+      if(_bloc.dream.descriptionPropose == null || _bloc.dream.descriptionPropose.isEmpty){
+        _bloc.stepErrors.add(StepsEnum.DREAM.index);
+        msg += "A descrição do sonho é obrigatória\n";
+      }
+
+      if(_bloc.dream.imgDream == null || _bloc.dream.imgDream.isEmpty){
+        _bloc.stepErrors.add(StepsEnum.DREAM.index);
+        msg += "A image do sonho é obrigatória\n";
       }
 
       if (!_bloc.dream.isDreamWait) {
         if (_bloc.dream.steps == null || _bloc.dream.steps.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.STEPS.index);
+          msg += "Adicione pelo menos um passo para conquistar\n";
         }
 
         if (_bloc.dream.dailyGoals == null || _bloc.dream.dailyGoals.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.DAILY_GOALS.index);
+          msg += "Adicione pelo menos uma meta diária\n";
         }
 
         if (_bloc.dream.reward == null || _bloc.dream.reward.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.REWARD.index);
+          msg += "A recompensa é obrigatória\n";
         }
 
         if (_bloc.dream.inflection == null || _bloc.dream.inflection.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.INFLECTION.index);
+          msg += "O ponto de inflexão é obrigatório\n";
         }
       }
 
       if (_bloc.dream.color == null) {
         _bloc.stepErrors.add(StepsEnum.CONFIG.index);
+        msg += "Escolha uma cor de representação\n";
       }
     });
 
     if (_bloc.stepErrors.isNotEmpty) {
       alertBottomSheet(context,
-          msg: "Existem campos obrigatórios a serem preenchidos",
+          msg: msg,
           type: TypeAlert.ERROR);
       _bloc.hideLoading();
       return false;
@@ -334,7 +350,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   List<Step> getSteps() {
-    if (widget.isWait) {
+    if (_bloc.dream.isDreamWait) {
       _bloc.steps = [
         stepInfoDream(),
         stepConfigDream(),
@@ -668,17 +684,127 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
               width: MediaQuery.of(context).size.width,
               child: InkWell(
                 child: _bloc.getImageDream(),
-                onTap: () => addPickImage(context),
+                // onTap: () => addPickImage(context),
+                onTap: () {
+                  // searchImageOrGallery();//FAlta integrar com a escolha e a galeria.
+
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          padding: EdgeInsets.all(16),
+                          color: AppColors.colorEggShell,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      child: Icon(Icons.image),
+                                    ),
+                                    TextUtil.textSubTitle("Pesquisar na galeria", align: TextAlign.center),
+                                  ],
+                                ),
+                                onTap: () {
+                                  addPickImage(context);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SizedBox(width: 20,),
+                              InkWell(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      child: Icon(Icons.wifi_tethering),
+                                    ),
+                                    TextUtil.textSubTitle("Pesquisar na internet", align: TextAlign.center),
+                                  ],
+                                ),
+                                onTap: () {
+                                  searchImageOrGallery();
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                },
               ),
             ),
             SizedBox(
               height: Constants.SIZE_HEIGHT_DEFAULT,
             ),
+            Visibility(
+              visible: _bloc.dream.isDreamWait,
+              child: SwitchListTile(
+                title: TextUtil.textDefault("Sonho em espera"),
+                subtitle: TextUtil.textSubTitle("Retirando seu sonho do modo espera, você vai precisar definir etapas e metas diárias"),
+                value: _bloc.dream.isDreamWait,
+                onChanged: (value)  {
+                  
+                  alertBottomSheet(
+                      context,
+                      msg: "Retirando a opção de espera, você vai precisar definir passo e metas diárias para esse sonho e não vai ser mais possível colocar ele em espera, deseja continuar?",
+                      nameButtonDefault: "Sim",
+                      onTapDefaultButton: () {
+                        updateDreamWaitForGoal(value);
+                      },
+                      title: "Alerta",
+                      type: TypeAlert.ALERT,
+                      listButtonsAddtional: [
+                        FlatButton(
+                          child: Text("Não"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ]);
+                },
+              ),
+            ),
           ],
         ));
   }
 
-  addPickImage(context) async {
+  void updateDreamWaitForGoal(bool value) {
+     _bloc.dream.isDreamWait = value;
+    _bloc.showLoading();
+                     
+    if(_bloc.dream.uid == null || _bloc.dream.uid.isEmpty){
+      push(context, RegisterDreamPage(), isReplace: true);
+    }else{
+      FirebaseService().updateDream(context, _bloc.dream).then((response) {
+        if (response.ok) {
+          _bloc.hideLoading();
+          AnalyticsUtil.sendAnalyticsEvent(EventRevo.updateDreamFocus);
+          push(context, RegisterDreamPage(dream: _bloc.dream,), isReplace: true);
+        }
+      });
+    }
+  }
+
+  Future searchImageOrGallery() async {
+    String sonho = _bloc.dreamTextEditController.text;
+    if(sonho.isNotEmpty && sonho.contains(" ")){
+      sonho = sonho.split(" ").last;
+    }
+    SearchPictureInternet search = SearchPictureInternet(sonho);
+    search.stream.listen((String fotoBase64) {
+      setState(() {
+        _bloc.dream.imgDream = fotoBase64;
+        Navigator.pop(context);
+      });
+    });
+    push(context, search);
+
+    AnalyticsUtil.sendAnalyticsEvent(EventRevo.addImageDreamInternet);
+  }
+
+  Future addPickImage(context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     File compressedImg = await FlutterNativeImage.compressImage(image.path,
         quality: 90, targetWidth: 600, targetHeight: 600);

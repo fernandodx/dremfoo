@@ -79,7 +79,9 @@ class EventRevo {
   static String registerLogin = "register_login";
   static String forgotPassword = "forgot_login";
   static String newDream = "new_dream";
+  static String updateDreamFocus = "update_dream_focus";
   static String addImageDream = "add_image_dream";
+  static String addImageDreamInternet = "add_image_dream_internet";
   static String dreamFinish = "dream_finish";
   static String dreamDeleted = "dream_deleted";
   static String addDailyForDream = "add_daily_for_dream";

@@ -2,7 +2,7 @@ import 'package:dremfoo/utils/analytics_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Future push(BuildContext context, Widget page, {bool isReplace = false}) async {
+Future<dynamic> push(BuildContext context, Widget page, {bool isReplace = false}) async {
   if (isReplace) {
     final result = Navigator.pushReplacement(
         context, FadeRoute(builder: (context) => page));

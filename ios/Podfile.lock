@@ -401,6 +401,8 @@ PODS:
     - Flutter
   - flutter_native_image (0.0.1):
     - Flutter
+  - flutter_native_timezone (0.0.1):
+    - Flutter
   - flutter_share (0.0.1):
     - Flutter
   - flutter_youtube (0.0.1):
@@ -516,6 +518,7 @@ DEPENDENCIES:
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_image (from `.symlinks/plugins/flutter_native_image/ios`)
+  - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
   - flutter_youtube (from `.symlinks/plugins/flutter_youtube/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -600,6 +603,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_image:
     :path: ".symlinks/plugins/flutter_native_image/ios"
+  flutter_native_timezone:
+    :path: ".symlinks/plugins/flutter_native_timezone/ios"
   flutter_share:
     :path: ".symlinks/plugins/flutter_share/ios"
   flutter_youtube:
@@ -655,8 +660,9 @@ SPEC CHECKSUMS:
   FirebaseStorage: f4f39ae834a7145963b913f54e2f24a9db1d8fac
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
-  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_image: 9c0b7451838484458e5b0fae007b86a4c2d4bdfe
+  flutter_native_timezone: e72ff1900460ff57cfd331d1758050c9269f3e99
   flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
   flutter_youtube: 142f8d5af0a11963bdc73e13bcae6eb78db746c2
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
