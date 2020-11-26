@@ -49,6 +49,11 @@ class Utils {
     return formatDate(date, [dd, '/', mm, '/', yyyy]);
   }
 
+  static DateTime stringToDate(String dateString) {
+    //format 2012-02-27
+    return DateTime.parse(dateString);
+  }
+
   static List<Color> getColorsDream() {
     return [
       AppColors.colorGreen,

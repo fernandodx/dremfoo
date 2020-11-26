@@ -285,22 +285,26 @@ class NotificationUtil {
     return scheduledDate;
   }
 
-  static Future<void> showDailyAtTime(int id, String title, String body, Time time) async {
-    tz.TZDateTime dateTime =  await _nextInstanceOfTime(time);
+  static Future<void> showDailyAtTime(int id, String title, String body, Time time,
+      String idChannel,
+      String channelName,
+      String channelDescription) async {
+
+    AndroidNotificationDetails specifics = AndroidNotificationDetails(idChannel, channelName, channelDescription);
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(android: specifics);
+
+    tz.TZDateTime tzDateTime = await _nextInstanceOfTime(time);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
         body,
-        dateTime,
-        const NotificationDetails(
-          android: AndroidNotificationDetails("br.com.dias.dremfoo.NOTIFICATION_DAILY", "DAILY", "Notication user daily"),
-        ),
+        tzDateTime,
+        platformChannelSpecifics,
         androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        scheduledNotificationRepeatFrequency:
-        ScheduledNotificationRepeatFrequency.daily);
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+        matchDateTimeComponents: DateTimeComponents.time);
   }
 
   static Future<void> showProgressNotification() async {

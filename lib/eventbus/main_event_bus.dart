@@ -4,7 +4,7 @@ import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-enum TipoEvento {FETCH,REFRESH}
+enum TipoEvento {FETCH,REFRESH, FETCH_WITH_LOADING}
 
 class MainEventBus {
 

@@ -16,7 +16,9 @@ class HistGoalWeek {
   bool isWonReward;
   bool isNeedInflection;
   bool isShow;
+  Timestamp dateLastShow;
   DocumentReference reference;
+
   Dream dream;
 
   HistGoalWeek();
@@ -30,6 +32,7 @@ class HistGoalWeek {
     isWonReward = map["isWonReward"];
     isNeedInflection = map["isNeedInflection"];
     isShow = map["isShow"];
+    dateLastShow = map["dateLastShow"];
   }
 
   static List<HistGoalWeek> fromListDocumentSnapshot(List<DocumentSnapshot> list){
@@ -59,6 +62,7 @@ class HistGoalWeek {
     map["isWonReward"] = this.isWonReward;
     map["isNeedInflection"] = this.isNeedInflection;
     map["isShow"] = this.isShow;
+    map["dateLastShow"] = this.dateLastShow;
     return map;
   }
 

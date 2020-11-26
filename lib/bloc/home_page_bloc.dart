@@ -6,13 +6,11 @@ import 'package:date_util/date_util.dart';
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/bloc/base_bloc.dart';
 import 'package:dremfoo/eventbus/main_event_bus.dart';
-import 'package:dremfoo/eventbus/user_event_bus.dart';
 import 'package:dremfoo/model/chart_goals.dart';
 import 'package:dremfoo/model/daily_goal.dart';
 import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/hist_goal_month.dart';
 import 'package:dremfoo/model/hist_goal_week.dart';
-import 'package:dremfoo/model/level_revo.dart';
 import 'package:dremfoo/model/notification_revo.dart';
 import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/step_dream.dart';
@@ -29,7 +27,6 @@ import 'package:dremfoo/utils/notification_util.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/card_dream.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class HomePageBloc extends BaseBloc {
@@ -38,24 +35,31 @@ class HomePageBloc extends BaseBloc {
   final _addChipDailyStreamController = StreamController<List<Widget>>();
   final _addChartStreamController = StreamController<List<Widget>>();
 
+  final _addCheckSucessStreamController = StreamController<bool>();
+
+
   Stream<List<Dream>> get streamDream => _addDreamStreamController.stream;
 
-  Stream<List<Widget>> get streamChipSteps =>
-      _addChipStepsStreamController.stream;
+  Stream<List<Widget>> get streamChipSteps => _addChipStepsStreamController.stream;
 
-  Stream<List<Widget>> get streamChipDailyGoal =>
-      _addChipDailyStreamController.stream;
+  Stream<List<Widget>> get streamChipDailyGoal => _addChipDailyStreamController.stream;
 
   Stream<List<Widget>> get streamChartSteps => _addChartStreamController.stream;
 
+  Stream<bool> get streamCheckSucess => _addCheckSucessStreamController.stream;
+
   List<Dream> listDream = [];
 
-  void fetch(context) async {
-    try{
-      showLoading();
+  void fetch(BuildContext context, bool isShowLoadind) async {
+    try {
+      if(isShowLoadind){
+        showLoading();
+      }
       await getSteps(context);
-      hideLoading();
-    }catch(error, stack){
+      if(isShowLoadind){
+        hideLoading();
+      }
+    } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
     }
   }
@@ -66,6 +70,7 @@ class HomePageBloc extends BaseBloc {
     _addChipStepsStreamController.close();
     _addChipDailyStreamController.close();
     _addChartStreamController.close();
+    _addCheckSucessStreamController.close();
   }
 
   void saveLastFocus() async {
@@ -85,10 +90,8 @@ class HomePageBloc extends BaseBloc {
       DateTime dateInit = focus.dateInit.toDate();
       DateTime dateNow = DateTime.now();
 
-      int countDayInit = DateUtil()
-          .totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
-      int countDayNow = DateUtil()
-          .totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
+      int countDayInit = DateUtil().totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
+      int countDayNow = DateUtil().totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
 
       focus.dateLastFocus = Timestamp.now();
       focus.countDaysFocus = countDayNow - countDayInit;
@@ -101,17 +104,14 @@ class HomePageBloc extends BaseBloc {
     UserFocus focus = UserFocus();
     focus.dateInit = Timestamp.fromDate(dateInit);
     focus.dateLastFocus = Timestamp.fromDate(dateLast);
-    int countDayInit = DateUtil()
-        .totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
-    int countDayLast = DateUtil()
-        .totalLengthOfDays(dateLast.month, dateLast.day, dateLast.year);
+    int countDayInit = DateUtil().totalLengthOfDays(dateInit.month, dateInit.day, dateInit.year);
+    int countDayLast = DateUtil().totalLengthOfDays(dateLast.month, dateLast.day, dateLast.year);
     focus.countDaysFocus = countDayInit - countDayLast;
     return focus;
   }
 
   Future<NotificationRevo> getNotificationRandomDailyInit() async {
-    ResponseApi<List<NotificationRevo>> responseApi =
-        await FirebaseService().findAllNotificationDailyInit();
+    ResponseApi<List<NotificationRevo>> responseApi = await FirebaseService().findAllNotificationDailyInit();
     if (responseApi.ok) {
       List<NotificationRevo> list = responseApi.result;
       return list[Random().nextInt(list.length)];
@@ -119,18 +119,15 @@ class HomePageBloc extends BaseBloc {
   }
 
   Future<NotificationRevo> getNotificationRandomDailyFinish() async {
-    ResponseApi<List<NotificationRevo>> responseApi =
-        await FirebaseService().findAllNotificationDailyFinish();
+    ResponseApi<List<NotificationRevo>> responseApi = await FirebaseService().findAllNotificationDailyFinish();
     if (responseApi.ok) {
       List<NotificationRevo> list = responseApi.result;
       return list[Random().nextInt(list.length)];
     }
   }
 
-  //Esta chamando 2 vezes
   getSteps(context) async {
-    ResponseApi<List<Dream>> responseApi =
-        await FirebaseService().findAllDreams();
+    ResponseApi<List<Dream>> responseApi = await FirebaseService().findAllDreams();
 
     List<Dream> listDream = responseApi.result;
     List<Widget> listChartWidget = List();
@@ -139,10 +136,8 @@ class HomePageBloc extends BaseBloc {
 
     if (listDream == null || listDream.isEmpty) {
       _addDreamStreamController.add(List<Dream>());
-      NotificationUtil.deleteNotificationChannel(
-          NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
-      NotificationUtil.deleteNotificationChannel(
-          NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
+      NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
+      NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
       return;
     }
 
@@ -151,10 +146,8 @@ class HomePageBloc extends BaseBloc {
       List<DailyGoal> listDailyGoals = List();
 
       if (dream != null && !dream.isDreamWait) {
-        ResponseApi<CollectionReference> responseStepApi =
-            FirebaseService().findSteps(dream);
-        ResponseApi<CollectionReference> responseDailyApi =
-            FirebaseService().findDailyGoals(dream);
+        ResponseApi<CollectionReference> responseStepApi = FirebaseService().findSteps(dream);
+        ResponseApi<CollectionReference> responseDailyApi = FirebaseService().findDailyGoals(dream);
 
         if (responseStepApi.ok) {
           await loadSteps(responseStepApi, dream, listStep);
@@ -176,10 +169,9 @@ class HomePageBloc extends BaseBloc {
     if (listAllDailyGoal == null || listAllDailyGoal.isEmpty) {
       _addChartStreamController.add([Container()]);
     } else {
-      List<List<ChartGoals>> listGoalsWeek = await getDataChartWeek(listDream);
+      List<List<ChartGoals>> listGoalsWeek = await getDataChartWeek(listDream); //zera isWonReward
 
-      Widget chartWeek =
-          ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
+      Widget chartWeek = ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
       listChartWidget.add(chartWeek);
 
       Widget chartMonth = await _createBarMouth(listDream);
@@ -188,37 +180,95 @@ class HomePageBloc extends BaseBloc {
       _addChartStreamController.add(listChartWidget);
     }
 
+    controllerShowHistWeekMonth(listDream, context);
+
+  }
+
+  bool isHistWeekContainsDream(Dream dream, List<HistGoalWeek> listHist) {
+      for(HistGoalWeek hist in listHist){
+        if(hist.dream.uid == dream.uid){
+          return true;
+        }
+      }
+      return false;
+  }
+
+  controllerShowHistWeekMonth(List<Dream> listDream, context) async {
     DateTime now = DateTime.now();
     DateTime firstDay = now.subtract(Duration(days: now.weekday));
-
-    int qtdDayFirstDay =
-        DateUtil().daysPastInYear(firstDay.month, firstDay.day, firstDay.year);
+    
+    int qtdDayFirstDay = DateUtil().daysPastInYear(firstDay.month, firstDay.day, firstDay.year);
     int qtdDayNow = DateUtil().daysPastInYear(now.month, now.day, now.year);
-
+    
     int nowWeek = Utils.getNumberWeek(now);
     int firstWeek = Utils.getNumberWeek(firstDay);
-
+    
     bool isSunday = (qtdDayNow - qtdDayFirstDay) == 7;
     bool isChangeWeek = nowWeek.floor() != firstWeek.floor();
+    
+    bool isExistAcessLastMonth = await FirebaseService().isExistAcessPreviousMonth();
+    DateTime dateLastAcess = await FirebaseService().getLastHitUser();
+    
+    int countAcess = await FirebaseService().getCountHitsUser();
+    bool isUserMore7Days = countAcess > 7;
+    
+     if (isChangeWeek && isUserMore7Days) {
+    
+       List<HistGoalWeek> listHist = await findLastHistWeek(listDream);
+       List<HistGoalWeek> listHistToday = await findLastShowHistWeekToday(listDream);
 
-    if (isChangeWeek) {
-      List<HistGoalWeek> listHist = await findLastHistWeek(listDream);
+       if((listHist == null || listHist.isEmpty) && (listHistToday == null || listHistToday.isEmpty)){
+
+         for(Dream dream in  listDream){
+           if(!dream.isDreamWait){
+             HistGoalWeek histGoalWeek = await FirebaseService().saveHistWeekCompleted(dream, firstDay, false);
+             listHist.add(histGoalWeek);
+           }
+         }
+    
+       }else if(listHistToday == null || listHistToday.isEmpty){
+
+         List<HistGoalWeek> listNewHist = new List();
+
+         for(Dream dream in  listDream){
+           if(!dream.isDreamWait && !isHistWeekContainsDream(dream, listHist)){
+             HistGoalWeek histGoalWeek = await FirebaseService().saveHistWeekCompleted(dream, firstDay, false);
+             listHist.add(histGoalWeek);
+           }
+         }
+
+         listHist.addAll(listNewHist);
+       }else{
+         listHist.clear();
+       }
+    
       if (listHist.isNotEmpty) {
         push(context, ReportDreamsWeek.from(listHist));
-        FirebaseService()
-            .updateOnlyField("isShow", true, listHist[0].reference);
+        listHist.forEach((hist) {
+          FirebaseService().updateOnlyField("isShow", true, hist.reference);
+          FirebaseService().updateOnlyField("dateLastShow", Timestamp.now(), hist.reference);
+        });
       }
     }
-
-    bool isExistAcessLastMonth =
-        await FirebaseService().isExistAcessPreviousMonth();
-
-    if (isExistAcessLastMonth) {
+    
+    if (dateLastAcess != null && dateLastAcess.month != now.month && isExistAcessLastMonth) {
       List<HistGoalMonth> listHist = List();
 
+      for(Dream dream in  listDream){
+
+        ResponseApi<HistGoalMonth> responseApiMonth = await FirebaseService().findHistShowedForMonth(dream, dateLastAcess.month);
+        if(!responseApiMonth.ok || responseApiMonth.result == null){
+
+          ResponseApi<HistGoalMonth> responseApi = await FirebaseService().findLastHistMonth(dream);
+          if (!responseApi.ok || responseApi.result == null && !dream.isDreamWait) {
+            FirebaseService().saveHistMonthCompleted(dream, now, dream.isGoalMonthOk);
+          }
+        }
+      }
+
+
       for (Dream dream in listDream) {
-        ResponseApi<HistGoalMonth> responseApi =
-            await FirebaseService().findLastHistMonth(dream);
+        ResponseApi<HistGoalMonth> responseApi = await FirebaseService().findLastHistMonth(dream);
         if (responseApi.ok && responseApi.result != null) {
           listHist.add(responseApi.result);
         }
@@ -226,16 +276,15 @@ class HomePageBloc extends BaseBloc {
 
       if (listHist.isNotEmpty) {
         push(context, ReportDreamsMonth.from(listHist));
-        FirebaseService()
-            .updateOnlyField("isShow", true, listHist[0].reference);
+        listHist.forEach((hist) {
+          FirebaseService().updateOnlyField("isShow", true, hist.reference);
+        });
       }
     }
   }
 
-  Future loadSteps(ResponseApi<CollectionReference> responseStepApi,
-      Dream dream, List<StepDream> listStep) async {
-    QuerySnapshot querySnapshotSteps =
-        await responseStepApi.result.orderBy("position").get();
+  Future loadSteps(ResponseApi<CollectionReference> responseStepApi, Dream dream, List<StepDream> listStep) async {
+    QuerySnapshot querySnapshotSteps = await responseStepApi.result.orderBy("position").get();
 
     for (QueryDocumentSnapshot step in querySnapshotSteps.docs) {
       StepDream stepDream = StepDream.fromMap(step.data());
@@ -248,10 +297,9 @@ class HomePageBloc extends BaseBloc {
     dream.steps = listStep;
   }
 
-  Future loadDailyGoal(ResponseApi<CollectionReference> responseDailyApi,
-      Dream dream, List<DailyGoal> listDailyGoals) async {
-    QuerySnapshot querySnapshotSteps =
-        await responseDailyApi.result.orderBy("position").get();
+  Future loadDailyGoal(
+      ResponseApi<CollectionReference> responseDailyApi, Dream dream, List<DailyGoal> listDailyGoals) async {
+    QuerySnapshot querySnapshotSteps = await responseDailyApi.result.orderBy("position").get();
 
     for (QueryDocumentSnapshot daily in querySnapshotSteps.docs) {
       DailyGoal dailyGoal = DailyGoal.fromMap(daily.data());
@@ -266,8 +314,18 @@ class HomePageBloc extends BaseBloc {
   Future<List<HistGoalWeek>> findLastHistWeek(List<Dream> listDream) async {
     List<HistGoalWeek> listHist = List();
     for (Dream dream in listDream) {
-      ResponseApi<HistGoalWeek> responseApi =
-          await FirebaseService().findLastHistWeek(dream);
+      ResponseApi<HistGoalWeek> responseApi = await FirebaseService().findLastHistWeekWithDate(dream);
+      if (responseApi.ok && responseApi.result != null) {
+        listHist.add(responseApi.result);
+      }
+    }
+    return listHist;
+  }
+
+  Future<List<HistGoalWeek>> findLastShowHistWeekToday(List<Dream> listDream) async {
+    List<HistGoalWeek> listHist = List();
+    for (Dream dream in listDream) {
+      ResponseApi<HistGoalWeek> responseApi = await FirebaseService().findLastHistWeekWithDate(dream, date: Timestamp.now(), isShow: true);
       if (responseApi.ok && responseApi.result != null) {
         listHist.add(responseApi.result);
       }
@@ -307,8 +365,7 @@ class HomePageBloc extends BaseBloc {
     return listCardDream;
   }
 
-  List<CardDream> getlistCardDreamFire(
-      BuildContext context, List<Dream> listDream) {
+  List<CardDream> getlistCardDreamFire(BuildContext context, List<Dream> listDream) {
     List<CardDream> listCardDream = List<CardDream>();
 
     for (Dream dream in listDream) {
@@ -338,11 +395,8 @@ class HomePageBloc extends BaseBloc {
 
   Future<List<Widget>> getStepChips(context, List<StepDream> steps) async {
     if (steps == null || steps.isEmpty) {
-      _addChipStepsStreamController.add([
-        Container(
-            margin: EdgeInsets.only(left: 12),
-            child: TextUtil.textDefault("Etapas ainda não definidas"))
-      ]);
+      _addChipStepsStreamController.add(
+          [Container(margin: EdgeInsets.only(left: 12), child: TextUtil.textDefault("Etapas ainda não definidas"))]);
       return [];
     }
 
@@ -353,11 +407,8 @@ class HomePageBloc extends BaseBloc {
 
   Future<List<Widget>> getDailyChips(context, List<DailyGoal> dailys) async {
     if (dailys == null || dailys.isEmpty) {
-      _addChipDailyStreamController.add([
-        Container(
-            margin: EdgeInsets.only(left: 12),
-            child: TextUtil.textDefault("Metas ainda não definidas"))
-      ]);
+      _addChipDailyStreamController.add(
+          [Container(margin: EdgeInsets.only(left: 12), child: TextUtil.textDefault("Metas ainda não definidas"))]);
       return [];
     }
     List<Widget> listWidget = await verifyCheckChipDaily(context, dailys);
@@ -372,8 +423,7 @@ class HomePageBloc extends BaseBloc {
       ChoiceChip chip = ChoiceChip(
         elevation: 8,
         label: TextUtil.textChipLight(stepDream.step),
-        backgroundColor:
-            Utils.colorFromHex(stepDream.dreamParent.color.primary),
+        backgroundColor: Utils.colorFromHex(stepDream.dreamParent.color.primary),
         selectedColor: AppColors.colorPrimary,
         selected: stepDream.isCompleted,
         avatar: stepDream.isCompleted
@@ -396,8 +446,7 @@ class HomePageBloc extends BaseBloc {
         },
       );
 
-      listWidget.add(Container(
-          margin: EdgeInsets.only(left: 2, right: 2, top: 1), child: chip));
+      listWidget.add(Container(margin: EdgeInsets.only(left: 2, right: 2, top: 1), child: chip));
     }
 
     return listWidget;
@@ -405,8 +454,7 @@ class HomePageBloc extends BaseBloc {
 
   void updatStepDream(context, StepDream stepDream, bool selected) async {
     showLoading(description: "Calculando etapas...");
-    ResponseApi responseApi =
-        await FirebaseService().updateStepDream(stepDream);
+    ResponseApi responseApi = await FirebaseService().updateStepDream(stepDream);
     hideLoading();
     MainEventBus().get(context).sendEventHomeDream(TipoEvento.FETCH);
   }
@@ -456,18 +504,26 @@ class HomePageBloc extends BaseBloc {
         },
       );
 
-      listWidget.add(Container(
-          margin: EdgeInsets.only(left: 2, right: 2, top: 1), child: chip));
+      listWidget.add(Container(margin: EdgeInsets.only(left: 2, right: 2, top: 1), child: chip));
     }
 
     return listWidget;
   }
 
   Future updateDailyGoal(context, DailyGoal daily, bool selected) async {
-    showLoading(description: "Calculando Metas...");
+    if(selected){
+      _showCheckSucessGoal(true);
+    }
+
     await FirebaseService().updateDailyGoal(daily);
-    hideLoading();
-    MainEventBus().get(context).sendEventHomeDream(TipoEvento.FETCH);
+
+    if(selected){
+      Future.delayed(Duration(seconds: 2), () {
+        _showCheckSucessGoal(false);
+      });
+    }
+
+    MainEventBus().get(context).sendEventHomeDream(selected ? TipoEvento.FETCH : TipoEvento.FETCH_WITH_LOADING);
   }
 
   Future<List<List<ChartGoals>>> getDataChartWeek(List<Dream> listDream) async {
@@ -488,8 +544,7 @@ class HomePageBloc extends BaseBloc {
       DateTime now = DateTime.now();
       DateTime firstDay = now.subtract(Duration(days: now.weekday));
 
-      int qtdDayFirstDay = DateUtil()
-          .daysPastInYear(firstDay.month, firstDay.day, firstDay.year);
+      int qtdDayFirstDay = DateUtil().daysPastInYear(firstDay.month, firstDay.day, firstDay.year);
       int qtdDayNow = DateUtil().daysPastInYear(now.month, now.day, now.year);
 
       //Verificar se é domingo, caso sim, a comparação tem que ser com o dia de hoje e não com o first
@@ -498,8 +553,8 @@ class HomePageBloc extends BaseBloc {
 
       List<DailyGoal> listDailyOk = List();
 
-      ResponseApi<List<DailyGoal>> responseApi = await FirebaseService()
-          .findDailyGoalsCompletedHist(dream, firstDay, now);
+      ResponseApi<List<DailyGoal>> responseApi =
+          await FirebaseService().findDailyGoalsCompletedHist(dream, firstDay.add(Duration(days: 1)), now);
       if (responseApi.ok) {
         listDailyOk = responseApi.result;
       }
@@ -518,11 +573,7 @@ class HomePageBloc extends BaseBloc {
           percent = percent + (totalDaysOk / maxPointsWeek) * 100;
         }
         listWeek.add(ChartGoals(
-            i.toDouble(),
-            percent,
-            Utils.colorFromHex(dream.color.primary),
-            dream.goalWeek,
-            dream.goalMonth));
+            i.toDouble(), percent, Utils.colorFromHex(dream.color.primary), dream.goalWeek, dream.goalMonth));
         firstDay = firstDay.add(Duration(days: 1));
       }
 
@@ -537,17 +588,14 @@ class HomePageBloc extends BaseBloc {
   }
 
   void updateIsGoalWeek(Dream dream, DateTime firstDay, bool lastIsGoalWeekOk) {
-    FirebaseService()
-        .updateOnlyField("isGoalWeekOk", dream.isGoalWeekOk, dream.reference);
+    FirebaseService().updateOnlyField("isGoalWeekOk", dream.isGoalWeekOk, dream.reference);
     if (!lastIsGoalWeekOk && dream.isGoalWeekOk) {
       FirebaseService().saveHistWeekCompleted(dream, firstDay, true);
     }
   }
 
-  void updateIsGoalMonth(
-      Dream dream, DateTime dateCompleted, bool lastIsGoalMonthOk) {
-    FirebaseService()
-        .updateOnlyField("isGoalMonthOk", dream.isGoalMonthOk, dream.reference);
+  void updateIsGoalMonth(Dream dream, DateTime dateCompleted, bool lastIsGoalMonthOk) {
+    FirebaseService().updateOnlyField("isGoalMonthOk", dream.isGoalMonthOk, dream.reference);
     if (!lastIsGoalMonthOk && dream.isGoalMonthOk) {
       FirebaseService().saveHistMonthCompleted(dream, dateCompleted, true);
     }
@@ -580,8 +628,8 @@ class HomePageBloc extends BaseBloc {
         if (dream.isDreamWait) {
           continue;
         }
-        ResponseApi<List<DailyGoal>> responseApi = await FirebaseService()
-            .findDailyGoalsCompletedHist(dream, firstMouth, now);
+        ResponseApi<List<DailyGoal>> responseApi =
+            await FirebaseService().findDailyGoalsCompletedHist(dream, firstMouth, now);
         if (responseApi.ok) {
           listAllDaily.addAll(responseApi.result);
         }
@@ -601,14 +649,9 @@ class HomePageBloc extends BaseBloc {
       if (countDailyOk > 0) {
         percent = (countDailyOk / maxPointsMouth) * 100;
       }
-      listMouth.add(ChartGoals(
-          i.toDouble(),
-          percent,
-          Colors.lightGreenAccent,
-          (countLevelWeek / listDream.length),
+      listMouth.add(ChartGoals(i.toDouble(), percent, Colors.lightGreenAccent, (countLevelWeek / listDream.length),
           (countLevelMonth / listDream.length)));
-      firstMouth =
-          DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
+      firstMouth = DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
     }
 
     return listMouth;
@@ -643,8 +686,8 @@ class HomePageBloc extends BaseBloc {
     DateTime firstMouth = DateTime(now.year, 1, 1);
 
     List<DailyGoal> dailyGoals = List();
-    ResponseApi<List<DailyGoal>> responseApi = await FirebaseService()
-        .findDailyGoalsCompletedHist(dream, firstMouth, now);
+    ResponseApi<List<DailyGoal>> responseApi =
+        await FirebaseService().findDailyGoalsCompletedHist(dream, firstMouth, now);
     if (responseApi.ok) {
       dailyGoals = responseApi.result;
     }
@@ -665,14 +708,9 @@ class HomePageBloc extends BaseBloc {
       if (countDailyOk > 0) {
         percent = (countDailyOk / maxPointsMouth) * 100;
       }
-      listMouth.add(ChartGoals(
-          i.toDouble(),
-          percent,
-          Utils.colorFromHex(dream.color.primary),
-          dream.goalWeek,
-          dream.goalMonth));
-      firstMouth =
-          DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
+      listMouth.add(
+          ChartGoals(i.toDouble(), percent, Utils.colorFromHex(dream.color.primary), dream.goalWeek, dream.goalMonth));
+      firstMouth = DateTime(firstMouth.year, firstMouth.month + 1, firstMouth.day);
     }
 
     return listMouth;
@@ -688,5 +726,9 @@ class HomePageBloc extends BaseBloc {
   _addDream(BuildContext context) {
     // push(context, RegisterDreamPage());
     push(context, CheckTypeDreamPage());
+  }
+
+  _showCheckSucessGoal(bool isShow){
+    _addCheckSucessStreamController.sink.add(isShow);
   }
 }

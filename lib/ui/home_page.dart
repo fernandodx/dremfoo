@@ -20,6 +20,7 @@ import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/app_button_default.dart';
 import 'package:dremfoo/widget/app_drawer_menu.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _bloc.fetch(context);
+    _bloc.fetch(context, true);
 
     MainEventBus().get(context).streamHomeDream.listen((TipoEvento tipo) {
       configMainEvent(tipo);
@@ -65,26 +66,23 @@ class _HomePageState extends State<HomePage> {
       },
     );
     _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-    //  print("FIREBASE MENSSAGE -> Settings registered: $settings");
+      //  print("FIREBASE MENSSAGE -> Settings registered: $settings");
     });
     _firebaseMessaging.getToken().then((String token) {
-     // print("FIREBASE MENSSAGE -> $token");
+      // print("FIREBASE MENSSAGE -> $token");
     });
-
   }
 
   Future verifyNotification() async {
+    UserRevo user = await FirebaseService().getPrefsUser();
 
-      UserRevo user = await FirebaseService().getPrefsUser();
-
-    if(user != null){
-      if(user.isEnableNotification){
+    if (user != null) {
+      if (user.isEnableNotification) {
         UserEventBus().get(context).sendEvent(TipoAcao.UPDATE_NOTIFICATION);
-      }else{
+      } else {
         UserEventBus().get(context).sendEvent(TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY);
       }
     }
-
   }
 
   @override
@@ -94,33 +92,36 @@ class _HomePageState extends State<HomePage> {
   }
 
   void configMainEvent(TipoEvento tipo) {
-    switch(tipo){
+    switch (tipo) {
       case TipoEvento.FETCH:
         setState(() {
-          _bloc.fetch(context);
+          _bloc.fetch(context, false);
         });
         break;
 
       case TipoEvento.REFRESH:
         setState(() {
-          _bloc.fetch(context);
+          _bloc.fetch(context, false);
         });
         break;
+
+      case TipoEvento.FETCH_WITH_LOADING:
+        setState(() {
+          _bloc.fetch(context, true);
+        });
     }
   }
 
-
   Future configUserEvent(TipoAcao tipo) async {
-
-    try{
-      switch(tipo){
+    try {
+      switch (tipo) {
         case TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY:
           NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
           // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
           break;
         case TipoAcao.UPDATE_NOTIFICATION:
           UserRevo user = await FirebaseService().getPrefsUser();
-          if(user != null && user.isEnableNotification){
+          if (user != null && user.isEnableNotification) {
             NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
             // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
             NotificationRevo initNotification = await _bloc.getNotificationRandomDailyInit();
@@ -128,31 +129,40 @@ class _HomePageState extends State<HomePage> {
 
             DateTime init = user.initNotification.toDate();
             DateTime finish = user.finishNotification.toDate();
-            NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_INIT, initNotification.title, initNotification.msg, Time(init.hour, init.minute, init.second));
-            NotificationUtil.showDailyAtTime(Constants.ID_NOTIFICATION_FINISH, finishNotification.title, finishNotification.msg, Time(finish.hour, finish.minute, finish.second));
+
+            NotificationUtil.showDailyAtTime(
+                Constants.ID_NOTIFICATION_INIT,
+                initNotification.title,
+                initNotification.msg,
+                Time(init.hour, init.minute, init.second),
+                NotificationUtil.ID_NOTIFICATION_DAILY,
+                NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+                NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
+
+            NotificationUtil.showDailyAtTime(
+                Constants.ID_NOTIFICATION_FINISH,
+                finishNotification.title,
+                finishNotification.msg,
+                Time(finish.hour, finish.minute, finish.second),
+                NotificationUtil.ID_NOTIFICATION_DAILY,
+                NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+                NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
           }
           break;
       }
-    }catch(error, stack){
+    } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      drawer: AppDrawerMenu(),
-      body: Stack(
-        children: <Widget>[
-          bodyHomePage(),
-          _bloc.loading()
-        ],
-      )
-    );
+        backgroundColor: Colors.white,
+        drawer: AppDrawerMenu(),
+        body: Stack(
+          children: <Widget>[bodyHomePage(), _bloc.loading()],
+        ));
   }
 
   StreamBuilder<List<Dream>> bodyHomePage() {
@@ -182,14 +192,16 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(Utils.getPathAssetsImg("icon_start_dream.png"), width: 150, height: 150,),
+            Image.asset(
+              Utils.getPathAssetsImg("icon_start_dream.png"),
+              width: 150,
+              height: 150,
+            ),
             SizedBox(
               height: 16,
             ),
-            TextUtil.textDefault(
-                "Vamos começar sua jornada para realizar seus sonhos. Agora adicione o seu primeiro!",
-                align: TextAlign.center,
-                fontSize: 16),
+            TextUtil.textDefault("Vamos começar sua jornada para realizar seus sonhos. Agora adicione o seu primeiro!",
+                align: TextAlign.center, fontSize: 16),
             SizedBox(
               height: 20,
             ),
@@ -205,64 +217,65 @@ class _HomePageState extends State<HomePage> {
 
   Widget _bodyMain(List<Dream> listDreams) {
     return NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            new SliverAppBar(
-              pinned: false,
-              title: TextUtil.textAppbar("Painel"),
-            ),
-          ];
-        },
-        body: getBody(listDreams),
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          new SliverAppBar(
+            pinned: false,
+            title: TextUtil.textAppbar("Painel"),
+          ),
+        ];
+      },
+      body: getBody(listDreams),
     );
   }
 
-  Widget getBody(List<Dream> listDreams){
-    if(listDreams == null || listDreams.isEmpty){
+  Widget getBody(List<Dream> listDreams) {
+    if (listDreams == null || listDreams.isEmpty) {
       return _bodyWithOutDreamHome();
-    }else{
+    } else {
       return _bodyDreams(listDreams);
     }
   }
 
   SingleChildScrollView _bodyDreams(List<Dream> listDreams) {
     return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(16),
-              child: TextUtil.textTitulo("Sonhos"),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(16),
+            child: TextUtil.textTitulo("Sonhos"),
+          ),
+          Container(
+            height: 185.0,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.all(8),
+              children: _bloc.getlistCardDreamFire(context, listDreams),
             ),
-            Container(
-              height: 185.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.all(8),
-                children: _bloc.getlistCardDreamFire(context, listDreams),
-              ),
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            child: TextUtil.textTitulo("Etapas"),
+          ),
+          Container(
+            margin: EdgeInsets.all(4),
+            child: StreamBuilder(
+              stream: _bloc.streamChipSteps,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Wrap(children: snapshot.data);
+                }
+                return _bloc.getSimpleLoadingWidget(size: 60);
+              },
             ),
-            Container(
-              padding: EdgeInsets.all(16),
-              child: TextUtil.textTitulo("Etapas"),
-            ),
-            Container(
-              margin: EdgeInsets.all(4),
-              child: StreamBuilder(
-                stream: _bloc.streamChipSteps,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Wrap(children: snapshot.data);
-                  }
-                  return _bloc.getSimpleLoadingWidget(size: 60);
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(16),
-              child: TextUtil.textTitulo("Metas diárias"),
-            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            child: TextUtil.textTitulo("Metas diárias"),
+          ),
+          Stack(children: [
             Container(
               margin: EdgeInsets.all(4),
               child: StreamBuilder(
@@ -275,25 +288,48 @@ class _HomePageState extends State<HomePage> {
                     return _bloc.getSimpleLoadingWidget(size: 60);
                   }),
             ),
-            Container(
-              height: 260.0,
-              child: StreamBuilder<List<Widget>>(
-                stream: _bloc.streamChartSteps,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.all(8),
-                      children: snapshot.data,
-                    );
-                  }
-                 return _bloc.getSimpleLoadingWidget();
-                },
-              ),
+            StreamBuilder<bool>(
+              stream: _bloc.streamCheckSucess,
+              builder: (context, snapshot) {
+                if(!snapshot.hasData || !snapshot.data){
+                  return Container();
+                }
+                return Visibility(
+                  visible: snapshot.data,
+                  child: Container(
+                    width: double.infinity,
+                    height: 200,
+                    child: Center(
+                      child: FlareActor(
+                        Utils.getPathAssetsAnim("animation_sucess-animate_check.flr"),
+                        shouldClip: true,
+                        animation: "animate_check",
+                      ),
+                    ),
+                  ),
+                );
+              }
             ),
-          ],
-        ),
-      );
+          ]),
+          Container(
+            height: 260.0,
+            child: StreamBuilder<List<Widget>>(
+              stream: _bloc.streamChartSteps,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.all(8),
+                    children: snapshot.data,
+                  );
+                }
+                return _bloc.getSimpleLoadingWidget();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   _startRegisterDream(BuildContext context) async {

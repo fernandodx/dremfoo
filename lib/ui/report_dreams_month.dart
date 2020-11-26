@@ -115,7 +115,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
           child: SingleChildScrollView(
             child: Container(
                 color: Colors.white,
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(12),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,8 +131,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
                               height: 160),
                           Container(
                             decoration: AppColors.backgroundBoxDecorationImg(),
-                            child: TextUtil.textDefault("Sonho em progresso",
-                                fontSize: 16),
+                            child: TextUtil.textAppbar("Sonho em progresso",),
                             width: double.infinity,
                             height: 100,
                             padding: EdgeInsets.all(12),

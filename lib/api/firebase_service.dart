@@ -297,7 +297,7 @@ class FirebaseService {
         int countDayNow=  DateUtil().totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
         int count = countDayNow - countDayLast;
 
-        ResponseApi<List<LevelRevo>> responseApi = await FirebaseService().findLevels(count);
+        ResponseApi<List<LevelRevo>> responseApi = await FirebaseService().findLevels(focus.countDaysFocus != null ? focus.countDaysFocus : 0);
         if(responseApi.ok) {
           List<LevelRevo> listLevels = responseApi.result;
           if (listLevels != null && listLevels.length >= 1) {
@@ -653,6 +653,49 @@ class FirebaseService {
     }
   }
 
+  Future<int> getCountHitsUser() async {
+    try {
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
+
+      QuerySnapshot query = await refUsers
+          .collection("hits")
+          .get();
+      return query.size;
+
+    } catch (error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      print("$error");
+      return 0;
+    }
+  }
+
+  Future<DateTime> getLastHitUser() async {
+    try {
+      DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
+
+      QuerySnapshot query = await refUsers
+          .collection("hits")
+          .orderBy("dateAcess", descending: true)
+          .limit(2)
+          .get();
+
+     List<QueryDocumentSnapshot> list = query.docs;
+
+     if(list == null || list.isEmpty){
+       return DateTime.now();
+     }
+
+     int index = list.length > 1 ? 1 : 0;
+     Timestamp dateLastAcess = list[index].data()['dateAcess'];
+     return dateLastAcess.toDate();
+
+    } catch (error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      print("$error");
+      return null;
+    }
+  }
+
   ResponseApi<CollectionReference> findDailyGoals(Dream dream) {
     try {
       DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
@@ -985,8 +1028,8 @@ class FirebaseService {
     dream.reference.update(dream.toMap());
   }
 
-  void saveHistWeekCompleted(
-      Dream dream, DateTime firsDayWeek, bool isWonReward) {
+  Future<HistGoalWeek> saveHistWeekCompleted(
+      Dream dream, DateTime firsDayWeek, bool isWonReward) async {
     var hist = HistGoalWeek();
     hist.firsDayWeek = Timestamp.fromDate(firsDayWeek);
     hist.numberWeek = Utils.getNumberWeek(firsDayWeek);
@@ -996,8 +1039,13 @@ class FirebaseService {
     hist.isWonReward = isWonReward;
     hist.isNeedInflection = !isWonReward;
     hist.isShow = false;
+    hist.dateLastShow = Timestamp.now();
 
-    dream.reference.collection("histGoalWeekReached").add(hist.toMap());
+    DocumentReference refHist = await dream.reference.collection("histGoalWeekReached").add(hist.toMap());
+    hist.dream = dream;
+    hist.reference = refHist;
+
+    return hist;
   }
 
   void saveHistMonthCompleted(Dream dream, DateTime date, bool isWonReward) {
@@ -1012,6 +1060,37 @@ class FirebaseService {
     hist.isShow = false;
 
     dream.reference.collection("histGoalMonthReached").add(hist.toMap());
+  }
+
+  Future<ResponseApi<HistGoalMonth>> findHistShowedForMonth(Dream dream, int numberMonth) async {
+    try {
+      Query query = dream.reference
+          .collection("histGoalMonthReached")
+          .where("isShow", isEqualTo: true)
+          .where("numberMonth", isEqualTo: numberMonth)
+          .orderBy("dateCompleted", descending: true);
+
+      // Query query = dream.reference
+      //     .collection("histGoalWeekReached");
+      //     .where("isShow", isEqualTo: true)
+      //      .where("numberWeek", isEqualTo: numberMonth) //46
+      //      .orderBy("firsDayWeek", descending: true);
+
+      if (query != null) {
+        QuerySnapshot querySnapshot = await query.get();
+        List<HistGoalMonth> list =
+        HistGoalMonth.fromListDocumentSnapshot(querySnapshot.docs);
+        if (list != null && list.isNotEmpty) {
+          HistGoalMonth hist = list[0];
+          hist.dream = dream;
+          return ResponseApi.ok(result: hist);
+        }
+      }
+      return ResponseApi.ok(result: null);
+    } catch (error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      ResponseApi.error(msg: error.toString());
+    }
   }
 
   Future<ResponseApi<HistGoalMonth>> findLastHistMonth(Dream dream,
@@ -1039,13 +1118,27 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi<HistGoalWeek>> findLastHistWeek(Dream dream,
-      {bool isShow = false}) async {
+  Future<ResponseApi<HistGoalWeek>> findLastHistWeekWithDate(Dream dream,
+      {bool isShow = false, Timestamp date}) async {
     try {
-      Query query = dream.reference
-          .collection("histGoalWeekReached")
-          .where("isShow", isEqualTo: isShow)
-          .orderBy("numberWeek", descending: true);
+      Query query;
+      if(date != null){
+        DateTime initDate = Utils.stringToDate("${date.toDate().year}-${date.toDate().month}-${date.toDate().day} 00:00:00");
+        DateTime finishDate = Utils.stringToDate("${date.toDate().year}-${date.toDate().month}-${date.toDate().day} 23:59:59");
+
+        query = dream.reference
+            .collection("histGoalWeekReached")
+            .where("isShow", isEqualTo: isShow)
+            .where("dateLastShow", isLessThanOrEqualTo: Timestamp.fromDate(finishDate))
+            .where("dateLastShow", isGreaterThanOrEqualTo: Timestamp.fromDate(initDate))
+            .limit(1);
+      }else{
+        query = dream.reference
+            .collection("histGoalWeekReached")
+            .where("isShow", isEqualTo: isShow)
+            .orderBy("numberWeek", descending: true)
+            .limit(1);
+      }
 
       if (query != null) {
         QuerySnapshot querySnapshot = await query.get();

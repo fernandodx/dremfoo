@@ -18,13 +18,13 @@ import 'package:pixabay_picker/pixabay_api.dart';
 final _controller = StreamController<String>.broadcast();
 final _controllerDonwload = StreamController<bool>.broadcast();
 Stream<bool> get _streamDonwload => _controllerDonwload.stream;
+bool _isSearchMore = false;
 
 class SearchPictureInternet extends StatelessWidget {
   Stream<String> get stream => _controller.stream;
 
 
   String namePicture;
-
   SearchPictureInternet(this.namePicture);
 
   @override
@@ -150,6 +150,9 @@ void returnImageBase64(List<PixabayMedia> list, int index, BuildContext context)
   _controller.add(base64);
   _controllerDonwload.add(false);
   pop(context,null);
+  if(_isSearchMore){
+    pop(context,null);
+  }
 }
 
 Future<String> donwloadImageConvertBase64(
@@ -218,15 +221,15 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // show some result based on the selection
-    return Center(
-      child: Text(query),
-    );
+       _isSearchMore = true;
+      return getGridViewForPicture(query);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // show when someone searches for something
     if (query.isNotEmpty && query.length > 3) {
+      _isSearchMore = true;
       return getGridViewForPicture(query);
     }
 

@@ -106,7 +106,7 @@ class BaseBloc<T> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 200,
+                  width: double.infinity,
                   height: 200,
                   child: Center(
                     child: FlareActor(
