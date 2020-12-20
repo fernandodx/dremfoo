@@ -273,7 +273,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             padding: EdgeInsets.all(16),
-            child: TextUtil.textTitulo("Metas diárias"),
+            child: TextUtil.textTitulo("Metas diárias - ${Utils.dateToString(DateTime.now())}"),
           ),
           Stack(children: [
             Container(
@@ -317,11 +317,22 @@ class _HomePageState extends State<HomePage> {
               stream: _bloc.streamChartSteps,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.all(8),
-                    children: snapshot.data,
-                  );
+                  if(snapshot.data.length == 1){
+                    return ListView(
+                      key: Key("LIST_WEEK"),
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.all(8),
+                      children: snapshot.data,
+                    );
+                  }else{
+                    return ListView(
+                      key: Key("LIST_COMPLETE"),
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.all(8),
+                      children: snapshot.data,
+                    );
+                  }
+
                 }
                 return _bloc.getSimpleLoadingWidget();
               },

@@ -33,7 +33,7 @@ class HomePageBloc extends BaseBloc {
   final _addDreamStreamController = StreamController<List<Dream>>();
   final _addChipStepsStreamController = StreamController<List<Widget>>();
   final _addChipDailyStreamController = StreamController<List<Widget>>();
-  final _addChartStreamController = StreamController<List<Widget>>();
+  final _addChartStreamController = StreamController<List<Widget>>.broadcast();
 
   final _addCheckSucessStreamController = StreamController<bool>();
 
@@ -174,10 +174,9 @@ class HomePageBloc extends BaseBloc {
       Widget chartWeek = ChartGoals.createChartWeek("Sua semana", listGoalsWeek);
       listChartWidget.add(chartWeek);
 
-      Widget chartMonth = await _createBarMouth(listDream);
-      listChartWidget.add(chartMonth);
-
+      _createBarMouth(listDream, listChartWidget);
       _addChartStreamController.add(listChartWidget);
+
     }
 
     controllerShowHistWeekMonth(listDream, context);
@@ -194,8 +193,9 @@ class HomePageBloc extends BaseBloc {
   }
 
   controllerShowHistWeekMonth(List<Dream> listDream, context) async {
+    DateTime lastHit = await FirebaseService().getLastHitUser();
     DateTime now = DateTime.now();
-    DateTime firstDay = now.subtract(Duration(days: now.weekday));
+    DateTime firstDay = lastHit.subtract(Duration(days: lastHit.weekday));
     
     int qtdDayFirstDay = DateUtil().daysPastInYear(firstDay.month, firstDay.day, firstDay.year);
     int qtdDayNow = DateUtil().daysPastInYear(now.month, now.day, now.year);
@@ -213,7 +213,6 @@ class HomePageBloc extends BaseBloc {
     bool isUserMore7Days = countAcess > 7;
     
      if (isChangeWeek && isUserMore7Days) {
-    
        List<HistGoalWeek> listHist = await findLastHistWeek(listDream);
        List<HistGoalWeek> listHistToday = await findLastShowHistWeekToday(listDream);
 
@@ -225,7 +224,7 @@ class HomePageBloc extends BaseBloc {
              listHist.add(histGoalWeek);
            }
          }
-    
+
        }else if(listHistToday == null || listHistToday.isEmpty){
 
          List<HistGoalWeek> listNewHist = new List();
@@ -241,7 +240,7 @@ class HomePageBloc extends BaseBloc {
        }else{
          listHist.clear();
        }
-    
+
       if (listHist.isNotEmpty) {
         push(context, ReportDreamsWeek.from(listHist));
         listHist.forEach((hist) {
@@ -250,7 +249,7 @@ class HomePageBloc extends BaseBloc {
         });
       }
     }
-    
+
     if (dateLastAcess != null && dateLastAcess.month != now.month && isExistAcessLastMonth) {
       List<HistGoalMonth> listHist = List();
 
@@ -333,16 +332,24 @@ class HomePageBloc extends BaseBloc {
     return listHist;
   }
 
-  Future<Widget> _createBarMouth(List<Dream> listDream) async {
+  Future<Widget> _createBarMouth(List<Dream> listDream,  List<Widget> listChartWidget) async {
     var listGoals = await getDataChartJoin(listDream);
     int countBar = listGoals[0].length * listGoals.length;
     if (countBar > 15) {
       //TODO descobrir uma maneira melhor de contar as barras
       List<ChartGoals> listGoals = await getDataChartMouth(listDream);
-      return ChartGoals.createBarChartMouth(listGoals);
+      Widget chart = ChartGoals.createBarChartMouth(listGoals);
+      listChartWidget.add(chart);
+      _addChartStreamController.add(listChartWidget);
+      return chart;
     } else {
-      return ChartGoals.createBarChartJoinMouth(listGoals);
+      Widget chart = ChartGoals.createBarChartJoinMouth(listGoals);
+      listChartWidget.add(chart);
+      _addChartStreamController.add(listChartWidget);
+      return chart;
     }
+
+
   }
 
   List<CardDream> getlistCardDream(BuildContext context) {
@@ -554,7 +561,7 @@ class HomePageBloc extends BaseBloc {
       List<DailyGoal> listDailyOk = List();
 
       ResponseApi<List<DailyGoal>> responseApi =
-          await FirebaseService().findDailyGoalsCompletedHist(dream, firstDay.add(Duration(days: 1)), now);
+          await FirebaseService().findDailyGoalsCompletedHist(dream, firstDay, now);
       if (responseApi.ok) {
         listDailyOk = responseApi.result;
       }
