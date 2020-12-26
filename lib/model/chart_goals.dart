@@ -18,6 +18,7 @@ class ChartGoals {
   static Widget createChartWeek(
       String titleChart, List<List<ChartGoals>> listDataChart) {
     return AspectRatio(
+      key: ObjectKey(1),
       aspectRatio: 1.1,
       child: Container(
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
@@ -320,6 +321,7 @@ class ChartGoals {
     showingBarGroups = List.of(rawBarGroups);
 
     return AspectRatio(
+      key: ObjectKey(2),
       aspectRatio: 1.1,
       child: Container(
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 4),
@@ -487,6 +489,7 @@ class ChartGoals {
     showingBarGroups = List.of(rawBarGroups);
 
     return AspectRatio(
+      key: ObjectKey(2),
       aspectRatio: 1.13,
       child: Container(
         margin: EdgeInsets.only(top: 4, bottom: 8, left: 4, right: 4),

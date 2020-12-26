@@ -312,27 +312,18 @@ class _HomePageState extends State<HomePage> {
             ),
           ]),
           Container(
+            key: Key("Chart"),
             height: 260.0,
             child: StreamBuilder<List<Widget>>(
               stream: _bloc.streamChartSteps,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if(snapshot.data.length == 1){
-                    return ListView(
-                      key: Key("LIST_WEEK"),
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.all(8),
-                      children: snapshot.data,
-                    );
-                  }else{
-                    return ListView(
-                      key: Key("LIST_COMPLETE"),
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.all(8),
-                      children: snapshot.data,
-                    );
-                  }
-
+                  return ListView(
+                    key: Key("LIST_${snapshot.data.length}"),
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.all(8),
+                    children: snapshot.data,
+                  );
                 }
                 return _bloc.getSimpleLoadingWidget();
               },
