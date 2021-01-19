@@ -1123,8 +1123,8 @@ class FirebaseService {
     try {
       Query query;
       if(date != null){
-        DateTime initDate = Utils.stringToDate("${date.toDate().year}-${date.toDate().month}-${date.toDate().day} 00:00:00");
-        DateTime finishDate = Utils.stringToDate("${date.toDate().year}-${date.toDate().month}-${date.toDate().day} 23:59:59");
+        DateTime initDate = Utils.stringToDate("${date.toDate().year}-${Utils.addZeroLeft(date.toDate().month)}-${Utils.addZeroLeft(date.toDate().day)} 00:00:00");
+        DateTime finishDate = Utils.stringToDate("${date.toDate().year}-${Utils.addZeroLeft(date.toDate().month)}-${Utils.addZeroLeft(date.toDate().day)} 23:59:59");
 
         query = dream.reference
             .collection("histGoalWeekReached")

@@ -94,7 +94,7 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
             color: AppColors.colorDark,
             size: 35,
             onTap: () {
-              launch("https://www.instagram.com/priscila_torres/");
+              launch("https://www.instagram.com/revometas/");
             },
           ),
           TextUtil.textDefault("Instagram")
@@ -113,7 +113,7 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
             color: AppColors.colorDark,
             size: 35,
             onTap: () {
-              launch("https://www.youtube.com/user/fernandodxx");
+              launch("https://www.youtube.com/channel/UC8auEL7B2jO0Uk1URQGvPGg");
             },
           ),
           TextUtil.textDefault("Youtube")
