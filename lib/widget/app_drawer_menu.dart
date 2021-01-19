@@ -299,7 +299,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
         title: 'App Revo',
         text:
             'Olha esse app, ele vai te ajudar a realizar seus sonhos, através de metas com foco ;)',
-        linkUrl: 'https://flutter.dev/',
+        linkUrl: 'https://play.google.com/store/apps/details?id=br.com.dias.dremfoo',
         chooserTitle: 'Revo  - Foco com metas');
   }
 
