@@ -63,6 +63,12 @@ dependencies:
   firebase_crashlytics: ^0.1.4+1
   firebase_remote_config: ^0.4.0
 
+  #Mobx
+  build_runner: ^1.11.1
+  mobx_codegen: ^1.1.2
+  flutter_mobx: ^1.1.0+2
+  mobx: ^1.2.1+4
+
 
 dev_dependencies:
   flutter_test:

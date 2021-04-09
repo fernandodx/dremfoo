@@ -9,6 +9,7 @@ import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/notification_revo.dart';
 import 'package:dremfoo/model/push_notification.dart';
 import 'package:dremfoo/model/user.dart';
+import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/constants.dart';
 import 'package:dremfoo/ui/check_type_dream_page.dart';
 import 'package:dremfoo/ui/register_dreams_page.dart';
@@ -220,8 +221,18 @@ class _HomePageState extends State<HomePage> {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           new SliverAppBar(
-            pinned: false,
-            title: TextUtil.textAppbar("Painel"),
+            pinned: true,
+            title: TextUtil.textAppbar(_bloc.titlePage),
+            bottom: PreferredSize(
+              child:  Container(
+                margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _bloc.getDaysOfWeekRow(context),
+                ),
+              ),
+              preferredSize: Size(double.infinity, 80),
+            )
           ),
         ];
       },
@@ -243,6 +254,15 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          // Container(
+          //   margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: _bloc.getDaysOfWeekRow(context),
+          //   ),
+          // ),
+
+
           Container(
             padding: EdgeInsets.all(16),
             child: TextUtil.textTitulo("Sonhos"),
@@ -267,13 +287,13 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.hasData) {
                   return Wrap(children: snapshot.data);
                 }
-                return _bloc.getSimpleLoadingWidget(size: 60);
+                return _bloc.getSimpleLoadingWidget(size: 120);
               },
             ),
           ),
           Container(
             padding: EdgeInsets.all(16),
-            child: TextUtil.textTitulo("Metas diárias - ${Utils.dateToString(DateTime.now())}"),
+            child: TextUtil.textTitulo("Metas diárias"),
           ),
           Stack(children: [
             Container(
@@ -285,31 +305,30 @@ class _HomePageState extends State<HomePage> {
                       return Wrap(children: snapshot.data);
                     }
 
-                    return _bloc.getSimpleLoadingWidget(size: 60);
+                    return _bloc.getSimpleLoadingWidget(size: 120);
                   }),
             ),
             StreamBuilder<bool>(
-              stream: _bloc.streamCheckSucess,
-              builder: (context, snapshot) {
-                if(!snapshot.hasData || !snapshot.data){
-                  return Container();
-                }
-                return Visibility(
-                  visible: snapshot.data,
-                  child: Container(
-                    width: double.infinity,
-                    height: 200,
-                    child: Center(
-                      child: FlareActor(
-                        Utils.getPathAssetsAnim("animation_sucess-animate_check.flr"),
-                        shouldClip: true,
-                        animation: "animate_check",
+                stream: _bloc.streamCheckSucess,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || !snapshot.data) {
+                    return Container();
+                  }
+                  return Visibility(
+                    visible: snapshot.data,
+                    child: Container(
+                      width: double.infinity,
+                      height: 200,
+                      child: Center(
+                        child: FlareActor(
+                          Utils.getPathAssetsAnim("animation_sucess-animate_check.flr"),
+                          shouldClip: true,
+                          animation: "animate_check",
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-            ),
+                  );
+                }),
           ]),
           Container(
             key: Key("Chart"),
@@ -325,7 +344,7 @@ class _HomePageState extends State<HomePage> {
                     children: snapshot.data,
                   );
                 }
-                return _bloc.getSimpleLoadingWidget();
+                return Container();
               },
             ),
           ),

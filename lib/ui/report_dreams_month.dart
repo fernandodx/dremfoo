@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:date_util/date_util.dart';
+import 'package:dremfoo/mobx/report_dreams_month_model.dart';
 import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/hist_goal_month.dart';
 import 'package:dremfoo/model/step_dream.dart';
@@ -15,6 +16,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ReportDreamsMonth extends StatefulWidget {
@@ -28,21 +30,13 @@ class ReportDreamsMonth extends StatefulWidget {
 
 class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   var pageViewController = PageController();
-
-  final _controllerAnimStream = StreamController<String>();
-
-  Stream<String> get streamAnim => _controllerAnimStream.stream;
   GlobalKey _globalKey = new GlobalKey();
+
+  var _model = ReportDreamsMonthModel();
 
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controllerAnimStream.close();
   }
 
   @override
@@ -102,12 +96,9 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   }
 
   Widget getPageReport(HistGoalMonth hist) {
-    //TODO se der problema com mais de um sonho tirar do stream
-    if(hist.isWonReward){
-      _controllerAnimStream.add("appear");
-    }else{
-      _controllerAnimStream.add("crying");
-    }
+
+    _model.choiceAnimation(hist);
+
     return Stack(
       children: <Widget>[
         RepaintBoundary(
@@ -177,7 +168,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
                       ),
                     ),
                     createChipStep(hist.dream.steps),
-                    getStreamAnimation(hist),
+                    observerAnimationHistGoal(hist),
                     cardRewardOrInflection(hist),
                     getCountDayCompleted(hist.dream),
                   ],
@@ -203,36 +194,35 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
     );
   }
 
-  StreamBuilder<String> getStreamAnimation(HistGoalMonth hist) {
+  Observer observerAnimationHistGoal(HistGoalMonth hist) {
 
     String pathAnimation = hist.isWonReward ? "medal.flr" : "sad.flr";
 
-    return StreamBuilder(
-                      stream: streamAnim,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Container(
-                            padding: EdgeInsets.all(16),
-                            width: double.infinity,
-                            height: 150,
-                            child: FlareActor(
-                              Utils.getPathAssetsAnim(pathAnimation),
-                              shouldClip: true,
-                              animation: snapshot.data,
-                              fit: BoxFit.contain,
-                              callback: (anim) {
-                                if (anim == "appear") {
-                                  _controllerAnimStream.add("points");
-                                }
-                              },
-                            ),
-                          );
-                        }
+    return Observer(builder: (context){
 
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      });
+      if(_model.nameAnimation == null){
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      return Container(
+        padding: EdgeInsets.all(16),
+        width: double.infinity,
+        height: 150,
+        child: FlareActor(
+          Utils.getPathAssetsAnim(pathAnimation),
+          shouldClip: true,
+          animation: _model.nameAnimation,
+          fit: BoxFit.contain,
+          callback: (anim) {
+            if (anim == "appear") {
+              _model.nameAnimation = "points";
+            }
+          },
+        ),
+      );
+    });
   }
 
   Widget getCountDayCompleted(Dream dream) {
@@ -372,5 +362,10 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
     } catch (e) {
       print('error: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

@@ -10,6 +10,7 @@ class DailyGoal {
   Timestamp lastDateCompleted;
   Dream dreamParent;
   DocumentReference reference;
+  bool isHistCompletedDay;
 
 //  Set<StatusDream> statusDream = Set();
 

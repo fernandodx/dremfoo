@@ -29,6 +29,7 @@ class AppColors {
   static Color get colorPacific => Utils.colorFromHex("#13ABC4");
   static Color get colorEletric => Utils.colorFromHex("#7EFAFF");
   static Color get colorWebColor => Utils.colorFromHex("#EBFFFB");
+  static Color get colorDisabled => Utils.colorFromHex("#808080");
 
 
 
