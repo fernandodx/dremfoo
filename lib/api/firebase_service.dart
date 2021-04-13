@@ -486,7 +486,7 @@ class FirebaseService {
     user.name = await Prefs.getString("USER_PREF_NAME");
     user.email = await Prefs.getString("USER_PREF_EMAIL");
     user.urlPicture = await Prefs.getString("USER_PREF_URL_PICTURE");
-    user.isEnableNotification = await Prefs.getBool("USER_PREF_ISNOTIFICATION");
+    user.isEnableNotification = await Prefs.getBool("USER_PREF_ISNOTIFICATION", false);
     user.initNotification = Timestamp.fromMillisecondsSinceEpoch(timeInit);
     user.finishNotification = Timestamp.fromMillisecondsSinceEpoch(timeFinish);
     setUserProperties(user);

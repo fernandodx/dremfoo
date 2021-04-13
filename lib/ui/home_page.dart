@@ -221,19 +221,18 @@ class _HomePageState extends State<HomePage> {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           new SliverAppBar(
-            pinned: true,
-            title: TextUtil.textAppbar(_bloc.titlePage),
-            bottom: PreferredSize(
-              child:  Container(
-                margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _bloc.getDaysOfWeekRow(context),
+              pinned: true,
+              title: TextUtil.textAppbar(_bloc.titlePage),
+              bottom: PreferredSize(
+                child: Container(
+                  margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: _bloc.getDaysOfWeekRow(context),
+                  ),
                 ),
-              ),
-              preferredSize: Size(double.infinity, 80),
-            )
-          ),
+                preferredSize: Size(double.infinity, 80),
+              )),
         ];
       },
       body: getBody(listDreams),
@@ -254,15 +253,6 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          // Container(
-          //   margin: EdgeInsets.only(top: 16, left: 16, right: 16),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: _bloc.getDaysOfWeekRow(context),
-          //   ),
-          // ),
-
-
           Container(
             padding: EdgeInsets.all(16),
             child: TextUtil.textTitulo("Sonhos"),
@@ -277,7 +267,27 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             padding: EdgeInsets.all(16),
-            child: TextUtil.textTitulo("Etapas"),
+            child: Row(
+              children: [
+                TextUtil.textTitulo("Etapas"),
+                IconButton(
+                    icon: _bloc.isVisibilityStep
+                        ? Icon(
+                            Icons.visibility_off,
+                            color: AppColors.colorText,
+                          )
+                        : Icon(
+                            Icons.visibility,
+                            color: AppColors.colorText,
+                          ),
+                    onPressed: () {
+                      setState(() {
+                        _bloc.isVisibilityStep = !_bloc.isVisibilityStep;
+                        _bloc.setVisibilityStepPrefs(_bloc.isVisibilityStep);
+                      });
+                    })
+              ],
+            ),
           ),
           Container(
             margin: EdgeInsets.all(4),
@@ -285,7 +295,7 @@ class _HomePageState extends State<HomePage> {
               stream: _bloc.streamChipSteps,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Wrap(children: snapshot.data);
+                  return Visibility(visible: _bloc.isVisibilityStep, child: Wrap(children: snapshot.data));
                 }
                 return _bloc.getSimpleLoadingWidget(size: 120);
               },

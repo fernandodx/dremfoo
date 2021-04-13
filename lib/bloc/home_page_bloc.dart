@@ -24,6 +24,7 @@ import 'package:dremfoo/ui/report_dreams_week.dart';
 import 'package:dremfoo/utils/crashlytics_util.dart';
 import 'package:dremfoo/utils/nav.dart';
 import 'package:dremfoo/utils/notification_util.dart';
+import 'package:dremfoo/utils/prefs.dart';
 import 'package:dremfoo/utils/text_util.dart';
 import 'package:dremfoo/utils/utils.dart';
 import 'package:dremfoo/widget/card_dream.dart';
@@ -52,12 +53,15 @@ class HomePageBloc extends BaseBloc {
   DateTime _currentDate = DateTime.now();
   String titlePage;
 
+  bool isVisibilityStep = true;
+
   void fetch(BuildContext context, bool isShowLoadind) async {
     try {
       titlePage = "Painel · ${Utils.dateToStringExtension(_currentDate)}";
       if (isShowLoadind) {
         showLoading();
       }
+      isVisibilityStep = await isVisibilityStepPrefs(true);
       await getSteps(context);
       if (isShowLoadind) {
         hideLoading();
@@ -795,5 +799,13 @@ class HomePageBloc extends BaseBloc {
 
   _showCheckSucessGoal(bool isShow) {
     _addCheckSucessStreamController.sink.add(isShow);
+  }
+
+  Future<bool> isVisibilityStepPrefs(bool defaultValue) async {
+    return Prefs.getBool("IS_VISIBILITY_STEP", defaultValue);
+  }
+
+  void setVisibilityStepPrefs(bool isVisible) async {
+    Prefs.putBool("IS_VISIBILITY_STEP", isVisible);
   }
 }
