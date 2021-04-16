@@ -47,6 +47,14 @@ class UserRevo {
     return map;
   }
 
+  static List<UserRevo> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
+    return list.map((snapshot) {
+      UserRevo userRevo = UserRevo.fromMap(snapshot.data());
+      userRevo.uid = snapshot.id;
+      return userRevo;
+    }).toList();
+  }
+
   String toJson() {
     return convert.json.encode(toMap());
   }

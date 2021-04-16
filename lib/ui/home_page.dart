@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/api/firebase_service.dart';
 import 'package:dremfoo/bloc/home_page_bloc.dart';
 import 'package:dremfoo/eventbus/main_event_bus.dart';
@@ -8,6 +9,7 @@ import 'package:dremfoo/eventbus/user_event_bus.dart';
 import 'package:dremfoo/model/dream.dart';
 import 'package:dremfoo/model/notification_revo.dart';
 import 'package:dremfoo/model/push_notification.dart';
+import 'package:dremfoo/model/response_api.dart';
 import 'package:dremfoo/model/user.dart';
 import 'package:dremfoo/resources/app_colors.dart';
 import 'package:dremfoo/resources/constants.dart';
@@ -25,6 +27,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:dremfoo/extensions/util_extensions.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -161,6 +164,127 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         drawer: AppDrawerMenu(),
+        endDrawer: Drawer(
+            child: Container(
+          color: AppColors.colorEggShell,
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 24),
+                    width: double.infinity,
+                    height: 150,
+                    child: FlareActor(
+                      Utils.getPathAssetsAnim("medal.flr"),
+                      shouldClip: true,
+                      animation: "appear",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  TextUtil.textTitulo("Classificação"),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Divider(
+                color: AppColors.colorDark,
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: FutureBuilder(
+                    future: _bloc.getRankUsers(),
+                    builder: (BuildContext context, AsyncSnapshot<List<UserRevo>> snapshots) {
+                      if (snapshots.hasData) {
+                        List<UserRevo> listRank = snapshots.data;
+
+                        return ListView.builder(
+                            itemCount: listRank.length,
+                            itemBuilder: (context, index) {
+                              UserRevo user = listRank[index];
+                              String name = user.name != null ? user.name : user.email.split("@")[0];
+                              String position = "${index + 1}˚";
+                              String detailFocus = user.focus.countDaysFocus > 1
+                                  ? "${user.focus.countDaysFocus} dias de foco"
+                                  : "${user.focus.countDaysFocus} dia de foco";
+                              return Container(
+                                padding: EdgeInsets.only(left: 8, right: 8, bottom: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    TextUtil.textTitulo(position),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    SizedBox(
+                                      child: CircleAvatar(
+                                        radius: 34,
+                                        backgroundImage: (user.urlPicture != null && user.urlPicture.isNotEmpty)
+                                            ? NetworkImage(user.urlPicture)
+                                            : AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
+                                      ),
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        TextUtil.textSubTitle(name.capitalizeFirstOfEach, fontWeight: FontWeight.bold),
+                                        TextUtil.textSubTitle(detailFocus)
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Visibility(
+                                        visible: user.focus != null &&
+                                            user.focus.level != null &&
+                                            user.focus.level.urlIcon != null,
+                                        child: Container(
+                                          alignment: Alignment.centerRight,
+                                          child: CircleAvatar(
+                                            radius: 13,
+                                            backgroundColor: Colors.white12,
+                                            child: ClipOval(
+                                              child: CachedNetworkImage(
+                                                width: 30,
+                                                height: 30,
+                                                imageUrl: user.focus.level.urlIcon,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      }
+
+                      if (snapshots.hasError) {
+                        return Row(
+                          children: [
+                            Container(
+                              child: TextUtil.textDefault(snapshots.error),
+                            ),
+                          ],
+                        );
+                      }
+
+                      return _bloc.getSimpleLoadingWidget();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )),
         body: Stack(
           children: <Widget>[bodyHomePage(), _bloc.loading()],
         ));
@@ -223,6 +347,15 @@ class _HomePageState extends State<HomePage> {
           new SliverAppBar(
               pinned: true,
               title: TextUtil.textAppbar(_bloc.titlePage),
+              actions: [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: Icon(Icons.emoji_events_rounded),
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                    tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  ),
+                ),
+              ],
               bottom: PreferredSize(
                 child: Container(
                   margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),

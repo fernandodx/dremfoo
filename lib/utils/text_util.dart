@@ -32,14 +32,17 @@ class TextUtil {
   static Text textSubTitle(String value,
       {int maxLines = 10,
         double fontSize = 12,
+        FontWeight fontWeight = FontWeight.normal,
         TextAlign align = TextAlign.start}) {
     return Text(
       value,
       textAlign: align,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
+
       style: TextStyle(
           fontSize: fontSize,
+          fontWeight: fontWeight,
           color: AppColors.colorSubText
       ),
     );

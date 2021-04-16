@@ -268,7 +268,7 @@ class FirebaseService {
 
   Future<bool> saveDataUser(User user, DateTime initTime, DateTime finishTime) async {
      bool isExist = await isUserUidExist(user.uid);
-    //TEstar sem conta cadastrada
+
     if(!isExist){
      getRefCurrentUser(user.uid).set({
         "name": user.displayName,
@@ -528,6 +528,31 @@ class FirebaseService {
           .catchError((error) => CrashlyticsUtil.logErro(error, error));
 
       return ResponseApi.ok(result: Dream.fromListDocumentSnapshot(querySnapshot.docs));
+    } catch (error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      return ResponseApi.error(msg: "$error");
+    }
+  }
+
+  Future<ResponseApi<List<UserRevo>>> findRankUser() async {
+    try {
+
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(Constants.ENVIRONMENT)
+          .doc(Constants.ENVIRONMENT_NOW)
+          .collection("users")
+          .where("focus.countDaysFocus", isGreaterThan: 0)
+          .orderBy("focus.countDaysFocus", descending: true)
+          .get()
+          .catchError((error) {
+            CrashlyticsUtil.logErro(error, error);
+          }
+      );
+
+      List<UserRevo> listUsers = UserRevo.fromListDocumentSnapshot(querySnapshot.docs);
+      listUsers = listUsers.where((user) => user.focus != null && user.focus.level != null).toList();
+
+      return ResponseApi.ok(result: listUsers);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
       return ResponseApi.error(msg: "$error");
@@ -1180,7 +1205,6 @@ class FirebaseService {
       CrashlyticsUtil.logErro(error, stack);
       return ResponseApi.error(msg: error.toString());
     }
-
   }
 
 }

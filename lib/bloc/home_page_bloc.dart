@@ -61,6 +61,7 @@ class HomePageBloc extends BaseBloc {
       if (isShowLoadind) {
         showLoading();
       }
+      ResponseApi response = await FirebaseService().findRankUser();
       isVisibilityStep = await isVisibilityStepPrefs(true);
       await getSteps(context);
       if (isShowLoadind) {
@@ -78,6 +79,15 @@ class HomePageBloc extends BaseBloc {
     _addChipDailyStreamController.close();
     _addChartStreamController.close();
     _addCheckSucessStreamController.close();
+  }
+
+  Future<List<UserRevo>> getRankUsers() async {
+    ResponseApi responseApi =  await FirebaseService().findRankUser();
+    if(responseApi.ok){
+      return responseApi.result;
+    }
+
+    return Future.error(responseApi.msg);
   }
 
   void saveLastFocus() async {
