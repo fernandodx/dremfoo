@@ -95,11 +95,13 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         Provider<MainEventBus>(
-          builder: (context) => MainEventBus(),
+          create: (context) => MainEventBus(),
+          lazy: true,
           dispose: (context, mainEventBus) => mainEventBus.dispose(),
         ),
         Provider<UserEventBus>(
-          builder: (context) => UserEventBus(),
+          create: (context) => UserEventBus(),
+          lazy: true,
           dispose: (context, userEventBus) => userEventBus.dispose(),
         )
       ],
