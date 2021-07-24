@@ -64,15 +64,22 @@ dependencies:
   firebase_remote_config: ^0.4.0
 
   #Mobx
-  build_runner: ^1.11.1
-  mobx_codegen: ^1.1.2
   flutter_mobx: ^1.1.0+2
   mobx: ^1.2.1+4
 
+  flutter_modular: ^3.3.1
+  slidy: ^2.2.1
+
+  intl: ^0.16.1
+
 
 dev_dependencies:
+  build_runner: ^1.11.1
+  mobx_codegen: ^1.1.2
   flutter_test:
     sdk: flutter
+
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -85,6 +92,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  generate: true
 
   fonts:
     - family: Alata
@@ -99,6 +108,9 @@ flutter:
   assets:
     - assets/animations/
     - assets/images/
+
+scripts:
+  mobx: flutter pub run build_runner watch  --delete-conflicting-outputs
 
 
   # To add assets to your application, add an assets section, like this:

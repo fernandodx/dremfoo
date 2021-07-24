@@ -1,0 +1,1 @@
+enum TypeAlert { SUCESS, ALERT, ERROR }
