@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:date_util/date_util.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/resources/PortuguesLocale.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:flutter/material.dart';

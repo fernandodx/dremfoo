@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:date_util/date_util.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/model/dream.dart';
 import 'package:dremfoo/app/model/step_dream.dart';
@@ -10,7 +10,6 @@ import 'package:dremfoo/app/model/user.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/utils.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -236,9 +235,15 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
 
   Future<void> _shareImage(ByteData bytes, Dream dream) async {
     try {
-      await Share.file('Relatório do sonho', 'sonho_realizado.png',
-          bytes.buffer.asUint8List(), 'image/png',
-          text: 'Parabéns pela realização do sonho ${dream.dreamPropose}');
+      // await Share.file('Relatório do sonho', 'sonho_realizado.png',
+      //     bytes.buffer.asUint8List(), 'image/png',
+      //     text: 'Parabéns pela realização do sonho ${dream.dreamPropose}');
+
+      // await ShareFilesAndScreenshotWidgets().shareFile(
+      //     "Relatório do sonho", "sonho_realizado.png",  bytes.buffer.asUint8List(), "image/jpg",
+      //     text: "Parabéns pela realização do sonho ${dream.dreamPropose}");
+
+
     } catch (e) {
       print('error: $e');
     }

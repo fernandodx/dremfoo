@@ -9,7 +9,7 @@ import 'package:dremfoo/app/utils/utils.dart';
 import 'package:dremfoo/app/widget/app_drawer_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_youtube/flutter_youtube.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ListVideoPage extends StatefulWidget {
   @override
@@ -100,15 +100,18 @@ class _ListVideoPageState extends State<ListVideoPage> {
       video.reference.collection("views").add({"name": user.name, "e-mail": user.email, "date" : Timestamp.now()});
     });
 
-    FlutterYoutube.playYoutubeVideoById(
-        apiKey: "AIzaSyDS3-7JYRPr7LlFzSecblTKVvTq_t2cBDw",
-        videoId: video.id,
+    String keyYoutube = "AIzaSyDS3-7JYRPr7LlFzSecblTKVvTq_t2cBDw";
+
+    YoutubePlayerController _controller = YoutubePlayerController(
+      initialVideoId: video.id,
+      flags: YoutubePlayerFlags(
         autoPlay: true,
-        //default false
-        fullScreen: false,
-        appBarColor: AppColors.colorPrimary,
-        appBarVisible: true,
-        backgroundColor: AppColors.colorPrimaryDark, //default false
+      ),
+    );
+
+    YoutubePlayer(
+      controller: _controller,
+      liveUIColor: AppColors.colorPrimaryDark,
     );
   }
 }

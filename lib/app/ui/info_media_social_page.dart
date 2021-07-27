@@ -9,7 +9,8 @@ import 'package:dremfoo/app/widget/app_drawer_menu.dart';
 import 'package:email_launcher/email_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_buttons/social_media_buttons.dart';
+import 'package:sign_button/constants.dart';
+import 'package:sign_button/create_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoMediaSocialPage extends StatefulWidget {
@@ -90,13 +91,7 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SocialMediaButton.instagram(
-            color: AppColors.colorDark,
-            size: 35,
-            onTap: () {
-              launch("https://www.instagram.com/revometas/");
-            },
-          ),
+          SignInButton.mini(buttonType: ButtonType.facebook, onPressed: () => launch("https://www.instagram.com/revometas/")),
           TextUtil.textDefault("Instagram")
         ],
       ),
@@ -109,13 +104,7 @@ class _InfoMediaSocialPageState extends State<InfoMediaSocialPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SocialMediaButton.youtube(
-            color: AppColors.colorDark,
-            size: 35,
-            onTap: () {
-              launch("https://www.youtube.com/channel/UC8auEL7B2jO0Uk1URQGvPGg");
-            },
-          ),
+          SignInButton.mini(buttonType: ButtonType.youtube, onPressed: () => launch("https://www.youtube.com/channel/UC8auEL7B2jO0Uk1URQGvPGg")),
           TextUtil.textDefault("Youtube")
         ],
       ),

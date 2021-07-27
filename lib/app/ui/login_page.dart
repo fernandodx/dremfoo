@@ -13,7 +13,7 @@ import 'package:dremfoo/app/utils/validator_util.dart';
 import 'package:dremfoo/app/widget/app_button_default.dart';
 import 'package:dremfoo/app/widget/app_text_default.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:sign_button/sign_button.dart';
 
 import 'home_page.dart';
 
@@ -212,10 +212,10 @@ class _LoginPageState extends State<LoginPage> {
       Row(
         children: <Widget>[
           Expanded(
-            child: GoogleSignInButton(
+            child: SignInButton(
+              buttonType: ButtonType.google,
               onPressed: () => onClickLoginWithGoogle(context),
-              borderRadius: 8.0,
-              text: "Login com Google",
+              btnText: "Login com Google",
             ),
           ),
         ],
@@ -225,11 +225,12 @@ class _LoginPageState extends State<LoginPage> {
         visible: Platform.isIOS,
         child: Row(
           children: <Widget>[
+
             Expanded(
-              child: FacebookSignInButton(
+              child: SignInButton(
+                buttonType: ButtonType.facebook,
                 onPressed: () => onClickLoginWithFacebook(context),
-                borderRadius: 8.0,
-                text: "Login com Facebook",
+                btnText: "Login com Facebook",
               ),
             ),
           ],

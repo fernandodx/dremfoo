@@ -20,7 +20,6 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 
 class AppDrawerMenu extends StatefulWidget {
   String urlImgBackgound;
@@ -295,12 +294,16 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
   }
 
   Future<void> share() async {
-    await FlutterShare.share(
-        title: 'App Revo',
-        text:
-            'Olha esse app, ele vai te ajudar a realizar seus sonhos, através de metas com foco ;)',
-        linkUrl: 'https://play.google.com/store/apps/details?id=br.com.dias.dremfoo',
-        chooserTitle: 'Revo  - Foco com metas');
+    // await FlutterShare.share(
+    //     title: 'App Revo',
+    //     text:
+    //         'Olha esse app, ele vai te ajudar a realizar seus sonhos, através de metas com foco ;)',
+    //     linkUrl: 'https://play.google.com/store/apps/details?id=br.com.dias.dremfoo',
+    //     chooserTitle: 'Revo  - Foco com metas');
+
+    // Share.share('Olha esse app, ele vai te ajudar a realizar seus sonhos, através de metas com foco: https://play.google.com/store/apps/details?id=br.com.dias.dremfoo', subject: 'Revo  - Foco com metas');
+
+
   }
 
   exit(context) {

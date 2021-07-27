@@ -2,7 +2,8 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_util/date_util.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'eventbus/main_event_bus.dart';
 import 'eventbus/user_event_bus.dart';
 import 'package:dremfoo/app/model/color_dream.dart';
@@ -26,7 +27,6 @@ import 'package:dremfoo/app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'firebase_storage_service.dart';
@@ -35,7 +35,7 @@ String fireBaseUserUid;
 
 class FirebaseService {
   final _googleSign = GoogleSignIn();
-  final _fbLogin = FacebookLogin();
+  final _fbLogin = FacebookAuth.instance;
   final _auth = FirebaseAuth.instance;
 
   Future<void> sendResetPassword(BuildContext context, String email) async {
@@ -85,26 +85,13 @@ class FirebaseService {
 
   Future<ResponseApi> loginWithFacebook(BuildContext context) async {
     try {
-      FacebookLoginResult result =
-          await _fbLogin.logIn(['email', 'public_profile']);
-      String msg = "";
-
-      switch (result.status) {
-        case FacebookLoginStatus.loggedIn:
-          AnalyticsUtil.sendLogLogin(MethodLogin.facebook);
-          final FacebookAccessToken accessToken = result.accessToken;
-          AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
-          return await _loginWithCredential(credential, context);
-          break;
-
-        case FacebookLoginStatus.cancelledByUser:
-          msg = "Tudo bem, você pode utilizar outro método de login.";
-          return ResponseApi.error(stackMessage: msg);
-          break;
-        case FacebookLoginStatus.error:
-          msg = result.errorMessage;
-          return ResponseApi.error(stackMessage: msg);
-          break;
+      final AccessToken accessToken = await _fbLogin.login(permissions: ['email', 'public_profile']);
+      if(accessToken != null) {
+        AnalyticsUtil.sendLogLogin(MethodLogin.facebook);
+        AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
+        return await _loginWithCredential(credential, context);
+      }else{
+        return ResponseApi.error(stackMessage: "Erro no login com Facebook");
       }
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);

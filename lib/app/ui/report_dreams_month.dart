@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:date_util/date_util.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/mobx/report_dreams_month_model.dart';
 import 'package:dremfoo/app/model/dream.dart';
 import 'package:dremfoo/app/model/hist_goal_month.dart';
@@ -11,7 +11,6 @@ import 'package:dremfoo/app/model/step_dream.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/utils.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -355,13 +354,13 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   }
 
   Future<void> _shareImage(ByteData bytes, Dream dream) async {
-    try {
-      await Share.file('Relatório do sonho', 'sonho_progresso.png',
-          bytes.buffer.asUint8List(), 'image/png',
-          text: 'Progresso do sonho ${dream.dreamPropose}');
-    } catch (e) {
-      print('error: $e');
-    }
+    // try {
+    //   await ShareFilesAndScreenshotWidgets().shareFile('Relatório do sonho', 'sonho_progresso.png',
+    //       bytes.buffer.asUint8List(), 'image/png',
+    //       text: 'Progresso do sonho ${dream.dreamPropose}');
+    // } catch (e) {
+    //   print('error: $e');
+    // }
   }
 
   @override
