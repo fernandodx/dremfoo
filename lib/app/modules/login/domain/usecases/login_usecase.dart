@@ -51,6 +51,7 @@ class LoginUseCase implements ILoginCase {
         }
         return ResponseApi.error(messageAlert: MessageAlert.create("Erro no envio do e-mail", msg, TypeAlert.ERROR));
       }
+      return ResponseApi.error(messageAlert: MessageAlert.create("Erro no envio do e-mail", error.toString(), TypeAlert.ERROR));
     }
   }
 

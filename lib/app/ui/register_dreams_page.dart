@@ -28,7 +28,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterDreamPage extends StatefulWidget {
-  Dream dream;
+  Dream? dream;
   bool isWait = false;
 
   RegisterDreamPage({this.dream});
@@ -80,7 +80,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             visible: _bloc.dreamForEdit != null,
             child: IconButton(
               icon: Icon(Icons.cloud_done),
-              onPressed: () => _checkDreamCompleted(_bloc.dreamForEdit),
+              onPressed: () => _checkDreamCompleted(_bloc.dreamForEdit!),
             ),
           ),
           Visibility(
@@ -179,8 +179,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     _bloc.showLoading();
 
     if (validDataStream()) {
-      if (_bloc.dream.reference != null) {
-        FirebaseService().updateDream(context, _bloc.dream).then((response) {
+      if (_bloc.dream!.reference != null) {
+        FirebaseService().updateDream(context, _bloc.dream!).then((response) {
           _bloc.hideLoading();
           if (response.ok) {
             AnalyticsUtil.sendAnalyticsEvent(EventRevo.newDream);
@@ -188,7 +188,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           }
         });
       } else {
-        FirebaseService().saveDream(context, _bloc.dream).then((response) {
+        FirebaseService().saveDream(context, _bloc.dream!).then((response) {
           _bloc.hideLoading();
           if (response.ok) {
             push(context, HomePage(), isReplace: true);
@@ -219,13 +219,13 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   setDataDream() {
-    _bloc.dream.dreamPropose = _bloc.dreamTextEditController.text.toString();
-    _bloc.dream.reward = _bloc.rewardTextEditController.text.toString();
-    _bloc.dream.inflection = _bloc.inflectionTextEditController.text.toString();
-    _bloc.dream.rewardWeek = _bloc.rewardWeekTextEditController.text.toString();
-    _bloc.dream.inflectionWeek =
+    _bloc.dream!.dreamPropose = _bloc.dreamTextEditController.text.toString();
+    _bloc.dream!.reward = _bloc.rewardTextEditController.text.toString();
+    _bloc.dream!.inflection = _bloc.inflectionTextEditController.text.toString();
+    _bloc.dream!.rewardWeek = _bloc.rewardWeekTextEditController.text.toString();
+    _bloc.dream!.inflectionWeek =
         _bloc.inflectionWeekTextEditController.text.toString();
-    _bloc.dream.descriptionPropose =
+    _bloc.dream!.descriptionPropose =
         _bloc.dreamDescriptionTextEditController.text.toString();
   }
 
@@ -236,44 +236,44 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     setState(() {
       _bloc.stepErrors.clear();
 
-      if(_bloc.dream.dreamPropose == null || _bloc.dream.dreamPropose.isEmpty){
+      if(_bloc.dream!.dreamPropose == null || _bloc.dream!.dreamPropose!.isEmpty){
         _bloc.stepErrors.add(StepsEnum.DREAM.index);
         msg += "O sonho é obrigatório\n";
       }
 
-      if(_bloc.dream.descriptionPropose == null || _bloc.dream.descriptionPropose.isEmpty){
+      if(_bloc.dream!.descriptionPropose == null || _bloc.dream!.descriptionPropose!.isEmpty){
         _bloc.stepErrors.add(StepsEnum.DREAM.index);
         msg += "A descrição do sonho é obrigatória\n";
       }
 
-      if(_bloc.dream.imgDream == null || _bloc.dream.imgDream.isEmpty){
+      if(_bloc.dream!.imgDream == null || _bloc.dream!.imgDream!.isEmpty){
         _bloc.stepErrors.add(StepsEnum.DREAM.index);
         msg += "A image do sonho é obrigatória\n";
       }
 
-      if (!_bloc.dream.isDreamWait) {
-        if (_bloc.dream.steps == null || _bloc.dream.steps.isEmpty) {
+      if (!_bloc.dream!.isDreamWait!) {
+        if (_bloc.dream!.steps == null || _bloc.dream!.steps!.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.STEPS.index);
           msg += "Adicione pelo menos um passo para conquistar\n";
         }
 
-        if (_bloc.dream.dailyGoals == null || _bloc.dream.dailyGoals.isEmpty) {
+        if (_bloc.dream!.dailyGoals == null || _bloc.dream!.dailyGoals.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.DAILY_GOALS.index);
           msg += "Adicione pelo menos uma meta diária\n";
         }
 
-        if (_bloc.dream.reward == null || _bloc.dream.reward.isEmpty) {
+        if (_bloc.dream!.reward == null || _bloc.dream!.reward!.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.REWARD.index);
           msg += "A recompensa é obrigatória\n";
         }
 
-        if (_bloc.dream.inflection == null || _bloc.dream.inflection.isEmpty) {
+        if (_bloc.dream!.inflection == null || _bloc.dream!.inflection!.isEmpty) {
           _bloc.stepErrors.add(StepsEnum.INFLECTION.index);
           msg += "O ponto de inflexão é obrigatório\n";
         }
       }
 
-      if (_bloc.dream.color == null) {
+      if (_bloc.dream!.color == null) {
         _bloc.stepErrors.add(StepsEnum.CONFIG.index);
         msg += "Escolha uma cor de representação\n";
       }
@@ -312,8 +312,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
                     onStepCancel: cancel,
                     onStepTapped: (step) => goTo(step),
                     controlsBuilder: (BuildContext context,
-                        {VoidCallback onStepContinue,
-                        VoidCallback onStepCancel}) {
+                        {VoidCallback? onStepContinue,
+                        VoidCallback? onStepCancel}) {
                       return ButtonBarTheme(
                         data: ButtonBarThemeData(
                             buttonPadding: EdgeInsets.all(6),
@@ -351,7 +351,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   List<Step> getSteps() {
-    if (_bloc.dream.isDreamWait) {
+    if (_bloc.dream!.isDreamWait!) {
       _bloc.steps = [
         stepInfoDream(),
         stepConfigDream(),
@@ -404,10 +404,10 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           top: 50,
         ),
         child: Slider(
-          value: _bloc.dream.goalWeek,
+          value: _bloc.dream!.goalWeek!,
           onChanged: (newValue) {
             setState(() {
-              _bloc.dream.goalWeek = newValue;
+              _bloc.dream!.goalWeek = newValue;
             });
           },
           min: 25,
@@ -415,7 +415,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           divisions: 3,
           activeColor: AppColors.colorPink,
           inactiveColor: AppColors.colorEggShell,
-          label: getLabelSlide(_bloc.dream.goalWeek),
+          label: getLabelSlide(_bloc.dream!.goalWeek!),
         ),
       ),
       SizedBox(
@@ -427,10 +427,10 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           top: 50,
         ),
         child: Slider(
-          value: _bloc.dream.goalMonth,
+          value: _bloc.dream!.goalMonth!,
           onChanged: (newValue) {
             setState(() {
-              _bloc.dream.goalMonth = newValue;
+              _bloc.dream!.goalMonth = newValue;
             });
           },
           min: 25,
@@ -438,7 +438,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
           divisions: 3,
           activeColor: AppColors.colorPink,
           inactiveColor: AppColors.colorEggShell,
-          label: getLabelSlide(_bloc.dream.goalMonth),
+          label: getLabelSlide(_bloc.dream!.goalMonth!),
         ),
       ),
       SizedBox(
@@ -471,11 +471,11 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         height: 100,
         child: FutureBuilder(
             future: FirebaseService().findAllColorsDream(),
-            builder: (context, snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<ResponseApi<List<ColorDream>>> snapshot) {
               if (snapshot.hasData) {
-                ResponseApi<List<ColorDream>> responseApi = snapshot.data;
+                ResponseApi<List<ColorDream>> responseApi = snapshot.data!;
                 if (responseApi.ok) {
-                  return getListviewColors(responseApi.result);
+                  return getListviewColors(responseApi.result!);
                 }
               }
 
@@ -502,17 +502,18 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             AppTextDefault(
               name: "Ponto de inflexão",
               icon: Icons.build,
+              maxLength: 80,
               controller: _bloc.inflectionTextEditController,
             ),
             SwitchListTile(
-              value: _bloc.dream.isInflectionWeek,
+              value: _bloc.dream!.isInflectionWeek!,
               title: TextUtil.textDefault(
                 "Escolher ponto de inflexão diferente para a semana.",
               ),
               // secondary: Icon(Icons.autorenew),
               onChanged: (isInflectionWeek) {
                 setState(() {
-                  _bloc.dream.isInflectionWeek = isInflectionWeek;
+                  _bloc.dream!.isInflectionWeek = isInflectionWeek;
                 });
               },
             ),
@@ -543,17 +544,18 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             AppTextDefault(
               name: "Recompensa",
               icon: Icons.thumb_up,
+              maxLength: 80,
               controller: _bloc.rewardTextEditController,
             ),
             SwitchListTile(
               dense: true,
-              value: _bloc.dream.isRewardWeek,
+              value: _bloc.dream!.isRewardWeek!,
               title: TextUtil.textDefault(
                   "Escolher recompensa diferente para a semana."),
               // secondary: Icon(Icons.autorenew),
               onChanged: (isRewardWeek) {
                 setState(() {
-                  _bloc.dream.isRewardWeek = isRewardWeek;
+                  _bloc.dream!.isRewardWeek = isRewardWeek;
                 });
               },
             ),
@@ -739,11 +741,11 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
               height: Constants.SIZE_HEIGHT_DEFAULT,
             ),
             Visibility(
-              visible: _bloc.dream.isDreamWait,
+              visible: _bloc.dream!.isDreamWait!,
               child: SwitchListTile(
                 title: TextUtil.textDefault("Sonho em espera"),
                 subtitle: TextUtil.textSubTitle("Retirando seu sonho do modo espera, você vai precisar definir etapas e metas diárias"),
-                value: _bloc.dream.isDreamWait,
+                value: _bloc.dream!.isDreamWait!,
                 onChanged: (value)  {
                   
                   alertBottomSheet(
@@ -772,13 +774,13 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   void updateDreamWaitForGoal(bool value) {
-     _bloc.dream.isDreamWait = value;
+     _bloc.dream!.isDreamWait = value;
     _bloc.showLoading();
                      
-    if(_bloc.dream.uid == null || _bloc.dream.uid.isEmpty){
+    if(_bloc.dream!.uid == null || _bloc.dream!.uid!.isEmpty){
       push(context, RegisterDreamPage(), isReplace: true);
     }else{
-      FirebaseService().updateDream(context, _bloc.dream).then((response) {
+      FirebaseService().updateDream(context, _bloc.dream!).then((response) {
         if (response.ok) {
           _bloc.hideLoading();
           AnalyticsUtil.sendAnalyticsEvent(EventRevo.updateDreamFocus);
@@ -796,7 +798,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     SearchPictureInternet search = SearchPictureInternet(sonho);
     search.stream.listen((String fotoBase64) {
       setState(() {
-        _bloc.dream.imgDream = fotoBase64;
+        _bloc.dream!.imgDream = fotoBase64;
         Navigator.pop(context);
       });
     });
@@ -806,7 +808,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   Future addPickImage(context) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final XFile image = await (new ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 300, imageQuality: 80) as FutureOr<XFile>);
     File compressedImg = await FlutterNativeImage.compressImage(image.path,
         quality: 90, targetWidth: 600, targetHeight: 600);
 
@@ -814,7 +816,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
     String base64Image = base64Encode(imageBytes);
 
     setState(() {
-      _bloc.dream.imgDream = base64Image;
+      _bloc.dream!.imgDream = base64Image;
     });
 
     AnalyticsUtil.sendAnalyticsEvent(EventRevo.addImageDream);
@@ -825,7 +827,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
         scrollDirection: Axis.horizontal,
         itemCount: listColors.length,
         itemBuilder: (context, index) {
-          Color color = Utils.colorFromHex(listColors[index].primary);
+          Color color = Utils.colorFromHex(listColors[index].primary!);
           return InkWell(
             child: Container(
               padding: EdgeInsets.all(8),
@@ -837,7 +839,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
             ),
             onTap: () {
               setState(() {
-                _bloc.dream.color = listColors[index];
+                _bloc.dream!.color = listColors[index];
               });
             },
           );
@@ -845,8 +847,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   Icon getIconColor(Color color) {
-    if (_bloc.dream.color != null &&
-        _bloc.dream.color.primary.toUpperCase() ==
+    if (_bloc.dream!.color != null &&
+        _bloc.dream!.color!.primary!.toUpperCase() ==
             Utils.colorToHex(color, leadingHashSign: false).toUpperCase()) {
       return Icon(
         Icons.check,
@@ -861,7 +863,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   Widget getRewardWeek() {
-    if (_bloc.dream.isRewardWeek) {
+    if (_bloc.dream!.isRewardWeek!) {
       return Container(
         margin: EdgeInsets.only(top: 12),
         child: AppTextDefault(
@@ -878,7 +880,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 
   Widget getInflectionWeek() {
-    if (_bloc.dream.isInflectionWeek) {
+    if (_bloc.dream!.isInflectionWeek!) {
       return Container(
         margin: EdgeInsets.only(top: 12),
         child: AppTextDefault(
@@ -907,13 +909,14 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
       case 100:
         return "Extraordinário";
     }
+    return "Desativado";
   }
 
   _checkDreamCompleted(Dream dream) {
     bool isStepsCompleted = true;
 
-    dream.steps.forEach((step) {
-      if (!step.isCompleted) {
+    dream.steps!.forEach((step) {
+      if (!step.isCompleted!) {
         isStepsCompleted = false;
         return;
       }

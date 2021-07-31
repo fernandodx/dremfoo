@@ -19,7 +19,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ReportDreamsMonth extends StatefulWidget {
-  List<HistGoalMonth> listHist;
+  List<HistGoalMonth?> listHist;
 
   ReportDreamsMonth.from(this.listHist);
 
@@ -46,7 +46,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   @override
   Widget build(BuildContext context) {
     List<Widget> list =
-        widget.listHist.map((hist) => getPageReport(hist)).toList();
+        widget.listHist.map((hist) => getPageReport(hist!)).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -115,7 +115,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
                       child: Stack(
                         alignment: Alignment.bottomRight,
                         children: <Widget>[
-                          Utils.string64ToImage(hist.dream.imgDream,
+                          Utils.string64ToImage(hist.dream!.imgDream!,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: 160),
@@ -141,11 +141,11 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
                     SizedBox(
                       height: 8,
                     ),
-                    TextUtil.textTitulo(hist.dream.dreamPropose),
+                    TextUtil.textTitulo(hist.dream!.dreamPropose!),
                     SizedBox(
                       height: 6,
                     ),
-                    TextUtil.textDefault(hist.dream.descriptionPropose),
+                    TextUtil.textDefault(hist.dream!.descriptionPropose!),
                     Align(
                       alignment: Alignment.topRight,
                       child: Chip(
@@ -166,10 +166,10 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
                         ),
                       ),
                     ),
-                    createChipStep(hist.dream.steps),
+                    createChipStep(hist.dream!.steps!),
                     observerAnimationHistGoal(hist),
                     cardRewardOrInflection(hist),
-                    getCountDayCompleted(hist.dream),
+                    getCountDayCompleted(hist.dream!),
                   ],
                 ),
             ),
@@ -195,7 +195,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
 
   Observer observerAnimationHistGoal(HistGoalMonth hist) {
 
-    String pathAnimation = hist.isWonReward ? "medal.flr" : "sad.flr";
+    String pathAnimation = hist.isWonReward! ? "medal.flr" : "sad.flr";
 
     return Observer(builder: (context){
 
@@ -225,7 +225,7 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   }
 
   Widget getCountDayCompleted(Dream dream) {
-    DateTime dateInit = dream.dateRegister.toDate();
+    DateTime dateInit = dream.dateRegister!.toDate();
     DateTime dateNow = DateTime.now();
 
     final countDaysInit =
@@ -252,16 +252,16 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
   }
 
   Widget createChipStep(List<StepDream> steps) {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
 
     for (StepDream stepDream in steps) {
-      if (stepDream.isCompleted) {
+      if (stepDream.isCompleted!) {
         Chip chip = Chip(
           avatar: CircleAvatar(
             backgroundColor: AppColors.colorDark,
             child: TextUtil.textDefault("${stepDream.position}˚",),
           ),
-          label: TextUtil.textDefault(stepDream.step),
+          label: TextUtil.textDefault(stepDream.step!),
           backgroundColor: AppColors.colorPrimary,
         );
 
@@ -295,13 +295,13 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
     String info =
         "Agora aproveita e faça isso com prazer, sem peso na conciência, você cumpriu sua meta.";
     
-    if (!hist.isWonReward) {
+    if (!hist.isWonReward!) {
       info = "Lembre-se agora é a hora de correr atrás, faça seu ponto de esforço.";
       
     }
 
-    String img = hist.isWonReward ? "icon_reward.png" : "icon_inflection.png";
-    String msg = hist.isWonReward ? hist.reward : hist.inflection;
+    String img = hist.isWonReward! ? "icon_reward.png" : "icon_inflection.png";
+    String msg = hist.isWonReward! ? hist.reward! : hist.inflection!;
     
     return Card(
       elevation: 4,
@@ -337,12 +337,12 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
     );
   }
 
-  Future<Uint8List> _capturePng(Dream dream) async {
+  Future<Uint8List?> _capturePng(Dream? dream) async {
     try {
       RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
+          _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      ByteData byteData = await (image.toByteData(format: ImageByteFormat.png) as FutureOr<ByteData>);
       var pngBytes = byteData.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
       _shareImage(byteData, dream);
@@ -350,10 +350,11 @@ class _ReportDreamsMonthState extends State<ReportDreamsMonth> {
       return pngBytes;
     } catch (e) {
       print(e);
+      return null;
     }
   }
 
-  Future<void> _shareImage(ByteData bytes, Dream dream) async {
+  Future<void> _shareImage(ByteData bytes, Dream? dream) async {
     // try {
     //   await ShareFilesAndScreenshotWidgets().shareFile('Relatório do sonho', 'sonho_progresso.png',
     //       bytes.buffer.asUint8List(), 'image/png',

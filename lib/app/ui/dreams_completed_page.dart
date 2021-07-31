@@ -1,13 +1,9 @@
 import 'package:dremfoo/app/api/bloc/dreams_completed_bloc.dart';
-import 'package:dremfoo/app/api/bloc/dreams_deleted_bloc.dart';
-import 'package:dremfoo/app/api/eventbus/main_event_bus.dart';
 import 'package:dremfoo/app/model/dream.dart';
-import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/model/step_dream.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/utils.dart';
-import 'package:dremfoo/app/widget/app_button_default.dart';
 import 'package:dremfoo/app/widget/app_drawer_menu.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,15 +43,15 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
       color: Colors.white,
       child: FutureBuilder(
         future: _bloc.findDreamsCompleted(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Dream>> snapshot) {
           if (snapshot.hasError) {
             return Container(
-              child: TextUtil.textTitulo(snapshot.error),
+              child: TextUtil.textTitulo(snapshot.error as String),
             ); //Criar Tela de erro
           }
 
           if (snapshot.hasData) {
-            List<Dream> listDream = snapshot.data;
+            List<Dream> listDream = snapshot.data!;
 
             if (listDream == null || listDream.isEmpty) {
               return Column(
@@ -110,7 +106,7 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
                 Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: _getImg(dream.imgDream),
+                    child: _getImg(dream.imgDream!),
                   ),
                   margin: EdgeInsets.all(4),
                 ),
@@ -125,14 +121,14 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
                 children: <Widget>[
                   Container(
                     child: TextUtil.textTitulo(
-                      dream.dreamPropose,
+                      dream.dreamPropose!,
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
                   ),
                   Container(
                     child: TextUtil.textDefault(
-                      dream.descriptionPropose,
+                      dream.descriptionPropose!,
                       fontSize: 14,
                     ),
                     alignment: Alignment.topLeft,
@@ -143,7 +139,7 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
                     padding: EdgeInsets.all(6),
                   ),
                   Wrap(
-                    children: createChipStep(dream.steps),
+                    children: createChipStep(dream.steps!),
                   ),
                   // ButtonBarTheme(
                   //   data: ButtonBarTheme.of(context),
@@ -179,7 +175,7 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
   }
 
   List<Widget> createChipStep(List<StepDream> steps) {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
 
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
@@ -187,7 +183,7 @@ class _DreamsCompletedPageState extends State<DreamsCompletedPage> {
           backgroundColor: AppColors.colorChipSecundary,
           child: TextUtil.textChip("${stepDream.position}˚",),
         ),
-        label: TextUtil.textChip(stepDream.step),
+        label: TextUtil.textChip(stepDream.step!),
         backgroundColor: AppColors.colorChipPrimary,
       );
 

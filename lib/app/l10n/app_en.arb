@@ -1,3 +1,12 @@
 {
-	"name_app": "Revo - Focused Goals"
+	"name_app": "Revo - Focused Goals",
+	"label_login": "Login",
+	"label_email": "E-mail",
+	"label_password": "Password",
+	"label_enter": "Login",
+	"label_or": "OR",
+	"label_login_with_google": "Login with Google",
+	"label_login_with_facebook": "Login with Facebook",
+	"label_forgot_password": "Forgot the password",
+	"label_not_rigister": "I don't have an account"
 }

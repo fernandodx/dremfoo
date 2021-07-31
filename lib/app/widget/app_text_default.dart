@@ -6,19 +6,19 @@ class AppTextDefault extends StatelessWidget {
   String hint;
   int maxLength;
   bool isPassword;
-  TextEditingController controller;
-  FormFieldValidator<String> validator;
-  TextInputType inputType;
-  TextInputAction inputAction;
-  FocusNode focus;
-  FocusNode nextFocus;
-  Function onSaved;
-  IconData icon;
-  Function onFieldSubmitted;
+  TextEditingController? controller;
+  FormFieldValidator<String>? validator;
+  TextInputType? inputType;
+  TextInputAction? inputAction;
+  FocusNode? focus;
+  FocusNode? nextFocus;
+  Function? onSaved;
+  IconData? icon;
+  Function? onFieldSubmitted;
 
   AppTextDefault({
-    @required this.name,
-    @required this.maxLength,
+    required this.name,
+    required this.maxLength,
     this.hint = "",
     this.isPassword = false,
     this.controller,
@@ -41,14 +41,14 @@ class AppTextDefault extends StatelessWidget {
       keyboardType: inputType,
       focusNode: focus,
       textInputAction: inputAction,
-      onSaved: onSaved,
+      onSaved: onSaved as void Function(String?)?,
       maxLength: maxLength,
       textCapitalization: TextCapitalization.sentences,
       style: TextStyle(color: AppColors.colorDark, fontSize: 15, ),
       onFieldSubmitted: (value) {
         print(value);
         if (onFieldSubmitted != null) {
-          onFieldSubmitted(value);
+          onFieldSubmitted!(value);
         }
         if (nextFocus != null) {
           FocusScope.of(context).requestFocus(nextFocus);

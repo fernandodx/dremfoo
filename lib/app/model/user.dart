@@ -8,16 +8,16 @@ import 'package:dremfoo/app/model/user_focus.dart';
 
 class UserRevo {
 
-  String uid;
-  String email;
-  String name;
-  String password;
-  String urlPicture;
-  Timestamp initNotification;
-  Timestamp finishNotification;
-  bool isEnableNotification;
-  File picture;
-  UserFocus focus;
+  String? uid;
+  String? email;
+  String? name;
+  String? password;
+  String? urlPicture;
+  Timestamp? initNotification;
+  Timestamp? finishNotification;
+  bool? isEnableNotification;
+  File? picture;
+  UserFocus? focus;
 
   UserRevo();
 
@@ -43,13 +43,13 @@ class UserRevo {
     map["initNotification"] = this.initNotification;
     map["finishNotification"] = this.finishNotification;
     map["isEnableNotification"] = this.isEnableNotification;
-    map["focus"] = this.focus != null ? this.focus.toMap() : null;
+    map["focus"] = this.focus != null ? this.focus!.toMap() : null;
     return map;
   }
 
   static List<UserRevo> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      UserRevo userRevo = UserRevo.fromMap(snapshot.data());
+      UserRevo userRevo = UserRevo.fromMap(snapshot.data() as Map<String, dynamic>);
       userRevo.uid = snapshot.id;
       return userRevo;
     }).toList();

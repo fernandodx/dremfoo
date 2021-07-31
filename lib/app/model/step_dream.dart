@@ -4,14 +4,14 @@ import 'package:dremfoo/app/model/dream.dart';
 
 class StepDream {
 
-  String uid;
-  String step;
-  int position;
-  int color;
-  bool isCompleted = false;
-  Timestamp dateCompleted;
-  Dream dreamParent;
-  DocumentReference reference;
+  String? uid;
+  String? step;
+  int? position;
+  int? color;
+  bool? isCompleted = false;
+  Timestamp? dateCompleted;
+  late Dream dreamParent;
+  late DocumentReference reference;
 
 //  Set<StatusDream> statusDream = Set();
 

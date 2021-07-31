@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Video {
 
-  String id;
-  String name;
-  Timestamp date;
-  String time;
-  DocumentReference reference;
+  String? id;
+  String? name;
+  Timestamp? date;
+  String? time;
+  late DocumentReference reference;
 
   Video();
 
@@ -28,7 +28,7 @@ class Video {
 
   static List<Video> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      Video video = Video.fromMap(snapshot.data());
+      Video video = Video.fromMap(snapshot.data() as Map<String, dynamic>);
       video.reference = snapshot.reference;
       return video;
     }).toList();

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -69,7 +70,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: <Widget>[
-                        Utils.string64ToImage(widget.dream.imgDream,
+                        Utils.string64ToImage(widget.dream.imgDream!,
                             fit: BoxFit.cover, width: double.infinity),
                         Container(
                           decoration: AppColors.backgroundBoxDecorationImg(),
@@ -94,11 +95,11 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                   SizedBox(
                     height: 8,
                   ),
-                  TextUtil.textTitulo(widget.dream.dreamPropose),
+                  TextUtil.textTitulo(widget.dream.dreamPropose!),
                   SizedBox(
                     height: 6,
                   ),
-                  TextUtil.textDefault(widget.dream.descriptionPropose),
+                  TextUtil.textDefault(widget.dream.descriptionPropose!),
                   SizedBox(
                     height: 16,
                   ),
@@ -117,11 +118,11 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                   ),
                   FutureBuilder(
                       future: FirebaseService().getPrefsUser(),
-                      builder: (context, snapshot) {
-                        String urlImg = "";
-                        String nameUser = "";
+                      builder: (BuildContext context, AsyncSnapshot<UserRevo?> snapshot) {
+                        String? urlImg = "";
+                        String? nameUser = "";
                         if (snapshot.hasData) {
-                          UserRevo user = snapshot.data;
+                          UserRevo user = snapshot.data!;
                           urlImg = user.urlPicture;
                           nameUser = user.name;
                         }
@@ -130,7 +131,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CircleAvatar(
-                                backgroundImage: NetworkImage(urlImg.isEmpty
+                                backgroundImage: NetworkImage(urlImg!.isEmpty
                                     ? "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Bearded_Man-17-512.png"
                                     : urlImg),
                               ),
@@ -150,7 +151,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
                   Container(
                     margin: EdgeInsets.only(top: 16, bottom: 16),
                     child: Wrap(
-                      children: createChipStep(widget.dream.steps),
+                      children: createChipStep(widget.dream.steps!),
                     ),
                   ),
                   SizedBox(
@@ -170,7 +171,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
   }
 
   Widget getCountDayCompleted(Dream dream) {
-    DateTime dateInit = dream.dateRegister.toDate();
+    DateTime dateInit = dream.dateRegister!.toDate();
     DateTime dateNow = DateTime.now();
 
     final countDaysInit =
@@ -194,7 +195,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
   }
 
   List<Widget> createChipStep(List<StepDream> steps) {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
 
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
@@ -202,7 +203,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
           backgroundColor: AppColors.colorChipSecundary,
           child: TextUtil.textChip("${stepDream.position}˚",),
         ),
-        label: TextUtil.textChip(stepDream.step),
+        label: TextUtil.textChip(stepDream.step!),
         backgroundColor: AppColors.colorChipPrimary,
       );
 
@@ -213,13 +214,13 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
     return listWidget;
   }
 
-  Future<Uint8List> _capturePng(Dream dream) async {
+  Future<Uint8List?> _capturePng(Dream dream) async {
     try {
       print('inside');
       RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
+          _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      ByteData byteData = await (image.toByteData(format: ImageByteFormat.png) as FutureOr<ByteData>);
       var pngBytes = byteData.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
       print(pngBytes);
@@ -229,6 +230,7 @@ class _DreamCompletedPageState extends State<DreamCompletedPage> {
       return pngBytes;
     } catch (e) {
       print(e);
+      return null;
     }
   }
 

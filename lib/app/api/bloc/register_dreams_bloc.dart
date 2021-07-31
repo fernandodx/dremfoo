@@ -24,8 +24,8 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterDreamsBloc extends BaseBloc {
-  Dream dream;
-  Dream dreamForEdit;
+  Dream? dream;
+  Dream? dreamForEdit;
   Set<int> stepErrors = Set();
   int currentStep = 0;
   bool complete = false;
@@ -47,20 +47,20 @@ class RegisterDreamsBloc extends BaseBloc {
   void fetch(context, dreamEdit, isWait) {
     if (dreamEdit == null) {
       dream = Dream();
-      dream.isDreamWait = isWait;
-      dream.steps = [];
+      dream!.isDreamWait = isWait;
+      dream!.steps = [];
       steps = [];
     } else {
       dream = Dream.copy(dreamEdit);
       dreamForEdit = Dream.copy(dreamEdit);
-      dreamTextEditController.text = dream.dreamPropose;
-      initStepForWin(dream, context);
-      initDailyGoals(dream, context);
-      rewardTextEditController.text = dream.reward;
-      inflectionTextEditController.text = dream.inflection;
-      dreamDescriptionTextEditController.text = dream.descriptionPropose;
-      inflectionWeekTextEditController.text = dream.inflectionWeek;
-      rewardWeekTextEditController.text = dream.rewardWeek;
+      dreamTextEditController.text = dream!.dreamPropose!;
+      initStepForWin(dream!, context);
+      initDailyGoals(dream!, context);
+      rewardTextEditController.text = dream!.reward!;
+      inflectionTextEditController.text = dream!.inflection!;
+      dreamDescriptionTextEditController.text = dream!.descriptionPropose!;
+      inflectionWeekTextEditController.text = dream!.inflectionWeek!;
+      rewardWeekTextEditController.text = dream!.rewardWeek!;
     }
   }
 
@@ -71,7 +71,7 @@ class RegisterDreamsBloc extends BaseBloc {
 
   deleteDream(context) {
     showLoading();
-    ResponseApi<bool> responseApi = FirebaseService().deleteDream(dreamForEdit);
+    ResponseApi<bool> responseApi = FirebaseService().deleteDream(dreamForEdit!);
     if (responseApi.ok) {
       AnalyticsUtil.sendAnalyticsEvent(EventRevo.dreamDeleted);
       hideLoading();
@@ -86,8 +86,8 @@ class RegisterDreamsBloc extends BaseBloc {
   }
 
   Widget getImageDream() {
-    if (dream.imgDream != null && dream.imgDream.isNotEmpty) {
-      return Utils.string64ToImage(dream.imgDream, fit: BoxFit.cover);
+    if (dream!.imgDream != null && dream!.imgDream!.isNotEmpty) {
+      return Utils.string64ToImage(dream!.imgDream!, fit: BoxFit.cover);
     } else {
       return Image.asset(
         Utils.getPathAssetsImg("icon_gallery_add.png"),
@@ -99,13 +99,13 @@ class RegisterDreamsBloc extends BaseBloc {
   }
 
   setDataDream() {
-    dream.dreamPropose = dreamTextEditController.text.toString();
-    dream.reward = rewardTextEditController.text.toString();
-    dream.inflection = rewardTextEditController.text.toString();
+    dream!.dreamPropose = dreamTextEditController.text.toString();
+    dream!.reward = rewardTextEditController.text.toString();
+    dream!.inflection = rewardTextEditController.text.toString();
   }
 
   validDataStream() {
-    if (dream.imgDream != null || dream.imgDream.isEmpty) {}
+    if (dream!.imgDream != null || dream!.imgDream!.isEmpty) {}
   }
 
   void initStepForWin(Dream dream, context) {
@@ -133,7 +133,7 @@ class RegisterDreamsBloc extends BaseBloc {
     stepsForWin.add(inputText);
     stepsForWin.add(inputButtonAdd);
 
-    dream.steps.forEach((step) {
+    dream.steps!.forEach((step) {
       var newChip = Chip(
         avatar: CircleAvatar(
           backgroundColor: AppColors.colorChipSecundary,
@@ -198,14 +198,14 @@ class RegisterDreamsBloc extends BaseBloc {
     List<Widget> stepTmp = List.of(stepsForWin);
 
     stepsForWin.clear();
-    dream.steps.clear();
+    dream!.steps!.clear();
     stepsForWin.add(stepTmp[0]);
     stepsForWin.add(stepTmp[1]);
 
     for (var position = 2; position < stepTmp.length; position++) {
-      Chip chip = stepTmp[position];
-      Text text = chip.label;
-      addStepForWinOnly(text.data, position, context);
+      Chip chip = stepTmp[position] as Chip;
+      Text text = chip.label as Text;
+      addStepForWinOnly(text.data!, position, context);
     }
 //    onRefresh();
     MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
@@ -216,14 +216,14 @@ class RegisterDreamsBloc extends BaseBloc {
     List<Widget> dailyTmp = List.of(dailyGoals);
 
     dailyGoals.clear();
-    dream.dailyGoals.clear();
+    dream!.dailyGoals.clear();
     dailyGoals.add(dailyTmp[0]);
     dailyGoals.add(dailyTmp[1]);
 
     for (var position = 2; position < dailyTmp.length; position++) {
-      Chip chip = dailyTmp[position];
-      Text text = chip.label;
-      addDailyGoalOnly(text.data, position, context);
+      Chip chip = dailyTmp[position] as Chip;
+      Text text = chip.label as Text;
+      addDailyGoalOnly(text.data!, position, context);
     }
 //    onRefresh();
     MainEventBus().get(context).sendEventRegisterDreamApp(TipoEvento.REFRESH);
@@ -245,10 +245,11 @@ class RegisterDreamsBloc extends BaseBloc {
       StepDream sd = StepDream();
       sd.step = nameStep;
       sd.position = position;
-      dream.steps.add(sd);
+      dream!.steps!.add(sd);
 
       stepsForWin.add(newChip);
     }
+    return [];
   }
 
   List<Widget> addDailyGoalOnly(
@@ -268,10 +269,11 @@ class RegisterDreamsBloc extends BaseBloc {
       DailyGoal dg = DailyGoal();
       dg.nameDailyGoal = nameStep;
       dg.position = position;
-      dream.dailyGoals.add(dg);
+      dream!.dailyGoals.add(dg);
 
       dailyGoals.add(newChip);
     }
+    return [];
   }
 
   void addStepForWin(String nameStep, int position, BuildContext context) {
@@ -293,7 +295,7 @@ class RegisterDreamsBloc extends BaseBloc {
     StepDream sd = StepDream();
     sd.step = nameStep;
     sd.position = position;
-    dream.steps.add(sd);
+    dream!.steps!.add(sd);
 
     stepTextEditController.clear();
     stepsForWin.add(newChip);
@@ -318,7 +320,7 @@ class RegisterDreamsBloc extends BaseBloc {
       DailyGoal dg = DailyGoal();
       dg.nameDailyGoal = nameGoal;
       dg.position = position;
-      dream.dailyGoals.add(dg);
+      dream!.dailyGoals.add(dg);
 
       dailyGoalTextEditController.clear();
       dailyGoals.add(newChip);
@@ -331,6 +333,6 @@ class RegisterDreamsBloc extends BaseBloc {
 
   void dreamCompleted() {
     FirebaseService()
-        .updateOnlyField("dateFinish", Timestamp.now(), dream.reference);
+        .updateOnlyField("dateFinish", Timestamp.now(), dream!.reference!);
   }
 }

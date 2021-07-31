@@ -50,10 +50,10 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
                 stream: MainEventBus().get(context).streamUser,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return _userAccountHeader(context, snapshot.data);
+                    return _userAccountHeader(context, snapshot.data!);
                   }
                   return _userAccountHeader(
-                      context, FirebaseAuth.instance.currentUser);
+                      context, FirebaseAuth.instance.currentUser!);
                 }),
             SizedBox(
               height: 16.0,
@@ -167,7 +167,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
         ),
       ),
       title: TextUtil.textTitleMenu(title),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 
@@ -191,7 +191,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
       ),
       title: TextUtil.textTitleMenu(title),
       subtitle: TextUtil.textSubTitleMenu(subTitle),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 
@@ -204,23 +204,23 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
           child: UserAccountsDrawerHeader(
             decoration: AppColors.backgroundDrawerHeaderDecoration(),
             accountName: Text(user.displayName ?? "", style: TextStyle(color: AppColors.colorlight),),
-            accountEmail: Text(user.email, style: TextStyle(color: AppColors.colorlight),),
+            accountEmail: Text(user.email!, style: TextStyle(color: AppColors.colorlight),),
             currentAccountPicture: CircleAvatar(
               backgroundColor: AppColors.colorlight,
               radius: 55,
               child: CircleAvatar(
                 radius: 34,
-                backgroundImage: (user.photoURL != null && user.photoURL.isNotEmpty) ?  NetworkImage(user.photoURL) :  AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
+                backgroundImage: ((user.photoURL != null && user.photoURL!.isNotEmpty) ?  NetworkImage(user.photoURL!) :  AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png"))) as ImageProvider<Object>?,
               ),
             ),
           ),
         ),
         StreamBuilder(
           stream: UserEventBus().get(context).streamLevel,
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<UserFocus> snapshot) {
             if (snapshot.hasData) {
-              UserFocus userFocus = snapshot.data;
-              if (userFocus.level.urlIcon != null) {
+              UserFocus userFocus = snapshot.data!;
+              if (userFocus.level!.urlIcon != null) {
                 return getAreaLevel(context, userFocus);
               }
             }
@@ -254,13 +254,13 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
                     child: CachedNetworkImage(
                         width: 20,
                         height: 20,
-                        imageUrl: userFocus.level.urlIcon),
+                        imageUrl: userFocus.level!.urlIcon!),
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                TextUtil.textLight("Nível ${userFocus.level.name}",
+                TextUtil.textLight("Nível ${userFocus.level!.name}",
                     fontSize: 13),
               ],
             ),
@@ -287,7 +287,7 @@ class _AppDrawerMenuState extends State<AppDrawerMenu> {
   }
 
   String getDaysFocusStr(UserFocus userFocus) {
-    int countDays = userFocus.countDaysFocus;
+    int countDays = userFocus.countDaysFocus!;
     return (countDays > 1)
         ? "$countDays dias de foco"
         : "$countDays dia de foco";

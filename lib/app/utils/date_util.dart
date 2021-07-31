@@ -5,7 +5,7 @@ class DateUtil {
 
 
 
-  yearLength(int year)
+  int yearLength(int year)
   {
     int yearLength = 0;
 
@@ -20,9 +20,6 @@ class DateUtil {
       }
       else
         yearLength += 365;
-
-
-
     }
     return yearLength;
 
@@ -36,7 +33,7 @@ class DateUtil {
     List<String> day = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday","Thursday", "Friday"];
 
     int count = 0;
-    String resultDay = null;
+    String? resultDay = null;
 
 
     for (int counter = 1; counter <= length ; counter++)
@@ -81,10 +78,10 @@ class DateUtil {
   }
 
 
-  daysInMonth(int monthNum, int year)
+  int daysInMonth(int monthNum, int year)
   {
 
-    List<int> monthLength = new List(12);
+    List<int> monthLength = [];
 
     monthLength[0] = 31;
     monthLength[2] = 31;
@@ -107,7 +104,7 @@ class DateUtil {
   }
 
 
-  daysPastInYear(int monthNum, int dayNum, int year)
+  int daysPastInYear(int monthNum, int dayNum, int year)
   {
 
     int totalMonthLength = 0;
@@ -170,10 +167,9 @@ class DateUtil {
   }
 
 
-  getWeek(int monthNum, int dayNum, int year)
+  int getWeek(int monthNum, int dayNum, int year)
   {
-    int a = (daysPastInYear(monthNum, dayNum, year) / 7) + 1;
-    return a.toInt();
+    return ((daysPastInYear(monthNum, dayNum, year) / 7) + 1) as int;
   }
 
 

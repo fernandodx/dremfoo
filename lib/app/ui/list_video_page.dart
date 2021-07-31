@@ -32,9 +32,9 @@ class _ListVideoPageState extends State<ListVideoPage> {
             builder: (BuildContext context,
                 AsyncSnapshot<ResponseApi<List<Video>>> snapshot) {
               
-              if (snapshot.hasData && snapshot.data.ok) {
+              if (snapshot.hasData && snapshot.data!.ok) {
                
-                List<Video> listVideos = snapshot.data.result;
+                List<Video> listVideos = snapshot.data!.result!;
 
                 return ListView.builder(
                     itemCount: listVideos.length,
@@ -85,25 +85,25 @@ class _ListVideoPageState extends State<ListVideoPage> {
           ),
           Container(
             padding: EdgeInsets.only(left: 12, bottom: 4, right: 12, top: 12),
-            child: TextUtil.textTituloVideo("Publicado em: ${Utils.dateToString(video.date.toDate())}", fontSize: 10, align: TextAlign.right),
+            child: TextUtil.textTituloVideo("Publicado em: ${Utils.dateToString(video.date!.toDate())}", fontSize: 10, align: TextAlign.right),
           ),
         ],
       ),
     );
   }
 
-  String getUrlImgVideo(String id) => "https://img.youtube.com/vi/$id/hqdefault.jpg";
+  String getUrlImgVideo(String? id) => "https://img.youtube.com/vi/$id/hqdefault.jpg";
 
   void playVideo(Video video){
 
     FirebaseService().getPrefsUser().then((user){
-      video.reference.collection("views").add({"name": user.name, "e-mail": user.email, "date" : Timestamp.now()});
+      video.reference.collection("views").add({"name": user!.name, "e-mail": user.email, "date" : Timestamp.now()});
     });
 
     String keyYoutube = "AIzaSyDS3-7JYRPr7LlFzSecblTKVvTq_t2cBDw";
 
     YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: video.id,
+      initialVideoId: video.id!,
       flags: YoutubePlayerFlags(
         autoPlay: true,
       ),

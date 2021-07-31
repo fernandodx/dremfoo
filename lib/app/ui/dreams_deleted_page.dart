@@ -1,7 +1,6 @@
 import 'package:dremfoo/app/api/bloc/dreams_deleted_bloc.dart';
 import 'package:dremfoo/app/api/eventbus/main_event_bus.dart';
 import 'package:dremfoo/app/model/dream.dart';
-import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/model/step_dream.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
@@ -46,15 +45,15 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
       color: Colors.white,
       child: FutureBuilder(
         future: _bloc.findDreamsDeleted(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Dream>> snapshot) {
           if (snapshot.hasError) {
             return Container(
-              child: TextUtil.textTitulo(snapshot.error),
+              child: TextUtil.textTitulo(snapshot.error as String),
             ); //Criar Tela de erro
           }
 
           if (snapshot.hasData) {
-            List<Dream> listDream = snapshot.data;
+            List<Dream> listDream = snapshot.data!;
 
             if (listDream == null || listDream.isEmpty) {
               return Column(
@@ -109,7 +108,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
                 Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: _getImg(dream.imgDream),
+                    child: _getImg(dream.imgDream!),
                   ),
                   margin: EdgeInsets.all(4),
                 ),
@@ -124,14 +123,14 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
                 children: <Widget>[
                   Container(
                     child: TextUtil.textTitulo(
-                      dream.dreamPropose,
+                      dream.dreamPropose!,
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
                   ),
                   Container(
                     child: TextUtil.textDefault(
-                      dream.descriptionPropose,
+                      dream.descriptionPropose!,
                       fontSize: 14,
                     ),
                     alignment: Alignment.topLeft,
@@ -142,7 +141,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
                     padding: EdgeInsets.all(6),
                   ),
                   Wrap(
-                    children: createChipStep(dream.steps),
+                    children: createChipStep(dream.steps!),
                   ),
                   ButtonBarTheme(
                     data: ButtonBarTheme.of(context),
@@ -178,7 +177,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
   }
 
   List<Widget> createChipStep(List<StepDream> steps) {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
 
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
@@ -186,7 +185,7 @@ class _DreamsDeletedPageState extends State<DreamsDeletedPage> {
           backgroundColor: AppColors.colorChipPrimary,
           child: TextUtil.textChip("${stepDream.position}˚",),
         ),
-        label: TextUtil.textChip(stepDream.step),
+        label: TextUtil.textChip(stepDream.step!),
         backgroundColor: AppColors.colorChipSecundary,
       );
 

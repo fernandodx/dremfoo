@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/resources/strings.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/validator_util.dart';
 import 'package:dremfoo/app/widget/app_button_default.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 class CardLoginWidget extends StatelessWidget {
 
@@ -40,7 +42,7 @@ class CardLoginWidget extends StatelessWidget {
 
   List<Widget> getFields(BuildContext context) {
     return <Widget>[
-      TextUtil.textTitulo("Login"),
+      TextUtil.textTitulo(Translate.i().get.label_login),
       SizedBox(height: 16),
       AppTextDefault(
         validator: ValidatorUtil.validatorEmail,
@@ -50,7 +52,7 @@ class CardLoginWidget extends StatelessWidget {
         onSaved: (value) => _store.user.email = value,
         controller: _store.textEmailController,
         maxLength: 60,
-        name: "E-mail",
+        name: Translate.i().get.label_email,
       ),
       SizedBox(height: 16),
       AppTextDefault(
@@ -61,12 +63,12 @@ class CardLoginWidget extends StatelessWidget {
         isPassword: true,
         inputType: TextInputType.text,
         onSaved: (value) => _store.user.password = value,
-        name: "Senha",
+        name: Translate.i().get.label_password,
       ),
       SizedBox(height: 16),
       Container(
         child: AppButtonDefault(
-          label: "Entrar",
+          label: Translate.i().get.label_enter,
           mainAxisSize: MainAxisSize.max,
           onPressed: () => onClickLogin(),
         ),
@@ -77,14 +79,14 @@ class CardLoginWidget extends StatelessWidget {
         children: <Widget>[
           AppButtonDefault(
               decoration: TextDecoration.underline,
-              label: Strings.labelNotRegister,
+              label: Translate.i().get.label_not_rigister,
               type: TypeButton.FLAT,
               onPressed: () {
                 //push(context, RegisterPage())
               }),
           AppButtonDefault(
               decoration: TextDecoration.underline,
-              label: Strings.labelRemenberPassword,
+              label: Translate.i().get.label_forgot_password,
               type: TypeButton.FLAT,
               onPressed: () => _store.rememberPassword(context)),
         ],
@@ -104,7 +106,7 @@ class CardLoginWidget extends StatelessWidget {
             width: 16,
           ),
           Text(
-            "OU",
+            Translate.i().get.label_or,
             style: TextStyle(color: AppColors.colorPrimary, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -128,7 +130,7 @@ class CardLoginWidget extends StatelessWidget {
             child: SignInButton(
               buttonType: ButtonType.google,
               onPressed: () => onClickLoginWithGoogle(),
-              btnText: "Login com Google",
+              btnText: Translate.i().get.label_login_with_google,
             ),
           ),
         ],
@@ -142,7 +144,7 @@ class CardLoginWidget extends StatelessWidget {
               child: SignInButton(
                 buttonType: ButtonType.facebook,
                 onPressed: () => onClickLoginWithFacebook(),
-                btnText: "Login com Facebook",
+                btnText: Translate.i().get.label_login_with_facebook,
               ),
             ),
           ],

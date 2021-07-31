@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationRevo {
 
-  String title;
-  String msg;
-  DocumentReference reference;
+  String? title;
+  String? msg;
+  DocumentReference? reference;
 
   NotificationRevo.fromMap(Map<String, dynamic> map) {
     title = map["title"];
@@ -20,7 +20,7 @@ class NotificationRevo {
 
   static List<NotificationRevo> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      NotificationRevo notification = NotificationRevo.fromMap(snapshot.data());
+      NotificationRevo notification = NotificationRevo.fromMap(snapshot.data() as Map<String, dynamic>);
       notification.reference = snapshot.reference;
       return notification;
     }).toList();

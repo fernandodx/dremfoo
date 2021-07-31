@@ -38,7 +38,7 @@ class NotificationUtil {
   }
 
 
-  static Future<void> showNotification(String title, String textBody, {String paylod}) async {
+  static Future<void> showNotification(String? title, String? textBody, {String? paylod}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         ID_NOTIFICATION_REVO, CHANNEL_NOTIFICATION_PUSH, DESCRIPTION_NOTIFICATION_PUSH,
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
@@ -150,7 +150,7 @@ class NotificationUtil {
   static Future<String> _downloadAndSaveFile(String url, String fileName) async {
     var directory = await getApplicationDocumentsDirectory();
     var filePath = '${directory.path}/$fileName';
-    var response = await http.get(url);
+    var response = await http.get(Uri(host: url));
     var file = File(filePath);
     await file.writeAsBytes(response.bodyBytes);
     return filePath;
@@ -192,7 +192,7 @@ class NotificationUtil {
   }
 
   static Future<void> showInboxNotification() async {
-    var lines = List<String>();
+    var lines = <String>[];
     lines.add('line <b>1</b>');
     lines.add('line <i>2</i>');
     var inboxStyleInformation = InboxStyleInformation(lines,
@@ -240,7 +240,7 @@ class NotificationUtil {
 
     // create the summary notification to support older devices that pre-date Android 7.0 (API level 24).
     // this is required is regardless of which versions of Android your application is going to support
-    var lines = List<String>();
+    var lines = <String>[];
     lines.add('Alex Faarborg  Check this out');
     lines.add('Jeff Chang    Launch Party');
     var inboxStyleInformation = InboxStyleInformation(lines,
@@ -285,7 +285,7 @@ class NotificationUtil {
     return scheduledDate;
   }
 
-  static Future<void> showDailyAtTime(int id, String title, String body, Time time,
+  static Future<void> showDailyAtTime(int id, String? title, String? body, Time time,
       String idChannel,
       String channelName,
       String channelDescription) async {

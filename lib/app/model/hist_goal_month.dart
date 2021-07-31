@@ -8,16 +8,16 @@ import 'package:dremfoo/app/model/dream.dart';
 
 class HistGoalMonth {
 
-  Timestamp dateCompleted;
-  int numberMonth;
-  double difficulty;
-  String reward;
-  String inflection;
-  bool isWonReward;
-  bool isNeedInflection;
-  bool isShow;
-  DocumentReference reference;
-  Dream dream;
+  Timestamp? dateCompleted;
+  int? numberMonth;
+  double? difficulty;
+  String? reward;
+  String? inflection;
+  bool? isWonReward;
+  bool? isNeedInflection;
+  bool? isShow;
+  late DocumentReference reference;
+  Dream? dream;
 
   HistGoalMonth();
 
@@ -34,7 +34,7 @@ class HistGoalMonth {
 
   static List<HistGoalMonth> fromListDocumentSnapshot(List<DocumentSnapshot> list){
     return list.map((snapshot) {
-      HistGoalMonth hist = HistGoalMonth.fromMap(snapshot.data());
+      HistGoalMonth hist = HistGoalMonth.fromMap(snapshot.data() as Map<String, dynamic>);
       hist.reference = snapshot.reference;
       return hist;
     }).toList();
@@ -42,7 +42,7 @@ class HistGoalMonth {
 
   static List<HistGoalMonth> fromListDocumentWithDreamSnapshot(List<DocumentSnapshot> list, Dream dream){
     return list.map((snapshot) {
-      HistGoalMonth hist = HistGoalMonth.fromMap(snapshot.data());
+      HistGoalMonth hist = HistGoalMonth.fromMap(snapshot.data() as Map<String, dynamic>);
       hist.reference = snapshot.reference;
       hist.dream = dream;
       return hist;

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ColorDream {
-  String primary;
-  String secondary;
-  DocumentReference reference;
+  String? primary;
+  String? secondary;
+  DocumentReference? reference;
 
   ColorDream.fromMap(Map<String, dynamic> map) {
     primary = map["primary"];
@@ -20,7 +20,7 @@ class ColorDream {
   static List<ColorDream> fromListDocumentSnapshot(
       List<QueryDocumentSnapshot> list) {
     return list.map((snapshot) {
-      ColorDream notification = ColorDream.fromMap(snapshot.data());
+      ColorDream notification = ColorDream.fromMap(snapshot.data() as Map<String, dynamic>);
       notification.reference = snapshot.reference;
       return notification;
     }).toList();

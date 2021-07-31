@@ -9,8 +9,8 @@ class ChartGoals {
   double step;
   double percentStepCompleted;
   Color color;
-  double levelWeek;
-  double levelMonth;
+  double? levelWeek;
+  double? levelMonth;
 
   ChartGoals(this.step, this.percentStepCompleted, this.color, this.levelWeek,
       this.levelMonth);
@@ -82,7 +82,7 @@ class ChartGoals {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 16,
-          textStyle: const TextStyle(
+          getTextStyles: (value) => TextStyle(
             color: Color(0xff0D7282),
             fontWeight: FontWeight.normal,
             fontSize: 12,
@@ -110,7 +110,7 @@ class ChartGoals {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          textStyle: const TextStyle(
+          getTextStyles: (value) => TextStyle(
             color: Color(0xff0D7282),
             fontWeight: FontWeight.bold,
             fontSize: 10,
@@ -163,11 +163,11 @@ class ChartGoals {
 
   static List<LineChartBarData> _getLinesChart(
       List<List<ChartGoals>> listGoals) {
-    List<LineChartBarData> listLineChart = List();
+    List<LineChartBarData> listLineChart = [];
 
     listGoals.forEach((chartGoals) {
-      List<FlSpot> listDataSpots = List();
-      Color color = null;
+      List<FlSpot> listDataSpots = [];
+      Color? color = null;
 
       chartGoals.forEach((dataChart) {
         color = dataChart.color; //Cor gráfico semanal
@@ -179,7 +179,7 @@ class ChartGoals {
         spots: listDataSpots,
         isCurved: true,
         colors: [
-          color,
+          color!,
         ],
         barWidth: 3,
         isStrokeCapRound: true,
@@ -200,10 +200,10 @@ class ChartGoals {
   }
 
   static void creatLineGoalLevel(
-      double levelWeek, List<LineChartBarData> listLineChart, Color color) {
-    List<FlSpot> listDataSpotsGoal = List();
+      double? levelWeek, List<LineChartBarData> listLineChart, Color? color) {
+    List<FlSpot> listDataSpotsGoal = [];
     for (int i = 1; i <= 7; i++) {
-      listDataSpotsGoal.add(FlSpot(i.toDouble(), levelWeek));
+      listDataSpotsGoal.add(FlSpot(i.toDouble(), levelWeek!));
     }
 
     final LineChartBarData lineChartGoal = LineChartBarData(
@@ -211,7 +211,7 @@ class ChartGoals {
       isCurved: false,
       dashArray: [5, 5],
       colors: [
-        color,
+        color!,
       ],
       barWidth: 1,
       isStrokeCapRound: true,
@@ -231,15 +231,15 @@ class ChartGoals {
     final Color leftBarColor = const Color(0xff53fdd7);
     final Color rightBarColor = const Color(0xffff5182);
 
-    List<BarChartGroupData> listGroup = List();
+    List<BarChartGroupData> listGroup = [];
 
     listGoals.forEach((goalsDream) {
-      List<BarChartRodData> barRods = List();
+      List<BarChartRodData> barRods = [];
       int x = goalsDream.step.toInt();
 
       barRods.add(BarChartRodData(
         y: goalsDream.percentStepCompleted,
-        color: leftBarColor,
+        colors: [leftBarColor],
         width: width,
       ));
 
@@ -249,20 +249,20 @@ class ChartGoals {
     return listGroup;
   }
 
-  static HashMap<int, List<BarChartRodData>> createBarRodData(
+  static HashMap<int, List<BarChartRodData>?> createBarRodData(
       double width, int countMouth, List<List<ChartGoals>> listGoals) {
-    HashMap<int, List<BarChartRodData>> mapMouth = HashMap();
+    HashMap<int, List<BarChartRodData>?> mapMouth = HashMap();
 
     listGoals.forEach((goals) {
       for (int mouth = 0; mouth < countMouth; mouth++) {
-        List<BarChartRodData> barRods = List();
+        List<BarChartRodData>? barRods = [];
         if (mapMouth[mouth] != null) {
           barRods = mapMouth[mouth];
         }
 
-        barRods.add(BarChartRodData(
+        barRods!.add(BarChartRodData(
           y: goals[mouth].percentStepCompleted,
-          color: goals[mouth].color, //Cor da barra mês
+          colors: [goals[mouth].color],//Cor da barra mês
           width: width,
         ));
 
@@ -274,8 +274,8 @@ class ChartGoals {
   }
 
   static List<BarChartGroupData> createBarJoinGroup(
-      HashMap<int, List<BarChartRodData>> mapMouth) {
-    List<BarChartGroupData> listGroup = List();
+      HashMap<int, List<BarChartRodData>?> mapMouth) {
+    List<BarChartGroupData> listGroup = [];
 
     mapMouth.forEach((mouth, listRodData) {
       listGroup
@@ -293,7 +293,7 @@ class ChartGoals {
     return BarChartGroupData(barsSpace: 4, x: x, barRods: [
       BarChartRodData(
         y: y1,
-        color: leftBarColor,
+        colors: [leftBarColor],
         width: width,
       ),
 //      BarChartRodData(
@@ -310,7 +310,7 @@ class ChartGoals {
     List<int> listGoalMonth = [];
 
     listChartGoals.forEach((dataChart) {
-      listGoalMonth.add(dataChart.levelMonth.toInt());
+      listGoalMonth.add(dataChart.levelMonth!.toInt());
     });
 
     rawBarGroups = createBarGroup(listChartGoals);
@@ -359,7 +359,7 @@ class ChartGoals {
                         show: true,
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          textStyle: TextStyle(
+                          getTextStyles: (_) => TextStyle(
                               color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
@@ -397,7 +397,7 @@ class ChartGoals {
                         ),
                         rightTitles: SideTitles(
                             showTitles: true,
-                            textStyle: TextStyle(
+                            getTextStyles: (_) => TextStyle(
                               fontSize: 16,
                             ),
                             getTitles: (value) {
@@ -408,7 +408,7 @@ class ChartGoals {
                             }),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          textStyle: TextStyle(
+                          getTextStyles: (_) => TextStyle(
                               color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
@@ -459,7 +459,7 @@ class ChartGoals {
     List<int> listGoalMonth = [];
 
     listChartGoals.forEach((dataChart) {
-      listGoalMonth.add(dataChart[0].levelMonth.toInt());
+      listGoalMonth.add(dataChart[0].levelMonth!.toInt());
     });
 
     int countBar = listChartGoals[0].length * listChartGoals.length;
@@ -536,7 +536,7 @@ class ChartGoals {
                         show: true,
                         rightTitles: SideTitles(
                             showTitles: true,
-                            textStyle: TextStyle(
+                            getTextStyles: (_) => TextStyle(
                               fontSize: 16,
                             ),
                             getTitles: (double value) {
@@ -547,7 +547,7 @@ class ChartGoals {
                             }),
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          textStyle: TextStyle(
+                          getTextStyles: (_) => TextStyle(
                               color: AppColors.colorText,
                               fontWeight: FontWeight.normal,
                               fontSize: 12),
@@ -585,7 +585,7 @@ class ChartGoals {
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          textStyle: TextStyle(
+                          getTextStyles: (_) => TextStyle(
                               color: AppColors.colorText,
                               fontWeight: FontWeight.bold,
                               fontSize: 10),

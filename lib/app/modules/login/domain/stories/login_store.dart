@@ -22,10 +22,10 @@ abstract class _LoginStoreBase with Store {
   bool isLoading = false;
 
   @observable
-  MessageAlert msgAlert;
+  MessageAlert? msgAlert;
 
   @observable
-  String navigation;
+  String? navigation;
 
 
   final formKey = GlobalKey<FormState>();
@@ -49,10 +49,10 @@ abstract class _LoginStoreBase with Store {
     // showLoading();
     ResponseApi responseApi =  await FirebaseService().loginWithGoogle(context);
     // hideLoading();
-    return checkResponseApiOnLogin(responseApi, context);
+    checkResponseApiOnLogin(responseApi, context);
   }
 
-  Future<User> loginWithFacebook(BuildContext context) async {
+  void loginWithFacebook(BuildContext context) async {
     // showLoading();
     ResponseApi responseApi = await FirebaseService().loginWithFacebook(context);
     // hideLoading();
@@ -72,16 +72,16 @@ abstract class _LoginStoreBase with Store {
     }
   }
 
-  Future<User> login(BuildContext context) async {
-    if (!formKey.currentState.validate()) {
+  Future<User?> login(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
       print("Erro na validação");
       return null;
     }
-    formKey.currentState.save();
+    formKey.currentState!.save();
 
     // showLoading();
     ResponseApi responseApi = await FirebaseService()
-        .loginWithEmailAndPassword(context, user.email, user.password);
+        .loginWithEmailAndPassword(context, user.email!, user.password!);
     // hideLoading();
     checkResponseApiOnLogin(responseApi, context);
   }
@@ -89,7 +89,7 @@ abstract class _LoginStoreBase with Store {
   void goToHome(user, BuildContext context) {
     if (user != null) {
       // push(context, HomePage(), isReplace: true);
-      Modular.to.navigate("/"); //ARRUMAR
+      // Modular.to.navigate("/"); //ARRUMAR
     }
   }
 

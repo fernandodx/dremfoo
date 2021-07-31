@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _bloc = LoginBloc();
-  Widget pageInit;
+  late Widget pageInit;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Form(
         key: _bloc.formKey,
         child: Stack(
-          children: <Widget>[
+          children: [
             background(),
             Container(
               alignment: Alignment.topCenter,

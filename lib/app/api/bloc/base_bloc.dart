@@ -17,7 +17,7 @@ class BaseBloc<T> {
 
   void addError(T obj){
     if(!_controller.isClosed){
-      _controller.addError(obj);
+      _controller.addError(obj!);
     }
   }
 
@@ -89,11 +89,11 @@ class BaseBloc<T> {
   loading() {
     return StreamBuilder(
       stream: _loadingStreamController.stream,
-      builder: (context, snapshop) {
-        var isShow = false;
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshop) {
+        bool isShow = false;
 
         if (snapshop.hasData) {
-          isShow = snapshop.data;
+          isShow = snapshop.data??false;
         }
 
         return Visibility(

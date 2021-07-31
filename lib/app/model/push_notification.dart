@@ -2,22 +2,22 @@ import 'dart:convert';
 
 class PushNotification {
 
-  Map data;
-  Map notification;
-  String body;
-  String title;
-  String message;
-  String payload;
+  Map? data;
+  Map? notification;
+  String? body;
+  String? title;
+  String? message;
+  String? payload;
 
   PushNotification.fromMap(Map<String, dynamic> map) {
     data = map["data"];
     notification = map["notification"];
-    body = notification["body"];
-    title = notification["title"];
+    body = notification!["body"];
+    title = notification!["title"];
 
-    if(body.contains("&")){
-      message = body.substring(0, body.indexOf("&"));
-      payload = body.substring(body.indexOf("&")+1 , body.length);
+    if(body!.contains("&")){
+      message = body!.substring(0, body!.indexOf("&"));
+      payload = body!.substring(body!.indexOf("&")+1 , body!.length);
     }else{
       message = body;
     }

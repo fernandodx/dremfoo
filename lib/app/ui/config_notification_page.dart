@@ -44,14 +44,14 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
           body: SingleChildScrollView(
             child: FutureBuilder(
               future: FirebaseService().getPrefsUser(),
-              builder: (context, snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<UserRevo?> snapshot) {
                 if (snapshot.hasData) {
-                  UserRevo user = snapshot.data;
+                  UserRevo user = snapshot.data!;
                   _bloc.isEnableNotification = user.isEnableNotification;
                   _bloc.initHourNotification = user.initNotification;
                   _bloc.finishHourNotification = user.finishNotification;
-                  _bloc.descInitHourNotification = _bloc.formatTimeStr(user.initNotification.toDate());
-                  _bloc.descFinishHourNotification = _bloc.formatTimeStr(user.finishNotification.toDate());
+                  _bloc.descInitHourNotification = _bloc.formatTimeStr(user.initNotification?.toDate() ?? new DateTime.now());
+                  _bloc.descFinishHourNotification = _bloc.formatTimeStr(user.finishNotification?.toDate() ?? new DateTime.now());
 
                   return bodyOptionsNotification(context);
                 }
@@ -74,7 +74,7 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
             margin: EdgeInsets.only(top: 12),
             child: SwitchListTile(
                 title: TextUtil.textDefault("Habilitar notificações"),
-                value: _bloc.isEnableNotification,
+                value: _bloc.isEnableNotification!,
                 secondary: Icon(
                   Icons.notifications,
                   color: AppColors.colorPrimaryDark,
@@ -126,10 +126,10 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
 
   Future _updateInitNotificationTime(BuildContext context) async {
     try{
-      TimeOfDay time = await _showTimePicker24h(context);
+      TimeOfDay? time = await _showTimePicker24h(context);
       setState(() {
         DateTime now = DateTime.now();
-        DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
+        DateTime dateTime = DateTime(now.year, now.month, now.day,time!.hour, time.minute);
 
         _bloc.descInitHourNotification = _bloc.formatTimeStr(dateTime);
         _bloc.initHourNotification = Timestamp.fromDate(dateTime);
@@ -144,10 +144,10 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
 
   Future _updateFinishNotificationTime(BuildContext context) async {
     try{
-      TimeOfDay time = await _showTimePicker24h(context);
+      TimeOfDay? time = await _showTimePicker24h(context);
       setState(() {
         DateTime now = DateTime.now();
-        DateTime dateTime = DateTime(now.year, now.month, now.day,time.hour, time.minute);
+        DateTime dateTime = DateTime(now.year, now.month, now.day,time!.hour, time.minute);
         _bloc.descFinishHourNotification = _bloc.formatTimeStr(dateTime);
         _bloc.finishHourNotification = Timestamp.fromDate(dateTime);
 
@@ -159,14 +159,14 @@ class _ConfigNotificationPageState extends State<ConfigNotificationPage> {
 
   }
 
-  Future<TimeOfDay> _showTimePicker24h(BuildContext context) async {
+  Future<TimeOfDay?> _showTimePicker24h(BuildContext context) async {
     return showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child,
+          child: child!,
         );
       },
     );

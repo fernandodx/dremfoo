@@ -24,9 +24,9 @@ class RegisterBloc extends BaseBloc<Widget> {
   }
 
   bool validFields(BuildContext context) {
-    if (formKey.currentState.validate()) {
-      formKey.currentState.save();
-      if (fieldsEquals(user.email, validatedEmailController.text.toString())) {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      if (fieldsEquals(user.email!, validatedEmailController.text.toString())) {
         return true;
       } else {
         alertBottomSheet(context, msg: "O e-mail não confere",
@@ -35,15 +35,16 @@ class RegisterBloc extends BaseBloc<Widget> {
         return false;
       }
     }
+    return false;
   }
 
-  Future<User> resgisterUser(BuildContext context) async {
+  Future<User?> resgisterUser(BuildContext context) async {
 
     bool isOk = validFields(context);
     if(isOk){
       showLoading();
       ResponseApi responseApi = await FirebaseService()
-          .createUserWithEmailAndPassword(context, user.email, user.password,
+          .createUserWithEmailAndPassword(context, user.email!, user.password!,
               name: user.name, photo: user.picture);
       hideLoading();
       if (responseApi.ok) {
@@ -69,17 +70,16 @@ class RegisterBloc extends BaseBloc<Widget> {
   }
 
   onAddImage() async {
-    File image = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 300,
-      imageQuality: 80
-    );
+    var _pick = ImagePicker();
 
-    user.picture = image;
+    final XFile image = await (_pick.pickImage(source: ImageSource.gallery, maxWidth: 300, imageQuality: 80) as FutureOr<XFile>);
+    final File fileImg = File(image.path);
+
+    user.picture = fileImg;
 
     var circleImage = CircleAvatar(
       radius: 70,
-      backgroundImage: Image.file(image).image,
+      backgroundImage: Image.file(fileImg).image,
     );
 
     var picture = Container(

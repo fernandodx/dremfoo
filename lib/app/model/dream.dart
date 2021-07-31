@@ -6,28 +6,28 @@ import 'dart:convert';
 
 class Dream {
 
-  String uid;
-  String dreamPropose;
-  String descriptionPropose;
-  String imgDream;
-  String reward;
-  String rewardWeek;
-  String inflection;
-  String inflectionWeek;
-  double goalWeek = 25;
-  double goalMonth = 25;
-  bool isGoalWeekOk = false;
-  bool isGoalMonthOk = false;
-  bool isRewardWeek = false;
-  bool isInflectionWeek = false;
-  bool isDeleted = false;
-  bool isDreamWait = false;
-  ColorDream color;
-  Timestamp dateRegister;
-  Timestamp dateFinish;
-  List<StepDream> steps = List();
-  List<DailyGoal> dailyGoals = List();
-  DocumentReference reference;
+  String? uid;
+  String? dreamPropose;
+  String? descriptionPropose;
+  String? imgDream;
+  String? reward;
+  String? rewardWeek;
+  String? inflection;
+  String? inflectionWeek;
+  double? goalWeek = 25;
+  double? goalMonth = 25;
+  bool? isGoalWeekOk = false;
+  bool? isGoalMonthOk = false;
+  bool? isRewardWeek = false;
+  bool? isInflectionWeek = false;
+  bool? isDeleted = false;
+  bool? isDreamWait = false;
+  ColorDream? color;
+  Timestamp? dateRegister;
+  Timestamp? dateFinish;
+  List<StepDream>? steps = [];
+  List<DailyGoal> dailyGoals = [];
+  DocumentReference? reference;
 
   static Dream copy(Dream data){
     Dream dream = Dream();
@@ -108,7 +108,7 @@ class Dream {
     data['inflectionWeek'] = this.inflectionWeek;
     data['rewardWeek'] = this.rewardWeek;
     data['isDeleted'] = this.isDeleted;
-    data['color'] = this.color.toMap();
+    data['color'] = this.color!.toMap();
     data['isDreamWait'] = this.isDreamWait;
     data['dateFinish'] = this.dateFinish;
 //    data['steps'] = this.steps;

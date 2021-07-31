@@ -8,18 +8,18 @@ import 'package:dremfoo/app/model/dream.dart';
 
 class HistGoalWeek {
 
-  Timestamp firsDayWeek;
-  int numberWeek;
-  double difficulty;
-  String reward;
-  String inflection;
-  bool isWonReward;
-  bool isNeedInflection;
-  bool isShow;
-  Timestamp dateLastShow;
-  DocumentReference reference;
+  Timestamp? firsDayWeek;
+  int? numberWeek;
+  double? difficulty;
+  String? reward;
+  String? inflection;
+  bool? isWonReward;
+  bool? isNeedInflection;
+  bool? isShow;
+  Timestamp? dateLastShow;
+  late DocumentReference reference;
 
-  Dream dream;
+  Dream? dream;
 
   HistGoalWeek();
 
@@ -37,7 +37,7 @@ class HistGoalWeek {
 
   static List<HistGoalWeek> fromListDocumentSnapshot(List<DocumentSnapshot> list){
     return list.map((snapshot) {
-      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data());
+      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data() as Map<String, dynamic>);
       hist.reference = snapshot.reference;
       return hist;
     }).toList();
@@ -45,7 +45,7 @@ class HistGoalWeek {
 
   static List<HistGoalWeek> fromListDocumentSnapshotWithDream(List<DocumentSnapshot> list, Dream dream){
     return list.map((snapshot) {
-      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data());
+      HistGoalWeek hist = HistGoalWeek.fromMap(snapshot.data() as Map<String, dynamic>);
       hist.reference = snapshot.reference;
       hist.dream = dream;
       return hist;

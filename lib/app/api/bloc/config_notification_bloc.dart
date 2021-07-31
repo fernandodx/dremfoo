@@ -9,20 +9,20 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ConfigNotificationBloc extends BaseBloc {
 
-  bool isEnableNotification;
-  String descInitHourNotification;
-  String descFinishHourNotification;
-  Timestamp initHourNotification;
-  Timestamp finishHourNotification;
+  bool? isEnableNotification;
+  late String descInitHourNotification;
+  late String descFinishHourNotification;
+  Timestamp? initHourNotification;
+  Timestamp? finishHourNotification;
 
 
   void updateConfigNotification(context){
-    Prefs.putBool("USER_PREF_ISNOTIFICATION", isEnableNotification);
-    Prefs.putInt("USER_PREF_INIT_NOTIFICATION", initHourNotification.toDate().millisecondsSinceEpoch);
-    Prefs.putInt("USER_PREF_FINISH_NOTIFICATION", finishHourNotification.toDate().millisecondsSinceEpoch);
+    Prefs.putBool("USER_PREF_ISNOTIFICATION", isEnableNotification!);
+    Prefs.putInt("USER_PREF_INIT_NOTIFICATION", initHourNotification!.toDate().millisecondsSinceEpoch);
+    Prefs.putInt("USER_PREF_FINISH_NOTIFICATION", finishHourNotification!.toDate().millisecondsSinceEpoch);
     FirebaseService().updateConfigUser(isEnableNotification, initHourNotification, finishHourNotification);
 
-    if(isEnableNotification){
+    if(isEnableNotification!){
       UserEventBus().get(context).sendEvent(TipoAcao.UPDATE_NOTIFICATION);
     }else{
       UserEventBus().get(context).sendEvent(TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY);

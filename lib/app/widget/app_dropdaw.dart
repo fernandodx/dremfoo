@@ -7,8 +7,8 @@ abstract class DropdownItem {
 class AppDropDraw<T extends DropdownItem> extends StatelessWidget {
   String hint;
   T valueSelected;
-  ValueChanged<T> onChangeCallback;
-  List<T> listaItens = List();
+  ValueChanged<T?> onChangeCallback;
+  List<T> listaItens = [];
 
 
   AppDropDraw(this.hint, this.valueSelected, this.onChangeCallback,

@@ -3,16 +3,19 @@ import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/background_widget.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/card_login_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/AppContext.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/utils.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
+
 class LoginWidgetPage extends StatefulWidget {
   final String title;
 
-  const LoginWidgetPage({Key key, this.title = 'LoginWidgetPage'}) : super(key: key);
+  const LoginWidgetPage({Key? key, this.title = 'LoginWidgetPage'}) : super(key: key);
 
   @override
   LoginWidgetPageState createState() => LoginWidgetPageState();
@@ -33,26 +36,27 @@ class LoginWidgetPageState extends ModularState<LoginWidgetPage, LoginStore> {
 
     reaction<bool>((_) => store.isLoading, (isLoading) {
       if(isLoading){
-        Overlay.of(context).insert(overlayLoading);
+        Overlay.of(context)!.insert(overlayLoading);
       }else{
         overlayLoading.remove();
       }
     });
 
-    reaction<MessageAlert>((_) => store.msgAlert, (msgErro) {
+    reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
       alertBottomSheet(context,
-          msg: msgErro.msg,
+          msg: msgErro!.msg,
           title:msgErro.title,
           type: msgErro.type);
     });
 
-    reaction((_) => store.navigation, (pageRoute) {
+    reaction((_) => store.navigation, (dynamic pageRoute) {
       Modular.to.navigate(pageRoute);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Translate.i().init(context); //Colocar em um local único
     return Scaffold(
       backgroundColor: AppColors.colorPrimaryDark,
       body: Form(

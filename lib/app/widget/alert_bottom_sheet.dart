@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 alertBottomSheet(BuildContext context,
-    {@required String msg,
+    {required String? msg,
     TypeAlert type = TypeAlert.ALERT,
-    Function onTapDefaultButton,
+    Function? onTapDefaultButton,
     String nameButtonDefault = "OK",
     String title = "Alerta",
-    String subTitle,
-    List<Widget> listButtonsAddtional,
+    String? subTitle,
+    List<Widget>? listButtonsAddtional,
     bool isWillPop = true}) {
   showModalBottomSheet(
       context: context,
@@ -41,7 +41,7 @@ alertBottomSheet(BuildContext context,
                             padding: EdgeInsets.all(8),
                             color: Colors.white,
                             child: Text(
-                              msg,
+                              msg!,
                               style: TextStyle(
                                   color: AppColors.colorPrimaryDark,
                                   fontSize: 14),
@@ -82,7 +82,7 @@ alertBottomSheet(BuildContext context,
 }
 
 List<Widget> buttonsAlert(BuildContext context, String nameDefaultButton,
-    Function onTapDefaultButton, List<Widget> listButtonsAdtional) {
+    Function? onTapDefaultButton, List<Widget>? listButtonsAdtional) {
   List<Widget> listButtons = [];
 
   listButtons.add(

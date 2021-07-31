@@ -2,17 +2,17 @@ import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppButtonDefault extends StatelessWidget {
-  String label;
+  String? label;
   Function onPressed;
   bool isShowProgress;
   TypeButton type;
   TextDecoration decoration;
-  Icon icon;
+  Icon? icon;
   MainAxisSize mainAxisSize;
 
   AppButtonDefault(
       {this.label,
-      @required this.onPressed,
+      required this.onPressed,
       this.isShowProgress = false,
       this.type = TypeButton.RAISE,
       this.icon,
@@ -41,7 +41,7 @@ class AppButtonDefault extends StatelessWidget {
             ],
           ),
           textColor: AppColors.colorAcent,
-          onPressed: onPressed,
+          onPressed: onPressed as void Function()?,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         );
         break;
@@ -66,7 +66,7 @@ class AppButtonDefault extends StatelessWidget {
             ],
           ),
           textColor: Colors.white,
-          onPressed: onPressed,
+          onPressed: onPressed as void Function()?,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -86,7 +86,7 @@ class AppButtonDefault extends StatelessWidget {
     }
 
     return Text(
-      label,
+      label!,
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 14, decoration: decoration,),
     );

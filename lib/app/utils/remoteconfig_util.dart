@@ -15,12 +15,16 @@ class RemoteConfigUtil {
   static const enableMediaSite = "enableMediaSite";
   static const enableMediaContato = "enableMediaContato";
 
-  static RemoteConfig _instance;
+  static late RemoteConfig _instance;
 
-  static void init() async {
+  static Future<void> init() async {
     _instance = await RemoteConfig.instance;
 
-    await _instance.setConfigSettings(RemoteConfigSettings(debugMode: false));
+    await _instance.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: Duration(seconds: 10),
+      minimumFetchInterval: Duration(minutes: 20)
+    ));
+
     // await _instance.setDefaults({
     //   enableMenuVideoRevo: true,
     //   enableMenuSocialMedia: true,
@@ -34,8 +38,8 @@ class RemoteConfigUtil {
     //   enableMenuDreamCompleted: true,
     // });
 
-    await _instance.fetch(expiration: const Duration(seconds: 1));
-    await _instance.activateFetched();
+    await _instance.fetch();
+    await _instance.activate();
   }
 
   bool isEnableMenuVideoRevo() {

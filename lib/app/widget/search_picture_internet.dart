@@ -60,11 +60,11 @@ Widget getGridViewForPicture(String namePicture) {
       Container(
         child: FutureBuilder(
           future: searchPictureInternet(namePicture),
-          builder: (BuildContext context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<ResponseApi<List<PixabayMedia>>> snapshot) {
             if (snapshot.hasData) {
-              ResponseApi<List<PixabayMedia>> responseApi = snapshot.data;
+              ResponseApi<List<PixabayMedia>> responseApi = snapshot.data!;
               if (responseApi.ok) {
-                List<PixabayMedia> list = responseApi.result;
+                List<PixabayMedia> list = responseApi.result!;
 
                 return GridView.builder(
                     itemCount: list.length,
@@ -79,7 +79,7 @@ Widget getGridViewForPicture(String namePicture) {
                           color: AppColors.colorEggShell,
                           padding: EdgeInsets.all(3),
                           child: CachedNetworkImage(
-                            imageUrl: list[index].getThumbnailLink(),
+                            imageUrl: list[index].getThumbnailLink()!,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -100,7 +100,7 @@ Widget getGridViewForPicture(String namePicture) {
                         ),
                       ),
                       Center(
-                        child: TextUtil.textTitulo(responseApi.stackMessage),
+                        child: TextUtil.textTitulo(responseApi.stackMessage!),
                       ),
                       Center(
                         child: TextUtil.textSubTitle(
@@ -125,10 +125,10 @@ Widget getGridViewForPicture(String namePicture) {
       ),
       StreamBuilder(
         stream: _streamDonwload,
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if(snapshot.hasData){
             return Visibility(
-              visible: snapshot.data,
+              visible: snapshot.data!,
               child: Container(
                 color: Colors.black26,
                 child: Center(
@@ -169,12 +169,12 @@ Future<ResponseApi<List<PixabayMedia>>> searchPictureInternet(
   try {
     PixabayMediaProvider api = getApiSearch();
 
-    PixabayResponse res = await api.requestImagesWithKeyword(
+    PixabayResponse? res = await api.requestImagesWithKeyword(
       keyword: namePicture,
       resultsPerPage: pages,
     );
 
-    if (res != null && res.hits.isNotEmpty) {
+    if (res != null && res.hits!.isNotEmpty) {
       return ResponseApi.ok(result: res.hits);
     }
 
@@ -192,7 +192,7 @@ PixabayMediaProvider getApiSearch() {
   return api;
 }
 
-class DataSearch extends SearchDelegate<String> {
+class DataSearch extends SearchDelegate<String?> {
   @override
   List<Widget> buildActions(BuildContext context) {
     //Actions for app bar

@@ -1,7 +1,7 @@
 class StatusDream {
 
-  DateTime date;
-  bool isOk;
+  DateTime? date;
+  bool? isOk;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

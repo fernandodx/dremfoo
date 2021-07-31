@@ -10,7 +10,7 @@ class DreamsDeletedBloc extends BaseBloc {
     ResponseApi<List<Dream>> responseApi = await FirebaseService().findAllDreamsDeleted();
     if(responseApi.ok){
 
-      List<Dream> list = responseApi.result;
+      List<Dream> list = responseApi.result!;
 
       for(Dream dream in list){
         ResponseApi<List<StepDream>> responseApi = await FirebaseService().findAllStepsForDream(dream);
@@ -19,11 +19,11 @@ class DreamsDeletedBloc extends BaseBloc {
       return list;
     }
 
-    return List();
+    return [];
   }
 
   void restoredDream(Dream dream) {
-    FirebaseService().updateOnlyField("isDeleted", false, dream.reference);
+    FirebaseService().updateOnlyField("isDeleted", false, dream.reference!);
   }
 
 }

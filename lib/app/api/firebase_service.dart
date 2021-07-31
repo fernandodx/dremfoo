@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -31,7 +32,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'firebase_storage_service.dart';
 
-String fireBaseUserUid;
+String? fireBaseUserUid;
 
 class FirebaseService {
   final _googleSign = GoogleSignIn();
@@ -44,7 +45,7 @@ class FirebaseService {
 
   Future<ResponseApi> loginWithGoogle(BuildContext context) async {
     try {
-      final GoogleSignInAccount account = await _googleSign.signIn();
+      final GoogleSignInAccount account = await (_googleSign.signIn() as FutureOr<GoogleSignInAccount>);
       final GoogleSignInAuthentication authentication =
           await account.authentication;
 
@@ -65,7 +66,7 @@ class FirebaseService {
       AuthCredential credential, BuildContext context) async {
     try {
       UserCredential result = await _auth.signInWithCredential(credential);
-      final User user = await result.user;
+      final User user = await result.user!;
       await saveUser(context, user);
       MainEventBus().get(context).updateUser(user);
       return ResponseApi<User>.ok(result: user);
@@ -77,6 +78,7 @@ class FirebaseService {
           case "account-exists-with-different-credential" :
             return ResponseApi.error(stackMessage: "Já existe uma conta com o mesmo endereço de e-mail, mas com credenciais de login diferentes. Faça login usando um provedor associado a este endereço de e-mail.");
         }
+        return ResponseApi.error(stackMessage: error.toString());
       }else{
         return ResponseApi.error(stackMessage: error.toString());
       }
@@ -85,13 +87,25 @@ class FirebaseService {
 
   Future<ResponseApi> loginWithFacebook(BuildContext context) async {
     try {
-      final AccessToken accessToken = await _fbLogin.login(permissions: ['email', 'public_profile']);
-      if(accessToken != null) {
-        AnalyticsUtil.sendLogLogin(MethodLogin.facebook);
-        AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
-        return await _loginWithCredential(credential, context);
-      }else{
-        return ResponseApi.error(stackMessage: "Erro no login com Facebook");
+      String? msg = "";
+      LoginResult result = await _fbLogin.login(permissions: ['email', 'public_profile']);
+      switch(result.status){
+        case LoginStatus.success: {
+          AnalyticsUtil.sendLogLogin(MethodLogin.facebook);
+          AuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.token);
+          ResponseApi responseApi = await _loginWithCredential(credential, context);
+          return responseApi;
+        }
+        case LoginStatus.cancelled: {
+          msg = "Tudo bem, você pode utilizar outro método de login.";
+          return ResponseApi.error(stackMessage: msg);
+        }
+        case LoginStatus.failed: {
+          msg = result.message;
+          return ResponseApi.error(stackMessage: msg);
+        }
+        case LoginStatus.operationInProgress:
+          return ResponseApi.error(stackMessage: msg);
       }
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
@@ -104,7 +118,7 @@ class FirebaseService {
     try {
       AnalyticsUtil.sendLogLogin(MethodLogin.email);
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      final User user = await result.user;
+      final User user = await result.user!;
       MainEventBus().get(context).updateUser(user);
       saveUser(context, user);
 
@@ -138,9 +152,9 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi> updateUser(BuildContext context, {@required name, urlPhoto}) async {
+  Future<ResponseApi> updateUser(BuildContext context, {required name, urlPhoto}) async {
     try {
-      var user = await FirebaseAuth.instance.currentUser;
+      var user = await FirebaseAuth.instance.currentUser!;
       if(urlPhoto != null){
         user.updateProfile(displayName: name, photoURL: urlPhoto);
       }else{
@@ -159,15 +173,15 @@ class FirebaseService {
 
   Future<ResponseApi> createUserWithEmailAndPassword(
       BuildContext context, String email, String password,
-      {String name, File photo}) async {
+      {String? name, File? photo}) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
-      User user = await result.user;
+      User user = await result.user!;
       MainEventBus().get(context).updateUser(user);
       await saveUser(context, user);
 
-      var urlPhotoUser = null;
+      dynamic urlPhotoUser = null;
       if (photo != null) {
         urlPhotoUser = await FirebaseStorageService().uploadFileUserOn(photo, id: "user_photo");
       }
@@ -175,7 +189,7 @@ class FirebaseService {
         await user.updateProfile(displayName: name, photoURL: urlPhotoUser);
       }
 
-      var currentUser = await _auth.currentUser;
+      var currentUser = await _auth.currentUser!;
       AnalyticsUtil.sendAnalyticsEvent(EventRevo.registerNewUser, parameters: {
         "email": currentUser.email,
         "name": currentUser.displayName
@@ -220,11 +234,11 @@ class FirebaseService {
       return snapshot.exists;
     }catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
+      return false;
     }
-
   }
 
-  DocumentReference getRefCurrentUser(String uid) {
+  DocumentReference getRefCurrentUser(String? uid) {
     return FirebaseFirestore.instance
         .collection(Constants.ENVIRONMENT)
         .doc(Constants.ENVIRONMENT_NOW)
@@ -232,7 +246,7 @@ class FirebaseService {
   }
 
 
-  void saveUser(BuildContext context, User user) async {
+  Future<void> saveUser(BuildContext context, User user) async {
     if (user.email != null) {
       DateTime now = DateTime.now();
       DateTime initTime = DateTime(
@@ -270,13 +284,13 @@ class FirebaseService {
   }
 
 
-  Future<UserFocus> checkFocusContinuos(BuildContext context) async {
+  Future<UserFocus?> checkFocusContinuos(BuildContext context) async {
 
     ResponseApi<UserRevo> responseApi = await FirebaseService().findDataUser();
     if(responseApi.ok){
-      UserFocus focus = responseApi.result.focus;
+      UserFocus? focus = responseApi.result!.focus;
       if(focus != null && focus.dateLastFocus != null){
-        DateTime dateLast = focus.dateLastFocus.toDate();
+        DateTime dateLast = focus.dateLastFocus!.toDate();
         DateTime dateNow = DateTime.now();
         focus.level = LevelRevo();
 
@@ -286,7 +300,7 @@ class FirebaseService {
 
         ResponseApi<List<LevelRevo>> responseApi = await FirebaseService().findLevels(focus.countDaysFocus != null ? focus.countDaysFocus : 0);
         if(responseApi.ok) {
-          List<LevelRevo> listLevels = responseApi.result;
+          List<LevelRevo>? listLevels = responseApi.result;
           if (listLevels != null && listLevels.length >= 1) {
             focus.level = listLevels[0];
             UserEventBus().get(context).updateLevel(focus);
@@ -311,9 +325,9 @@ class FirebaseService {
 
   void saveLevelPrefs(UserFocus focus) {
     if(focus.level != null){
-      Prefs.putString(Constants.LEVEL_NAME_USER, focus.level.name);
-      Prefs.putString(Constants.LEVEL_URL_ICON, focus.level.urlIcon);
-      Prefs.putInt(Constants.LEVEL_DAYS_FOCUS, focus.countDaysFocus);
+      Prefs.putString(Constants.LEVEL_NAME_USER, focus.level!.name!);
+      Prefs.putString(Constants.LEVEL_URL_ICON, focus.level!.urlIcon!);
+      Prefs.putInt(Constants.LEVEL_DAYS_FOCUS, focus.countDaysFocus!);
     }
   }
 
@@ -326,8 +340,8 @@ class FirebaseService {
       return map;
   }
 
-  ResponseApi<bool> updateConfigUser(bool isEnableNotification,
-      Timestamp initNotification, Timestamp finishNotification) {
+  ResponseApi<bool> updateConfigUser(bool? isEnableNotification,
+      Timestamp? initNotification, Timestamp? finishNotification) {
     try {
       DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
       refUsers.update({
@@ -346,7 +360,7 @@ class FirebaseService {
   Future<ResponseApi<UserRevo>> findDataUser() async {
     try {
       DocumentSnapshot snapshot = await getRefCurrentUser(fireBaseUserUid).get();
-      UserRevo user = UserRevo.fromMap(snapshot.data());
+      UserRevo user = UserRevo.fromMap(snapshot.data() as Map<String, dynamic>);
       user.uid = snapshot.id;
       return ResponseApi.ok(result: user);
     } catch (error, stack) {
@@ -400,7 +414,7 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi<List<LevelRevo>>> findLevels(int value) async {
+  Future<ResponseApi<List<LevelRevo>>> findLevels(int? value) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("levels")
@@ -432,15 +446,15 @@ class FirebaseService {
     ResponseApi responseApi = await findDataUser();
     if (responseApi.ok) {
       UserRevo user = responseApi.result;
-      Prefs.putString("USER_PREF_UID", user.uid);
-      Prefs.putString("USER_PREF_NAME", user.name);
-      Prefs.putString("USER_PREF_EMAIL", user.email);
-      Prefs.putString("USER_PREF_URL_PICTURE", user.urlPicture);
-      Prefs.putBool("USER_PREF_ISNOTIFICATION", user.isEnableNotification);
+      Prefs.putString("USER_PREF_UID", user.uid!);
+      Prefs.putString("USER_PREF_NAME", user.name!);
+      Prefs.putString("USER_PREF_EMAIL", user.email!);
+      Prefs.putString("USER_PREF_URL_PICTURE", user.urlPicture!);
+      Prefs.putBool("USER_PREF_ISNOTIFICATION", user.isEnableNotification!);
       Prefs.putInt("USER_PREF_INIT_NOTIFICATION",
-          user.initNotification.toDate().millisecondsSinceEpoch);
+          user.initNotification!.toDate().millisecondsSinceEpoch);
       Prefs.putInt("USER_PREF_FINISH_NOTIFICATION",
-          user.finishNotification.toDate().millisecondsSinceEpoch);
+          user.finishNotification!.toDate().millisecondsSinceEpoch);
       setUserProperties(user);
       CrashlyticsUtil.addUserIdentifier(user);
     }
@@ -452,14 +466,14 @@ class FirebaseService {
     AnalyticsUtil.setUserProperty("email", user.email);
     AnalyticsUtil.setUserProperty("urlPicture", user.urlPicture);
     AnalyticsUtil.setUserProperty(
-        "initNotification", Utils.dateToString(user.initNotification.toDate()));
+        "initNotification", Utils.dateToString(user.initNotification!.toDate()));
     AnalyticsUtil.setUserProperty("finishNotification",
-        Utils.dateToString(user.finishNotification.toDate()));
+        Utils.dateToString(user.finishNotification!.toDate()));
     AnalyticsUtil.setUserProperty(
         "isEnableNotification", user.isEnableNotification.toString());
   }
 
-  Future<UserRevo> getPrefsUser() async {
+  Future<UserRevo?> getPrefsUser() async {
     int timeInit = await Prefs.getInt("USER_PREF_INIT_NOTIFICATION");
     int timeFinish = await Prefs.getInt("USER_PREF_FINISH_NOTIFICATION");
     String uid = await Prefs.getString("USER_PREF_UID");
@@ -493,7 +507,7 @@ class FirebaseService {
   }
 
   Future<bool> checkLoginOn() async {
-    UserRevo user = await getPrefsUser();
+    UserRevo? user = await getPrefsUser();
     if (user != null) {
       setUidUser(user.uid);
       saveLastAcess();
@@ -537,7 +551,7 @@ class FirebaseService {
       );
 
       List<UserRevo> listUsers = UserRevo.fromListDocumentSnapshot(querySnapshot.docs);
-      listUsers = listUsers.where((user) => user.focus != null && user.focus.level != null).toList();
+      listUsers = listUsers.where((user) => user.focus != null && user.focus!.level != null).toList();
 
       return ResponseApi.ok(result: listUsers);
     } catch (error, stack) {
@@ -681,7 +695,7 @@ class FirebaseService {
     }
   }
 
-  Future<DateTime> getLastHitUser() async {
+  Future<DateTime?> getLastHitUser() async {
     try {
       DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
@@ -698,7 +712,7 @@ class FirebaseService {
      }
 
      int index = list.length > 1 ? 1 : 0;
-     Timestamp dateLastAcess = list[index].data()['dateAcess'];
+     Timestamp dateLastAcess = list[index].get('dateAcess');
      return dateLastAcess.toDate();
 
     } catch (error, stack) {
@@ -727,7 +741,7 @@ class FirebaseService {
   Future<ResponseApi<List<DailyGoal>>> findDailyGoalsCompletedHist(
       Dream dream, DateTime dateStart, DateTime dateEnd) async {
     try {
-      DocumentReference dreamRef = dream.reference;
+      DocumentReference dreamRef = dream.reference!;
       Timestamp start = Timestamp.fromDate(
           DateTime(dateStart.year, dateStart.month, dateStart.day));
       Timestamp end = Timestamp.fromDate(
@@ -772,7 +786,7 @@ class FirebaseService {
           .doc(dreamPropouse)
           .collection("steps");
 
-      List<StepDream> listSteps = List();
+      List<StepDream> listSteps = [];
       QuerySnapshot querySnapshot = await listStepsRef.get();
 
       for (QueryDocumentSnapshot snapshot in querySnapshot.docs) {
@@ -850,7 +864,7 @@ class FirebaseService {
 
       dailyRef.set(dailyGoal.toMap());
 
-      DocumentReference dreamRef = dailyRef.parent.parent;
+      DocumentReference dreamRef = dailyRef.parent.parent!;
       CollectionReference histRef = dreamRef.collection("dailyCompletedHist");
 
       if (dailyGoal.lastDateCompleted != null) {
@@ -875,24 +889,25 @@ class FirebaseService {
   Future<ResponseApi<DocumentReference>> updateDream(
       BuildContext context, Dream dream) async {
     try {
-      DocumentReference dreamRef = dream.reference;
-      dreamRef.updateData(dream.toMap());
+      DocumentReference dreamRef = dream.reference!;
+      dreamRef.update(dream.toMap());
 
       CollectionReference stepsListRef = dreamRef.collection("steps");
       CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
 
-      QuerySnapshot queryStep = await stepsListRef.getDocuments();
-      QuerySnapshot queryDaily = await dailyGoalRef.getDocuments();
+      QuerySnapshot queryStep = await stepsListRef.get();
+      QuerySnapshot queryDaily = await dailyGoalRef.get();
 
-      List<StepDream> stepsOld = List();
-      List<DailyGoal> dailysOld = List();
+      List<StepDream> stepsOld = [];
+      List<DailyGoal> dailysOld = [];
+
 
       for (QueryDocumentSnapshot stepOld in queryStep.docs) {
         StepDream step = StepDream.fromMap(stepOld.data());
         step.reference = stepOld.reference;
 
         stepsOld.add(step);
-        if (!dream.steps.contains(step)) {
+        if (!dream.steps!.contains(step)) {
           step.reference.delete();
         }
       }
@@ -907,7 +922,7 @@ class FirebaseService {
         }
       }
 
-      for (StepDream stepDream in dream.steps) {
+      for (StepDream stepDream in dream.steps!) {
         if (!stepsOld.contains(stepDream)) {
           stepsListRef.add(stepDream.toMap());
         } else {
@@ -950,7 +965,7 @@ class FirebaseService {
       CollectionReference stepsListRef = dreamRef.collection("steps");
       CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
 
-      for (StepDream stepDream in dream.steps) {
+      for (StepDream stepDream in dream.steps!) {
         stepsListRef.add(stepDream.toMap());
       }
 
@@ -975,7 +990,7 @@ class FirebaseService {
           .doc(stepDream.dreamParent.dreamPropose);
 
       CollectionReference stepsListRef = dreamRef.collection("steps");
-      DocumentReference stepRef = stepsListRef.document(stepDream.step);
+      DocumentReference stepRef = stepsListRef.doc(stepDream.step);
 
       CollectionReference statusDreamListHistRef = stepRef.collection("years");
 
@@ -1004,7 +1019,7 @@ class FirebaseService {
           .doc(stepDream.dreamParent.dreamPropose);
 
       CollectionReference stepsListRef = dreamRef.collection("steps");
-      DocumentReference stepRef = stepsListRef.document(stepDream.step);
+      DocumentReference stepRef = stepsListRef.doc(stepDream.step);
 
       CollectionReference statusDreamListHistRef = stepRef.collection("years");
 
@@ -1015,7 +1030,7 @@ class FirebaseService {
           .collection("days")
           .get();
 
-      List<int> listDays = List();
+      List<int> listDays = [];
       histRef.docs.forEach((daySnapshot) {
         listDays.add(int.parse(daySnapshot.id));
       });
@@ -1037,7 +1052,7 @@ class FirebaseService {
   }
 
   void updateDataDream(Dream dream) {
-    dream.reference.update(dream.toMap());
+    dream.reference!.update(dream.toMap());
   }
 
   Future<HistGoalWeek> saveHistWeekCompleted(
@@ -1053,7 +1068,7 @@ class FirebaseService {
     hist.isShow = false;
     hist.dateLastShow = Timestamp.now();
 
-    DocumentReference refHist = await dream.reference.collection("histGoalWeekReached").add(hist.toMap());
+    DocumentReference refHist = await dream.reference!.collection("histGoalWeekReached").add(hist.toMap());
     hist.dream = dream;
     hist.reference = refHist;
 
@@ -1071,12 +1086,12 @@ class FirebaseService {
     hist.isNeedInflection = !isWonReward;
     hist.isShow = false;
 
-    dream.reference.collection("histGoalMonthReached").add(hist.toMap());
+    dream.reference!.collection("histGoalMonthReached").add(hist.toMap());
   }
 
   Future<ResponseApi<HistGoalMonth>> findHistShowedForMonth(Dream dream, int numberMonth) async {
     try {
-      Query query = dream.reference
+      Query query = dream.reference!
           .collection("histGoalMonthReached")
           .where("isShow", isEqualTo: true)
           .where("numberMonth", isEqualTo: numberMonth)
@@ -1101,14 +1116,14 @@ class FirebaseService {
       return ResponseApi.ok(result: null);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
-      ResponseApi.error(stackMessage: error.toString());
+      return ResponseApi.error(stackMessage: error.toString());
     }
   }
 
   Future<ResponseApi<HistGoalMonth>> findLastHistMonth(Dream dream,
       {bool isShow = false}) async {
     try {
-      Query query = dream.reference
+      Query query = dream.reference!
           .collection("histGoalMonthReached")
           .where("isShow", isEqualTo: isShow)
           .orderBy("numberMonth", descending: true);
@@ -1126,26 +1141,26 @@ class FirebaseService {
       return ResponseApi.ok(result: null);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
-      ResponseApi.error(stackMessage: error.toString());
+      return ResponseApi.error(stackMessage: error.toString());
     }
   }
 
   Future<ResponseApi<HistGoalWeek>> findLastHistWeekWithDate(Dream dream,
-      {bool isShow = false, Timestamp date}) async {
+      {bool isShow = false, Timestamp? date}) async {
     try {
       Query query;
       if(date != null){
         DateTime initDate = Utils.stringToDate("${date.toDate().year}-${Utils.addZeroLeft(date.toDate().month)}-${Utils.addZeroLeft(date.toDate().day)} 00:00:00");
         DateTime finishDate = Utils.stringToDate("${date.toDate().year}-${Utils.addZeroLeft(date.toDate().month)}-${Utils.addZeroLeft(date.toDate().day)} 23:59:59");
 
-        query = dream.reference
+        query = dream.reference!
             .collection("histGoalWeekReached")
             .where("isShow", isEqualTo: isShow)
             .where("dateLastShow", isLessThanOrEqualTo: Timestamp.fromDate(finishDate))
             .where("dateLastShow", isGreaterThanOrEqualTo: Timestamp.fromDate(initDate))
             .limit(1);
       }else{
-        query = dream.reference
+        query = dream.reference!
             .collection("histGoalWeekReached")
             .where("isShow", isEqualTo: isShow)
             .orderBy("numberWeek", descending: true)
@@ -1165,13 +1180,13 @@ class FirebaseService {
       return ResponseApi.ok(result: null);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);
-      ResponseApi.error(stackMessage: error.toString());
+      return ResponseApi.error(stackMessage: error.toString());
     }
   }
 
   ResponseApi<bool> deleteDream(Dream dream) {
     try {
-      updateOnlyField("isDeleted", true, dream.reference);
+      updateOnlyField("isDeleted", true, dream.reference!);
       return ResponseApi.ok(result: true);
     } catch (error, stack) {
       CrashlyticsUtil.logErro(error, stack);

@@ -1,20 +1,18 @@
-import 'dart:io' show Platform;
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/api/bloc/home_page_bloc.dart';
 import 'package:dremfoo/app/api/eventbus/main_event_bus.dart';
 import 'package:dremfoo/app/api/eventbus/user_event_bus.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
+import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/model/dream.dart';
 import 'package:dremfoo/app/model/notification_revo.dart';
 import 'package:dremfoo/app/model/push_notification.dart';
-import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/model/user.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/resources/constants.dart';
 import 'package:dremfoo/app/ui/check_type_dream_page.dart';
-import 'package:dremfoo/app/ui/register_dreams_page.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:dremfoo/app/utils/nav.dart';
 import 'package:dremfoo/app/utils/notification_util.dart';
@@ -27,7 +25,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,7 +33,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _bloc = HomePageBloc();
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -55,33 +52,20 @@ class _HomePageState extends State<HomePage> {
     NotificationUtil.requestIOSPermissions();
     verifyNotification();
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        PushNotification notification = PushNotification.fromMap(message);
-        NotificationUtil.showNotification(notification.title, notification.message, paylod: notification.payload);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        PushNotification notification = PushNotification.fromMap(message);
-        NotificationUtil.showNotification(notification.title, notification.message);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        PushNotification notification = PushNotification.fromMap(message);
-        NotificationUtil.showNotification(notification.title, notification.message);
-      },
-    );
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      //  print("FIREBASE MENSSAGE -> Settings registered: $settings");
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        if(message.notification != null){
+          PushNotification notification = PushNotification.fromMap(message.data);
+          NotificationUtil.showNotification(notification.title, notification.message, paylod: notification.payload);
+        }
     });
-    _firebaseMessaging.getToken().then((String token) {
-      // print("FIREBASE MENSSAGE -> $token");
-    });
+
   }
 
   Future verifyNotification() async {
-    UserRevo user = await FirebaseService().getPrefsUser();
+    UserRevo? user = await FirebaseService().getPrefsUser();
 
     if (user != null) {
-      if (user.isEnableNotification) {
+      if (user.isEnableNotification!) {
         UserEventBus().get(context).sendEvent(TipoAcao.UPDATE_NOTIFICATION);
       } else {
         UserEventBus().get(context).sendEvent(TipoAcao.DISABLE_NOTIFICATION_DAILY_WEEKLY);
@@ -124,33 +108,35 @@ class _HomePageState extends State<HomePage> {
           // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
           break;
         case TipoAcao.UPDATE_NOTIFICATION:
-          UserRevo user = await FirebaseService().getPrefsUser();
-          if (user != null && user.isEnableNotification) {
+          UserRevo? user = await FirebaseService().getPrefsUser();
+          if (user != null && user.isEnableNotification!) {
             NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
             // NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_WEEKLY);
-            NotificationRevo initNotification = await _bloc.getNotificationRandomDailyInit();
-            NotificationRevo finishNotification = await _bloc.getNotificationRandomDailyFinish();
+            NotificationRevo? initNotification = await _bloc.getNotificationRandomDailyInit();
+            NotificationRevo? finishNotification = await _bloc.getNotificationRandomDailyFinish();
 
-            DateTime init = user.initNotification.toDate();
-            DateTime finish = user.finishNotification.toDate();
+            if(initNotification != null && finishNotification != null){
+              DateTime init = user.initNotification!.toDate();
+              DateTime finish = user.finishNotification!.toDate();
 
-            NotificationUtil.showDailyAtTime(
-                Constants.ID_NOTIFICATION_INIT,
-                initNotification.title,
-                initNotification.msg,
-                Time(init.hour, init.minute, init.second),
-                NotificationUtil.ID_NOTIFICATION_DAILY,
-                NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
-                NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
+              NotificationUtil.showDailyAtTime(
+                  Constants.ID_NOTIFICATION_INIT,
+                  initNotification.title,
+                  initNotification.msg,
+                  Time(init.hour, init.minute, init.second),
+                  NotificationUtil.ID_NOTIFICATION_DAILY,
+                  NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+                  NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
 
-            NotificationUtil.showDailyAtTime(
-                Constants.ID_NOTIFICATION_FINISH,
-                finishNotification.title,
-                finishNotification.msg,
-                Time(finish.hour, finish.minute, finish.second),
-                NotificationUtil.ID_NOTIFICATION_DAILY,
-                NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
-                NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
+              NotificationUtil.showDailyAtTime(
+                  Constants.ID_NOTIFICATION_FINISH,
+                  finishNotification.title,
+                  finishNotification.msg,
+                  Time(finish.hour, finish.minute, finish.second),
+                  NotificationUtil.ID_NOTIFICATION_DAILY,
+                  NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+                  NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY);
+            }
           }
           break;
       }
@@ -196,19 +182,19 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(left: 8, right: 8),
                   child: FutureBuilder(
                     future: _bloc.getRankUsers(),
-                    builder: (BuildContext context, AsyncSnapshot<List<UserRevo>> snapshots) {
+                    builder: (BuildContext context, AsyncSnapshot<List<UserRevo>?> snapshots) {
                       if (snapshots.hasData) {
-                        List<UserRevo> listRank = snapshots.data;
+                        List<UserRevo> listRank = snapshots.data!;
 
                         return ListView.builder(
                             itemCount: listRank.length,
                             itemBuilder: (context, index) {
                               UserRevo user = listRank[index];
-                              String name = user.name != null ? user.name : user.email.split("@")[0];
+                              String name = user.name != null ? user.name! : user.email!.split("@")[0];
                               String position = "${index + 1}˚";
-                              String detailFocus = user.focus.countDaysFocus > 1
-                                  ? "${user.focus.countDaysFocus} dias de foco"
-                                  : "${user.focus.countDaysFocus} dia de foco";
+                              String detailFocus = user.focus!.countDaysFocus! > 1
+                                  ? "${user.focus!.countDaysFocus} dias de foco"
+                                  : "${user.focus!.countDaysFocus} dia de foco";
                               return Container(
                                 padding: EdgeInsets.only(left: 8, right: 8, bottom: 16),
                                 child: Row(
@@ -222,9 +208,9 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       child: CircleAvatar(
                                         radius: 34,
-                                        backgroundImage: (user.urlPicture != null && user.urlPicture.isNotEmpty)
-                                            ? NetworkImage(user.urlPicture)
-                                            : AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png")),
+                                        backgroundImage: ((user.urlPicture != null && user.urlPicture!.isNotEmpty)
+                                            ? NetworkImage(user.urlPicture!)
+                                            : AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png"))) as ImageProvider<Object>?,
                                       ),
                                       width: 40,
                                       height: 40,
@@ -243,8 +229,8 @@ class _HomePageState extends State<HomePage> {
                                     Expanded(
                                       child: Visibility(
                                         visible: user.focus != null &&
-                                            user.focus.level != null &&
-                                            user.focus.level.urlIcon != null,
+                                            user.focus!.level != null &&
+                                            user.focus!.level!.urlIcon != null,
                                         child: Container(
                                           alignment: Alignment.centerRight,
                                           child: CircleAvatar(
@@ -254,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                                               child: CachedNetworkImage(
                                                 width: 30,
                                                 height: 30,
-                                                imageUrl: user.focus.level.urlIcon,
+                                                imageUrl: user.focus!.level!.urlIcon!,
                                               ),
                                             ),
                                           ),
@@ -271,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                         return Row(
                           children: [
                             Container(
-                              child: TextUtil.textDefault(snapshots.error),
+                              child: TextUtil.textDefault(snapshots.error as String),
                             ),
                           ],
                         );
@@ -301,7 +287,7 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (snapshots.hasData) {
-          List<Dream> listDream = snapshots.data;
+          List<Dream>? listDream = snapshots.data;
           return _bodyMain(listDream);
         }
 
@@ -340,7 +326,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _bodyMain(List<Dream> listDreams) {
+  Widget _bodyMain(List<Dream>? listDreams) {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -372,7 +358,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget getBody(List<Dream> listDreams) {
+  Widget getBody(List<Dream>? listDreams) {
     if (listDreams == null || listDreams.isEmpty) {
       return _bodyWithOutDreamHome();
     } else {
@@ -426,9 +412,9 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.all(4),
             child: StreamBuilder(
               stream: _bloc.streamChipSteps,
-              builder: (context, snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<Widget>>snapshot) {
                 if (snapshot.hasData) {
-                  return Visibility(visible: _bloc.isVisibilityStep, child: Wrap(children: snapshot.data));
+                  return Visibility(visible: _bloc.isVisibilityStep, child: Wrap(children: snapshot.data!));
                 }
                 return _bloc.getSimpleLoadingWidget(size: 120);
               },
@@ -443,22 +429,21 @@ class _HomePageState extends State<HomePage> {
               margin: EdgeInsets.all(4),
               child: StreamBuilder(
                   stream: _bloc.streamChipDailyGoal,
-                  builder: (context, snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
                     if (snapshot.hasData) {
-                      return Wrap(children: snapshot.data);
+                      return Wrap(children: snapshot.data!);
                     }
-
                     return _bloc.getSimpleLoadingWidget(size: 120);
                   }),
             ),
             StreamBuilder<bool>(
                 stream: _bloc.streamCheckSucess,
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || !snapshot.data) {
+                  if (!snapshot.hasData || !snapshot.data!) {
                     return Container();
                   }
                   return Visibility(
-                    visible: snapshot.data,
+                    visible: snapshot.data!,
                     child: Container(
                       width: double.infinity,
                       height: 200,
@@ -481,10 +466,10 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView(
-                    key: Key("LIST_${snapshot.data.length}"),
+                    key: Key("LIST_${snapshot.data!.length}"),
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.all(8),
-                    children: snapshot.data,
+                    children: snapshot.data!,
                   );
                 }
                 return Container();

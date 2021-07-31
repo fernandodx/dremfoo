@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
 
   Future registerUserOnPress(BuildContext context) async {
-     User user = await _bloc.resgisterUser(context);
+     User? user = await _bloc.resgisterUser(context);
      if(user != null){
        push(context, HomePage(), isReplace: true);
      }

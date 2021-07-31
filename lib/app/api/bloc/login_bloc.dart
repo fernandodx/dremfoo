@@ -29,21 +29,21 @@ class LoginBloc extends BaseBloc {
 
   var textEmailController = TextEditingController();
 
-  Future<User> login(BuildContext context) async {
-    if (!formKey.currentState.validate()) {
+  Future<User?> login(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
       print("Erro na validação");
       return null;
     }
-    formKey.currentState.save();
+    formKey.currentState!.save();
 
     showLoading();
     ResponseApi responseApi = await FirebaseService()
-        .loginWithEmailAndPassword(context, user.email, user.password);
+        .loginWithEmailAndPassword(context, user.email!, user.password!);
     hideLoading();
     return checkResponseApiOnLogin(responseApi, context);
   }
 
-  User checkResponseApiOnLogin(ResponseApi responseApi, BuildContext context) {
+  User? checkResponseApiOnLogin(ResponseApi responseApi, BuildContext context) {
      if (responseApi.ok) {
       User user = responseApi.result;
       print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoURL}");
@@ -104,7 +104,7 @@ class LoginBloc extends BaseBloc {
     return checkResponseApiOnLogin(responseApi, context);
   }
 
-  Future<User> loginWithFacebook(BuildContext context) async {
+  Future<User?> loginWithFacebook(BuildContext context) async {
     showLoading();
     ResponseApi responseApi = await FirebaseService().loginWithFacebook(context);
     hideLoading();

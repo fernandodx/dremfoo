@@ -8,11 +8,11 @@ class ReportDreamsMonthModel = ReportDreamsMonthModelBase with _$ReportDreamsMon
 abstract class ReportDreamsMonthModelBase with Store {
 
   @observable
-  String nameAnimation;
+  String? nameAnimation;
 
   @action
   choiceAnimation(HistGoalMonth hist) {
-    if(hist.isWonReward){
+    if(hist.isWonReward!){
       this.nameAnimation = "appear";
     }else{
       this.nameAnimation = "crying";

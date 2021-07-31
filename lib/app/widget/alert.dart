@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 simpleAlert(
   BuildContext context, {
-  @required String msg,
-  Function onPressOk,
+  required String msg,
+  Function? onPressOk,
   String title = "Alerta",
 }) {
   showDialog(
@@ -20,7 +20,7 @@ simpleAlert(
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  onPressOk();
+                  onPressOk!();
                 },
                 child: Text("OK"),
               ),

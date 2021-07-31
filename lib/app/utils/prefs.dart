@@ -18,7 +18,7 @@ class Prefs {
     return prefs.getString(key) ?? "";
   }
 
-  static Future<List<String>> getListString(String key) async {
+  static Future<List<String>?> getListString(String key) async {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getStringList(key) ?? null;
   }

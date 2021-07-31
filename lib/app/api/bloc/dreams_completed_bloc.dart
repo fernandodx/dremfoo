@@ -10,7 +10,7 @@ class DreamsCompletedBloc extends BaseBloc {
     ResponseApi<List<Dream>> responseApi = await FirebaseService().findAllDreamsCompleted();
     if(responseApi.ok){
 
-      List<Dream> list = responseApi.result;
+      List<Dream> list = responseApi.result!;
 
       for(Dream dream in list){
         ResponseApi<List<StepDream>> responseApi = await FirebaseService().findAllStepsForDream(dream);
@@ -19,7 +19,7 @@ class DreamsCompletedBloc extends BaseBloc {
       return list;
     }
 
-    return List();
+    return [];
   }
 
 

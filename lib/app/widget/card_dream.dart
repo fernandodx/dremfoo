@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class CardDream extends StatelessWidget {
-  String urlImg;
-  String imgBase64;
-  String imageAsset;
+  String? urlImg;
+  String? imgBase64;
+  String? imageAsset;
   Function onTap;
-  String title;
-  String subTitle;
+  String? title;
+  String? subTitle;
   bool selected;
   bool isCardAdd;
-  bool isDreamWait;
-  ColorDream color;
+  bool? isDreamWait;
+  ColorDream? color;
 
   CardDream(
       {this.urlImg,
@@ -27,10 +27,10 @@ class CardDream extends StatelessWidget {
       this.isCardAdd = false,
       this.subTitle,
       this.isDreamWait,
-      @required this.color,
-      @required this.onTap,
-      @required this.title,
-      @required this.selected});
+      this.color,
+      required this.onTap,
+      required this.title,
+      required this.selected});
 
   @override
   Widget build(BuildContext context) {
@@ -44,43 +44,47 @@ class CardDream extends StatelessWidget {
   Widget _creatCardDream(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: onTap,
+        onTap: onTap as void Function()?,
         child: Stack(
-         children: [
-           Column(
-             mainAxisSize: MainAxisSize.min,
-             children: <Widget>[
-               Container(
-                 child: ClipRRect(
-                   borderRadius: BorderRadius.all(Radius.circular(10,),),
-                   child: _getImg(),
-                 ),
-                 margin: EdgeInsets.all(4),
-               ),
-               Container(
-                 constraints: BoxConstraints.expand(width: 160, height: 40),
-                 child: Container(
-                   margin: EdgeInsets.all(2),
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: <Widget>[
-                       TextUtil.textDefault(title, fontSize: 13, maxLines: 1),
-                       TextUtil.textDefault(subTitle, fontSize: 10, maxLines: 1),
-                     ],
-                   ),
-                 ),
-               ),
-             ],
-           ),
-           Container(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        10,
+                      ),
+                    ),
+                    child: _getImg(),
+                  ),
+                  margin: EdgeInsets.all(4),
+                ),
+                Container(
+                  constraints: BoxConstraints.expand(width: 160, height: 40),
+                  child: Container(
+                    margin: EdgeInsets.all(2),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextUtil.textDefault(title!, fontSize: 13, maxLines: 1),
+                        TextUtil.textDefault(subTitle!, fontSize: 10, maxLines: 1),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
               margin: EdgeInsets.only(bottom: 55, left: 12),
               width: 145,
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: CircleAvatar(
                   maxRadius: 12,
-                  backgroundColor: Utils.colorFromHex(color.secondary),
+                  backgroundColor: color != null ? Utils.colorFromHex(color!.secondary!) : AppColors.colorCard,
                   child: Icon(
                     Icons.settings,
                     color: Colors.white,
@@ -90,7 +94,7 @@ class CardDream extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: isDreamWait != null ? isDreamWait : false,
+              visible: isDreamWait != null ? isDreamWait! : false,
               child: Container(
                 width: 145,
                 margin: EdgeInsets.all(12),
@@ -108,8 +112,7 @@ class CardDream extends StatelessWidget {
                 ),
               ),
             )
-
-         ],
+          ],
         ),
       ),
       elevation: 6,
@@ -120,7 +123,7 @@ class CardDream extends StatelessWidget {
   Widget _creatCardAdd() {
     return Card(
       child: InkWell(
-        onTap: onTap,
+        onTap: onTap as void Function()?,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +139,7 @@ class CardDream extends StatelessWidget {
             Container(
               constraints: BoxConstraints.expand(width: 180, height: 40),
               child: TextUtil.textTitulo(
-                title,
+                title!,
                 align: TextAlign.center,
               ),
             ),
@@ -158,12 +161,12 @@ class CardDream extends StatelessWidget {
         fit: fit,
         width: width,
         height: height,
-        imageUrl: urlImg,
+        imageUrl: urlImg!,
       );
     }
     if (imgBase64 != null) {
       return Utils.string64ToImage(
-        imgBase64,
+        imgBase64!,
         fit: fit,
         width: width,
         height: height,
@@ -171,7 +174,7 @@ class CardDream extends StatelessWidget {
     }
     if (imageAsset != null) {
       return Image.asset(
-        imageAsset,
+        imageAsset!,
         width: width,
         height: height,
         fit: fit,

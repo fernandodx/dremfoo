@@ -88,7 +88,7 @@ class AppColors {
 
   static backgroundPageGradient() {
     return LinearGradient(
-        colors: [Colors.white, Colors.grey[300]],
+        colors: [Colors.white, Colors.grey[300]!],
         begin: FractionalOffset.center,
         end: FractionalOffset.bottomCenter);
   }

@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LevelRevo {
 
-  int countDaysFocus;
-  int position;
-  int finishValue;
-  int initValue;
-  String name;
-  String urlIcon;
-  DocumentReference reference;
+  int? countDaysFocus;
+  int? position;
+  int? finishValue;
+  int? initValue;
+  String? name;
+  String? urlIcon;
+  DocumentReference? reference;
 
   LevelRevo();
 
@@ -32,7 +32,7 @@ class LevelRevo {
 
   static List<LevelRevo> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){
     return list.map((snapshot) {
-      LevelRevo level = LevelRevo.fromMap(snapshot.data());
+      LevelRevo level = LevelRevo.fromMap(snapshot.data() as Map<String, dynamic>);
       level.reference = snapshot.reference;
       return level;
     }).toList();

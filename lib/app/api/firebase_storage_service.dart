@@ -6,28 +6,28 @@ import 'firebase_service.dart';
 
 class FirebaseStorageService {
 
-  Future<String> uploadFileUserOn(File file, {String id}) async {
+  Future<String> uploadFileUserOn(File file, {String? id}) async {
     return uploadFile("users", file, id: id);
   }
 
-  Future<String> uploadFileTemp(File file, {String id}) async {
+  Future<String> uploadFileTemp(File file, {String? id}) async {
     return uploadFile("temp", file, id: id);
   }
 
-  Future<String> uploadFile(String refChild, File file, {String id}) async {
+  Future<String> uploadFile(String refChild, File file, {String? id}) async {
     try {
-      final StorageReference refUser = FirebaseStorage.instance
+      final Reference refUser = FirebaseStorage.instance
           .ref()
           .child(refChild)
           .child("$fireBaseUserUid");
-      final StorageReference ref = refUser.child(id ?? file.path);
+      final Reference ref = refUser.child(id ?? file.path);
 
-      StorageUploadTask task = ref.putFile(file);
-      final stream = task.events.listen((event) {
-        print("UPLOAD FILE $id : ${event.type}");
+      UploadTask task = ref.putFile(file);
+      final stream = task.snapshotEvents.listen((event) {
+        print("UPLOAD FILE $id : ${event.hashCode}");
       });
 
-      StorageTaskSnapshot storageTask = await task.onComplete;
+      TaskSnapshot storageTask = await task;
       stream.cancel();
 
       final urlImage = await storageTask.ref.getDownloadURL();

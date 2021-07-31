@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class ValidatorUtil {
-  static String validatorEmail(String value) {
-    if (value.isEmpty) {
+  static String? validatorEmail(String? value) {
+    if (value == null || value.isEmpty) {
       return "E-mail é obrigatório";
     }
 
@@ -12,8 +12,8 @@ class ValidatorUtil {
     return null;
   }
 
-  static String validatorPassword(String value) {
-    if (value.isEmpty) {
+  static String? validatorPassword(String? value) {
+    if (value == null || value.isEmpty) {
       return "Senha é obrigatória";
     }
     if (value.length < 4) {
@@ -22,7 +22,7 @@ class ValidatorUtil {
     return null;
   }
 
-  static String validatorPasswordWithRepit(
+  static String? validatorPasswordWithRepit(
       String value, TextEditingController controllerRepit) {
 
     if (value.isEmpty) {
@@ -38,8 +38,8 @@ class ValidatorUtil {
     return null;
   }
 
-  static String  requiredField(String value) {
-    if (value.isEmpty) {
+  static String?  requiredField(String? value) {
+    if (value == null || value.isEmpty) {
       return "Campo obrigatório";
     }
     return null;

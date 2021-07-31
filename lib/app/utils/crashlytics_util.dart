@@ -1,28 +1,26 @@
 import 'package:dremfoo/app/model/user.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 
 class CrashlyticsUtil {
 
-  static Crashlytics _crashlytics = Crashlytics.instance;
+  static FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
 
   static void init(){
-    FlutterError.onError = Crashlytics.instance.recordFlutterError;
-    _crashlytics.enableInDevMode = false;
+    _crashlytics.recordFlutterError;
   }
 
   static void enableDevMode(){
-    _crashlytics.enableInDevMode = true;
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
 
   static void addParam(String key, String value){
-    _crashlytics.setString(key, value);
+    _crashlytics.setCustomKey(key, value);
   }
 
   static void addUserIdentifier(UserRevo user){
-    _crashlytics.setUserIdentifier(user.uid);
-    _crashlytics.setUserName(user.name);
-    _crashlytics.setUserEmail(user.email);
+    _crashlytics.setUserIdentifier(user.uid!);
+    _crashlytics.setCustomKey("name", user.name!);
+    _crashlytics.setCustomKey("email", user.email!);
   }
 
   static void logErro(dynamic exception, StackTrace stack){

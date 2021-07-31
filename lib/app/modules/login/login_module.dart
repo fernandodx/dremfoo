@@ -10,13 +10,13 @@ class LoginModule extends Module {
   @override
   final List<Bind> binds = [
     Bind.lazySingleton((i) => FirebaseDataSource()),
-    Bind.lazySingleton((i) => LoginRepository()),
+    Bind.lazySingleton((i) => LoginRepository(i.get<FirebaseDataSource>())),
     Bind.lazySingleton((i) => LoginUseCase(i.get<LoginRepository>())),
     Bind.lazySingleton((i) => LoginStore(i.get<LoginUseCase>())),
   ];
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => LoginWidgetPage())
+    ChildRoute(Modular.initialRoute, child: (_, args) => LoginWidgetPage(),)
   ];
 }

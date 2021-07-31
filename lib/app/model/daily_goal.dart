@@ -3,14 +3,14 @@ import 'package:dremfoo/app/model/dream.dart';
 
 class DailyGoal {
 
-  String uid;
-  String nameDailyGoal;
-  String descriptionDailyGoal;
-  int position;
-  Timestamp lastDateCompleted;
-  Dream dreamParent;
-  DocumentReference reference;
-  bool isHistCompletedDay;
+  String? uid;
+  String? nameDailyGoal;
+  String? descriptionDailyGoal;
+  int? position;
+  Timestamp? lastDateCompleted;
+  late Dream dreamParent;
+  late DocumentReference reference;
+  late bool isHistCompletedDay;
 
 //  Set<StatusDream> statusDream = Set();
 
@@ -50,7 +50,7 @@ class DailyGoal {
     if(lastDateCompleted == null){
       return false;
     }
-    DateTime dateCompleted = lastDateCompleted.toDate();
+    DateTime dateCompleted = lastDateCompleted!.toDate();
     DateTime dateNow = DateTime.now();
     if(dateNow.day == dateCompleted.day
       && dateNow.month == dateCompleted.month

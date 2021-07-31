@@ -4,7 +4,7 @@ class AnalyticsUtil {
 
   static final FirebaseAnalytics _analytics = FirebaseAnalytics();
 
-  static void sendAnalyticsEvent(String nameEvent, {Map<String, dynamic> parameters}) {
+  static void sendAnalyticsEvent(String nameEvent, {Map<String, dynamic>? parameters}) {
     _analytics.logEvent(
       name: nameEvent,
       parameters: parameters,
@@ -22,7 +22,7 @@ class AnalyticsUtil {
     );
   }
 
-  static void setUserProperty(String name, String value){
+  static void setUserProperty(String name, String? value){
     _analytics.setUserProperty(name: name, value: value);
   }
 

@@ -9,9 +9,9 @@ class CardChart extends StatelessWidget {
   Widget chart;
 
   CardChart(
-      {@required this.onTap,
-      @required this.title,
-      @required this.chart});
+      {required this.onTap,
+      required this.title,
+      required this.chart});
 
   @override
   Widget build(BuildContext context) {
