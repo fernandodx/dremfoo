@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
+import 'package:dremfoo/app/modules/login/login_module.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +26,7 @@ abstract class _LoginStoreBase with Store {
   MessageAlert? msgAlert;
 
   @observable
-  String? navigation;
-
+  User? userSingIn;
 
   final formKey = GlobalKey<FormState>();
   final UserRevo user = UserRevo();
@@ -35,65 +35,47 @@ abstract class _LoginStoreBase with Store {
   void rememberPassword(BuildContext context) async {
     isLoading = true;
     ResponseApi responseApi = await _loginCase.rememberPassword(textEmailController.text);
-    if(responseApi.ok){
-      if(responseApi.messageAlert != null){
-        msgAlert = responseApi.messageAlert;
-      }
-    }else{
-      msgAlert = responseApi.messageAlert;
-    }
+    msgAlert = responseApi.messageAlert;
     isLoading = false;
   }
 
-  loginWithGoogle(BuildContext context) async {
-    // showLoading();
-    ResponseApi responseApi =  await FirebaseService().loginWithGoogle(context);
-    // hideLoading();
-    checkResponseApiOnLogin(responseApi, context);
+  void onNotRegister() {
+    Modular.to.pushNamed(LoginModule.REGISTER_PAGE);
   }
 
-  void loginWithFacebook(BuildContext context) async {
-    // showLoading();
-    ResponseApi responseApi = await FirebaseService().loginWithFacebook(context);
-    // hideLoading();
-    checkResponseApiOnLogin(responseApi, context);
+  void onLoginWithGoogle(BuildContext context) async {
+    isLoading = true;
+    ResponseApi<User> responseApi = await _loginCase.loginWithGoogle();
+    handlerResponseApiUser(responseApi);
+    msgAlert = responseApi.messageAlert;
+    isLoading = false;
+
   }
 
-  void checkResponseApiOnLogin(ResponseApi responseApi, BuildContext context) {
-    if (responseApi.ok) {
-      User user = responseApi.result;
-      print("LOGIN REALIZADO: ${user.email} Foto: ${user.photoURL}");
-      goToHome(user, context);
-    } else {
-      alertBottomSheet(context,
-          msg: responseApi.stackMessage,
-          title: "Erro na Autenticação",
-          type: TypeAlert.ERROR);
-    }
+  void onLoginWithFacebook(BuildContext context) async {
+    isLoading = true;
+    ResponseApi<User> responseApi = await _loginCase.loginWithFacebook();
+    handlerResponseApiUser(responseApi);
+    msgAlert = responseApi.messageAlert;
+    isLoading = false;
   }
 
-  Future<User?> login(BuildContext context) async {
+  Future<void> onLoginWithEmail(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
-      print("Erro na validação");
       return null;
     }
     formKey.currentState!.save();
-
-    // showLoading();
-    ResponseApi responseApi = await FirebaseService()
-        .loginWithEmailAndPassword(context, user.email!, user.password!);
-    // hideLoading();
-    checkResponseApiOnLogin(responseApi, context);
+    isLoading = true;
+    ResponseApi<User> responseApi = await _loginCase.loginWithEmailAndPassword(user);
+    handlerResponseApiUser(responseApi);
+    msgAlert = responseApi.messageAlert;
+    isLoading = false;
   }
 
-  void goToHome(user, BuildContext context) {
-    if (user != null) {
-      // push(context, HomePage(), isReplace: true);
-      // Modular.to.navigate("/"); //ARRUMAR
+  void handlerResponseApiUser(ResponseApi<User> responseApi) {
+    if(responseApi.ok){
+      userSingIn = responseApi.result;
     }
   }
-
-
-
 
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/model/user_focus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class UserRevo {
@@ -58,7 +59,6 @@ class UserRevo {
   String toJson() {
     return convert.json.encode(toMap());
   }
-
 
 
 }

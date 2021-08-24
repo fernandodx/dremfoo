@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/model/user_focus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class UserRevo {
@@ -18,6 +19,7 @@ class UserRevo {
   bool? isEnableNotification;
   File? picture;
   UserFocus? focus;
+  User? userFirebase;
 
   UserRevo();
 
@@ -58,6 +60,23 @@ class UserRevo {
   String toJson() {
     return convert.json.encode(toMap());
   }
+
+  updateDataUserFirebase(User? user){
+    if(user != null){
+      userFirebase = user;
+      uid = user.uid;
+      email = user.email;
+      if(user.photoURL != null) {
+        urlPicture = user.photoURL;
+      }
+      if(user.displayName != null) {
+        name = user.displayName;
+      }
+    }else{
+      userFirebase = null;
+    }
+  }
+
 
 
 

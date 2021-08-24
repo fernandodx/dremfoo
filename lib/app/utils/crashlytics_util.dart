@@ -23,9 +23,14 @@ class CrashlyticsUtil {
     _crashlytics.setCustomKey("email", user.email!);
   }
 
-  static void logErro(dynamic exception, StackTrace stack){
+  static void logErro(dynamic exception, StackTrace? stack){
     _crashlytics.recordError(exception, stack);
   }
+
+  static void logError(dynamic exception, {StackTrace? stack}){
+    _crashlytics.recordError(exception, stack);
+  }
+
 
 
 

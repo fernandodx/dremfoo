@@ -1,10 +1,14 @@
+import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class ILoginRepository {
 
-  Future<User> login();
+  Future<User> signInWithEmailAndPassword(String email, String password);
 
   Future<void> sendResetPassword(String email);
+
+  Future<User> signInWithFacebook();
+
+  Future<User> signInWithGoogle();
 
 }

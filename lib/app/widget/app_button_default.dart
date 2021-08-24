@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppButtonDefault extends StatelessWidget {
   String? label;
-  Function onPressed;
+  VoidCallback? onPressed;
   bool isShowProgress;
   TypeButton type;
   TextDecoration decoration;
@@ -23,7 +23,7 @@ class AppButtonDefault extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case TypeButton.FLAT:
-        return FlatButton(
+        return TextButton(
           child: Row(
             mainAxisSize: mainAxisSize,
             children: <Widget>[
@@ -35,18 +35,19 @@ class AppButtonDefault extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(2),
+                padding: EdgeInsets.all(10),
                 child: getTextButton(),
               ),
             ],
           ),
-          textColor: AppColors.colorAcent,
-          onPressed: onPressed as void Function()?,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          style: TextButton.styleFrom(
+            primary: AppColors.colorAcent
+          ),
+          onPressed: onPressed,
         );
-        break;
+
       case TypeButton.RAISE:
-        return RaisedButton(
+        return ElevatedButton(
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,16 +61,17 @@ class AppButtonDefault extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(2),
+                padding: EdgeInsets.all(10),
                 child: getTextButton(),
               ),
             ],
           ),
-          textColor: Colors.white,
-          onPressed: onPressed as void Function()?,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          style: ElevatedButton.styleFrom(
+            primary: AppColors.colorPrimaryDark,
+            onPrimary: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          ),
+          onPressed: onPressed,
         );
     }
   }

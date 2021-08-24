@@ -3,25 +3,22 @@ import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/background_widget.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/card_login_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
-import 'package:dremfoo/app/utils/AppContext.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/utils.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 
-class LoginWidgetPage extends StatefulWidget {
-  final String title;
-
-  const LoginWidgetPage({Key? key, this.title = 'LoginWidgetPage'}) : super(key: key);
+class LoginPage extends StatefulWidget {
 
   @override
-  LoginWidgetPageState createState() => LoginWidgetPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class LoginWidgetPageState extends ModularState<LoginWidgetPage, LoginStore> {
+class LoginPageState extends ModularState<LoginPage, LoginStore> {
   @override
   void initState() {
     super.initState();
@@ -43,15 +40,21 @@ class LoginWidgetPageState extends ModularState<LoginWidgetPage, LoginStore> {
     });
 
     reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
-      alertBottomSheet(context,
-          msg: msgErro!.msg,
-          title:msgErro.title,
-          type: msgErro.type);
+      if(msgErro != null){
+        alertBottomSheet(context,
+            msg: msgErro.msg,
+            title:msgErro.title,
+            type: msgErro.type);
+      }
     });
 
-    reaction((_) => store.navigation, (dynamic pageRoute) {
-      Modular.to.navigate(pageRoute);
+    reaction<User?>((_) => store.userSingIn, (user) {
+      if(user != null){
+          print("LOGIN REALIZADO COM SUCESSO - "+ user.toString());
+          print("*** NAVEGANDO PARA HOME ***");
+      }
     });
+
   }
 
   @override
@@ -99,11 +102,7 @@ class LoginWidgetPageState extends ModularState<LoginWidgetPage, LoginStore> {
   Container containerBody(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 16),
-      child: CardLoginWidget(
-        () => store.login(context),
-        () => store.loginWithFacebook(context),
-        () => store.loginWithGoogle(context),
-      ),
+      child: CardLoginWidget(),
     );
   }
 }

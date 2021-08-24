@@ -4,7 +4,7 @@ import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/api/bloc/login_bloc.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/resources/strings.dart';
-import 'package:dremfoo/app/ui/register_page.dart';
+import 'package:dremfoo/app/modules/login/ui/pages/register_page.dart';
 import 'package:dremfoo/app/utils/analytics_util.dart';
 import 'package:dremfoo/app/utils/nav.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
