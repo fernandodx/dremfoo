@@ -29,7 +29,7 @@ abstract class _LoginStoreBase with Store {
   User? userSingIn;
 
   final formKey = GlobalKey<FormState>();
-  final UserRevo user = UserRevo();
+  UserRevo user  = Modular.get<UserRevo>();
   var textEmailController = TextEditingController();
 
   void rememberPassword(BuildContext context) async {

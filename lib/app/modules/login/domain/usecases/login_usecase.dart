@@ -26,17 +26,17 @@ class LoginUseCase implements ILoginCase {
   Future<ResponseApi<User>> loginWithEmailAndPassword(UserRevo userRevo) async {
 
     try {
-      var user = await _loginRepository.signInWithEmailAndPassword(userRevo.email!, _userRevo.password!);
+      var user = await _loginRepository.signInWithEmailAndPassword(userRevo.email!, userRevo.password!);
       // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
-      _saveUser(userRevo);
+      _saveUser(_userRevo);
       _saveLastAcessUser();
 
       return ResponseApi.ok(result: user);
 
-    }on RevoExceptions catch(error){
+    } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
 
@@ -55,10 +55,10 @@ class LoginUseCase implements ILoginCase {
 
       return ResponseApi.ok(result: user);
 
-    }on RevoExceptions catch(error){
+    } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
 
@@ -77,10 +77,10 @@ class LoginUseCase implements ILoginCase {
 
       return ResponseApi.ok(result: user);
 
-    }on RevoExceptions catch(error){
+    } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
 
@@ -108,7 +108,7 @@ class LoginUseCase implements ILoginCase {
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
 
@@ -134,7 +134,7 @@ class LoginUseCase implements ILoginCase {
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
     var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);

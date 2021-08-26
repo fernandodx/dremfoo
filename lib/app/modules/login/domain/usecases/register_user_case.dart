@@ -27,15 +27,14 @@ class RegisterUserCase extends IRegisterUserCase {
   Future<ResponseApi<User>> createUserWithEmailAndPassword(BuildContext context, UserRevo userRevo, {File? photo}) async {
 
     try{
-
       var user = await _userRepository.createUserWithEmailAndPassword(context, userRevo);
 
       // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
-      saveUser(userRevo);
-      saveLastAcessUser();
+      await saveUser(userRevo);
+      await saveLastAcessUser();
 
-      if(photo != null  &&  _userRevo.uid != null){
-        await uploadPhotoAcountUser(_userRevo.uid!, photo);
+      if(photo != null){
+        await uploadPhotoAcountUser(user.uid, photo);
       }
 
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_sucess_user_created, TypeAlert.SUCESS);
@@ -54,10 +53,14 @@ class RegisterUserCase extends IRegisterUserCase {
 
 
   Future<void> saveUser(UserRevo user) async {
+    try{
       DateTime now = DateTime.now();
       DateTime initTime = DateTime(now.year, now.month, now.day, Constants.HOUR_INIT_NOTIFICATION);
       DateTime finishTime = DateTime(now.year, now.month, now.day, Constants.HOUR_FINISH_NOTIFICATION);
       _userRepository.saveUser(user, initTime, finishTime);
+    } catch(error){
+      throw error;
+    }
   }
 
   @override
@@ -73,7 +76,7 @@ class RegisterUserCase extends IRegisterUserCase {
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
+    } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
     }
 
@@ -81,22 +84,14 @@ class RegisterUserCase extends IRegisterUserCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
-  Future<ResponseApi> saveLastAcessUser() async {
+  Future<void> saveLastAcessUser() async {
     try{
-
       if(_userRevo.uid != null){
-         await _userRepository.saveLastAcessUser(_userRevo.uid!, Timestamp.now());
-         return ResponseApi.ok();
+         _userRepository.saveLastAcessUser(_userRevo.uid!, Timestamp.now());
       }
-
-    }on RevoExceptions catch(error){
-      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
-      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
-    }on Exception catch(error, stack){
-      CrashlyticsUtil.logErro(error, stack);
+    } catch(error){
+      throw error;
     }
-    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
-    return ResponseApi.error(messageAlert: alert);
   }
 
 

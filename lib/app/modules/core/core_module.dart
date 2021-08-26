@@ -7,8 +7,8 @@ class CoreModule extends Module {
   @override
   final List<Bind> binds = [
     Bind.instance<String>("KEY", export: true),
-    Bind.instance<RevoAnalytics>(RevoAnalytics(), export: true),
-    Bind.instance<UserRevo>(UserRevo(), export: true)
+    Bind.lazySingleton((i) => RevoAnalytics(), export: true),
+    Bind.lazySingleton((i) => UserRevo(), export: true),
   ];
 
   @override

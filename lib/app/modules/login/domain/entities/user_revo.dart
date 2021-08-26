@@ -61,7 +61,7 @@ class UserRevo {
     return convert.json.encode(toMap());
   }
 
-  updateDataUserFirebase(User? user){
+  updateDataUserFirebase(User? user) async {
     if(user != null){
       userFirebase = user;
       uid = user.uid;

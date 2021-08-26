@@ -29,10 +29,12 @@ class RegisterUserRepository extends IRegisterUserRepository {
   @override
   Future<User> createUserWithEmailAndPassword(BuildContext context, UserRevo userRevo) async {
     try{
-      _userRevo = userRevo;
-
       var user = await _loginDatasource.createUserWithEmailAndPassword(userRevo.email!, userRevo.password!);
-      _userRevo.updateDataUserFirebase(user);
+      if(user != null){
+        user.updateDisplayName(userRevo.name);
+      }
+
+      await _userRevo.updateDataUserFirebase(user);
 
       if(user != null){
         _analytics.eventRegisterNewUser(email: _userRevo.email!, name: _userRevo.name!);

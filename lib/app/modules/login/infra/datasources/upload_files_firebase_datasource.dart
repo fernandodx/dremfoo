@@ -36,24 +36,18 @@ class UploadFilesFirebaseDataSource implements IUploadFilesDataSource {
   @override
   Future<String> uploadFileAcountUser(String fireBaseUserUid, String nameFolder, File file, String id) async {
     try{
-      final Reference refUser = FirebaseStorage.instance
+      final Reference refUser = _storage
           .ref()
           .child(nameFolder)
-          .child(fireBaseUserUid);
-      final Reference ref = refUser.child(id);
+          .child(fireBaseUserUid)
+          .child(id);
 
-      UploadTask task = ref.putFile(file);
-      final stream = task.snapshotEvents.listen((event) {
-        print("UPLOAD FILE $id : ${event.hashCode}");
-      });
-
-      TaskSnapshot storageTask = await task.snapshot;
-      stream.cancel();
-
-      final urlImage = storageTask.ref.getDownloadURL();
+      UploadTask task = refUser.putFile(file);
+      TaskSnapshot storageTask = await task;
+      String urlImage = await storageTask.ref.getDownloadURL();
 
       print("UPLOAD FILE SUCESS: $urlImage");
-      return urlImage.toString();
+      return urlImage;
     } catch(error){
       throw error;
     }

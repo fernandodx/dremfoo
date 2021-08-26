@@ -22,8 +22,8 @@ abstract class _RegisterUserStoreBase with Store {
   _RegisterUserStoreBase(this._registerUserCase);
 
   final formKey = GlobalKey<FormState>();
-  final user = UserRevo();
   final validatedEmailController = TextEditingController();
+  var user =  Modular.get<UserRevo>();
 
   @observable
   bool isLoading = false;

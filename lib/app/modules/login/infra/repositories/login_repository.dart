@@ -67,7 +67,7 @@ class LoginRepository implements ILoginRepository {
 
           AuthCredential auth = FacebookAuthProvider.credential(result.accessToken!.token);
           var user = await _loginDatasource.signInWithCredential(auth);
-          _userRevo.updateDataUserFirebase(user);
+          await _userRevo.updateDataUserFirebase(user);
           return _handlerUser(_userRevo, MethodLogin.facebook);
 
         case LoginStatus.cancelled:
@@ -108,7 +108,7 @@ class LoginRepository implements ILoginRepository {
     try {
       AuthCredential auth = await _loginDatasource.signInWithGoogle();
       var user = await _loginDatasource.signInWithCredential(auth);
-      _userRevo.updateDataUserFirebase(user);
+      await _userRevo.updateDataUserFirebase(user);
       return _handlerUser(_userRevo, MethodLogin.google);
 
     }on FirebaseAuthException catch(error, stack) {
@@ -131,7 +131,7 @@ class LoginRepository implements ILoginRepository {
     try{
 
       var user = await _loginDatasource.signInWithEmailAndPassword(email, password);
-      _userRevo.updateDataUserFirebase(user);
+      await _userRevo.updateDataUserFirebase(user);
       return _handlerUser(_userRevo, MethodLogin.email);
 
     } on FirebaseAuthException catch (error, stack) {
