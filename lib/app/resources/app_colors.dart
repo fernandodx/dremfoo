@@ -4,24 +4,28 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
-  static Color get colorPrimary => Utils.colorFromHex("#13ABC4");
-  static Color get colorPrimaryDark => Utils.colorFromHex("#0D7282");
+  static Color get colorPrimary => Utils.colorFromHex("#2E2D4D");
+  static Color get colorPrimaryDark => Utils.colorFromHex("#171727");
   static Color get colorAcent => Utils.colorFromHex("#00B1B8");
   static Color get colorCard => Utils.colorFromHex("#FCFFFE");
   static Color get colorText => Utils.colorFromHex("#0D7282");
-  static Color get colorSubText => Utils.colorFromHex("#D90D7282");
+  static Color get colorTextLight => Utils.colorFromHex("#E3F1F2");
+  static Color get colorTextChipMenu => Utils.colorFromHex("#2B371B");
+  static Color get colorSubText => Utils.colorFromHex("#E3F1F2");
   static Color get colorStartGradient => Utils.colorFromHex("#6E5A7D");
   static Color get colorEndGradient => Utils.colorFromHex("#1397A9");
   static Color get colorDrawer => Utils.colorFromHex("#13ABC4");
   static Color get colorIconDrawer => Utils.colorFromHex("#6E5773");
   static Color get colorlight => Utils.colorFromHex("#E9E2D0");
+  static Color get colorLine => Utils.colorFromHex("#EBFFFB");
   static Color get colorTextTitleMenu => Utils.colorFromHex("#2C232F");
   static Color get colorTextSubTitleMenu => Utils.colorFromHex("#D92C232F");
   static Color get colorChipPrimary => Utils.colorFromHex("#EA9085");
   static Color get colorChipSecundary => Utils.colorFromHex("#E9E2D0");
   static Color get colorTextChip => Utils.colorFromHex("#211A23");
-
   static Color get colorViolet => Utils.colorFromHex("#6E5773");
+  static Color get colorButtonChip => Utils.colorFromHex("#EAFFFD");
+  static Color get colorButtonChipDark => Utils.colorFromHex("#0D7282");
   static Color get colorSatin => Utils.colorFromHex("#D45D79");
   static Color get colorPink => Utils.colorFromHex("#EA9085");
   static Color get colorEggShell => Utils.colorFromHex("#E9E2D0");
@@ -30,6 +34,7 @@ class AppColors {
   static Color get colorEletric => Utils.colorFromHex("#7EFAFF");
   static Color get colorWebColor => Utils.colorFromHex("#EBFFFB");
   static Color get colorDisabled => Utils.colorFromHex("#808080");
+  static Color get colorBackground => Utils.colorFromHex("#332E3C");
 
 
 

@@ -1,15 +1,14 @@
+import 'package:dremfoo/app/modules/dreams/domain/stories/dreams_store.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:dremfoo/app/modules/home/home_store.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class DreamsPage extends StatefulWidget {
   final String title;
-  const HomePage({Key? key, this.title = 'HomePage'}) : super(key: key);
+  const DreamsPage({Key? key, this.title = 'DreamsPage'}) : super(key: key);
   @override
-  HomePageState createState() => HomePageState();
+  DreamsPageState createState() => DreamsPageState();
 }
-class HomePageState extends State<HomePage> {
-  final HomeStore store = Modular.get();
+class DreamsPageState extends ModularState<DreamsPage, DreamsStore> {
 
   @override
   Widget build(BuildContext context) {

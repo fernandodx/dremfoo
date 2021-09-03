@@ -32,6 +32,7 @@ class TextUtil {
   static Text textSubTitle(String value,
       {int maxLines = 10,
         double fontSize = 12,
+        color = Colors.white,
         FontWeight fontWeight = FontWeight.normal,
         TextAlign align = TextAlign.start}) {
     return Text(
@@ -43,7 +44,7 @@ class TextUtil {
       style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          color: AppColors.colorSubText
+          color: color
       ),
     );
   }
@@ -60,6 +61,23 @@ class TextUtil {
       style: TextStyle(
           fontSize: fontSize,
           color: AppColors.colorTextChip
+      ),
+    );
+  }
+
+  static Text textChipMenu(String value,
+      {int maxLines = 10,
+        double fontSize = 12,
+        TextAlign align = TextAlign.start}) {
+    return Text(
+      value,
+      textAlign: align,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: AppColors.colorTextChipMenu
       ),
     );
   }
@@ -138,14 +156,14 @@ class TextUtil {
     );
   }
 
-  static Text textTitulo(String value, {TextAlign align = TextAlign.start}) {
+  static Text textTitulo(String value, {TextAlign align = TextAlign.start, color = Colors.white}) {
     return Text(
       value,
       textAlign: align,
       style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: AppColors.colorText),
+          color: color),
     );
   }
 
