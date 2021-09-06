@@ -20,9 +20,9 @@ class AppColors {
   static Color get colorLine => Utils.colorFromHex("#EBFFFB");
   static Color get colorTextTitleMenu => Utils.colorFromHex("#2C232F");
   static Color get colorTextSubTitleMenu => Utils.colorFromHex("#D92C232F");
-  static Color get colorChipPrimary => Utils.colorFromHex("#EA9085");
-  static Color get colorChipSecundary => Utils.colorFromHex("#E9E2D0");
-  static Color get colorTextChip => Utils.colorFromHex("#211A23");
+  static Color get colorChipPrimary => Utils.colorFromHex("#C8F4F9");
+  static Color get colorChipSecundary => Utils.colorFromHex("#3CACAE");
+  static Color get colorTextChip => Utils.colorFromHex("#211522");
   static Color get colorViolet => Utils.colorFromHex("#6E5773");
   static Color get colorButtonChip => Utils.colorFromHex("#EAFFFD");
   static Color get colorButtonChipDark => Utils.colorFromHex("#0D7282");

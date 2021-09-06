@@ -22,7 +22,8 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
   void initState() {
     super.initState();
 
-    Modular.to.navigate('/home/dashboard');
+    // Modular.to.navigate('/home/dashboard');
+    Modular.to.navigate('/home/dream');
 
   }
 

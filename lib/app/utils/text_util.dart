@@ -16,6 +16,7 @@ class TextUtil {
   static Text textDefault(String value,
       {int maxLines = 10,
       double fontSize = 14,
+      color = Colors.white,
       TextAlign align = TextAlign.start}) {
     return Text(
       value,
@@ -24,7 +25,7 @@ class TextUtil {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: fontSize,
-        color: AppColors.colorText
+        color: color
       ),
     );
   }
@@ -51,7 +52,7 @@ class TextUtil {
 
   static Text textChip(String value,
       {int maxLines = 10,
-        double fontSize = 14,
+        double fontSize = 12,
         TextAlign align = TextAlign.start}) {
     return Text(
       value,
@@ -67,7 +68,7 @@ class TextUtil {
 
   static Text textChipMenu(String value,
       {int maxLines = 10,
-        double fontSize = 12,
+        double fontSize = 10,
         TextAlign align = TextAlign.start}) {
     return Text(
       value,
@@ -93,7 +94,7 @@ class TextUtil {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: fontSize,
-          color: AppColors.colorlight
+          color: AppColors.colorTextLight
       ),
     );
   }
