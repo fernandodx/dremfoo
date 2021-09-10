@@ -44,6 +44,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   pixabay_picker: ^1.0.6
   youtube_player_flutter: ^8.0.0
+  percent_indicator: ^3.0.1
 
   #Exigem configuração no Android ou IOS
   image_picker: ^0.8.2

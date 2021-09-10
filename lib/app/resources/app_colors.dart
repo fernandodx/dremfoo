@@ -35,6 +35,7 @@ class AppColors {
   static Color get colorWebColor => Utils.colorFromHex("#EBFFFB");
   static Color get colorDisabled => Utils.colorFromHex("#808080");
   static Color get colorBackground => Utils.colorFromHex("#332E3C");
+  static Color get colorAcentProgress => Utils.colorFromHex("#CDE7B0");
 
 
 
