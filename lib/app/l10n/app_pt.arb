@@ -33,6 +33,10 @@
 	"msg_error_sign_in_fb_cancelled": "Tudo bem, você pode utilizar outro método de login.",
 	"msg_error_sign_in_fb_failed": "Ocorreu uma falha no login com facebook, tente novamente mais tarde.",
 	"msg_error_sign_in_fb_in_progress": "Não foi possível finalizar o login, tente novamente mais tarde.",
-	"msg_error_credential_invalid": "Já existe uma conta com o mesmo endereço de e-mail, mas com credenciais de login diferentes. Faça login usando um provedor associado a este endereço de e-mail."
+	"msg_error_credential_invalid": "Já existe uma conta com o mesmo endereço de e-mail, mas com credenciais de login diferentes. Faça login usando um provedor associado a este endereço de e-mail.",
+	"label_hist_daily_goal": "Histórico das metas diárias",
+	"label_daily_goals": "Metas diárias",
+	"label_steps": "Etapas",
+	"label_today": "Hoje"
 
 }

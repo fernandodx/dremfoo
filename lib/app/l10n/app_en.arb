@@ -34,6 +34,9 @@
 	"msg_error_sign_in_fb_cancelled": "Okay, you can use another login method.",
 	"msg_error_sign_in_fb_failed": "Failed to login with facebook, please try again later.",
 	"msg_error_sign_in_fb_in_progress": "Unable to finalize login, please try again later.",
-	"msg_error_credential_invalid": "An account with the same email address but different login credentials already exists. Log in using a provider associated with this email address."
-
+	"msg_error_credential_invalid": "An account with the same email address but different login credentials already exists. Log in using a provider associated with this email address.",
+    "label_hist_daily_goal": "History of daily goals",
+    "label_daily_goals": "Daily goals",
+    "label_steps": "Steps",
+	"label_today": "Today"
 }

@@ -1,20 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/button_outlined_revo_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dreams_store.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/cicular_progress_revo_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/body_item_dream_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/daily_goals_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/header_item_dream_widget.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/image_positioned_left_widget.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/info_percent_dream_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/list_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/panel_info_dream_expansion_header_widget.dart';
-import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/steps_dream_widget.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DreamsPage extends StatefulWidget {
   final String title;
@@ -52,138 +50,61 @@ class DreamsPageState extends ModularState<DreamsPage, DreamsStore>
       Tween(begin: 0.0, end: 0.5).animate(_controller);
 
   bool isVisible = true;
+  List<Dream> listDream = [];
+  Map<Dream, bool> isVisibleBodyDreamMap = {};
 
   @override
   void initState() {
     super.initState();
+
+    for(var i=0; i<=5; i++){
+      var d = Dream();
+      d.uid = "#$i";
+      d.dreamPropose = "Meu sonho $i";
+      d.descriptionPropose = "Descrição do Sonho que vai ser realizado com certeza vamos conseguir $i";
+      listDream.add(d);
+      isVisibleBodyDreamMap[d] = false;
+    }
+
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HeaderItemDreamWidget(),
-                SpaceWidget(),
-                PanelInfoDreamExpansionHeaderWidget(
-                  controller: _controller,
-                  onTap: () {
-                    setState(() {
-                      if (isVisible) {
-                        isVisible = false;
-                        _controller.forward();
-                      } else {
-                        isVisible = true;
-                        _controller.reverse();
-                      }
-                    });
-                  },
-                ),
-                SpaceWidget(),
-                SpaceWidget(),
-                buildCrossFadeTransition(),
-                TextUtil.textTitulo("Tenho que ficar junto, Bora lá !!!!"),
-                TextUtil.textTitulo("Tenho que ficar junto, Bora lá !!!!"),
-              ],
-            ),
-          )
-        ],
-      ),
+        body: ListDreamWidget(
+            listDream: listDream,
+            controller: _controller,
+            onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
+              print("$isSelected ${dailyGoal.toString()}");
+            },
+            onTapStep: (bool isSelected, StepDream step) {
+              print("$isSelected ${step.toString()}");
+            },
+            onTapExpansionPanel: (bool isOk, Dream dream) {
+              setState(() {
+                print("${dream.toString()} $isOk");
+                if (isVisible) {
+                  isVisible = false;
+                  isVisibleBodyDreamMap[dream] = false;
+                  _controller.forward();
+                } else {
+                  isVisible = true;
+                  isVisibleBodyDreamMap[dream] = true;
+                  _controller.reverse();
+                }
+              });
+            },
+            onTapHist: (){
+              print("Hitorico");
+            },
+            isVisibleBodyDreamMap: isVisibleBodyDreamMap,
+            onTapConfigDream: (Dream dream) {
+              print("onTapConfigDream");
+            },
+
+        ),
     );
   }
 
-  AnimatedCrossFade buildCrossFadeTransition() {
-    return AnimatedCrossFade(
-      crossFadeState:
-          isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: Duration(milliseconds: 500),
-      firstChild: Container(
-        width: double.maxFinite,
-        height: 0,
-      ),
-      secondChild: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              TextUtil.textTitulo("Etapas"),
-              SpaceWidget(
-                isSpaceRow: true,
-              ),
-              InkWell(
-                child: Icon(
-                  Icons.visibility,
-                  color: AppColors.colorlight,
-                ),
-                onTap: () {},
-              )
-            ],
-          ),
-          SpaceWidget(),
-          Wrap(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 8),
-                child: Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: AppColors.colorChipSecundary,
-                    child: TextUtil.textChipLight(
-                      "1˚",
-                    ),
-                  ),
-                  label:
-                      TextUtil.textChip("Correr 10k e fazer atividade física"),
-                  backgroundColor: AppColors.colorChipPrimary,
-                ),
-              ),
-            ],
-          ),
-          SpaceWidget(),
-          SpaceWidget(),
-          TextUtil.textTitulo("Metas diárias"),
-          SpaceWidget(),
-          Wrap(
-            children: [
-              ChoiceChip(
-                elevation: 8,
-                label: TextUtil.textChipMenu("label"),
-                backgroundColor: Utils.colorFromHex("#BAF3BE"),
-                selectedColor: AppColors.colorPrimary,
-                selected: false,
-                avatar: false
-                    ? CircleAvatar(
-                        backgroundColor: AppColors.colorPrimaryDark,
-                        child: Icon(
-                          Icons.check,
-                          color: AppColors.colorlight,
-                          size: 18,
-                        ),
-                      )
-                    : Icon(
-                        Icons.radio_button_unchecked,
-                        color: AppColors.colorDark,
-                      ),
-                onSelected: (selected) {
-                  print("Selected");
-                },
-              )
-            ],
-          ),
-          SpaceWidget(),
-          Container(
-            child: ChipButtonWidget(
-              name: "Historico",
-              onTap: () {},
-            ),
-            width: double.maxFinite,
-            alignment: Alignment.topRight,
-          ),
-        ],
-      ),
-    );
-  }
 }

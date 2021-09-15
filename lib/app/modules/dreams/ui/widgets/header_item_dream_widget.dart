@@ -5,20 +5,31 @@ import 'info_percent_dream_widget.dart';
 
 class HeaderItemDreamWidget extends StatelessWidget {
 
+  final String urlImage;
+  final Function()? onTapImage;
+  final String percentStep;
+  final String percentToday;
+
+  HeaderItemDreamWidget({required this.urlImage, this.onTapImage, required this.percentStep, required this.percentToday});
+
   @override
   Widget build(BuildContext context) {
     return  Container(
       child: Stack(
         children: [
           ImagePositionedLeftWidget(
-              urlImage: "https://www.criandocomapego.com/wp-content/uploads/2018/03/manual-dos-sonhos.jpg",
+              urlImage: urlImage,
+              onTap: onTapImage,
               leftPercent: 0.8,
-              height: 180),
-          InfoPercentDreamWidget(),
+              height: 170),
+          InfoPercentDreamWidget(
+            percentStep: percentStep,
+            percentToday: percentToday,
+          ),
         ],
       ),
       width: double.maxFinite,
-      height: 180,
+      height: 170,
     );
   }
 }

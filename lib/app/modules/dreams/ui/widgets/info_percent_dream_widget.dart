@@ -1,9 +1,14 @@
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:flutter/material.dart';
 
 import 'cicular_progress_revo_widget.dart';
 
 class InfoPercentDreamWidget extends StatelessWidget {
+
+  final String percentStep;
+  final String percentToday;
+  InfoPercentDreamWidget({required this.percentStep, required this.percentToday});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +22,10 @@ class InfoPercentDreamWidget extends StatelessWidget {
           children: [
             SpaceWidget(),
             CicularProgressRevoWidget(
-                titleCenter: "30%", titleBottom: "Etapas", value: 0.3),
+                titleCenter: percentStep, titleBottom: Translate.i().get.label_steps, value: 0.3),
             SpaceWidget(),
             CicularProgressRevoWidget(
-                titleCenter: "70%", titleBottom: "Hoje", value: 0.7),
+                titleCenter: percentToday, titleBottom: Translate.i().get.label_today, value: 0.7),
           ],
         ));
   }
