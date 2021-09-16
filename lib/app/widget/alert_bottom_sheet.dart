@@ -1,4 +1,4 @@
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';

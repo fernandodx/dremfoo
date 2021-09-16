@@ -1,4 +1,4 @@
-import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/background_widget.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/card_login_widget.dart';

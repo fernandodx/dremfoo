@@ -1,4 +1,4 @@
-import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 
 class ResponseApi<T> {
 

@@ -10,7 +10,7 @@ import 'package:dremfoo/app/model/daily_goal.dart';
 import 'package:dremfoo/app/model/dream.dart';
 import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/model/step_dream.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/analytics_util.dart';
 import 'package:dremfoo/app/utils/nav.dart';

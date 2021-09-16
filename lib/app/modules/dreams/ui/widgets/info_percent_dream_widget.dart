@@ -8,12 +8,14 @@ class InfoPercentDreamWidget extends StatelessWidget {
 
   final String percentStep;
   final String percentToday;
-  InfoPercentDreamWidget({required this.percentStep, required this.percentToday});
+  final double valueStep;
+  final double valueToday;
+  InfoPercentDreamWidget({required this.percentStep, required this.percentToday, required this.valueStep, required this.valueToday});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 16),
+        margin: EdgeInsets.only(right: 8),
         width: double.maxFinite,
         alignment: Alignment.topRight,
         child: Column(
@@ -22,10 +24,10 @@ class InfoPercentDreamWidget extends StatelessWidget {
           children: [
             SpaceWidget(),
             CicularProgressRevoWidget(
-                titleCenter: percentStep, titleBottom: Translate.i().get.label_steps, value: 0.3),
+                titleCenter: percentStep, titleBottom: Translate.i().get.label_steps, value: valueStep),
             SpaceWidget(),
             CicularProgressRevoWidget(
-                titleCenter: percentToday, titleBottom: Translate.i().get.label_today, value: 0.7),
+                titleCenter: percentToday, titleBottom: Translate.i().get.label_today, value: valueToday),
           ],
         ));
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/api/eventbus/user_event_bus.dart';
@@ -7,7 +8,7 @@ import 'package:dremfoo/app/model/level_revo.dart';
 import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/model/user.dart';
 import 'package:dremfoo/app/model/user_focus.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+
 import 'package:dremfoo/app/utils/analytics_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';

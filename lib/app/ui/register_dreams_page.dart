@@ -8,7 +8,7 @@ import 'package:dremfoo/app/api/eventbus/main_event_bus.dart';
 import 'package:dremfoo/app/model/color_dream.dart';
 import 'package:dremfoo/app/model/dream.dart';
 import 'package:dremfoo/app/model/response_api.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/resources/constants.dart';
 import 'package:dremfoo/app/ui/dream_completed_page.dart';

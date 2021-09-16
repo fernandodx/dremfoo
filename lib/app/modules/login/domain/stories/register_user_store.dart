@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dremfoo/app/app_module.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/Translate.dart';

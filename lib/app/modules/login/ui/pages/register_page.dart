@@ -1,7 +1,7 @@
 
 import 'package:dremfoo/app/modules/core/ui/widgets/background_form_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';

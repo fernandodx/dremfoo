@@ -39,6 +39,8 @@ class ListDreamWidget extends StatelessWidget {
                 HeaderItemDreamWidget(
                   percentStep: "40%",
                   percentToday: "10%",
+                  valueToday: 0.1,
+                  valueStep: 0.4,
                   urlImage: dream.imgDream??"https://www.criandocomapego.com/wp-content/uploads/2018/03/manual-dos-sonhos.jpg",
                   onTapImage: () {
                     onTapConfigDream(dream);

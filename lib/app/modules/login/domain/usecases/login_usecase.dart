@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dremfoo/app/model/response_api.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/error_msg.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/modules/login/infra/repositories/contract/ilogin_repository.dart';
