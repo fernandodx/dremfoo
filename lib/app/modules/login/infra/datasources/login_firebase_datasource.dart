@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/ilogin_datasource.dart';
 import 'package:dremfoo/app/resources/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginFirebaseDataSource implements ILoginDatasource {
+class LoginFirebaseDataSource extends BaseDataSource implements ILoginDatasource {
 
   Completer<String> _instance = Completer<String>();
   // Completer<FirebaseAuth> _auth = Completer<FirebaseAuth>();
@@ -35,7 +36,7 @@ class LoginFirebaseDataSource implements ILoginDatasource {
 
   @override
   Future<void> sendResetPassword(String email) async {
-    return _auth.sendPasswordResetEmail(email: email).catchError(_handlerError);
+    return _auth.sendPasswordResetEmail(email: email).catchError(handlerError);
   }
 
   @override
@@ -83,11 +84,7 @@ class LoginFirebaseDataSource implements ILoginDatasource {
 
   @override
   Future<LoginResult> signInWithFacebook() async {
-    return  _facebookSign.login(permissions: ['email', 'public_profile']).catchError(_handlerError);
-  }
-
-  _handlerError(error, stack) {
-    throw error;
+    return  _facebookSign.login(permissions: ['email', 'public_profile']).catchError(handlerError);
   }
 
 }

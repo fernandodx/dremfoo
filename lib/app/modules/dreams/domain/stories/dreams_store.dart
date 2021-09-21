@@ -25,7 +25,7 @@ abstract class _DreamsStoreBase with Store {
     isLoading = true;
     ResponseApi<List<Dream>> responseApi = await _dreamCase.findDreamsForUser();
     msgAlert = responseApi.messageAlert;
-    if(responseApi.result != null){
+    if(responseApi.ok){
       listDream = responseApi.result!;
     }
     isLoading = false;
