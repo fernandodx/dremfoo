@@ -25,6 +25,8 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
 
     // Modular.to.navigate('/home/dashboard');
     Modular.to.navigate('/home/dream');
+    // Navigator.pushNamed(context, "/dream");
+
 
   }
 

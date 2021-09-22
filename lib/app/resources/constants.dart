@@ -12,7 +12,7 @@ class Constants {
   static const ENVIRONMENT = "ENVIRONMENT";
   static const DEBUG = "DEBUG";
   static const RELEASE = "RELEASE";
-  static const ENVIRONMENT_NOW = DEBUG;
+  static const ENVIRONMENT_NOW = RELEASE;
   static const ID_NOTIFICATION_INIT = 1;
   static const ID_NOTIFICATION_FINISH = 2;
 

@@ -23,10 +23,11 @@ class DreamRespository extends IDreamRepository {
      if(_userRevo.uid != null){
       return _datasource.findAllDreamForUser(_userRevo.uid!);
      }else{
-       RevoExceptions _revoExceptions = new RevoExceptions
-           .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
-       CrashlyticsUtil.logError(_revoExceptions);
-       throw _revoExceptions;
+       return _datasource.findAllDreamForUser("7uFOlj8el2Q62sblZxu7jnWaRME3");
+       // RevoExceptions _revoExceptions = new RevoExceptions
+       //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+       // CrashlyticsUtil.logError(_revoExceptions);
+       // throw _revoExceptions;
      }
 
    } catch(error, stack) {

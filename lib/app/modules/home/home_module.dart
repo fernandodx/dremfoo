@@ -28,7 +28,8 @@ class HomeModule extends Module {
     ChildRoute("/home", child: (_, args) => BottomNavigatePage(),
       children: [
         ChildRoute("/dashboard", child: (_, arg) => HomePage()),
-        ChildRoute("/dream", child: (_, arg) => DreamsPage()),
+        // ChildRoute("/dream", child: (_, arg) => DreamsPage()),
+        ModuleRoute("/dream", module: DreamsModule()),
         ChildRoute("/chart", child: (_, arg) => DreamsPage()),
         ChildRoute("/challenge", child: (_, arg) => DreamsPage()),
       ]),

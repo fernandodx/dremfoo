@@ -1,22 +1,23 @@
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
-import 'package:dremfoo/app/modules/dreams/domain/stories/dreams_store.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/list_dream_widget.dart';
+import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
 class DreamsPage extends StatefulWidget {
-  final String title;
-
-  const DreamsPage({Key? key, this.title = 'DreamsPage'}) : super(key: key);
 
   @override
   DreamsPageState createState() => DreamsPageState();
 }
 
-class DreamsPageState extends ModularState<DreamsPage, DreamsStore>
+class DreamsPageState extends State<DreamsPage>
     with SingleTickerProviderStateMixin {
 
   late final AnimationController _controller = AnimationController(
@@ -25,25 +26,42 @@ class DreamsPageState extends ModularState<DreamsPage, DreamsStore>
   );
 
   bool isVisible = true;
-  // List<Dream> listDream = [];
+   List<Dream> listDream = [];
   Map<Dream, bool> isVisibleBodyDreamMap = {};
+
+  DreamStore store = Modular.get<DreamStore>();
 
   @override
   void initState() {
     super.initState();
-    store.fetchListDream();
-    
-    
-    //
-    // for(var i=0; i<=5; i++){
-    //   var d = Dream();
-    //   d.uid = "#$i";
-    //   d.dreamPropose = "Meu sonho $i";
-    //   d.descriptionPropose = "Descrição do Sonho que vai ser realizado com certeza vamos conseguir $i";
-    //   listDream.add(d);
-    //   isVisibleBodyDreamMap[d] = false;
-    // }
 
+    var overlayLoading = OverlayEntry(builder: (context) {
+      return Container(
+        color: Colors.black38,
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      );
+    });
+
+    reaction<bool>((_) => store.isLoading, (isLoading) {
+      if(isLoading){
+        Overlay.of(context)!.insert(overlayLoading);
+      }else{
+        overlayLoading.remove();
+      }
+    });
+
+    reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
+      if(msgErro != null){
+        alertBottomSheet(context,
+            msg: msgErro.msg,
+            title:msgErro.title,
+            type: msgErro.type);
+      }
+    });
+
+
+    store.fetchListDream();
   }
 
 

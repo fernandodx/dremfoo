@@ -4,13 +4,13 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:mobx/mobx.dart';
 
-part 'dreams_store.g.dart';
+part 'dream_store.g.dart';
 
-class DreamsStore = _DreamsStoreBase with _$DreamsStore;
-abstract class _DreamsStoreBase with Store {
+class DreamStore = _DreamStoreBase with _$DreamStore;
+abstract class _DreamStoreBase with Store {
 
   IDreamCase _dreamCase;
-  _DreamsStoreBase(this._dreamCase);
+  _DreamStoreBase(this._dreamCase);
 
   @observable
   bool isLoading = false;
@@ -30,10 +30,5 @@ abstract class _DreamsStoreBase with Store {
     }
     isLoading = false;
   }
-
-
-
-
-
 
 }
