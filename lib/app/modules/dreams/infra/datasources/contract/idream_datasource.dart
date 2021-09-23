@@ -1,8 +1,14 @@
 
+import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 
 abstract class IDreamDatasource {
 
   Future<List<Dream>> findAllDreamForUser(String fireBaseUserUid);
+
+  Future<List<StepDream>> findAllStepsForDream(String userUid, String uidDream);
+
+  Future<List<DailyGoal>> findAllDailyGoalForDream(String userUid, String uidDream);
 
 }

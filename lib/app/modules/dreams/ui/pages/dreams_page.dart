@@ -17,7 +17,7 @@ class DreamsPage extends StatefulWidget {
   DreamsPageState createState() => DreamsPageState();
 }
 
-class DreamsPageState extends State<DreamsPage>
+class DreamsPageState extends ModularState<DreamsPage, DreamStore>
     with SingleTickerProviderStateMixin {
 
   late final AnimationController _controller = AnimationController(
@@ -28,8 +28,6 @@ class DreamsPageState extends State<DreamsPage>
   bool isVisible = true;
    List<Dream> listDream = [];
   Map<Dream, bool> isVisibleBodyDreamMap = {};
-
-  DreamStore store = Modular.get<DreamStore>();
 
   @override
   void initState() {
@@ -61,7 +59,7 @@ class DreamsPageState extends State<DreamsPage>
     });
 
 
-    store.fetchListDream();
+    store.fetch();
   }
 
 
@@ -73,6 +71,8 @@ class DreamsPageState extends State<DreamsPage>
           child: Observer(
             builder: (context) => ListDreamWidget(
                 listDream: store.listDream,
+                listStepDream: [],
+                listDailyGoal: [],
                 controller: _controller,
                 onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
                   print("$isSelected ${dailyGoal.toString()}");

@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 import 'body_item_dream_widget.dart';
 
 class ListDreamWidget extends StatelessWidget {
-
   final List<Dream> listDream;
+  final List<StepDream>? listStepDream;
+  final List<DailyGoal>? listDailyGoal;
   final AnimationController controller;
   final Function(bool isSelected, DailyGoal dailyGoal) onTapDailyGoal;
   final Function(bool isSelected, StepDream step) onTapStep;
@@ -19,63 +20,65 @@ class ListDreamWidget extends StatelessWidget {
   final Function(Dream) onTapConfigDream;
   final Map<Dream, bool> isVisibleBodyDreamMap;
 
-  ListDreamWidget({required this.listDream, required this.controller, required this.onTapDailyGoal,
-    required this.onTapStep,required this.onTapExpansionPanel, required this.onTapHist, required this.isVisibleBodyDreamMap,
-    required this.onTapConfigDream});
+  ListDreamWidget(
+      {required this.listDream,
+      required this.controller,
+      required this.onTapDailyGoal,
+      required this.onTapStep,
+      required this.onTapExpansionPanel,
+      required this.onTapHist,
+      required this.isVisibleBodyDreamMap,
+      required this.onTapConfigDream,
+      this.listStepDream,
+      this.listDailyGoal});
 
-
-  createListView(){
+  createListView() {
     List<Widget> children = [];
 
     listDream.forEach((dream) {
+      bool isInitBodyVisible = isVisibleBodyDreamMap[dream] ?? false;
 
-      bool isInitBodyVisible = isVisibleBodyDreamMap[dream]??false;
-
-      children.add(
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HeaderItemDreamWidget(
-                  percentStep: "40%",
-                  percentToday: "10%",
-                  valueToday: 0.1,
-                  valueStep: 0.4,
-                  urlImage: dream.imgDream??"https://www.criandocomapego.com/wp-content/uploads/2018/03/manual-dos-sonhos.jpg",
-                  onTapImage: () {
-                    onTapConfigDream(dream);
-                  },
-                ),
-                SpaceWidget(),
-                PanelInfoDreamExpansionHeaderWidget(
-                  title: dream.dreamPropose??"Meu Sonho",
-                  subTitle: dream.descriptionPropose??"Descrição",
-                  controller: controller,
-                  onTap: () {
-                    onTapExpansionPanel(true, dream);
-                  },
-                ),
-                SpaceWidget(),
-                SpaceWidget(),
-                BodyItemDreamWidget(
-                    isVisible: isInitBodyVisible,
-                    colorDream: dream.color?.primary??"#BAF3BE",
-                    dream: dream,
-                    onTapDailyGoal: onTapDailyGoal,
-                    onTapStep: onTapStep,
-                    onTapHist: onTapHist),
-              ],
+      children.add(Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HeaderItemDreamWidget(
+              percentStep: "40%",
+              percentToday: "10%",
+              valueToday: 0.1,
+              valueStep: 0.4,
+              imageBase64: dream.imgDream,
+              onTapImage: () {
+                onTapConfigDream(dream);
+              },
             ),
-          )
-      );
+            SpaceWidget(),
+            PanelInfoDreamExpansionHeaderWidget(
+              title: dream.dreamPropose ?? "",
+              subTitle: dream.descriptionPropose ?? "",
+              controller: controller,
+              onTap: () {
+                onTapExpansionPanel(isInitBodyVisible, dream);
+              },
+            ),
+            SpaceWidget(),
+            SpaceWidget(),
+            BodyItemDreamWidget(
+                isVisible: isInitBodyVisible,
+                colorDream: dream.color?.primary ?? "#BAF3BE",
+                dream: dream,
+                onTapDailyGoal: onTapDailyGoal,
+                onTapStep: onTapStep,
+                onTapHist: onTapHist),
+          ],
+        ),
+      ));
     });
 
     return ListView(
       children: children,
     );
-
   }
-
 
   @override
   Widget build(BuildContext context) {

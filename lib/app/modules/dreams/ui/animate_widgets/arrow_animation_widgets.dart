@@ -14,7 +14,7 @@ class ArrowAnimationWidget extends AnimatedWidget {
         child: Container(
             padding: EdgeInsets.all(8),
             child: Icon(
-          Icons.keyboard_arrow_up,
+          Icons.keyboard_arrow_down,
           color: AppColors.colorTextLight,
           size: 34,
         )));

@@ -10,22 +10,30 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 
 class BodyItemDreamWidget extends StatelessWidget {
-
   final bool isVisible;
   final String colorDream;
   final Dream dream;
+  final List<StepDream>? listStepDream;
+  final List<DailyGoal>? listDailyGoal;
   final Function(bool isSelected, DailyGoal dailyGoalSelected) onTapDailyGoal;
   final Function(bool isSelected, StepDream stepSelected) onTapStep;
   final Function() onTapHist;
 
-  BodyItemDreamWidget({required this.isVisible, required this.colorDream, required this.dream,
-    required this.onTapDailyGoal, required this.onTapStep, required this.onTapHist});
+  BodyItemDreamWidget(
+      {required this.isVisible,
+      required this.colorDream,
+      required this.dream,
+      required this.onTapDailyGoal,
+      required this.onTapStep,
+      required this.onTapHist,
+      this.listStepDream,
+      this.listDailyGoal});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       crossFadeState:
-      !isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          !isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       duration: Duration(milliseconds: 500),
       firstChild: Container(
         width: double.maxFinite,
@@ -44,7 +52,7 @@ class BodyItemDreamWidget extends StatelessWidget {
           ),
           SpaceWidget(),
           StepsDreamWidget(
-            listStepDream: dream.steps,
+            listStepDream: listStepDream,
             colorSteps: colorDream,
             onTap: onTapStep,
           ), //
@@ -53,7 +61,7 @@ class BodyItemDreamWidget extends StatelessWidget {
           TextUtil.textTitulo(Translate.i().get.label_daily_goals),
           SpaceWidget(),
           DailyGoalsDreamWidget(
-              listDailyGoal: dream.dailyGoals,
+              listDailyGoal: listDailyGoal,
               colorGoal: colorDream,
               onTap: onTapDailyGoal),
           SpaceWidget(),

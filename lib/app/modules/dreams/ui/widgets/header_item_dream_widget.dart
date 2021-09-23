@@ -4,7 +4,7 @@ import 'image_positioned_left_widget.dart';
 import 'info_percent_dream_widget.dart';
 
 class HeaderItemDreamWidget extends StatelessWidget {
-  final String urlImage;
+  final String? imageBase64;
   final Function()? onTapImage;
   final String percentStep;
   final String percentToday;
@@ -12,7 +12,7 @@ class HeaderItemDreamWidget extends StatelessWidget {
   final double valueToday;
 
   HeaderItemDreamWidget(
-      {required this.urlImage,
+      {this.imageBase64,
       this.onTapImage,
       required this.percentStep,
       required this.percentToday,
@@ -25,7 +25,7 @@ class HeaderItemDreamWidget extends StatelessWidget {
       child: Stack(
         children: [
           ImagePositionedLeftWidget(
-              urlImage: urlImage,
+              imageBase64: imageBase64,
               onTap: onTapImage,
               leftPercent: 0.75,
               height: 170),

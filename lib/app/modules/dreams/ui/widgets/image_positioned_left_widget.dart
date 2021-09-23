@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ImagePositionedLeftWidget extends StatelessWidget {
-  final String urlImage;
+  final String? imageBase64;
   final double leftPercent;
   final double height;
   final Function()? onTap;
 
   ImagePositionedLeftWidget(
-      {required this.urlImage,
+      {this.imageBase64,
       required this.leftPercent,
       required this.height,
       this.onTap});
@@ -23,12 +24,22 @@ class ImagePositionedLeftWidget extends StatelessWidget {
         onTap: onTap,
         child: Stack(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: CachedNetworkImage(
-                width: double.maxFinite,
-                imageUrl: urlImage,
-                fit: BoxFit.cover,
+            Visibility(
+              visible: imageBase64 != null && imageBase64!.isNotEmpty,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Utils.string64ToImage(imageBase64!, width: double.maxFinite, fit: BoxFit.cover),
+              ),
+            ),
+            Visibility(
+              visible: imageBase64 == null || imageBase64!.isEmpty,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: CachedNetworkImage(
+                  width: double.maxFinite,
+                  imageUrl: "https://www.criandocomapego.com/wp-content/uploads/2018/03/manual-dos-sonhos.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
