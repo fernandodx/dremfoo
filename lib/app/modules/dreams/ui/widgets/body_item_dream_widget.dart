@@ -10,9 +10,7 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 
 class BodyItemDreamWidget extends StatelessWidget {
-  final bool isVisible;
   final String colorDream;
-  final Dream dream;
   final List<StepDream>? listStepDream;
   final List<DailyGoal>? listDailyGoal;
   final Function(bool isSelected, DailyGoal dailyGoalSelected) onTapDailyGoal;
@@ -20,9 +18,7 @@ class BodyItemDreamWidget extends StatelessWidget {
   final Function() onTapHist;
 
   BodyItemDreamWidget(
-      {required this.isVisible,
-      required this.colorDream,
-      required this.dream,
+      {required this.colorDream,
       required this.onTapDailyGoal,
       required this.onTapStep,
       required this.onTapHist,
@@ -31,15 +27,7 @@ class BodyItemDreamWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      crossFadeState:
-          !isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: Duration(milliseconds: 500),
-      firstChild: Container(
-        width: double.maxFinite,
-        height: 0,
-      ),
-      secondChild: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -74,7 +62,6 @@ class BodyItemDreamWidget extends StatelessWidget {
           ),
           SpaceWidget(),
         ],
-      ),
-    );
+      );
   }
 }

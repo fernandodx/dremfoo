@@ -25,9 +25,7 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
     vsync: this,
   );
 
-  bool isVisible = true;
    List<Dream> listDream = [];
-  Map<Dream, bool> isVisibleBodyDreamMap = {};
 
   @override
   void initState() {
@@ -71,35 +69,10 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
           child: Observer(
             builder: (context) => ListDreamWidget(
                 listDream: store.listDream,
-                listStepDream: [],
-                listDailyGoal: [],
                 controller: _controller,
-                onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
-                  print("$isSelected ${dailyGoal.toString()}");
-                },
-                onTapStep: (bool isSelected, StepDream step) {
-                  print("$isSelected ${step.toString()}");
-                },
-                onTapExpansionPanel: (bool isOk, Dream dream) {
-                  setState(() {
-                    print("${dream.toString()} $isOk");
-                    if (isVisible) {
-                      isVisible = false;
-                      isVisibleBodyDreamMap[dream] = false;
-                      _controller.forward();
-                    } else {
-                      isVisible = true;
-                      isVisibleBodyDreamMap[dream] = true;
-                      _controller.reverse();
-                    }
-                  });
-                },
-                onTapHist: (){
-                  print("Hitorico");
-                },
-                isVisibleBodyDreamMap: isVisibleBodyDreamMap,
-                onTapConfigDream: (Dream dream) {
-                  print("onTapConfigDream");
+                onTapDetailDream: (Dream dream) {
+                  print("NAVAGAR PARA PAGINA DE DETALHE");
+                  Modular.to.navigate('/detailDream');
                 },
 
             ),
