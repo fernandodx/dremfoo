@@ -25,7 +25,7 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
     vsync: this,
   );
 
-   List<Dream> listDream = [];
+  List<Dream> listDream = [];
 
   @override
   void initState() {
@@ -70,11 +70,9 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
             builder: (context) => ListDreamWidget(
                 listDream: store.listDream,
                 controller: _controller,
-                onTapDetailDream: (Dream dream) {
-                  print("NAVAGAR PARA PAGINA DE DETALHE");
-                  Modular.to.navigate('/detailDream');
+                onTapDetailDream: (Dream dreamSelected) {
+                  store.editDream(context, dreamSelected);
                 },
-
             ),
           ),
         ),

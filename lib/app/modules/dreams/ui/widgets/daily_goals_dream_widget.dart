@@ -19,7 +19,7 @@ class DailyGoalsDreamWidget extends StatelessWidget {
       listDailyGoal = [];
       for (var i = 0; i <= 5; i++) {
         var d = DailyGoal();
-        d.nameDailyGoal = "Etapa - $i";
+        d.nameDailyGoal = "Loading - $i";
         d.lastDateCompleted = Timestamp.now();
 
         listDailyGoal!.add(d);

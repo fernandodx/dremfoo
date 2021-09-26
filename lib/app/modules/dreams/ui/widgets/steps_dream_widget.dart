@@ -20,7 +20,7 @@ class StepsDreamWidget extends StatelessWidget {
       listStepDream = [];
       for (var i = 0; i <= 6; i++) {
         var s = StepDream();
-        s.step = "Meta - $i";
+        s.step = "Loading - $i";
         s.isCompleted = i % 2 == 0;
 
         listStepDream!.add(s);

@@ -26,26 +26,10 @@ class ImagePositionedLeftWidget extends StatelessWidget {
           children: [
             Visibility(
               visible: imageBase64 != null && imageBase64!.isNotEmpty,
-              child: Hero(
-                tag: "imgDream",
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Utils.string64ToImage(imageBase64!, width: double.maxFinite, fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: imageBase64 == null || imageBase64!.isEmpty,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Hero(
-                  tag: "imgDream",
-                  child: CachedNetworkImage(
-                    width: double.maxFinite,
-                    imageUrl: "https://www.criandocomapego.com/wp-content/uploads/2018/03/manual-dos-sonhos.jpg",
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: Utils.string64ToImage(imageBase64!,
+                    width: double.maxFinite, fit: BoxFit.cover),
               ),
             ),
             Container(

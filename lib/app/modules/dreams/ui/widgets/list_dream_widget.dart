@@ -1,13 +1,8 @@
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
-import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
-import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/header_item_dream_widget.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/panel_info_dream_expansion_header_widget.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
-
-import 'body_item_dream_widget.dart';
 
 class ListDreamWidget extends StatelessWidget {
   final List<Dream> listDream;
@@ -49,7 +44,7 @@ class ListDreamWidget extends StatelessWidget {
     });
 
     return ListView(
-      children: children,
+    children: children,
     );
   }
 
