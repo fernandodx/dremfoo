@@ -871,8 +871,13 @@ class FirebaseService {
         histRef.add(dailyGoal.toMap());
         return ResponseApi.ok(result: true);
       } else {
+        DateTime now = DateTime.now();
+        DateTime date = Utils.stringToDate("${now.year}-${now.month}-${now.day}");
         QuerySnapshot query =
-            await histRef.where("uid", isEqualTo: dailyGoal.uid).get();
+            await histRef
+                .where("uid", isEqualTo: dailyGoal.uid)
+                .where("lastDateCompleted", isGreaterThan: Timestamp.fromDate(date))
+                .get();
         for (QueryDocumentSnapshot snapshot in query.docs) {
           if (snapshot.exists) {
             snapshot.reference.delete();

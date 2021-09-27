@@ -11,5 +11,11 @@ abstract class IDreamRepository {
 
   Future<List<DailyGoal>> findAllDailyGoalForDream(String uidDream);
 
+  Future<void> updateDailyGoal(DailyGoal dailyGoal);
+
+  Future<void> registerHistoryDailyGoal(DailyGoal dailyGoal);
+
+  Future<void> deleteRegisterHistoryDailyGoalforDate(DailyGoal dailyGoal, DateTime dateDelete);
+
 
 }

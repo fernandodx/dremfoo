@@ -11,4 +11,10 @@ abstract class IDreamDatasource {
 
   Future<List<DailyGoal>> findAllDailyGoalForDream(String userUid, String uidDream);
 
+  Future<void> updateDailyGoal(DailyGoal dailyGoal);
+
+  Future<void> registerHistoryDailyGoal(DailyGoal dailyGoal);
+
+  Future<void> deleteRegisterHistoryDailyGoalforDate(DailyGoal dailyGoal, DateTime dateDelete);
+
 }

@@ -79,4 +79,46 @@ class DreamRespository extends IDreamRepository {
     }
   }
 
+  Future<void> updateDailyGoal(DailyGoal dailyGoal) async {
+    try{
+      _datasource.updateDailyGoal(dailyGoal);
+      //validar referencias
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  Future<void> registerHistoryDailyGoal(DailyGoal dailyGoal) async {
+    try{
+
+      if(dailyGoal.reference.parent.parent == null ){
+        // return erro
+      }
+
+      _datasource.registerHistoryDailyGoal(dailyGoal);
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  Future<void> deleteRegisterHistoryDailyGoalforDate(DailyGoal dailyGoal, DateTime dateDelete) async {
+    try{
+
+      if(dailyGoal.reference.parent.parent == null ){
+        // return erro
+      }
+
+      _datasource.registerHistoryDailyGoal(dailyGoal);
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+
+
+
+
 }

@@ -70,6 +70,17 @@ class DreamUseCase extends IDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  Future<void> updateDailyGoalDream(DailyGoal dailyGoal) async {
+    _repository.updateDailyGoal(dailyGoal);
+
+    if(dailyGoal.lastDateCompleted != null) {
+      _repository.registerHistoryDailyGoal(dailyGoal);
+    }else{
+      _repository.deleteRegisterHistoryDailyGoalforDate(dailyGoal, DateTime.now());
+    }
+
+  }
+
 
 
 }
