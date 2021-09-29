@@ -70,14 +70,46 @@ class DreamUseCase extends IDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
-  Future<void> updateDailyGoalDream(DailyGoal dailyGoal) async {
-    _repository.updateDailyGoal(dailyGoal);
+  @override
+  Future<ResponseApi> updateStepDream(StepDream stepDream) async {
+    try{
+      await _repository.updateStepDream(stepDream);
+      return ResponseApi.ok();
 
-    if(dailyGoal.lastDateCompleted != null) {
-      _repository.registerHistoryDailyGoal(dailyGoal);
-    }else{
-      _repository.deleteRegisterHistoryDailyGoalforDate(dailyGoal, DateTime.now());
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
     }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal) async {
+
+    try{
+      await _repository.updateDailyGoal(dailyGoal);
+
+      if(dailyGoal.lastDateCompleted != null) {
+        await _repository.registerHistoryDailyGoal(dailyGoal);
+      }else{
+        await _repository.deleteRegisterHistoryDailyGoalforDate(dailyGoal, DateTime.now());
+      }
+
+      return ResponseApi.ok();
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
 
   }
 

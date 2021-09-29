@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DetailDreamPage extends StatefulWidget {
 
@@ -66,20 +67,22 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               width: double.maxFinite, fit: BoxFit.cover),
           SpaceWidget(),
           Observer(
-            builder: (context) => BodyItemDreamWidget(
+            builder: (context) {
+              return BodyItemDreamWidget(
                 listDailyGoal: store.listDailyGoals,
                 listStepDream: store.listStep,
                 colorDream: widget.dreamSelected.color?.primary ?? "#BAF3BE",
                 onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
-                  print("$isSelected ${dailyGoal.toString()}");
+                  store.updateDailyGoal(dailyGoal, isSelected);
                 },
                 onTapStep: (bool isSelected, StepDream step) {
-                  print("$isSelected ${step.toString()}");
+                  store.updateStepDream(step, isSelected);
                 },
                 onTapHist: (){
                   print("Hitorico");
                 },
-            ),
+              );
+            },
           ),
 
         ],

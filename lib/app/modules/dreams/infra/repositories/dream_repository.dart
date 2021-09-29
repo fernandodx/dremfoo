@@ -1,4 +1,3 @@
-import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -6,9 +5,7 @@ import 'package:dremfoo/app/modules/dreams/infra/datasources/contract/idream_dat
 import 'package:dremfoo/app/modules/dreams/infra/repositories/contract/idream_repository.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
-import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class DreamRespository extends IDreamRepository {
@@ -81,7 +78,7 @@ class DreamRespository extends IDreamRepository {
 
   Future<void> updateDailyGoal(DailyGoal dailyGoal) async {
     try{
-      _datasource.updateDailyGoal(dailyGoal);
+      await _datasource.updateDailyGoal(dailyGoal);
       //validar referencias
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);
@@ -96,7 +93,7 @@ class DreamRespository extends IDreamRepository {
         // return erro
       }
 
-      _datasource.registerHistoryDailyGoal(dailyGoal);
+     await _datasource.registerHistoryDailyGoal(dailyGoal);
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);
       throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
@@ -110,7 +107,17 @@ class DreamRespository extends IDreamRepository {
         // return erro
       }
 
-      _datasource.registerHistoryDailyGoal(dailyGoal);
+      await _datasource.deleteRegisterHistoryDailyGoalforDate(dailyGoal, dateDelete);
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  Future<void> updateStepDream(StepDream stepDream) async {
+    try{
+      stepDream.isCompleted = stepDream.dateCompleted != null;
+      await _datasource.updateStepDream(stepDream);
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);
       throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");

@@ -16,26 +16,21 @@ class DailyGoalsDreamWidget extends StatelessWidget {
     List<Widget> list = [];
 
     if (listDailyGoal == null || listDailyGoal!.isEmpty) {
-      listDailyGoal = [];
-      for (var i = 0; i <= 5; i++) {
-        var d = DailyGoal();
-        d.nameDailyGoal = "Loading - $i";
-        d.lastDateCompleted = Timestamp.now();
+      list.add(Center(child: LinearProgressIndicator(),));
+    }else{
+      listDailyGoal!.forEach((dailyGoal) {
+        list.add(ChoiceChipRevoWidget(
+            label: dailyGoal.nameDailyGoal ?? "",
+            color: colorGoal,
+            isCompleted: dailyGoal.isCompletedToday(),
+            onSelected: (isSelected) {
+              onTap(isSelected, dailyGoal);
+            }));
+      });
 
-        listDailyGoal!.add(d);
-      }
     }
 
-    listDailyGoal!.forEach((dailyGoal) {
-      // Utils.colorFromHex(daily.dreamParent.color!.primary!)
-      list.add(ChoiceChipRevoWidget(
-          label: dailyGoal.nameDailyGoal ?? "",
-          color: colorGoal,
-          isCompleted: dailyGoal.isCompletedToday(),
-          onSelected: (isSelected) {
-            onTap(isSelected, dailyGoal);
-          }));
-    });
+
 
     return Wrap(
       children: list,

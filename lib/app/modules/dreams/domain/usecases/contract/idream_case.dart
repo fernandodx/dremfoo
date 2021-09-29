@@ -11,5 +11,9 @@ abstract class IDreamCase {
 
   Future<ResponseApi<List<DailyGoal>>> findDailyGoalForUser(String uidDream);
 
+  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal);
+
+  Future<ResponseApi> updateStepDream(StepDream stepDream);
+
 
 }

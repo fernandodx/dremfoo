@@ -13,6 +13,8 @@ abstract class IDreamRepository {
 
   Future<void> updateDailyGoal(DailyGoal dailyGoal);
 
+  Future<void> updateStepDream(StepDream stepDream);
+
   Future<void> registerHistoryDailyGoal(DailyGoal dailyGoal);
 
   Future<void> deleteRegisterHistoryDailyGoalforDate(DailyGoal dailyGoal, DateTime dateDelete);

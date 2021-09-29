@@ -8,7 +8,7 @@ class ChoiceChipRevoWidget extends StatelessWidget {
   String label;
   String color;
   bool isCompleted;
-  Function(bool)? onSelected;
+  Function(bool) onSelected;
 
   ChoiceChipRevoWidget(
   {required this.label, required this.color, required this.isCompleted, required this.onSelected});
@@ -22,7 +22,7 @@ class ChoiceChipRevoWidget extends StatelessWidget {
         label: TextUtil.textChipMenu(label),
         backgroundColor: Utils.colorFromHex(color),
         selectedColor: AppColors.colorPrimary,
-        selected: false,
+        selected: isCompleted,
         avatar: isCompleted
             ? CircleAvatar(
           backgroundColor: AppColors.colorPrimaryDark,
@@ -36,7 +36,7 @@ class ChoiceChipRevoWidget extends StatelessWidget {
           Icons.radio_button_unchecked,
           color: AppColors.colorDark,
         ),
-        onSelected: onSelected,
+        onSelected: (isSelected) => onSelected(isSelected)
       ),
     );
   }

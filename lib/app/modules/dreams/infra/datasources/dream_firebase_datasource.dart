@@ -68,7 +68,8 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
     DocumentReference dreamRef = dailyRef.parent.parent!;
     CollectionReference histRef = dreamRef.collection("dailyCompletedHist");
 
-    DateTime date = Utils.stringToDate("${dateDelete.year}-${dateDelete.month}-${dateDelete.day}");
+    String dateStr = "${dateDelete.year}-${Utils.addZeroLeft(dateDelete.month)}-${dateDelete.day}";
+    DateTime date = Utils.stringToDate(dateStr);
     QuerySnapshot query = await histRef
                                 .where("uid", isEqualTo: dailyGoal.uid)
                                 .where("lastDateCompleted", isGreaterThan: Timestamp.fromDate(date))
@@ -78,5 +79,10 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
         snapshot.reference.delete().catchError(handlerError);
       }
     }
+  }
+
+  Future<void> updateStepDream(StepDream stepDream) async {
+    DocumentReference stepUpdate = stepDream.reference;
+    stepUpdate.set(stepDream.toMap()).catchError(handlerError);
   }
 }
