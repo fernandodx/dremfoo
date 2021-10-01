@@ -6,10 +6,10 @@ class BottomNavigateStore = _BottomNavigateStoreBase with _$BottomNavigateStore;
 abstract class _BottomNavigateStoreBase with Store {
 
   @observable
-  int value = 0;
+  bool isAppBarVisible = false;
 
   @action
-  void increment() {
-    value++;
+  void showHideAppBar(bool isAppBarVisible) {
+    this.isAppBarVisible = isAppBarVisible;
   } 
 }

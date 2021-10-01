@@ -15,5 +15,7 @@ abstract class IDreamCase {
 
   Future<ResponseApi> updateStepDream(StepDream stepDream);
 
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentDate(Dream dream, DateTime date);
+
 
 }

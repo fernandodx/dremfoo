@@ -50,26 +50,28 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: TextUtil.textAppbar(widget.title),
-        actions: [
-          Container(
-              margin: EdgeInsets.only(right: 32),
-              child: InkWell(
-                onTap: (){
-                  print("menu");
-                },
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png"),
-                ),
-                ),
+    AppBar myAppBar = AppBar(
+      title: TextUtil.textAppbar(widget.title),
+      actions: [
+        Container(
+          margin: EdgeInsets.only(right: 32),
+          child: InkWell(
+            onTap: (){
+              print("menu");
+            },
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage(Utils.getPathAssetsImg("icon_user_not_found.png"),
               ),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+
+    return Scaffold(
+      appBar: store.isAppBarVisible ? myAppBar : null,
       backgroundColor: AppColors.colorBackground,
       // body: _widgetOptions.elementAt(_selectedIndex),
       body: RouterOutlet(),
@@ -81,7 +83,7 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
               icon: Icon(Icons.home),
               label: "Home",
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.cloud), label: "Sonhos"),
+            BottomNavigationBarItem(icon: Icon(Icons.cloud), label: "Sonhos",),
             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Gráficos"),
             BottomNavigationBarItem(icon: Icon(Icons.assignment_turned_in), label: "Desafios"),
           ],
@@ -97,8 +99,10 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
             //   _selectedIndex = index;
             // });
             if (index == 0) {
+              store.showHideAppBar(true);
               Modular.to.navigate('/home/dashboard');
             } else if (index == 1) {
+              store.showHideAppBar(false);
               Modular.to.navigate('/home/dream');
             } else if (index == 2) {
               Modular.to.navigate('/home/chart');

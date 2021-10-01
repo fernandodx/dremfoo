@@ -49,7 +49,8 @@ abstract class _DreamStoreBase with Store {
 
   void editDream(BuildContext context, Dream dreamSelected) {
     print("NAVAGAR PARA PAGINA DE DETALHE");
-    //Modular.to.navigate('/home/dream/detail');
+    // Modular.to.navigate('/home/dream/detail', arguments: dreamSelected);
+    // Modular.to.navigate('/dream/detail', arguments: dreamSelected);
     Navigator.pushNamed(context, "/home/dream/detail", arguments: dreamSelected);
   }
 

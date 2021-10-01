@@ -32,6 +32,10 @@ abstract class _DetailDreamStoreBase with Store {
    @observable
    ObservableList<StepDream> listStep = ObservableList<StepDream>.of([]);
 
+   DateTime currentDate = DateTime.now();
+
+   List<DailyGoal> _listDailyGoalsCurrentDate = [];
+
    var user =  Modular.get<UserRevo>();
 
    @action
@@ -64,10 +68,38 @@ abstract class _DetailDreamStoreBase with Store {
       }
    }
 
+
+   Future<ResponseApi<List<DailyGoal>>> _findHistoryCurrentDateDailyGoal(Dream dream) async {
+      if(dream.uid != null && dream.uid!.isNotEmpty){
+         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentDate(dream, currentDate);
+         msgAlert = responseApi.messageAlert;
+         if(responseApi.ok){
+            _listDailyGoalsCurrentDate = responseApi.result!;
+         }
+         return responseApi;
+      }else{
+         return ResponseApi.error(messageAlert: MessageAlert.create("Ops", "Uid == null", TypeAlert.ERROR));
+      }
+   }
+
+   @action
+   void changeCurrentDayForDailyGoal(Dream dream, DateTime dateTime) async {
+
+       await _findHistoryCurrentDateDailyGoal(dream);
+      List<DailyGoal> listCurrentDate = [];
+      for(DailyGoal daily in listDailyGoals){
+         int index = _listDailyGoalsCurrentDate.indexWhere((hist) => hist.nameDailyGoal == daily.nameDailyGoal);
+         daily.isHistCompletedDay = index >= 0;
+         listCurrentDate.add(daily);
+      }
+       listDailyGoals = ObservableList.of(listCurrentDate);
+   }
+
    void fetch(Dream dream) async {
       // isLoading = true;
-      _findDailyGoal(dream);
       _findStepDream(dream);
+      // await _findHistoryCurrentDateDailyGoal(dream);
+      await _findDailyGoal(dream);
       // isLoading = false;
    }
 

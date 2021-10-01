@@ -19,5 +19,7 @@ abstract class IDreamRepository {
 
   Future<void> deleteRegisterHistoryDailyGoalforDate(DailyGoal dailyGoal, DateTime dateDelete);
 
+  Future<List<DailyGoal>> findIntervalHistoryDailyGoal(Dream dream, DateTime dateStart, DateTime dateEnd);
+
 
 }

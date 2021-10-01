@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -122,6 +123,21 @@ class DreamRespository extends IDreamRepository {
       CrashlyticsUtil.logErro(error, stack);
       throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
     }
+  }
+
+  @override
+  Future<List<DailyGoal>> findIntervalHistoryDailyGoal(Dream dream, DateTime dateStart, DateTime dateEnd) async {
+   try{
+     Timestamp start = Timestamp.fromDate(
+         DateTime(dateStart.year, dateStart.month, dateStart.day));
+     Timestamp end = Timestamp.fromDate(
+         DateTime(dateEnd.year, dateEnd.month, dateEnd.day)
+             .add(Duration(days: 1)));
+     return _datasource.findIntervalHistoryDailyGoal(dream, start, end);
+   } catch(error, stack) {
+     CrashlyticsUtil.logErro(error, stack);
+     throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+   }
   }
 
 

@@ -70,8 +70,8 @@ class AppColors {
   static BoxDecoration backgroundBoxDecorationImg() {
     return BoxDecoration(
         gradient: LinearGradient(
-            colors: [Colors.transparent, Colors.black87],
-            begin: FractionalOffset.topCenter,
+            colors: [Colors.transparent, AppColors.colorBackground],
+            begin: FractionalOffset.center,
             end: FractionalOffset.bottomCenter));
   }
 
