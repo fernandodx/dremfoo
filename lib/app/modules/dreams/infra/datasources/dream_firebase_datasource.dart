@@ -88,17 +88,13 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
 
   Future<List<DailyGoal>> findIntervalHistoryDailyGoal(Dream dream, Timestamp dateStart, Timestamp dateEnd) async {
     DocumentReference dreamRef = dream.reference!;
-    // Timestamp start = Timestamp.fromDate(
-    //     DateTime(dateStart.year, dateStart.month, dateStart.day));
-    // Timestamp end = Timestamp.fromDate(
-    //     DateTime(dateEnd.year, dateEnd.month, dateEnd.day)
-    //         .add(Duration(days: 1)));
 
     QuerySnapshot query = await dreamRef
         .collection("dailyCompletedHist")
         .where("lastDateCompleted", isGreaterThanOrEqualTo: dateStart)
         .where("lastDateCompleted", isLessThanOrEqualTo: dateEnd)
-        .get();
+        .get()
+        .catchError(handlerError);
 
     return DailyGoal.fromListDocumentSnapshot(query.docs);
   }

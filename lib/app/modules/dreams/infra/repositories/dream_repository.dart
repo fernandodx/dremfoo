@@ -128,11 +128,8 @@ class DreamRespository extends IDreamRepository {
   @override
   Future<List<DailyGoal>> findIntervalHistoryDailyGoal(Dream dream, DateTime dateStart, DateTime dateEnd) async {
    try{
-     Timestamp start = Timestamp.fromDate(
-         DateTime(dateStart.year, dateStart.month, dateStart.day));
-     Timestamp end = Timestamp.fromDate(
-         DateTime(dateEnd.year, dateEnd.month, dateEnd.day)
-             .add(Duration(days: 1)));
+     Timestamp start = Timestamp.fromDate(dateStart);
+     Timestamp end = Timestamp.fromDate(dateEnd);
      return _datasource.findIntervalHistoryDailyGoal(dream, start, end);
    } catch(error, stack) {
      CrashlyticsUtil.logErro(error, stack);

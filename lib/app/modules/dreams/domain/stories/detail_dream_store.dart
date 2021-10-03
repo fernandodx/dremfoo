@@ -32,9 +32,10 @@ abstract class _DetailDreamStoreBase with Store {
    @observable
    ObservableList<StepDream> listStep = ObservableList<StepDream>.of([]);
 
+   @observable
    DateTime currentDate = DateTime.now();
 
-   List<DailyGoal> _listDailyGoalsCurrentDate = [];
+   // List<DailyGoal> _listDailyGoalsCurrentDate = [];
 
    var user =  Modular.get<UserRevo>();
 
@@ -69,12 +70,13 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
 
-   Future<ResponseApi<List<DailyGoal>>> _findHistoryCurrentDateDailyGoal(Dream dream) async {
+   Future<ResponseApi<List<DailyGoal>>> _findHistoryCurrentDateDailyGoal(Dream dream, DateTime dateSelected) async {
       if(dream.uid != null && dream.uid!.isNotEmpty){
-         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentDate(dream, currentDate);
+         print("FIND -> ${currentDate.toString()}");
+         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentDate(dream, dateSelected);
          msgAlert = responseApi.messageAlert;
          if(responseApi.ok){
-            _listDailyGoalsCurrentDate = responseApi.result!;
+            print("RESPONSE OK -> ${responseApi.result!}");
          }
          return responseApi;
       }else{
@@ -83,52 +85,63 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
    @action
-   void changeCurrentDayForDailyGoal(Dream dream, DateTime dateTime) async {
+   void _setListDailyGoals(List<DailyGoal> listDailyGoal) {
+      listDailyGoals = ObservableList.of(listDailyGoal);
+   }
 
-       await _findHistoryCurrentDateDailyGoal(dream);
-      List<DailyGoal> listCurrentDate = [];
-      for(DailyGoal daily in listDailyGoals){
-         int index = _listDailyGoalsCurrentDate.indexWhere((hist) => hist.nameDailyGoal == daily.nameDailyGoal);
-         daily.isHistCompletedDay = index >= 0;
-         listCurrentDate.add(daily);
+   @action
+   void _setListStepDream(List<StepDream> listStepDream) {
+      listStepDream = ObservableList.of(listStepDream);
+   }
+
+   @action
+   void _setCurrentDate(DateTime dateTime) {
+      currentDate = dateTime;
+   }
+
+   void _updateListDailyGoal(int index, DailyGoal? dailyGoal) {
+      if(dailyGoal != null) {
+         List<DailyGoal> listTemp = [];
+         listTemp.addAll(listDailyGoals);
+         listTemp[index] = dailyGoal;
+         _setListDailyGoals(listTemp);
       }
-       listDailyGoals = ObservableList.of(listCurrentDate);
+   }
+
+
+   void _updateListStepDream(int index, StepDream? stepDream) {
+      if(stepDream != null) {
+         List<StepDream> listTemp = [];
+         listTemp.addAll(listStep);
+         listTemp[index] = stepDream;
+         _setListStepDream(listTemp);
+      }
+   }
+
+   Future<void> changeCurrentDayForDailyGoal(Dream dream, DateTime dateTime) async {
+      ResponseApi<List<DailyGoal>> responseHist = await _findHistoryCurrentDateDailyGoal(dream, dateTime);
+      if(responseHist.ok){
+         List<DailyGoal> listCurrentDate = [];
+         List<DailyGoal> _listDailyGoalsCurrentDate = responseHist.result!;
+         for(DailyGoal daily in listDailyGoals){
+            int index = _listDailyGoalsCurrentDate.indexWhere((hist) => hist.nameDailyGoal == daily.nameDailyGoal);
+            daily.isHistCompletedDay = index >= 0;
+            listCurrentDate.add(daily);
+         }
+         _setCurrentDate(dateTime);
+         _setListDailyGoals(listCurrentDate);
+      }
    }
 
    void fetch(Dream dream) async {
       // isLoading = true;
       _findStepDream(dream);
       // await _findHistoryCurrentDateDailyGoal(dream);
-      await _findDailyGoal(dream);
+     _findDailyGoal(dream);
       // isLoading = false;
    }
 
-   @action
-   void removeListDailyGoal(int index, DailyGoal? dailyGoal) {
-      if(dailyGoal != null) {
-         listDailyGoals.removeAt(index);
-      }
-   }
 
-   @action
-   void _updateListDailyGoal(int index, DailyGoal? dailyGoal) {
-      if(dailyGoal != null) {
-         List<DailyGoal> listTemp = [];
-         listTemp.addAll(listDailyGoals);
-         listTemp[index] = dailyGoal;
-         listDailyGoals = ObservableList.of(listTemp);
-      }
-   }
-
-   @action
-   void _updateListStepDream(int index, StepDream? stepDream) {
-      if(stepDream != null) {
-         List<StepDream> listTemp = [];
-         listTemp.addAll(listStep);
-         listTemp[index] = stepDream;
-         listStep = ObservableList.of(listTemp);
-      }
-   }
 
    Future<void> updateDailyGoal(DailyGoal? dailyGoal, bool isSelected) async  {
       if(dailyGoal != null) {

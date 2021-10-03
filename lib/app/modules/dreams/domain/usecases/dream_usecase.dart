@@ -1,6 +1,7 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -116,7 +117,8 @@ class DreamUseCase extends IDreamCase {
   @override
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentDate(Dream dream, DateTime date) async {
     try{
-      _repository.findIntervalHistoryDailyGoal(dream, date, date);
+      List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(date), Utils.resetEndDay(date));
+      return ResponseApi.ok(result: listHist);
     } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);

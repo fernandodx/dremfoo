@@ -10,7 +10,7 @@ class DailyGoal {
   Timestamp? lastDateCompleted;
   late Dream dreamParent;
   late DocumentReference reference;
-  late bool isHistCompletedDay;
+  bool? isHistCompletedDay;
 
 //  Set<StatusDream> statusDream = Set();
 
@@ -50,6 +50,11 @@ class DailyGoal {
     if(lastDateCompleted == null){
       return false;
     }
+
+    if(isHistCompletedDay != null) {
+      return isHistCompletedDay!;
+    }
+
     DateTime dateCompleted = lastDateCompleted!.toDate();
     DateTime dateNow = DateTime.now();
     if(dateNow.day == dateCompleted.day
