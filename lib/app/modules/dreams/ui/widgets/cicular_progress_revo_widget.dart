@@ -5,20 +5,25 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class CicularProgressRevoWidget extends StatelessWidget {
   final String titleCenter;
-  final String titleBottom;
+  final String? titleBottom;
   final double value;
+  final double radius;
 
-  CicularProgressRevoWidget({required this.titleCenter, required this.titleBottom, required this.value});
+  CicularProgressRevoWidget(
+      {required this.titleCenter,
+      this.titleBottom,
+      required this.value,
+      this.radius = 50});
 
   @override
   Widget build(BuildContext context) {
-    return  CircularPercentIndicator(
-      radius: 50,
+    return CircularPercentIndicator(
+      radius: radius,
       lineWidth: 6,
       percent: value,
       animation: true,
       center: TextUtil.textSubTitle(titleCenter, fontSize: 10),
-      footer: TextUtil.textSubTitle(titleBottom, fontSize: 14),
+      footer: TextUtil.textSubTitle(titleBottom ?? "", fontSize: 14),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: AppColors.colorAcentProgress,
       backgroundColor: Colors.white38,

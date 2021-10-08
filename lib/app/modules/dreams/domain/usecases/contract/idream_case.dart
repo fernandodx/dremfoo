@@ -11,11 +11,13 @@ abstract class IDreamCase {
 
   Future<ResponseApi<List<DailyGoal>>> findDailyGoalForUser(String uidDream);
 
-  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal);
+  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal, DateTime currentDate);
 
   Future<ResponseApi> updateStepDream(StepDream stepDream);
 
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentDate(Dream dream, DateTime date);
+
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date);
 
 
 }

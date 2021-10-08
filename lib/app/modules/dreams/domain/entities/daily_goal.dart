@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/model/dream.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 class DailyGoal {
 
@@ -57,13 +58,20 @@ class DailyGoal {
 
     DateTime dateCompleted = lastDateCompleted!.toDate();
     DateTime dateNow = DateTime.now();
-    if(dateNow.day == dateCompleted.day
-      && dateNow.month == dateCompleted.month
-      && dateNow.year == dateCompleted.year){
-      return true;
+    return dateCompleted.isSameDate(dateNow);
+  }
+
+  bool isCompletedInDate(DateTime dateTime){
+    if(isHistCompletedDay != null) {
+      return isHistCompletedDay!;
     }
 
-    return false;
+    if(lastDateCompleted == null){
+      return false;
+    }
+
+    DateTime dateCompleted = lastDateCompleted!.toDate();
+    return dateCompleted.isSameDate(dateTime);
   }
 
   @override

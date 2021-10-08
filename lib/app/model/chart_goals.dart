@@ -72,7 +72,6 @@ class ChartGoals {
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
         ),
-        touchCallback: (LineTouchResponse touchResponse) {},
         handleBuiltInTouches: false,
       ),
       gridData: FlGridData(
@@ -82,11 +81,6 @@ class ChartGoals {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 16,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xff0D7282),
-            fontWeight: FontWeight.normal,
-            fontSize: 12,
-          ),
           margin: 7,
           getTitles: (value) {
             switch (value.toInt()) {
@@ -110,11 +104,6 @@ class ChartGoals {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xff0D7282),
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          ),
           getTitles: (value) {
             switch (value.toInt()) {
               case 0:
@@ -359,10 +348,6 @@ class ChartGoals {
                         show: true,
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (_) => TextStyle(
-                              color: AppColors.colorText,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12),
                           margin: 8,
                           getTitles: (double value) {
                             switch (value.toInt()) {
@@ -397,9 +382,6 @@ class ChartGoals {
                         ),
                         rightTitles: SideTitles(
                             showTitles: true,
-                            getTextStyles: (_) => TextStyle(
-                              fontSize: 16,
-                            ),
                             getTitles: (value) {
                               if (listGoalMonth.contains(value.toInt())) {
                                 return "🥳";
@@ -408,10 +390,6 @@ class ChartGoals {
                             }),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (_) => TextStyle(
-                              color: AppColors.colorText,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12),
                           margin: 32,
                           reservedSize: 16,
                           getTitles: (value) {
@@ -536,9 +514,6 @@ class ChartGoals {
                         show: true,
                         rightTitles: SideTitles(
                             showTitles: true,
-                            getTextStyles: (_) => TextStyle(
-                              fontSize: 16,
-                            ),
                             getTitles: (double value) {
                               if (listGoalMonth.contains(value.toInt())) {
                                 return "🥳";
@@ -547,10 +522,6 @@ class ChartGoals {
                             }),
                         bottomTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (_) => TextStyle(
-                              color: AppColors.colorText,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 12),
                           margin: 8,
                           getTitles: (double value) {
                             switch (value.toInt()) {
@@ -585,10 +556,6 @@ class ChartGoals {
                         ),
                         leftTitles: SideTitles(
                           showTitles: true,
-                          getTextStyles: (_) => TextStyle(
-                              color: AppColors.colorText,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10),
                           margin: 16,
                           reservedSize: 16,
                           getTitles: (value) {

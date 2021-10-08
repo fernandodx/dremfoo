@@ -10,6 +10,7 @@ import 'package:dremfoo/app/modules/dreams/infra/repositories/contract/idream_re
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 class DreamUseCase extends IDreamCase {
 
@@ -89,15 +90,19 @@ class DreamUseCase extends IDreamCase {
   }
 
   @override
-  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal) async {
+  Future<ResponseApi> updateDailyGoalDream(DailyGoal dailyGoal, DateTime currentDate) async {
 
     try{
-      await _repository.updateDailyGoal(dailyGoal);
+
+      if(dailyGoal.lastDateCompleted == null
+          || dailyGoal.lastDateCompleted!.toDate().isSameDate(DateTime.now())){
+        await _repository.updateDailyGoal(dailyGoal);
+      }
 
       if(dailyGoal.lastDateCompleted != null) {
         await _repository.registerHistoryDailyGoal(dailyGoal);
       }else{
-        await _repository.deleteRegisterHistoryDailyGoalforDate(dailyGoal, DateTime.now());
+        await _repository.deleteRegisterHistoryDailyGoalforDate(dailyGoal, currentDate);
       }
 
       return ResponseApi.ok();
@@ -118,6 +123,26 @@ class DreamUseCase extends IDreamCase {
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentDate(Dream dream, DateTime date) async {
     try{
       List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(date), Utils.resetEndDay(date));
+      return ResponseApi.ok(result: listHist);
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date) async {
+    try{
+
+      DateTime firstDay = date.subtract(Duration(days: date.weekday));
+      DateTime endDay = firstDay.add(Duration(days: 7));
+
+      List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
       return ResponseApi.ok(result: listHist);
     } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

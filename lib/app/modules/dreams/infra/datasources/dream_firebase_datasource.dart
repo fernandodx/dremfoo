@@ -68,11 +68,14 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
     DocumentReference dreamRef = dailyRef.parent.parent!;
     CollectionReference histRef = dreamRef.collection("dailyCompletedHist");
 
-    String dateStr = "${dateDelete.year}-${Utils.addZeroLeft(dateDelete.month)}-${dateDelete.day}";
-    DateTime date = Utils.stringToDate(dateStr);
+    // String dateStr = "${dateDelete.year}-${Utils.addZeroLeft(dateDelete.month)}-${Utils.addZeroLeft(dateDelete.day)}";
+    // DateTime date = Utils.stringToDate(dateStr);
+    DateTime dateStart = Utils.resetStartDay(dateDelete);
+    DateTime dateEnd = Utils.resetEndDay(dateDelete);
     QuerySnapshot query = await histRef
                                 .where("uid", isEqualTo: dailyGoal.uid)
-                                .where("lastDateCompleted", isGreaterThan: Timestamp.fromDate(date))
+                                .where("lastDateCompleted", isGreaterThanOrEqualTo: Timestamp.fromDate(dateStart))
+                                .where("lastDateCompleted", isLessThanOrEqualTo: Timestamp.fromDate(dateEnd))
                                 .get();
     for (QueryDocumentSnapshot snapshot in query.docs) {
       if (snapshot.exists) {

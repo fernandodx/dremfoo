@@ -11,6 +11,7 @@ import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 part 'detail_dream_store.g.dart';
 
@@ -33,9 +34,10 @@ abstract class _DetailDreamStoreBase with Store {
    ObservableList<StepDream> listStep = ObservableList<StepDream>.of([]);
 
    @observable
-   DateTime currentDate = DateTime.now();
+   ObservableList<DailyGoal> listHistoryWeekDailyGoals = ObservableList<DailyGoal>.of([]);
 
-   // List<DailyGoal> _listDailyGoalsCurrentDate = [];
+   @observable
+   DateTime currentDate = DateTime.now();
 
    var user =  Modular.get<UserRevo>();
 
@@ -69,14 +71,20 @@ abstract class _DetailDreamStoreBase with Store {
       }
    }
 
+   List<DailyGoal> _findHistoryCurrentDateDailyGoal(Dream dream, DateTime dateSelected) {
+      List<DailyGoal> result = listHistoryWeekDailyGoals.where(
+              (daily) => daily.lastDateCompleted!.toDate().isSameDate(dateSelected))
+             .toList();
+      return result;
+   }
 
-   Future<ResponseApi<List<DailyGoal>>> _findHistoryCurrentDateDailyGoal(Dream dream, DateTime dateSelected) async {
+   Future<ResponseApi<List<DailyGoal>>> _findHistoryWeekDailyGoal(Dream dream) async {
+
       if(dream.uid != null && dream.uid!.isNotEmpty){
-         print("FIND -> ${currentDate.toString()}");
-         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentDate(dream, dateSelected);
+         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentWeek(dream, DateTime.now());
          msgAlert = responseApi.messageAlert;
          if(responseApi.ok){
-            print("RESPONSE OK -> ${responseApi.result!}");
+            listHistoryWeekDailyGoals = responseApi.result!.asObservable();
          }
          return responseApi;
       }else{
@@ -90,6 +98,11 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
    @action
+   void _setListHitoryWeekDailyGoals(List<DailyGoal> listDailyGoal) {
+      listHistoryWeekDailyGoals = ObservableList.of(listDailyGoal);
+   }
+
+   @action
    void _setListStepDream(List<StepDream> listStepDream) {
       listStepDream = ObservableList.of(listStepDream);
    }
@@ -99,12 +112,49 @@ abstract class _DetailDreamStoreBase with Store {
       currentDate = dateTime;
    }
 
+   @computed
+   double get percentWeekCompleted {
+      var daysWeek = 7;
+      var countDaily = listDailyGoals.length;
+      var countCompletedDailyHist = listHistoryWeekDailyGoals.length;
+      return countCompletedDailyHist / (countDaily * daysWeek);
+   }
+
+   @computed
+   int get countDailyGoal => listDailyGoals.length;
+
    void _updateListDailyGoal(int index, DailyGoal? dailyGoal) {
       if(dailyGoal != null) {
          List<DailyGoal> listTemp = [];
          listTemp.addAll(listDailyGoals);
          listTemp[index] = dailyGoal;
          _setListDailyGoals(listTemp);
+      }
+   }
+
+   void _updateListDailyGoalHistWeek(DailyGoal? dailyGoal, DateTime currentDate) {
+      if(dailyGoal != null) {
+         List<DailyGoal> listTemp = [];
+         listTemp.addAll(listHistoryWeekDailyGoals);
+
+         print("LIST WEEK PAST = ${listHistoryWeekDailyGoals.map((e) => e.lastDateCompleted!.toDate())}");
+
+         if(dailyGoal.isHistCompletedDay == true){
+            var map = dailyGoal.toMap();
+            DailyGoal newDaily = DailyGoal.fromMap(map);
+            listTemp.add(newDaily);
+         }else{
+            int index = listTemp.indexWhere(
+                    (hist) {
+                       return hist.nameDailyGoal == dailyGoal.nameDailyGoal
+                       && hist.lastDateCompleted!.toDate().isSameDate(currentDate);
+                    });
+            listTemp.removeAt(index);
+         }
+
+         _setListHitoryWeekDailyGoals(listTemp);
+
+         print("LIST WEEK NEW = ${listTemp.map((e) => e.lastDateCompleted!.toDate())}");
       }
    }
 
@@ -119,25 +169,23 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
    Future<void> changeCurrentDayForDailyGoal(Dream dream, DateTime dateTime) async {
-      ResponseApi<List<DailyGoal>> responseHist = await _findHistoryCurrentDateDailyGoal(dream, dateTime);
-      if(responseHist.ok){
-         List<DailyGoal> listCurrentDate = [];
-         List<DailyGoal> _listDailyGoalsCurrentDate = responseHist.result!;
-         for(DailyGoal daily in listDailyGoals){
-            int index = _listDailyGoalsCurrentDate.indexWhere((hist) => hist.nameDailyGoal == daily.nameDailyGoal);
-            daily.isHistCompletedDay = index >= 0;
-            listCurrentDate.add(daily);
-         }
-         _setCurrentDate(dateTime);
-         _setListDailyGoals(listCurrentDate);
+      List<DailyGoal> _listDailyGoalsCurrentDate = _findHistoryCurrentDateDailyGoal(dream, dateTime);
+      List<DailyGoal> listCurrentDate = [];
+
+      for(DailyGoal daily in listDailyGoals){
+         int index = _listDailyGoalsCurrentDate.indexWhere((hist) => hist.nameDailyGoal == daily.nameDailyGoal);
+         daily.isHistCompletedDay = index >= 0;
+         listCurrentDate.add(daily);
       }
+      _setCurrentDate(dateTime);
+      _setListDailyGoals(listCurrentDate);
    }
 
    void fetch(Dream dream) async {
       // isLoading = true;
       _findStepDream(dream);
-      // await _findHistoryCurrentDateDailyGoal(dream);
-     _findDailyGoal(dream);
+      _findDailyGoal(dream);
+      _findHistoryWeekDailyGoal(dream);
       // isLoading = false;
    }
 
@@ -146,11 +194,13 @@ abstract class _DetailDreamStoreBase with Store {
    Future<void> updateDailyGoal(DailyGoal? dailyGoal, bool isSelected) async  {
       if(dailyGoal != null) {
          var index = listDailyGoals.indexOf(dailyGoal);
-         dailyGoal.lastDateCompleted = isSelected ? Timestamp.now() : null;
-         ResponseApi responseApi = await _dreamCase.updateDailyGoalDream(dailyGoal);
+         dailyGoal.lastDateCompleted = isSelected ? Timestamp.fromDate(currentDate) : null;
+         dailyGoal.isHistCompletedDay = isSelected;
+         ResponseApi responseApi = await _dreamCase.updateDailyGoalDream(dailyGoal, currentDate);
          msgAlert = responseApi.messageAlert;
          if(responseApi.ok){
             _updateListDailyGoal(index, dailyGoal);
+            _updateListDailyGoalHistWeek(dailyGoal, currentDate);
          }
       }
    }
@@ -158,7 +208,7 @@ abstract class _DetailDreamStoreBase with Store {
    Future<void> updateStepDream(StepDream? stepDream, bool isSelected) async  {
       if(stepDream != null) {
          var index = listStep.indexOf(stepDream);
-         stepDream.dateCompleted = isSelected ? Timestamp.now() : null;
+         stepDream.dateCompleted = isSelected ? Timestamp.fromDate(currentDate) : null;
          ResponseApi responseApi = await _dreamCase.updateStepDream(stepDream);
          msgAlert = responseApi.messageAlert;
          if(responseApi.ok){

@@ -115,12 +115,14 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
 
   ListView body() {
     return ListView(
+
       children: [
         Observer(
           builder: (context) {
             return BodyItemDreamWidget(
               listDailyGoal: store.listDailyGoals,
               listStepDream: store.listStep,
+              listHistWeekDailyGoal: store.listHistoryWeekDailyGoals,
               colorDream: widget.dreamSelected.color?.primary ?? "#BAF3BE",
               onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
                 store.updateDailyGoal(dailyGoal, isSelected);
