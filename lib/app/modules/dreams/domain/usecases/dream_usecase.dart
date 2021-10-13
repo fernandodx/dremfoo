@@ -11,6 +11,7 @@ import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 
 class DreamUseCase extends IDreamCase {
 
@@ -141,6 +142,25 @@ class DreamUseCase extends IDreamCase {
 
       DateTime firstDay = date.subtract(Duration(days: date.weekday));
       DateTime endDay = firstDay.add(Duration(days: 7));
+
+      List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
+      return ResponseApi.ok(result: listHist);
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentYearlyMonth(Dream dream, DateTime date) async {
+    try{
+      DateTime firstDay = DateTime(date.year, 1,1); //01/01/2021
+      DateTime endDay = DateTime(date.year, 12,31); //31/01/2021
 
       List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
       return ResponseApi.ok(result: listHist);

@@ -18,8 +18,12 @@ extension CapExtension on String {
 
 extension PercentExtensions on double {
   String get toIntPercent {
-    if(this == double.nan || this.isInfinite) return "0%";
+    if(this.isNaN || this.isInfinite) return "0%";
     return "${(this*100).toInt()}%";
+  }
+  String get formatIntPercent {
+    if(this.isNaN || this.isInfinite) return "0%";
+    return "${(this).toInt()}%";
   }
 }
 

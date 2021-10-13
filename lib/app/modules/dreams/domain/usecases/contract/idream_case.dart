@@ -19,5 +19,7 @@ abstract class IDreamCase {
 
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date);
 
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentYearlyMonth(Dream dream, DateTime date);
+
 
 }

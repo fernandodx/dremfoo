@@ -38,5 +38,19 @@
     "label_hist_daily_goal": "History of daily goals",
     "label_daily_goals": "Daily goals",
     "label_steps": "Steps",
-	"label_today": "Today"
+	"label_today": "Today",
+	"label_your_week": "Your week",
+	"label_your_month": "Your month",
+	"label_monitor_goal_daily": "Daily monitoring of goals",
+	"label_monitor_goal_month": "Monthly monitoring of goals",
+	"label_goal": "Goal",
+	"label_week_day_mon": "MON",
+	"label_week_day_tue": "TUE",
+	"label_week_day_wed": "WED",
+	"label_week_day_thu": "THU",
+	"label_week_day_fri": "FRI",
+	"label_week_day_sat": "SAT",
+	"label_week_day_sun": "SUN",
+	"label_weekly": "Weekly",
+	"label_monthly": "Monthly"
 }

@@ -9,6 +9,7 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
@@ -37,7 +38,15 @@ abstract class _DetailDreamStoreBase with Store {
    ObservableList<DailyGoal> listHistoryWeekDailyGoals = ObservableList<DailyGoal>.of([]);
 
    @observable
+   ObservableList<DailyGoal> listHistoryYaerlyMonthDailyGoals = ObservableList<DailyGoal>.of([]);
+
+   @observable
    DateTime currentDate = DateTime.now();
+
+   @observable
+   bool isChartWeek = true;
+
+
 
    var user =  Modular.get<UserRevo>();
 
@@ -92,6 +101,19 @@ abstract class _DetailDreamStoreBase with Store {
       }
    }
 
+   Future<ResponseApi<List<DailyGoal>>> _findHistoryYearlyMonthDailyGoal(Dream dream) async {
+      if(dream.uid != null && dream.uid!.isNotEmpty){
+         ResponseApi<List<DailyGoal>> responseApi = await _dreamCase.findHistoryDailyGoalCurrentYearlyMonth(dream, currentDate);
+         msgAlert = responseApi.messageAlert;
+         if(responseApi.ok){
+            listHistoryYaerlyMonthDailyGoals = responseApi.result!.asObservable();
+         }
+         return responseApi;
+      }else{
+         return ResponseApi.error(messageAlert: MessageAlert.create("Ops", "Uid == null", TypeAlert.ERROR));
+      }
+   }
+
    @action
    void _setListDailyGoals(List<DailyGoal> listDailyGoal) {
       listDailyGoals = ObservableList.of(listDailyGoal);
@@ -100,6 +122,16 @@ abstract class _DetailDreamStoreBase with Store {
    @action
    void _setListHitoryWeekDailyGoals(List<DailyGoal> listDailyGoal) {
       listHistoryWeekDailyGoals = ObservableList.of(listDailyGoal);
+   }
+
+   @action
+   void _setListHitoryMonthDailyGoals(List<DailyGoal> listDailyGoal) {
+      listHistoryYaerlyMonthDailyGoals = ObservableList.of(listDailyGoal);
+   }
+
+   @action
+   void _isChartWeek(bool isWeek){
+      isChartWeek = isWeek;
    }
 
    @action
@@ -121,7 +153,31 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
    @computed
+   double get percentMonthCompleted {
+      var daysInMonth = DateUtil().daysInMonth(currentDate.month, currentDate.year);
+      print("dias no mes= $daysInMonth");
+      var countDaily = listDailyGoals.length;
+      print("qtd metas= $countDaily");
+
+      var listMonth = listHistoryYaerlyMonthDailyGoals.where(
+                       (hist) => hist.lastDateCompleted?.toDate().month == currentDate.month)
+                       .toList();
+
+      var countCompletedDailyHist = listMonth.length;
+      print("historico cumprido= $countCompletedDailyHist");
+      print("total = ${(countDaily * daysInMonth)}");
+      return countCompletedDailyHist / (countDaily * daysInMonth);
+   }
+
+   @computed
    int get countDailyGoal => listDailyGoals.length;
+
+   @computed
+   int get countDailyGoalMaxMonth {
+      var countDaily = listDailyGoals.length;
+      var daysInMonth = DateUtil().daysInMonth(currentDate.month, currentDate.year);
+      return countDaily * daysInMonth;
+   }
 
    void _updateListDailyGoal(int index, DailyGoal? dailyGoal) {
       if(dailyGoal != null) {
@@ -137,8 +193,6 @@ abstract class _DetailDreamStoreBase with Store {
          List<DailyGoal> listTemp = [];
          listTemp.addAll(listHistoryWeekDailyGoals);
 
-         print("LIST WEEK PAST = ${listHistoryWeekDailyGoals.map((e) => e.lastDateCompleted!.toDate())}");
-
          if(dailyGoal.isHistCompletedDay == true){
             var map = dailyGoal.toMap();
             DailyGoal newDaily = DailyGoal.fromMap(map);
@@ -151,10 +205,28 @@ abstract class _DetailDreamStoreBase with Store {
                     });
             listTemp.removeAt(index);
          }
-
          _setListHitoryWeekDailyGoals(listTemp);
+      }
+   }
 
-         print("LIST WEEK NEW = ${listTemp.map((e) => e.lastDateCompleted!.toDate())}");
+   void _updateListDailyGoalHistMonth(DailyGoal? dailyGoal, DateTime currentDate) {
+      if(dailyGoal != null) {
+         List<DailyGoal> listTemp = [];
+         listTemp.addAll(listHistoryYaerlyMonthDailyGoals);
+
+         if(dailyGoal.isHistCompletedDay == true){
+            var map = dailyGoal.toMap();
+            DailyGoal newDaily = DailyGoal.fromMap(map);
+            listTemp.add(newDaily);
+         }else{
+            int index = listTemp.indexWhere(
+                    (hist) {
+                   return hist.nameDailyGoal == dailyGoal.nameDailyGoal
+                       && hist.lastDateCompleted!.toDate().isSameDate(currentDate);
+                });
+            listTemp.removeAt(index);
+         }
+         _setListHitoryMonthDailyGoals(listTemp);
       }
    }
 
@@ -201,6 +273,7 @@ abstract class _DetailDreamStoreBase with Store {
          if(responseApi.ok){
             _updateListDailyGoal(index, dailyGoal);
             _updateListDailyGoalHistWeek(dailyGoal, currentDate);
+            _updateListDailyGoalHistMonth(dailyGoal, currentDate);
          }
       }
    }
@@ -217,6 +290,10 @@ abstract class _DetailDreamStoreBase with Store {
       }
    }
 
-
-
+   Future<void> changeTimeModeChart(Dream dreamSelected, bool isChartWeek) async {
+      if(listHistoryYaerlyMonthDailyGoals.isEmpty){
+         await _findHistoryYearlyMonthDailyGoal(dreamSelected);
+      }
+      _isChartWeek(isChartWeek);
+   }
 }

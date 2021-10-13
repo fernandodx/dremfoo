@@ -1,6 +1,5 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -14,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DetailDreamPage extends StatefulWidget {
 
@@ -83,7 +81,7 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               ]
               ),
             ),
-            title: TextUtil.textAppbar("Seu sonho"),
+            title: TextUtil.textAppbar(widget.dreamSelected.dreamPropose??""),
             bottom: PreferredSize(
               child: Container(
                 margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 4),
@@ -123,15 +121,19 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               listDailyGoal: store.listDailyGoals,
               listStepDream: store.listStep,
               listHistWeekDailyGoal: store.listHistoryWeekDailyGoals,
+              listHistMonthDailyGoal: store.listHistoryYaerlyMonthDailyGoals,
               colorDream: widget.dreamSelected.color?.primary ?? "#BAF3BE",
+              isChartWeek: store.isChartWeek,
+              goalWeek: widget.dreamSelected.goalWeek??0,
+              goalMonth: widget.dreamSelected.goalMonth??0,
+              onTapSelectChart: (isChartWeek)  {
+                store.changeTimeModeChart(widget.dreamSelected, isChartWeek);
+              },
               onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
                 store.updateDailyGoal(dailyGoal, isSelected);
               },
               onTapStep: (bool isSelected, StepDream step) {
                 store.updateStepDream(step, isSelected);
-              },
-              onTapHist: (){
-                print("Hitorico");
               },
             );
           },

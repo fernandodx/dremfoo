@@ -37,6 +37,20 @@
 	"label_hist_daily_goal": "Histórico das metas diárias",
 	"label_daily_goals": "Metas diárias",
 	"label_steps": "Etapas",
-	"label_today": "Hoje"
+	"label_today": "Hoje",
+	"label_your_week": "Sua semana",
+	"label_your_month": "Seu mês",
+	"label_monitor_goal_daily": "Acompanhamento diário das metas",
+	"label_monitor_goal_month": "Monthly monitoring of goals",
+	"label_goal": "Meta",
+	"label_week_day_mon": "SEG",
+	"label_week_day_tue": "TER",
+	"label_week_day_wed": "QUA",
+	"label_week_day_thu": "QUI",
+	"label_week_day_fri": "SEX",
+	"label_week_day_sat": "SAB",
+	"label_week_day_sun": "DOM",
+	"label_weekly": "Semanal",
+	"label_monthly": "Mensal"
 
 }

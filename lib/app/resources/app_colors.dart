@@ -92,6 +92,14 @@ class AppColors {
             end: FractionalOffset.bottomCenter));
   }
 
+  static BoxDecoration backgroundGoalCircularProgress() {
+    return BoxDecoration(
+        gradient: LinearGradient(
+            colors: [colorGreenLight, colorOrangeDark],
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter));
+  }
+
   static backgroundPageGradient() {
     return LinearGradient(
         colors: [Colors.white, Colors.grey[300]!],

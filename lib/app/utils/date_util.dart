@@ -81,7 +81,8 @@ class DateUtil {
   int daysInMonth(int monthNum, int year)
   {
 
-    List<int> monthLength = [];
+    // List<int> monthLength = [];
+    Map<int, int> monthLength = {};
 
     monthLength[0] = 31;
     monthLength[2] = 31;
@@ -100,7 +101,9 @@ class DateUtil {
     else
       monthLength[1] = 28;
 
-    return monthLength[monthNum -1];
+    var days = monthLength[monthNum -1]??31;
+
+    return days;
   }
 
 

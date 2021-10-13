@@ -1,7 +1,6 @@
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/choice_chip_revo_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class StepsDreamWidget extends StatelessWidget {
   List<StepDream>? listStepDream;
