@@ -54,5 +54,10 @@ abstract class _DreamStoreBase with Store {
     Navigator.pushNamed(context, "/home/dream/detail", arguments: dreamSelected);
   }
 
+  void newDream(BuildContext context){
+    Navigator.pushNamed(context, "/home/dream/choiceDream");
+    // Modular.to.navigate("/dream/newDream");
+  }
+
 
 }

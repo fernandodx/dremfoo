@@ -37,7 +37,7 @@ class BodyItemDreamWidget extends StatelessWidget {
         this.goalWeek = 0,
         this.goalMonth = 0,});
 
-  //TODO criar body caso seja um sonho em espera
+  //TODO criar pagina caso seja um sonho em espera
 
 
   @override

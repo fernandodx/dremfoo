@@ -113,7 +113,6 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
 
   ListView body() {
     return ListView(
-
       children: [
         Observer(
           builder: (context) {

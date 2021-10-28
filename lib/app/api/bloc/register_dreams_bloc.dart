@@ -32,6 +32,7 @@ class RegisterDreamsBloc extends BaseBloc {
   List<Step> steps = [];
   List<Widget> stepsForWin = [];
   List<Widget> dailyGoals = [];
+  List<bool> listInfoExpanted = [];
   TextEditingController stepTextEditController = TextEditingController();
   TextEditingController dailyGoalTextEditController = TextEditingController();
   TextEditingController dreamTextEditController = TextEditingController();
@@ -42,7 +43,7 @@ class RegisterDreamsBloc extends BaseBloc {
   TextEditingController inflectionTextEditController = TextEditingController();
   TextEditingController inflectionWeekTextEditController =
       TextEditingController();
-  List<bool> listInfoExpanted = [];
+
 
   void fetch(context, dreamEdit, isWait) {
     if (dreamEdit == null) {

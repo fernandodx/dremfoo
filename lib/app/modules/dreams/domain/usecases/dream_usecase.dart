@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/infra/repositories/contract/iupload_image_repository.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -16,7 +22,8 @@ import 'package:dremfoo/app/utils/date_util.dart';
 class DreamUseCase extends IDreamCase {
 
   IDreamRepository _repository;
-  DreamUseCase(this._repository);
+  IUploadImageRepository _imageRepository;
+  DreamUseCase(this._repository, this._imageRepository);
 
   @override
   Future<ResponseApi<List<Dream>>> findDreamsForUser() async {
@@ -174,6 +181,29 @@ class DreamUseCase extends IDreamCase {
     var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
     return ResponseApi.error(messageAlert: alert);
   }
+
+  @override
+  Future<ResponseApi<String>> loadImageDreamGallery() async {
+    try{
+
+      File img = await _imageRepository.chooseImageGallery(maxWidth: 300, imageQuality: 90);
+      List<int> imageBytes = img.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      AnalyticsUtil.sendAnalyticsEvent(EventRevo.addImageDream);
+      return ResponseApi.ok(result: base64Image);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+
 
 
 

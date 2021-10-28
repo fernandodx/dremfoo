@@ -89,7 +89,6 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: AppColors.colorAcent,
-
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
