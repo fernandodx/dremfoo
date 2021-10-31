@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -100,5 +101,14 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
         .catchError(handlerError);
 
     return DailyGoal.fromListDocumentSnapshot(query.docs);
+  }
+
+  @override
+  Future<List<ColorDream>> findAllColorsDream() async  {
+    QuerySnapshot querySnapshot = await firestore
+        .collection("colorsDreams")
+        .get()
+        .catchError(handlerError);
+    return  ColorDream.fromListDocumentSnapshot(querySnapshot.docs);
   }
 }

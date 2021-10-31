@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -40,6 +41,9 @@ abstract class _RegisterDreamWaitStoreBase with Store {
 
   @observable
   ObservableList<Widget> listDailyGoals = ObservableList<Widget>.of([]);
+
+  @observable
+  ObservableList<ColorDream> listColorDream = ObservableList<ColorDream>.of([]);
 
   Dream dreamForEdit = Dream();
 
@@ -87,8 +91,66 @@ abstract class _RegisterDreamWaitStoreBase with Store {
   }
 
   @action
+  void changeIsRewardWeekDream(bool isRewardWeek){
+    Dream tmp = Dream.copy(dream);
+    if(tmp.isRewardWeek == null ){
+      tmp.isRewardWeek = false;
+    }
+    tmp.isRewardWeek = isRewardWeek;
+    dream = tmp;
+  }
+
+  @action
+  void changeIsInflectionWeekDream(bool isInflectionWeek){
+    Dream tmp = Dream.copy(dream);
+    if(tmp.isInflectionWeek == null ){
+      tmp.isInflectionWeek = false;
+    }
+    tmp.isInflectionWeek = isInflectionWeek;
+    dream = tmp;
+  }
+
+  @action
+  void changeGoalWeekDream(double valueGoalWeek){
+    Dream tmp = Dream.copy(dream);
+    if(tmp.goalWeek == null ){
+      tmp.goalWeek = 0;
+    }
+    tmp.goalWeek = valueGoalWeek;
+    dream = tmp;
+  }
+
+  @action
+  void changeGoalMonthDream(double valueGoalMonth){
+    Dream tmp = Dream.copy(dream);
+    if(tmp.goalMonth == null ){
+      tmp.goalMonth = 0;
+    }
+    tmp.goalMonth = valueGoalMonth;
+    dream = tmp;
+  }
+
+  @action
+  void changeColorDream(ColorDream colorDream){
+    Dream tmp = Dream.copy(dream);
+    if(tmp.color == null ){
+      tmp.color = ColorDream.fromMap({
+        "primary": "FF6E5773",
+        "secondary": "FF382C3A"
+      });
+    }
+    tmp.color = colorDream;
+    dream = tmp;
+  }
+
+  @action
   void setListInfoExpanted(List<bool> listInfo) {
     listInfoExpanted = ObservableList.of(listInfo);
+  }
+
+  @action
+  void setListColorDream(List<ColorDream> listColor) {
+    listColorDream = ObservableList.of(listColor);
   }
 
   @action
@@ -152,6 +214,14 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     Navigator.pop(context);
   }
 
+  Future<void> loadListColorDream() async {
+    ResponseApi<List<ColorDream>> responseApi = await _dreamCase.findAllColorsDream();
+    msgAlert = responseApi.messageAlert;
+    if(responseApi.ok){
+      setListColorDream(responseApi.result!);
+    }
+  }
+
   SearchPictureInternet searchImageInternet(BuildContext context) {
     String sonho = dreamTextEditController.text;
     if(sonho.isNotEmpty && sonho.contains(" ")){
@@ -166,7 +236,11 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     return search;
   }
 
-  void fetch(context, dreamEdit, isWait) {
+  Future<void> fetch(context, dreamEdit, isWait) async {
+
+    loadListColorDream();
+
+
     if (dreamEdit == null) {
       dream = Dream();
       dream.isDreamWait = isWait;

@@ -67,6 +67,24 @@
 	"msg_info_step_conquer": "Defina passos que você precisa cumprir antes de realizar o sonho, como se estivesse subindo uma escada.",
 	"label_information": "Informações",
 	"label_add": "Adicionar",
-	"msg_info_step_daily_goal": "Agora defina metas diárias para conquistar seus passos, se concentre no primeiro passo e trace suas metas, após a conclusão você pode adicionar outras metas diárias."
+	"msg_info_step_daily_goal": "Agora defina metas diárias para conquistar seus passos, se concentre no primeiro passo e trace suas metas, após a conclusão você pode adicionar outras metas diárias.",
+	"msg_info_step_reward": "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!",
+	"msg_info_step_inflection": "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcançadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu.",
+	"msg_info_settings_dream": "Defina o nível que você gostaria de ser cobrado. Lembre-se de começar aos poucos, pois isso vai validar a sua performace para uma meta extraordinária.",
+	"label_choice_diff_inflection": "Escolher ponto de inflexão diferente para a semana.",
+	"label_reward": "Recompensa",
+	"label_choice_diff_reward": "Escolher recompensa diferente para a semana.",
+	"label_weekly_reward": "Recompensa semanal",
+	"label_inflection_point": "Ponto de inflexão",
+	"label_inflection_point_weekly": "Ponto de inflexão para semana",
+	"label_settings": "Configurações",
+	"label_choice_color_dream": "Escolha uma cor de representação",
+	"label_weekly_goal": "Meta semanal",
+	"label_monthly_goal": "Meta mensal",
+	"label_disabled": "Desativado",
+	"label_beginner": "Iniciante",
+	"label_moderate": "Moderado",
+	"label_out_average": "Fora da média",
+	"label_extraordinary": "Extraordinário"
 
 }

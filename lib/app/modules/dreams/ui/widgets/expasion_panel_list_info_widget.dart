@@ -35,7 +35,7 @@ class ExpasionPanelListInfoWidget extends StatelessWidget {
             );
           },
           body: Container(
-            margin: EdgeInsets.only(left: 8, right: 8, bottom: 8),
+            margin: EdgeInsets.only(left: 8, right: 8, bottom: 16),
             child: TextUtil.textSubTitle(subtitle),
           ),
           isExpanded: isExpanded,

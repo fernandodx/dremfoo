@@ -1,11 +1,15 @@
 
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_daily_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_dream_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_inflection_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_info_dream_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_reward_dream_widget.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_settings_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/expasion_panel_list_info_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/stepper_register_dream_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
@@ -153,137 +157,47 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     ];
   }
 
-  List<Widget> getListWidgetsConfig() {
-    if (widget.isWait) {
-      return listDefinitionColors();
-    } else {
-      List<Widget> list = listDefinitionGoal();
-      list.addAll(listDefinitionColors());
-      return list;
-    }
-  }
 
-  String getLabelSlide(double value) {
-    switch (value.toInt()) {
-      case 0:
-        return "Desativado";
-      case 25:
-        return "Iniciante";
-      case 50:
-        return "Moderado";
-      case 75:
-        return "Fora da média";
-      case 100:
-        return "Extraordinário";
-    }
-    return "Desativado";
-  }
 
-  List<Widget> listDefinitionGoal() {
-    return [
-      expansionPanelListInfo(StepsEnum.CONFIG.index,
-          "Defina o nível que você gostaria de ser cobrado. Lembre-se de começar aos poucos, pois isso vai validar a sua performace para uma meta extraordinária."),
-      SizedBox(
-        height: 20,
-      ),
-      TextUtil.textTitulo("Meta semanal"),
-      Container(
-        padding: EdgeInsets.only(
-          top: 50,
-        ),
-        child: Slider(
-          value: store.dream.goalWeek!,
-          onChanged: (newValue) {
-            //TODO TROCAR PARA MBX
-            // setState(() {
-            //   store.dream!.goalWeek = newValue;
-            // });
-          },
-          min: 25,
-          max: 100,
-          divisions: 3,
-          activeColor: AppColors.colorPink,
-          inactiveColor: AppColors.colorEggShell,
-          label: getLabelSlide(store.dream.goalWeek!),
-        ),
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      TextUtil.textTitulo("Meta mensal"),
-      Container(
-        padding: EdgeInsets.only(
-          top: 50,
-        ),
-        child: Slider(
-          value: store.dream.goalMonth!,
-          onChanged: (newValue) {
-            //TODO TROCAR PARA MBX
-            // setState(() {
-            //   store.dream!.goalMonth = newValue;
-            // });
-          },
-          min: 25,
-          max: 100,
-          divisions: 3,
-          activeColor: AppColors.colorPink,
-          inactiveColor: AppColors.colorEggShell,
-          label: getLabelSlide(store.dream.goalMonth!),
-        ),
-      ),
-      SizedBox(
-        height: 20,
-      ),
-    ];
-  }
-
-  List<Widget> listDefinitionColors() {
-    return [
-      Row(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: AppColors.colorPrimaryLight,
-            child: ClipOval(
-              child: Image.asset(
-                Utils.getPathAssetsImg("icon_paint.png"),
-                width: 35,
-              ),
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.only(left: 12),
-              child: TextUtil.textAccent("Escolha uma cor de representação")),
-        ],
-      ),
-
-      //TODO FAzer consulta e montar o widget
-      // Container(
-      //   width: MediaQuery.of(context).size.width,
-      //   height: 100,
-      //   child: FutureBuilder(
-      //       future: FirebaseService().findAllColorsDream(),
-      //       builder: (BuildContext context, AsyncSnapshot<ResponseApi<List<ColorDream>>> snapshot) {
-      //         if (snapshot.hasData) {
-      //           ResponseApi<List<ColorDream>> responseApi = snapshot.data!;
-      //           if (responseApi.ok) {
-      //             return getListviewColors(responseApi.result!);
-      //           }
-      //         }
-      //
-      //         return _bloc.getSimpleLoadingWidget(size: 100);
-      //       }),
-      // ),
-    ];
-  }
+  //TODO FAzer consulta e montar o widget
+  // Container(
+  //   width: MediaQuery.of(context).size.width,
+  //   height: 100,
+  //   child: FutureBuilder(
+  //       future: FirebaseService().findAllColorsDream(),
+  //       builder: (BuildContext context, AsyncSnapshot<ResponseApi<List<ColorDream>>> snapshot) {
+  //         if (snapshot.hasData) {
+  //           ResponseApi<List<ColorDream>> responseApi = snapshot.data!;
+  //           if (responseApi.ok) {
+  //             return getListviewColors(responseApi.result!);
+  //           }
+  //         }
+  //
+  //         return _bloc.getSimpleLoadingWidget(size: 100);
+  //       }),
+  // ),
 
   Step stepConfigDream() {
     return Step(
       isActive: store.checkStepActive(StepsEnum.CONFIG),
       state: store.getStateStep(StepsEnum.CONFIG),
-      title: TextUtil.textTituloStep("Configurações"),
-      content: Column(
-        children: getListWidgetsConfig(),
+      title: TextUtil.textTituloStep(Translate.i().get.label_settings),
+      content: Observer(
+        builder: (context) => ContentStepSettingsDreamWidget(
+          expansionInfo: expansionPanelListInfo(StepsEnum.CONFIG.index, Translate.i().get.msg_info_settings_dream),
+          dream: store.dream,
+          isWait: false,
+          listColorDream: store.listColorDream,
+          onChangeColorDream: (ColorDream colorDream) {
+            store.changeColorDream(colorDream);
+          },
+          onChangeValueGoalMonth: (valueGoalMonth) {
+            store.changeGoalMonthDream(valueGoalMonth);
+          },
+          onChangeValueGoalWeek: (valueGoalWeek) {
+            store.changeGoalWeekDream(valueGoalWeek);
+          },
+        ),
       ),
     );
   }
@@ -292,59 +206,18 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.INFLECTION),
       state: store.getStateStep(StepsEnum.INFLECTION),
-      title: TextUtil.textTituloStep("Ponto de inflexão"),
-      content: Container(
-        margin: EdgeInsets.only(top: 16),
-        child: Column(
-          children: <Widget>[
-            expansionPanelListInfo(StepsEnum.INFLECTION.index,
-                "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcançadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
-            SizedBox(
-              height: 20,
-            ),
-            AppTextDefault(
-              name: "Ponto de inflexão",
-              icon: Icons.build,
-              maxLength: 80,
-              controller: store.inflectionTextEditController,
-            ),
-            SwitchListTile(
-              value: store.dream.isInflectionWeek!,
-              title: TextUtil.textDefault(
-                "Escolher ponto de inflexão diferente para a semana.",
-              ),
-              // secondary: Icon(Icons.autorenew),
-              onChanged: (isInflectionWeek) {
-                //TODO trocar para mbx
-                // setState(() {
-                //   store.dream!.isInflectionWeek = isInflectionWeek;
-                // });
-              },
-            ),
-            getInflectionWeek(),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+      title: TextUtil.textTituloStep(Translate.i().get.label_inflection_point),
+      content: Observer(
+        builder: (context) => ContentStepInflectionDreamWidget(
+            expansionInfo: expansionPanelListInfo(StepsEnum.INFLECTION.index, Translate.i().get.msg_info_step_inflection),
+            isInflectionWeek: store.dream.isInflectionWeek??false,
+            inflectionTextEditController: store.inflectionTextEditController,
+            inflectionWeekTextEditController: store.inflectionWeekTextEditController,
+            onChangeSwitchInflectionWeek: (isChangeInflectionWeek) {
+              store.changeIsInflectionWeekDream(isChangeInflectionWeek);
+            },
         ),
       ),
-    );
-  }
-
-  Widget getInflectionWeek() {
-    if (store.dream.isInflectionWeek!) {
-      return Container(
-        margin: EdgeInsets.only(top: 12),
-        child: AppTextDefault(
-          name: "Ponto de inflexão para semana",
-          maxLength: 40,
-          icon: Icons.build,
-          controller: store.inflectionWeekTextEditController,
-        ),
-      );
-    }
-    return SizedBox(
-      height: 10,
     );
   }
 
@@ -352,63 +225,20 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.REWARD),
       state: store.getStateStep(StepsEnum.REWARD),
-      title: TextUtil.textTituloStep("Recompensa"),
-      content: Container(
-        margin: EdgeInsets.only(top: 16),
-        child: Column(
-          children: <Widget>[
-            expansionPanelListInfo(StepsEnum.REWARD.index,
-                "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
-            SizedBox(
-              height: 20,
-            ),
-            AppTextDefault(
-              name: "Recompensa",
-              icon: Icons.thumb_up,
-              maxLength: 80,
-              controller: store.rewardTextEditController,
-            ),
-            SwitchListTile(
-              dense: true,
-              value: store.dream.isRewardWeek!,
-              title: TextUtil.textDefault(
-                  "Escolher recompensa diferente para a semana."),
-              // secondary: Icon(Icons.autorenew),
-              onChanged: (isRewardWeek) {
-                //TODO USAR MBX
-                // setState(() {
-                //   store.dream!.isRewardWeek = isRewardWeek;
-                // });
-              },
-            ),
-            getRewardWeek(),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+      title: TextUtil.textTituloStep(Translate.i().get.label_reward),
+      content: Observer(
+        builder: (context) => ContentStepRewardDreamWidget(
+          isRewardWeek: store.dream.isRewardWeek??false,
+          rewardTextEditController: store.rewardTextEditController,
+          rewardWeekTextEditController: store.rewardWeekTextEditController,
+          expansionInfo: expansionPanelListInfo(StepsEnum.REWARD.index,Translate.i().get.msg_info_step_reward),
+          onChangeSwitchRewardWeek: (onChangeValue) {
+            store.changeIsRewardWeekDream(onChangeValue);
+          },
         ),
-      ),
+      )
     );
   }
-
-  Widget getRewardWeek() {
-    if (store.dream.isRewardWeek!) {
-      return Container(
-        margin: EdgeInsets.only(top: 12),
-        child: AppTextDefault(
-          name: "Recompensa semanal",
-          maxLength: 40,
-          icon: Icons.thumb_up,
-          controller: store.rewardWeekTextEditController,
-        ),
-      );
-    }
-    return SizedBox(
-      height: 10,
-    );
-  }
-
-
 
 
 

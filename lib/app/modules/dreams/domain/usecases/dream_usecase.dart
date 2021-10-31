@@ -8,6 +8,7 @@ import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/contract/iupload_image_repository.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -191,6 +192,26 @@ class DreamUseCase extends IDreamCase {
       String base64Image = base64Encode(imageBytes);
       AnalyticsUtil.sendAnalyticsEvent(EventRevo.addImageDream);
       return ResponseApi.ok(result: base64Image);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<ColorDream>>> findAllColorsDream() async {
+    try{
+
+      List<ColorDream> listColors = await _repository.findAllColorsDream();
+      if(listColors.isNotEmpty){
+        return ResponseApi.ok(result: listColors);
+      }
 
     } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
