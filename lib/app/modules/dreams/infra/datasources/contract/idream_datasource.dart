@@ -25,4 +25,8 @@ abstract class IDreamDatasource {
 
   Future<List<ColorDream>> findAllColorsDream();
 
+  Future<Dream> saveDream(Dream dream, String userUid);
+
+  Future<Dream> updateDream(Dream dream);
+
 }

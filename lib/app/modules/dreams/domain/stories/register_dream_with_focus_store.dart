@@ -1,9 +1,9 @@
 
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
@@ -14,6 +14,7 @@ import 'package:dremfoo/app/ui/register_dreams_page.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/search_picture_internet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 part 'register_dream_with_focus_store.g.dart';
@@ -45,11 +46,10 @@ abstract class _RegisterDreamWaitStoreBase with Store {
   @observable
   ObservableList<ColorDream> listColorDream = ObservableList<ColorDream>.of([]);
 
-  Dream dreamForEdit = Dream();
+  @observable
+  ObservableSet<int> stepErrors = ObservableSet<int>.of([]);
 
-  Set<int> stepErrors = Set();
   List<Step> steps = [];
-
 
   TextEditingController stepTextEditController = TextEditingController();
   TextEditingController dailyGoalTextEditController = TextEditingController();
@@ -176,6 +176,126 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     _reCreateListStepsReOrderPosition(stepTmp);
   }
 
+  @computed
+  bool get isLastStepCurrent {
+    return currentStep == steps.length -1;
+  }
+
+  @action
+  Future<void> finishRegisterDream() async {
+    setDataDream();
+
+    if (validDataStream()) {
+      isLoading = true;
+      if (dream.reference == null) {
+        await _saveDream();
+      } else {
+        await _editDream();
+      }
+      isLoading = false;
+    }
+  }
+
+  void nextStep() {
+    if(isLastStepCurrent){
+      finishRegisterDream();
+    }else{
+      goToStep(currentStep + 1);
+    }
+  }
+
+  void cancelStep() {
+    if (currentStep > 0) {
+      goToStep(currentStep - 1);
+    }
+  }
+
+  @action
+  void goToStep(numberStep) {
+    currentStep = numberStep;
+  }
+
+  Future<void> _saveDream() async {
+    ResponseApi<Dream> responseApi = await _dreamCase.saveDream(dream);
+    msgAlert = responseApi.messageAlert;
+    if(responseApi.ok){
+      Modular.to.navigate(Modular.initialRoute);
+    }
+  }
+
+  Future<void> _editDream() async {
+     ResponseApi<Dream> responseApi = await _dreamCase.updateDream(dream);
+     msgAlert = responseApi.messageAlert;
+     if(responseApi.ok){
+       Modular.to.navigate(Modular.initialRoute);
+     }
+  }
+
+  void setDataDream() {
+    dream.dreamPropose = dreamTextEditController.text.toString();
+    dream.reward = rewardTextEditController.text.toString();
+    dream.inflection = inflectionTextEditController.text.toString();
+    dream.rewardWeek = rewardWeekTextEditController.text.toString();
+    dream.inflectionWeek = inflectionWeekTextEditController.text.toString();
+    dream.descriptionPropose = dreamDescriptionTextEditController.text.toString();
+  }
+
+  @action
+  bool validDataStream() {
+    String msg = "";
+
+    stepErrors = ObservableSet<int>.of([]);;
+
+    if (dream.dreamPropose == null || dream.dreamPropose?.isEmpty == true) {
+      stepErrors.add(StepsEnum.DREAM.index);
+      msg += "O sonho é obrigatório\n";
+    }
+
+    if (dream.descriptionPropose == null || dream.descriptionPropose?.isEmpty == true) {
+      stepErrors.add(StepsEnum.DREAM.index);
+      msg += "A descrição do sonho é obrigatória\n";
+    }
+
+    if (dream.imgDream == null || dream.imgDream?.isEmpty == true) {
+      stepErrors.add(StepsEnum.DREAM.index);
+      msg += "A image do sonho é obrigatória\n";
+    }
+
+    if (!dream.isDreamWait!) {
+      if (dream.steps == null || dream.steps?.isEmpty == true) {
+        stepErrors.add(StepsEnum.STEPS.index);
+        msg += "Adicione pelo menos um passo para conquistar\n";
+      }
+
+      if (dream.dailyGoals == null || dream.dailyGoals?.isEmpty == true) {
+        stepErrors.add(StepsEnum.DAILY_GOALS.index);
+        msg += "Adicione pelo menos uma meta diária\n";
+      }
+
+      if (dream.reward == null || dream.reward?.isEmpty == true) {
+        stepErrors.add(StepsEnum.REWARD.index);
+        msg += "A recompensa é obrigatória\n";
+      }
+
+      if (dream.inflection == null || dream.inflection?.isEmpty == true) {
+        stepErrors.add(StepsEnum.INFLECTION.index);
+        msg += "O ponto de inflexão é obrigatório\n";
+      }
+    }
+
+    if (dream.color == null) {
+      stepErrors.add(StepsEnum.CONFIG.index);
+      msg += "Escolha uma cor de representação\n";
+    }
+
+    if (stepErrors.isNotEmpty) {
+      msgAlert = MessageAlert.create("Ops", msg, TypeAlert.ERROR);
+      return false;
+    }
+
+    return true;
+  }
+
   void removeDailyGoals(position) {
 
     var countWidgetDefault = 2;
@@ -236,28 +356,52 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     return search;
   }
 
-  Future<void> fetch(context, dreamEdit, isWait) async {
-
+  @action
+  Future<void> fetch(BuildContext context, Dream? dreamEdit, bool isWait) async {
+    isLoading = true;
     loadListColorDream();
 
-
     if (dreamEdit == null) {
-      dream = Dream();
-      dream.isDreamWait = isWait;
-      dream.steps = [];
-      steps = [];
+      _initNewDream(isWait);
     } else {
-      dream = Dream.copy(dreamEdit);
-      dreamForEdit = Dream.copy(dreamEdit);
-      dreamTextEditController.text = dream.dreamPropose!;
-      // initStepForWin(dream, context);
-      // initDailyGoals(dream, context);
-      rewardTextEditController.text = dream.reward!;
-      inflectionTextEditController.text = dream.inflection!;
-      dreamDescriptionTextEditController.text = dream.descriptionPropose!;
-      inflectionWeekTextEditController.text = dream.inflectionWeek!;
-      rewardWeekTextEditController.text = dream.rewardWeek!;
+      _initDreamForEdit(dreamEdit);
+      await _loadStepsDream(dreamEdit);
+      await _loadDailyGoalDream(dreamEdit);
     }
+    isLoading = false;
+  }
+
+  Future<void> _loadDailyGoalDream(Dream dreamEdit) async {
+     ResponseApi<List<DailyGoal>> responseApiDailyGoal = await _dreamCase.findDailyGoalForUser(dreamEdit.uid!);
+    if(responseApiDailyGoal.ok){
+      dream.dailyGoals = responseApiDailyGoal.result!;
+      _createListDailyGoalWithDreamDaily(responseApiDailyGoal.result!);
+    }
+  }
+
+  Future<void> _loadStepsDream(Dream dreamEdit) async {
+     ResponseApi<List<StepDream>> responseApiStepDream = await _dreamCase.findStepDreamForUser(dreamEdit.uid!);
+    if(responseApiStepDream.ok){
+      dream.steps = responseApiStepDream.result!;
+      _createListStepsWithDreamSteps(responseApiStepDream.result!);
+    }
+  }
+
+  void _initDreamForEdit(Dream dreamEdit) {
+     dream = Dream.copy(dreamEdit);
+    dreamTextEditController.text = dream.dreamPropose!;
+    rewardTextEditController.text = dream.reward!;
+    inflectionTextEditController.text = dream.inflection!;
+    dreamDescriptionTextEditController.text = dream.descriptionPropose!;
+    inflectionWeekTextEditController.text = dream.inflectionWeek!;
+    rewardWeekTextEditController.text = dream.rewardWeek!;
+  }
+
+  void _initNewDream(bool isWait) {
+     dream = Dream();
+    dream.isDreamWait = isWait;
+    dream.steps = [];
+    steps = [];
   }
 
   void _reCreateListStepsReOrderPosition(List<Widget> listStepsOld){
@@ -282,6 +426,30 @@ abstract class _RegisterDreamWaitStoreBase with Store {
           });
 
       addItemStepForWin(newChip);
+    }
+  }
+
+  void _createListStepsWithDreamSteps(List<StepDream> listStepDream){
+    for (StepDream stepDream in listStepDream) {
+      var newChip = createChipStep(
+          nameStep: stepDream.step??"",
+          position: stepDream.position??0,
+          onDeleted: () {
+            removeStepForWin(stepDream.position??0);
+          });
+      addItemStepForWin(newChip);
+    }
+  }
+
+  void _createListDailyGoalWithDreamDaily(List<DailyGoal> listDailyGoal){
+    for (DailyGoal daily in listDailyGoal) {
+      var newChip = createChipStep(
+          nameStep: daily.nameDailyGoal??"",
+          position: daily.position??0,
+          onDeleted: () {
+            removeStepForWin(daily.position??0);
+          });
+      addItemDailyGoal(newChip);
     }
   }
 
@@ -333,19 +501,6 @@ abstract class _RegisterDreamWaitStoreBase with Store {
       listStepsForWin.add(newChip);
     }
     return [];
-  }
-
-  Widget getImageDream() {
-    // if (dream!.imgDream != null && dream!.imgDream!.isNotEmpty) {
-    //   return Utils.string64ToImage(dream!.imgDream!, fit: BoxFit.cover);
-    // } else {
-      return Image.asset(
-        Utils.getPathAssetsImg("icon_gallery_add.png"),
-        width: 100,
-        height: 100,
-        scale: 5,
-      );
-    // }
   }
 
   Chip createChipStep({

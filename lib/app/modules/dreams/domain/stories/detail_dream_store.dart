@@ -6,10 +6,13 @@ import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
@@ -45,8 +48,6 @@ abstract class _DetailDreamStoreBase with Store {
 
    @observable
    bool isChartWeek = true;
-
-
 
    var user =  Modular.get<UserRevo>();
 
@@ -135,8 +136,8 @@ abstract class _DetailDreamStoreBase with Store {
    }
 
    @action
-   void _setListStepDream(List<StepDream> listStepDream) {
-      listStepDream = ObservableList.of(listStepDream);
+   void _setListStepDream(List<StepDream> newListStep) {
+      listStep = ObservableList.of(newListStep);
    }
 
    @action
@@ -224,7 +225,9 @@ abstract class _DetailDreamStoreBase with Store {
                    return hist.nameDailyGoal == dailyGoal.nameDailyGoal
                        && hist.lastDateCompleted!.toDate().isSameDate(currentDate);
                 });
-            listTemp.removeAt(index);
+            if(index > 0){
+               listTemp.removeAt(index);
+            }
          }
          _setListHitoryMonthDailyGoals(listTemp);
       }
@@ -295,5 +298,10 @@ abstract class _DetailDreamStoreBase with Store {
          await _findHistoryYearlyMonthDailyGoal(dreamSelected);
       }
       _isChartWeek(isChartWeek);
+   }
+
+   void editDream(BuildContext context, Dream dreamSelected) {
+      Navigator.pushNamed(context, "/home/dream/newDreamWithFocus",
+          arguments: DreamPageDto(isDreamWait: dreamSelected.isDreamWait??false, dream: dreamSelected));
    }
 }

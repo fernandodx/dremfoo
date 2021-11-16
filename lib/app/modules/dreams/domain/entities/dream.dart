@@ -27,6 +27,7 @@ class Dream {
   Timestamp? dateFinish;
   List<StepDream>? steps = [];
   List<DailyGoal>? dailyGoals = [];
+  List<DailyGoal>? listHistoryWeekDailyGoals = [];
   DocumentReference? reference;
 
   static Dream copy(Dream data){
@@ -54,6 +55,7 @@ class Dream {
     dream.isDeleted = data.isDeleted;
     dream.color = data.color;
     dream.isDreamWait = data.isDreamWait;
+    dream.listHistoryWeekDailyGoals = data.listHistoryWeekDailyGoals;
     return dream;
   }
 

@@ -58,6 +58,7 @@
 	"label_finish": "Finalizar",
 	"label_previous": "Anterior",
 	"label_dream": "Sonho",
+	"label_dreams": "Sonhos",
 	"label_description_dream": "Descrição do sonho",
 	"label_choose_image_dream": "Escolha uma imagem para representar o sonho.",
 	"label_search_gallery": "Pesquisar na galeria",
@@ -85,6 +86,9 @@
 	"label_beginner": "Iniciante",
 	"label_moderate": "Moderado",
 	"label_out_average": "Fora da média",
-	"label_extraordinary": "Extraordinário"
+	"label_extraordinary": "Extraordinário",
+	"label_on_hold": "Em espera",
+	"label_new_dream": "Novo Sonho",
+	"label_create_focus": "Criar foco"
 
 }

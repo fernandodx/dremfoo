@@ -224,6 +224,63 @@ class DreamUseCase extends IDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  @override
+  Future<ResponseApi<Dream>> saveDream(Dream dream) async {
+    try{
+
+      _validateDream(dream);
+
+      var dreamSave = await _repository.saveDream(dream);
+      return ResponseApi.ok(result: dreamSave);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  void _validateDream(Dream dream) {
+    StringBuffer msgError = StringBuffer();
+
+    if(dream.isDreamWait == false) {
+      if(dream.steps == null || dream.steps!.isEmpty){
+        msgError.writeln("Os passos do sonho são obrigatórios");
+      }
+      if(dream.dailyGoals == null || dream.dailyGoals!.isEmpty){
+        msgError.writeln("As metas diárias são obrigatórios");
+      }
+      if(msgError.isNotEmpty){
+        throw RevoExceptions.msgToUser(msg: msgError.toString());
+      }
+    }
+  }
+
+  @override
+  Future<ResponseApi<Dream>> updateDream(Dream dream) async {
+    try{
+
+      //TODO fazer metodo unico
+      _validateDream(dream);
+
+      var dreamUpdate = await _repository.updateDream(dream);
+      return ResponseApi.ok(result: dreamUpdate);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
 
 
 

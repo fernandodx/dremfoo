@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
@@ -146,6 +148,48 @@ class DreamRespository extends IDreamRepository {
       CrashlyticsUtil.logErro(error, stack);
       throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
     }
+  }
+
+  @override
+  Future<Dream> saveDream(Dream dream) async {
+    try{
+      dream.dateRegister = Timestamp.now();
+
+      if(_userRevo.uid != null){
+        AnalyticsUtil.sendAnalyticsEvent(EventRevo.newDream);
+        return _datasource.saveDream(dream, _userRevo.uid!);
+      }else{
+        return _datasource.saveDream(dream, "7uFOlj8el2Q62sblZxu7jnWaRME3");
+        // RevoExceptions _revoExceptions = new RevoExceptions
+        //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        // CrashlyticsUtil.logError(_revoExceptions);
+        // throw _revoExceptions;
+      }
+
+
+
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<Dream> updateDream(Dream dream) {
+    try{
+      if(dream.reference != null){
+        return _datasource.updateDream(dream);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("DreamReference == null"), msg: "Sonho não encontrado para a atualização.");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+
   }
 
 

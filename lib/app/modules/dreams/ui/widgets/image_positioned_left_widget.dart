@@ -2,18 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ImagePositionedLeftWidget extends StatelessWidget {
   final String? imageBase64;
   final double leftPercent;
   final double height;
   final Function()? onTap;
+  final bool isDreamAwait;
 
   ImagePositionedLeftWidget(
       {this.imageBase64,
       required this.leftPercent,
       required this.height,
-      this.onTap});
+      this.onTap,
+      required this.isDreamAwait});
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +36,17 @@ class ImagePositionedLeftWidget extends StatelessWidget {
               ),
             ),
             Container(
-              child: Icon(
-                Icons.settings,
-                color: Colors.white,
-                size: 28,
-              ),
+              child: isDreamAwait
+                  ? FaIcon(
+                      FontAwesomeIcons.edit,
+                      size: 23,
+                      color: Colors.white,
+                    )
+                  : FaIcon(
+                      FontAwesomeIcons.chartBar,
+                      size: 23,
+                      color: Colors.white,
+                    ),
               width: double.maxFinite,
               alignment: Alignment.topRight,
               margin: EdgeInsets.all(16),

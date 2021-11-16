@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/list_dream_widget.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,16 +62,20 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextUtil.textAppbar("REVO Doido!!"),
+        title: TextUtil.textAppbar(Translate.i().get.label_dreams),
       ),
       body: Container(
         margin: EdgeInsets.only(left: 12, right: 12, top: 12),
         child: Observer(
           builder: (context) => ListDreamWidget(
             listDream: store.listDream,
+            isLoadingStepDaily: store.isloadingDailyStep,
             controller: _controller,
             onTapDetailDream: (Dream dreamSelected) {
-              store.editDream(context, dreamSelected);
+              store.detailDream(context, dreamSelected);
+            },
+            onTapCreateFocusDream: (Dream dreamSelected) {
+              store.createFocusDream(context, dreamSelected);
             },
           ),
         ),
@@ -79,8 +84,8 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
         onPressed: () {
           store.newDream(context);
         },
-        label: Text("Novo Sonho"),
-        icon: Icon(Icons.add),
+        label: Text(Translate.i().get.label_new_dream),
+        icon: FaIcon(FontAwesomeIcons.plus, size: 18,),
       ),
     );
   }

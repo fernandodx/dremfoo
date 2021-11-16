@@ -26,5 +26,9 @@ abstract class IDreamCase {
 
   Future<ResponseApi<List<ColorDream>>> findAllColorsDream();
 
+  Future<ResponseApi<Dream>> saveDream(Dream dream);
+
+  Future<ResponseApi<Dream>> updateDream(Dream dream);
+
 
 }

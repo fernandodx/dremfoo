@@ -24,5 +24,9 @@ abstract class IDreamRepository {
 
   Future<List<ColorDream>> findAllColorsDream();
 
+  Future<Dream> saveDream(Dream dream);
+
+  Future<Dream> updateDream(Dream dream);
+
 
 }

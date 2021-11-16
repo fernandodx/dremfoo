@@ -31,7 +31,7 @@ dependencies:
   bloc_pattern: ^3.0.0
   flare_flutter: ^3.0.1 # animações
   flutter_native_image: ^0.0.6+1
-  fl_chart: ^0.36.3
+  fl_chart: ^0.40.0
   date_format: ^2.0.2
   email_launcher: ^1.1.1
   flutter_share: ^2.0.0
@@ -45,6 +45,7 @@ dependencies:
   pixabay_picker: ^1.0.6
   youtube_player_flutter: ^8.0.0
   percent_indicator: ^3.0.1
+  font_awesome_flutter: ^9.1.0
 
   #Exigem configuração no Android ou IOS
   image_picker: ^0.8.2
@@ -63,8 +64,8 @@ dependencies:
   firebase_remote_config: ^0.10.0+3
 
   #Mobx
-  flutter_mobx: ^2.0.1
-  mobx: ^2.0.3
+  flutter_mobx: ^2.0.2
+  mobx: ^2.0.4
 
   flutter_modular: ^3.3.1
   slidy: ^3.1.0

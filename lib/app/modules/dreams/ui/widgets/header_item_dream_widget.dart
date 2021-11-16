@@ -8,8 +8,11 @@ class HeaderItemDreamWidget extends StatelessWidget {
   final Function()? onTapImage;
   final String percentStep;
   final String percentToday;
-  final double valueStep;
-  final double valueToday;
+  final double? valueStep;
+  final double? valueToday;
+  final bool isDreamAwait;
+  final Function()? onTapCreateFocus;
+  final bool isLoading;
 
   HeaderItemDreamWidget(
       {this.imageBase64,
@@ -17,7 +20,10 @@ class HeaderItemDreamWidget extends StatelessWidget {
       required this.percentStep,
       required this.percentToday,
       required this.valueStep,
-      required this.valueToday});
+      required this.valueToday,
+      required this.isDreamAwait,
+      this.onTapCreateFocus,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +33,17 @@ class HeaderItemDreamWidget extends StatelessWidget {
           ImagePositionedLeftWidget(
               imageBase64: imageBase64,
               onTap: onTapImage,
+              isDreamAwait: isDreamAwait,
               leftPercent: 0.75,
               height: 170),
           InfoPercentDreamWidget(
+            isLoading: isLoading,
             valueStep: valueStep,
             valueToday: valueToday,
             percentStep: percentStep,
             percentToday: percentToday,
+            isDreamAwait: isDreamAwait,
+            onTapCreateFocus: onTapCreateFocus,
           ),
         ],
       ),

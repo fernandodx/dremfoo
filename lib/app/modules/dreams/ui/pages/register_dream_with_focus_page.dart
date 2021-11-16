@@ -1,8 +1,7 @@
 
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
-import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_daily_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_dream_widget.dart';
@@ -17,19 +16,16 @@ import 'package:dremfoo/app/ui/register_dreams_page.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/nav.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
-import 'package:dremfoo/app/widget/app_button_default.dart';
-import 'package:dremfoo/app/widget/app_text_default.dart';
+import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/widget/search_picture_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobx/mobx.dart';
 
 class RegisterDreamWithFocusPage extends StatefulWidget {
-  bool isWait;
-
-
-  RegisterDreamWithFocusPage(this.isWait);
+  DreamPageDto dreamPageDto;
+  RegisterDreamWithFocusPage(this.dreamPageDto);
 
   @override
   RegisterDreamWithFocusPageState createState() => RegisterDreamWithFocusPageState();
@@ -40,22 +36,36 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
   void initState() {
     super.initState();
 
-    store.fetch(context, null, widget.isWait);
-
-    // MainEventBus().get(context).streamRegisterDream.listen((TipoEvento tipo) {
-    //   switch (tipo) {
-    //     case TipoEvento.FETCH:
-    //       _bloc.fetch(context, widget.dream, widget.isWait);
-    //       break;
-    //     case TipoEvento.REFRESH:
-    //       refresh();
-    //       break;
-    //   }
-    // });
-
     StepsEnum.values.forEach((element) {
       store.listInfoExpanted.add(false);
     });
+
+    var overlayLoading = OverlayEntry(builder: (context) {
+      return Container(
+        color: Colors.black38,
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      );
+    });
+
+    reaction<bool>((_) => store.isLoading, (isLoading) {
+      if(isLoading){
+        Overlay.of(context)!.insert(overlayLoading);
+      }else{
+        overlayLoading.remove();
+      }
+    });
+
+    reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
+      if(msgErro != null){
+        alertBottomSheet(context,
+            msg: msgErro.msg,
+            title:msgErro.title,
+            type: msgErro.type);
+      }
+    });
+
+    store.fetch(context, widget.dreamPageDto.dream, widget.dreamPageDto.isDreamWait);
   }
 
 
@@ -64,54 +74,11 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("RegisterDreamWithFocusPage f"),
+        title: Text("Sonho"),
       ),
       body: bodyRegisterDreamPage(),
     );
   }
-
-  next() {
-    store.currentStep + 1 != store.steps.length
-        ? goTo(store.currentStep + 1)
-        : finishRegisterDream();
-  }
-
-  cancel() {
-    if (store.currentStep > 0) {
-      goTo(store.currentStep - 1);
-    }
-  }
-
-  goTo(numberStep) {
-    setState(() {
-      store.currentStep = numberStep;
-    });
-  }
-
-  finishRegisterDream() {
-    // setDataDream();
-    // _bloc.showLoading();
-
-    // if (validDataStream()) {
-    //   if (_bloc.dream!.reference != null) {
-    //     FirebaseService().updateDream(context, _bloc.dream!).then((response) {
-    //       _bloc.hideLoading();
-    //       if (response.ok) {
-    //         AnalyticsUtil.sendAnalyticsEvent(EventRevo.newDream);
-    //         push(context, HomePage(), isReplace: true);
-    //       }
-    //     });
-    //   } else {
-    //     FirebaseService().saveDream(context, _bloc.dream!).then((response) {
-    //       _bloc.hideLoading();
-    //       if (response.ok) {
-    //         push(context, HomePage(), isReplace: true);
-    //       }
-    //     });
-    //   }
-    // }
-  }
-
 
   Container bodyRegisterDreamPage() {
     return Container(
@@ -120,62 +87,39 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Expanded(
-              child: StepperRegisterDreamWidget(
-            listStep: getSteps(),
-            currentStep: store.currentStep,
-            onStepContinue: next,
-            onStepCancel: cancel,
-            onStepTapped: (step) => goTo(step),
-          )),
+              child: Observer(
+                builder: (context) => StepperRegisterDreamWidget(
+                  listStep: getSteps(),
+                  currentStep: store.currentStep,
+                  onStepContinue: () => store.nextStep(),
+                  onStepCancel: () => store.cancelStep(),
+                  onStepTapped: (step) => store.goToStep(step),
+                  isLastStep: store.isLastStepCurrent,
+          ),
+              )),
         ],
       ),
     );
   }
 
   List<Step> getSteps() {
-    // if (_bloc.dream!.isDreamWait!) {
-    //   _bloc.steps = [
-    //     stepInfoDream(),
-    //     stepConfigDream(),
-    //   ];
-    // } else {
-    //   _bloc.steps = [
-    //     stepInfoDream(),
-    //     stepGoalDream(),
-    //     stepGoalDaily(),
-    //     stepRewardDream(),
-    //     stepInflectionDream(),
-    //     stepConfigDream(),
-    //   ];
-    return [
-      stepInfoDream(),
-      stepGoalDream(),
-      stepGoalDaily(),
-      stepRewardDream(),
-      stepInflectionDream(),
-      stepConfigDream(),
-    ];
+    if(widget.dreamPageDto.isDreamWait){
+      store.steps = [
+        stepInfoDream(),
+        stepConfigDream(),
+      ];
+    }else{
+      store.steps = [
+        stepInfoDream(),
+        stepGoalDream(),
+        stepGoalDaily(),
+        stepRewardDream(),
+        stepInflectionDream(),
+        stepConfigDream(),
+      ];
+    }
+    return store.steps;
   }
-
-
-
-  //TODO FAzer consulta e montar o widget
-  // Container(
-  //   width: MediaQuery.of(context).size.width,
-  //   height: 100,
-  //   child: FutureBuilder(
-  //       future: FirebaseService().findAllColorsDream(),
-  //       builder: (BuildContext context, AsyncSnapshot<ResponseApi<List<ColorDream>>> snapshot) {
-  //         if (snapshot.hasData) {
-  //           ResponseApi<List<ColorDream>> responseApi = snapshot.data!;
-  //           if (responseApi.ok) {
-  //             return getListviewColors(responseApi.result!);
-  //           }
-  //         }
-  //
-  //         return _bloc.getSimpleLoadingWidget(size: 100);
-  //       }),
-  // ),
 
   Step stepConfigDream() {
     return Step(
@@ -186,7 +130,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
         builder: (context) => ContentStepSettingsDreamWidget(
           expansionInfo: expansionPanelListInfo(StepsEnum.CONFIG.index, Translate.i().get.msg_info_settings_dream),
           dream: store.dream,
-          isWait: false,
+          isWait: widget.dreamPageDto.isDreamWait,
           listColorDream: store.listColorDream,
           onChangeColorDream: (ColorDream colorDream) {
             store.changeColorDream(colorDream);
@@ -238,25 +182,6 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
         ),
       )
     );
-  }
-
-
-
-  void updateDreamWaitForGoal(bool value) {
-    // _bloc.dream!.isDreamWait = value;
-    // _bloc.showLoading();
-    //
-    // if(_bloc.dream!.uid == null || _bloc.dream!.uid!.isEmpty){
-    //   push(context, RegisterDreamPage(), isReplace: true);
-    // }else{
-    //   FirebaseService().updateDream(context, _bloc.dream!).then((response) {
-    //     if (response.ok) {
-    //       _bloc.hideLoading();
-    //       AnalyticsUtil.sendAnalyticsEvent(EventRevo.updateDreamFocus);
-    //       push(context, RegisterDreamPage(dream: _bloc.dream,), isReplace: true);
-    //     }
-    //   });
-    // }
   }
 
   Widget expansionPanelListInfo(int indexList, String subtitle) {

@@ -8,6 +8,7 @@ class StepperRegisterDreamWidget extends StatelessWidget {
   final Function()? onStepContinue;
   final Function()? onStepCancel;
   final Function(int)? onStepTapped;
+  final bool isLastStep;
 
   StepperRegisterDreamWidget(
       {
@@ -15,7 +16,8 @@ class StepperRegisterDreamWidget extends StatelessWidget {
         required this.currentStep,
         this.onStepContinue,
         this.onStepCancel,
-        this.onStepTapped
+        this.onStepTapped,
+        required this.isLastStep
       });
 
   @override
@@ -30,7 +32,7 @@ class StepperRegisterDreamWidget extends StatelessWidget {
           {VoidCallback? onStepContinue,
             VoidCallback? onStepCancel}) {
         return ButtonBarStepperWidget(
-            isLastStep: false,
+            isLastStep: isLastStep,
             onStepCancel: onStepCancel,
           onStepContinue: onStepContinue,
         );

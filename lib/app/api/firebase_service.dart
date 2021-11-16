@@ -958,15 +958,13 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi<String>> saveDream(
-      BuildContext context, Dream dream) async {
+  Future<ResponseApi<String>> saveDream(BuildContext context, Dream dream) async {
     try {
       dream.dateRegister = Timestamp.now();
 
       DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 
-      DocumentReference dreamRef =
-          await refUsers.collection("dreams").add(dream.toMap());
+      DocumentReference dreamRef = await refUsers.collection("dreams").add(dream.toMap());
       CollectionReference stepsListRef = dreamRef.collection("steps");
       CollectionReference dailyGoalRef = dreamRef.collection("dailyGoals");
 

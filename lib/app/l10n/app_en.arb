@@ -59,6 +59,7 @@
 	"label_finish": "Finish",
 	"label_previous": "Previous",
 	"label_dream": "Dream",
+	"label_dreams": "Dreams",
 	"label_description_dream": "Dream description",
 	"label_choose_image_dream": "Choose an image to represent the dream.",
 	"label_search_gallery": "Search the gallery",
@@ -86,5 +87,8 @@
 	"label_beginner": "Beginner",
 	"label_moderate": "Moderate",
 	"label_out_average": "out of average",
-	"label_extraordinary": "Extraordinary"
+	"label_extraordinary": "Extraordinary",
+	"label_on_hold": "On hold",
+	"label_new_dream": "New Dream",
+	"label_create_focus": "Create focus"
 }

@@ -12,6 +12,7 @@ import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 class DetailDreamPage extends StatefulWidget {
@@ -66,6 +67,18 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             pinned: true,
             floating: false,
             expandedHeight: 230.0,
+            leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
+              Dream dream = widget.dreamSelected;
+              dream.dailyGoals = store.listDailyGoals;
+              dream.steps = store.listStep;
+              dream.listHistoryWeekDailyGoals = store.listHistoryWeekDailyGoals;
+              Navigator.pop(context, dream);
+            },),
+            actions: [
+              IconButton(
+                icon: FaIcon(FontAwesomeIcons.edit, size: 23,),
+                onPressed: () => store.editDream(context, widget.dreamSelected))
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.passthrough,

@@ -37,48 +37,13 @@ class BodyItemDreamWidget extends StatelessWidget {
         this.goalWeek = 0,
         this.goalMonth = 0,});
 
-  //TODO criar pagina caso seja um sonho em espera
-
-
   @override
   Widget build(BuildContext context) {
-
-    if(listStepDream == null || listStepDream!.isEmpty){
-      return getBodyDreamAwait();
-    }else{
-      return getBodyDreamWithFocus();
-    }
-  }
-  
-  Widget getBodyDreamAwait() {
-    return Container(
-      margin: EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextUtil.textTitulo("Sonho em espera!"),
-          SpaceWidget(),
-          Icon(Icons.access_time, size: 50, color: AppColors.colorlight,),
-          SpaceWidget(),
-          ElevatedButton(onPressed: (){}, child: Text("Tonar sonho com foco"))
-        ],
-      ),
-    );
+    return getBodyDreamWithFocus();
   }
   
   Widget getBodyDreamWithFocus() {
 
-    bool isChartVisible = true;
-
-    if(isChartWeek && (listHistWeekDailyGoal == null || listHistWeekDailyGoal!.isEmpty)){
-      isChartVisible = false;
-    }
-    if(!isChartWeek && (listHistMonthDailyGoal == null || listHistMonthDailyGoal!.isEmpty)){
-      isChartVisible = false;
-    }
-    
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16),
       child: Column(
@@ -108,25 +73,19 @@ class BodyItemDreamWidget extends StatelessWidget {
               onTap: onTapDailyGoal),
           SpaceWidget(),
           SpaceWidget(),
-          Visibility(
-            visible: isChartVisible,
-            child: DualButtonsOptionSelectedWidget(
-              titleLeft: Translate.i().get.label_weekly,
-              titleRight: Translate.i().get.label_monthly,
-              isLeftSelect: isChartWeek,
-              onPressLeft: () =>  onTapSelectChart(true),
-              onPressRight: () =>  onTapSelectChart(false),
-            ),
+          DualButtonsOptionSelectedWidget(
+            titleLeft: Translate.i().get.label_weekly,
+            titleRight: Translate.i().get.label_monthly,
+            isLeftSelect: isChartWeek,
+            onPressLeft: () =>  onTapSelectChart(true),
+            onPressRight: () =>  onTapSelectChart(false),
           ),
-          Visibility(
-            visible: isChartVisible,
-            child: ChartWeekWidget(
-              listHistWeekDailyGoal: listHistWeekDailyGoal,
-              listHistMonthDailyGoal: listHistMonthDailyGoal,
-              isChartWeek: isChartWeek,
-              goalMonth: goalMonth,
-              goalWeek: goalWeek,
-            ),
+          ChartWeekWidget(
+            listHistWeekDailyGoal: listHistWeekDailyGoal,
+            listHistMonthDailyGoal: listHistMonthDailyGoal,
+            isChartWeek: isChartWeek,
+            goalMonth: goalMonth,
+            goalWeek: goalWeek,
           ),
           SpaceWidget(),
         ],
