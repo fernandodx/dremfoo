@@ -1,5 +1,6 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
+import 'package:dremfoo/app/modules/login/login_module.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/background_widget.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/card_login_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends ModularState<LoginPage, LoginStore> {
+
   @override
   void initState() {
     super.initState();
@@ -48,13 +50,6 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
       }
     });
 
-    reaction<User?>((_) => store.userSingIn, (user) {
-      if(user != null){
-          print("LOGIN REALIZADO COM SUCESSO - "+ user.toString());
-          print("*** NAVEGANDO PARA HOME ***");
-      }
-    });
-
   }
 
   @override
@@ -74,6 +69,8 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
         ),
       ),
     );
+
+
   }
 
   Column body(BuildContext context) {

@@ -30,5 +30,15 @@ abstract class IDreamCase {
 
   Future<ResponseApi<Dream>> updateDream(Dream dream);
 
+  Future<ResponseApi<List<Dream>>> findAllDreamsArchive();
+
+  Future<ResponseApi> archiveDream(Dream dream);
+
+  Future<ResponseApi> restoreDream(Dream dream);
+
+  Future<ResponseApi<List<Dream>>> findAllDreamsCompletedCurrentUser();
+
+  Future<ResponseApi> realizedDream(Dream dream,  {required DateTime? dateFinish});
+
 
 }

@@ -75,11 +75,6 @@ class TextUtil {
       textAlign: align,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: AppColors.colorTextChipMenu
-      ),
     );
   }
 

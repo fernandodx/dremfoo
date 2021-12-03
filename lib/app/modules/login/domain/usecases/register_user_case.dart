@@ -5,6 +5,7 @@ import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/infra/repositories/contract/ishared_prefs_repository.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/modules/login/infra/repositories/contract/iregister_user_repository.dart';
@@ -19,7 +20,8 @@ import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 class RegisterUserCase extends IRegisterUserCase {
 
   IRegisterUserRepository _userRepository;
-  RegisterUserCase(this._userRepository);
+  ISharedPrefsRepository _sharedPrefsRepository;
+  RegisterUserCase(this._userRepository, this._sharedPrefsRepository);
 
   var _userRevo = Modular.get<UserRevo>();
 
@@ -32,6 +34,7 @@ class RegisterUserCase extends IRegisterUserCase {
       // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
       await saveUser(userRevo);
       await saveLastAcessUser();
+      await _saveUserLoging(user.uid);
 
       if(photo != null){
         await uploadPhotoAcountUser(user.uid, photo);
@@ -61,6 +64,10 @@ class RegisterUserCase extends IRegisterUserCase {
     } catch(error){
       throw error;
     }
+  }
+
+  Future<void> _saveUserLoging(String uid) async  {
+    return _sharedPrefsRepository.putString("USER_LOG_UID", uid);
   }
 
   @override

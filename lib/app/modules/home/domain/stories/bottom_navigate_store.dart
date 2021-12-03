@@ -6,7 +6,7 @@ class BottomNavigateStore = _BottomNavigateStoreBase with _$BottomNavigateStore;
 abstract class _BottomNavigateStoreBase with Store {
 
   @observable
-  bool isAppBarVisible = false;
+  bool isAppBarVisible = true;
 
   @action
   void showHideAppBar(bool isAppBarVisible) {

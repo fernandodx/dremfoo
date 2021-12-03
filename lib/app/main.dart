@@ -121,7 +121,6 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'REVO - Metas com foco',
         theme: ThemeData(
           fontFamily: "Alata",
           primaryColor: AppColors.colorPrimary,

@@ -2,6 +2,7 @@
 import 'package:dremfoo/app/modules/core/ui/widgets/background_form_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
@@ -16,6 +17,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 class RegisterPage extends StatefulWidget {
+
+  final UserRevo? userRevo;
+  RegisterPage({this.userRevo});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -51,6 +56,8 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
             type: msgErro.type);
       }
     });
+
+   store.featch(widget.userRevo);
 
   }
 
@@ -92,48 +99,47 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
     return Expanded(
               child: Form(
                 key: store.formKey,
-                child: BackgroundFormWidget(
-                  child: ListView(
-                    children: <Widget>[
-                      AppTextDefault(
-                        name: Translate.i().get.label_name,
-                        maxLength: 40,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.text,
-                        onSaved: (name) => store.user.name = name,
-                        validator: ValidatorUtil.requiredField,
-                      ),
-                      SpaceWidget(),
-                      AppTextDefault(
-                        name: Translate.i().get.label_email,
-                        maxLength: 50,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.emailAddress,
-                        onSaved: (email) => store.user.email = email,
-                        validator: ValidatorUtil.validatorEmail,
-                      ),
-                      SpaceWidget(),
-                      AppTextDefault(
-                        name: Translate.i().get.label_confirm_email,
-                        maxLength: 50,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.emailAddress,
-                        validator: ValidatorUtil.validatorEmail,
-                        controller: store.validatedEmailController,
-                      ),
-                      SpaceWidget(),
-                      AppTextDefault(
-                        name: Translate.i().get.label_password,
-                        maxLength: 12,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.visiblePassword,
-                        isPassword: true,
-                        onSaved: (password) => store.user.password = password,
-                        validator: ValidatorUtil.validatorPassword,
-                      ),
-                     SpaceWidget(),
-                    ],
-                  ),
+                child: ListView(
+                  children: <Widget>[
+                    AppTextDefault(
+                      name: Translate.i().get.label_name,
+                      maxLength: 40,
+                      controller: store.nameTextEditingController,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.text,
+                      onSaved: (name) => store.user.name = name,
+                      validator: ValidatorUtil.requiredField,
+                    ),
+                    SpaceWidget(),
+                    AppTextDefault(
+                      name: Translate.i().get.label_email,
+                      maxLength: 50,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.emailAddress,
+                      onSaved: (email) => store.user.email = email,
+                      validator: ValidatorUtil.validatorEmail,
+                    ),
+                    SpaceWidget(),
+                    AppTextDefault(
+                      name: Translate.i().get.label_confirm_email,
+                      maxLength: 50,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.emailAddress,
+                      validator: ValidatorUtil.validatorEmail,
+                      controller: store.validatedEmailController,
+                    ),
+                    SpaceWidget(),
+                    AppTextDefault(
+                      name: Translate.i().get.label_password,
+                      maxLength: 12,
+                      inputAction: TextInputAction.next,
+                      inputType: TextInputType.visiblePassword,
+                      isPassword: true,
+                      onSaved: (password) => store.user.password = password,
+                      validator: ValidatorUtil.validatorPassword,
+                    ),
+                   SpaceWidget(),
+                  ],
                 ),
               ),
             );
@@ -142,7 +148,6 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
 
   Container headerRegister() {
     return Container(
-      color: Colors.white,
       child: Stack(
         children: <Widget>[
           Container(

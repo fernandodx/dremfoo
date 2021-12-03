@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/infra/repositories/contract/ishared_prefs_repository.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/modules/login/infra/repositories/contract/ilogin_repository.dart';
@@ -18,7 +19,8 @@ class LoginUseCase implements ILoginCase {
 
   ILoginRepository _loginRepository;
   IRegisterUserRepository _userRepository;
-  LoginUseCase(this._loginRepository, this._userRepository);
+  ISharedPrefsRepository _sharedPrefsRepository;
+  LoginUseCase(this._loginRepository, this._userRepository, this._sharedPrefsRepository);
 
   var _userRevo = Modular.get<UserRevo>();
 
@@ -27,9 +29,10 @@ class LoginUseCase implements ILoginCase {
 
     try {
       var user = await _loginRepository.signInWithEmailAndPassword(userRevo.email!, userRevo.password!);
-      // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
+      await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
       _saveLastAcessUser();
+
 
       return ResponseApi.ok(result: user);
 
@@ -49,7 +52,7 @@ class LoginUseCase implements ILoginCase {
 
     try {
       var user = await _loginRepository.signInWithFacebook();
-      // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
+      await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
       _saveLastAcessUser();
 
@@ -71,7 +74,7 @@ class LoginUseCase implements ILoginCase {
 
     try {
       var user = await _loginRepository.signInWithGoogle();
-      // MainEventBus().get(context).updateUser(user); -- vericar depois a reatividade ao se ter um novo user
+      await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
       _saveLastAcessUser();
 
@@ -123,12 +126,37 @@ class LoginUseCase implements ILoginCase {
     _userRepository.saveUser(user, initTime, finishTime);
   }
 
+  Future<void> _saveUserLoging(String uid) async  {
+    return _sharedPrefsRepository.putString("USER_LOG_UID", uid);
+  }
+
   Future<ResponseApi> _saveLastAcessUser() async {
     try{
 
       if(_userRevo.uid != null){
         await _userRepository.saveLastAcessUser(_userRevo.uid!, Timestamp.now());
         return ResponseApi.ok();
+      }
+
+    }on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<String>> checkUserLoging() async {
+    try{
+      
+      String uid = await _sharedPrefsRepository.getString("USER_LOG_UID");
+      if(uid.isNotEmpty) {
+        return ResponseApi.ok(result: uid);
+      }else{
+        return ResponseApi.error(messageAlert: MessageAlert.create(Translate.i().get.title_msg_error, "Usuário não logado", TypeAlert.ALERT));
       }
 
     }on RevoExceptions catch(error){

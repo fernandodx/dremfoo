@@ -72,6 +72,9 @@ dependencies:
 
   intl: ^0.17.0
 
+  google_fonts: ^2.1.0
+  cryptoutils: ^0.5.0
+
 
 dev_dependencies:
   build_runner: ^2.0.6
@@ -146,3 +149,5 @@ scripts:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

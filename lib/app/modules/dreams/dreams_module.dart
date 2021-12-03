@@ -1,14 +1,18 @@
 import 'package:dremfoo/app/modules/core/core_module.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/upload_image_repository.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/archive_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/choice_type_dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/detail_dream_store.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/dream_completed_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/dream_usecase.dart';
 import 'package:dremfoo/app/modules/dreams/infra/datasources/dream_firebase_datasource.dart';
 import 'package:dremfoo/app/modules/dreams/infra/repositories/dream_repository.dart';
+import 'package:dremfoo/app/modules/dreams/ui/pages/archive_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/choice_type_dream_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/detail_dream_page.dart';
+import 'package:dremfoo/app/modules/dreams/ui/pages/dream_completed_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/dreams_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_wait_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_with_focus_page.dart';
@@ -33,6 +37,9 @@ class DreamsModule extends Module {
     Bind.lazySingleton((i) => RegisterDreamWithFocusStore(i.get<DreamUseCase>())),
     Bind.lazySingleton((i) => ChoiceTypeDreamStore()),
     Bind.lazySingleton((i) => DreamStore(i.get<DreamUseCase>())),
+    Bind.lazySingleton((i) => ArchiveStore(i.get<DreamUseCase>())),
+    Bind.lazySingleton((i) => DreamCompletedStore(i.get<DreamUseCase>())),
+
   ];
 
   @override
@@ -42,5 +49,7 @@ class DreamsModule extends Module {
     ChildRoute("/choiceDream", child: (_, args) => ChoiceTypeDreamPage()),
     ChildRoute("/newDreamWait", child: (_, args) => RegisterDreamWaitPage()),
     ChildRoute("/newDreamWithFocus", child: (_, args) => RegisterDreamWithFocusPage(args.data)),
+    ChildRoute("/archive", child: (_, args) => ArchivePage()),
+    ChildRoute("/dreamsCompleted", child: (_, args) => DreamCompletedPage()),
   ];
 }

@@ -281,6 +281,90 @@ class DreamUseCase extends IDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  @override
+  Future<ResponseApi> archiveDream(Dream dream) async {
+    try{
+      await _repository.updateArchiveDream(dream, isArchived: true);
+      return ResponseApi.ok();
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi> realizedDream(Dream dream,  {required DateTime? dateFinish}) async {
+    try{
+      await _repository.updateRealizedDream(dream, dateFinish: dateFinish);
+      return ResponseApi.ok();
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<Dream>>> findAllDreamsArchive() async {
+    try{
+
+      List<Dream> listeDream = await _repository.findAllDreamsArchiveCurrentUser();
+      return ResponseApi.ok(result: listeDream);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi> restoreDream(Dream dream) async {
+    try{
+      await _repository.updateArchiveDream(dream, isArchived: false);
+      return ResponseApi.ok();
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<Dream>>> findAllDreamsCompletedCurrentUser() async {
+    try{
+
+      List<Dream> listeDream = await _repository.findAllDreamsCompletedCurrentUser();
+      return ResponseApi.ok(result: listeDream);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
 
 
 

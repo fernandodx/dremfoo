@@ -19,6 +19,7 @@ class UserRevo {
   bool? isEnableNotification;
   File? picture;
   UserFocus? focus;
+  int? countDaysAcess;
   User? userFirebase;
 
   UserRevo();
@@ -32,6 +33,7 @@ class UserRevo {
     initNotification = map["initNotification"];
     finishNotification = map["finishNotification"];
     isEnableNotification = map["isEnableNotification"];
+    countDaysAcess =  map["countDaysAcess"];
     focus = UserFocus.fromMap(map['focus']);
   }
 
@@ -45,6 +47,7 @@ class UserRevo {
     map["initNotification"] = this.initNotification;
     map["finishNotification"] = this.finishNotification;
     map["isEnableNotification"] = this.isEnableNotification;
+    map["countDaysAcess"] = this.countDaysAcess;
     map["focus"] = this.focus != null ? this.focus!.toMap() : null;
     return map;
   }

@@ -12,4 +12,6 @@ abstract class ILoginCase {
 
   Future<ResponseApi<User>> loginWithGoogle();
 
+  Future<ResponseApi<String>> checkUserLoging();
+
 }

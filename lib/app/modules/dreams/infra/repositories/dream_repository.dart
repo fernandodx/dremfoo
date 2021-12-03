@@ -26,11 +26,10 @@ class DreamRespository extends IDreamRepository {
      if(_userRevo.uid != null){
       return _datasource.findAllDreamForUser(_userRevo.uid!);
      }else{
-       return _datasource.findAllDreamForUser("7uFOlj8el2Q62sblZxu7jnWaRME3");
-       // RevoExceptions _revoExceptions = new RevoExceptions
-       //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
-       // CrashlyticsUtil.logError(_revoExceptions);
-       // throw _revoExceptions;
+       RevoExceptions _revoExceptions = new RevoExceptions
+           .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+       CrashlyticsUtil.logError(_revoExceptions);
+       throw _revoExceptions;
      }
 
    } catch(error, stack) {
@@ -47,11 +46,10 @@ class DreamRespository extends IDreamRepository {
       if(_userRevo.uid != null){
         return _datasource.findAllDailyGoalForDream(_userRevo.uid!, uidDream);
       }else{
-        return _datasource.findAllDailyGoalForDream("7uFOlj8el2Q62sblZxu7jnWaRME3", uidDream);
-        // RevoExceptions _revoExceptions = new RevoExceptions
-        //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
-        // CrashlyticsUtil.logError(_revoExceptions);
-        // throw _revoExceptions;
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
       }
 
     } catch(error, stack) {
@@ -67,11 +65,10 @@ class DreamRespository extends IDreamRepository {
       if(_userRevo.uid != null){
         return _datasource.findAllStepsForDream(_userRevo.uid!, uidDream);
       }else{
-        return _datasource.findAllStepsForDream("7uFOlj8el2Q62sblZxu7jnWaRME3", uidDream);
-        // RevoExceptions _revoExceptions = new RevoExceptions
-        //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
-        // CrashlyticsUtil.logError(_revoExceptions);
-        // throw _revoExceptions;
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
       }
 
     } catch(error, stack) {
@@ -159,11 +156,10 @@ class DreamRespository extends IDreamRepository {
         AnalyticsUtil.sendAnalyticsEvent(EventRevo.newDream);
         return _datasource.saveDream(dream, _userRevo.uid!);
       }else{
-        return _datasource.saveDream(dream, "7uFOlj8el2Q62sblZxu7jnWaRME3");
-        // RevoExceptions _revoExceptions = new RevoExceptions
-        //     .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
-        // CrashlyticsUtil.logError(_revoExceptions);
-        // throw _revoExceptions;
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
       }
 
 
@@ -189,8 +185,66 @@ class DreamRespository extends IDreamRepository {
       CrashlyticsUtil.logErro(error, stack);
       throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
     }
-
   }
+
+
+  Future<List<Dream>> findAllDreamsArchiveCurrentUser() async {
+    try{
+
+      if(_userRevo.uid != null){
+        return _datasource.findAllDreamsArchive(_userRevo.uid!);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<void> updateArchiveDream(Dream dream, {required bool isArchived}) async {
+    try{
+      _datasource.updateOnlyFieldDream(dream, "isDeleted", isArchived);
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<void> updateRealizedDream(Dream dream, {required DateTime? dateFinish}) async {
+    try{
+      _datasource.updateOnlyFieldDream(dream, "dateFinish",
+          dateFinish != null ? Timestamp.fromDate(dateFinish) : null);
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<List<Dream>> findAllDreamsCompletedCurrentUser() async {
+    try{
+      if(_userRevo.uid != null){
+        return _datasource.findAllDreamsCompleted(_userRevo.uid!);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+
 
 
 

@@ -16,4 +16,10 @@ abstract class IRegisterUserRepository {
 
   Future<Object> saveLastAcessUser(String fireBaseUserUid, Timestamp dateAcess);
 
+  Future<UserRevo> findCurrentUser();
+
+  Future<DateTime> findLastDayAcessForUser(bool excludeToday);
+
+  Future<List<UserRevo>> findRankUser();
+
 }

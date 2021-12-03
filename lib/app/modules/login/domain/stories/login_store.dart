@@ -22,9 +22,6 @@ abstract class _LoginStoreBase with Store {
   @observable
   MessageAlert? msgAlert;
 
-  @observable
-  User? userSingIn;
-
   final formKey = GlobalKey<FormState>();
   UserRevo user  = Modular.get<UserRevo>();
   var textEmailController = TextEditingController();
@@ -65,13 +62,15 @@ abstract class _LoginStoreBase with Store {
     isLoading = true;
     ResponseApi<User> responseApi = await _loginCase.loginWithEmailAndPassword(user);
     handlerResponseApiUser(responseApi);
-    msgAlert = responseApi.messageAlert;
     isLoading = false;
   }
 
   void handlerResponseApiUser(ResponseApi<User> responseApi) {
     if(responseApi.ok){
-      userSingIn = responseApi.result;
+      // userSingIn = responseApi.result;
+      Modular.to.navigate("/home");
+    }else{
+      msgAlert = responseApi.messageAlert;
     }
   }
 

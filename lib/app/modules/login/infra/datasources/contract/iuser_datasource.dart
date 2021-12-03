@@ -9,4 +9,14 @@ abstract class IUserDataSource {
 
   Future<bool> isUserUidExist(String uid);
 
+  Future<UserRevo> findUserWithUid(String uid);
+
+  Future<DateTime> findLastDayAcessForUser(String uid, bool excludeToday);
+
+  Future<List<UserRevo>> findRankUser();
+
+  Future<void> saveCountDaysAcess(String uidUser, int count);
+
+  Future<int> findCountHitsUser(String uidUser);
+
 }

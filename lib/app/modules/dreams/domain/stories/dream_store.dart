@@ -105,11 +105,16 @@ abstract class _DreamStoreBase with Store {
     if(dreamSelected.isDreamWait??false){
       _editDream(context, dreamSelected);
     }else{
-      Dream dreamReturn = await Navigator.pushNamed(context, "/home/dream/detail", arguments: dreamSelected) as Dream;
-      int index = listDream.indexWhere((dream) => dream.uid == dreamReturn.uid);
-      listDream[index] = dreamReturn;
-      updateListDream(listDream);
-
+      DreamPageDto _dreamDto = await Navigator.pushNamed(context, "/home/dream/detail", arguments: dreamSelected) as DreamPageDto;
+      if(_dreamDto.dream != null) {
+        int index = listDream.indexWhere((dream) => dream.uid == _dreamDto.dream!.uid);
+        if(_dreamDto.isRemoveDream){
+          listDream.remove(_dreamDto.dream);
+        }else{
+          listDream[index] = _dreamDto.dream!;
+        }
+        updateListDream(listDream);
+      }
     }
   }
 

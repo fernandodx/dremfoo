@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/ilogin_datasource.dart';
-import 'package:dremfoo/app/resources/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

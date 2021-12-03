@@ -1,10 +1,12 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/detail_dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/body_item_dream_widget.dart';
+import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/week_calendar_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
@@ -75,9 +77,20 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               Navigator.pop(context, dream);
             },),
             actions: [
-              IconButton(
-                icon: FaIcon(FontAwesomeIcons.edit, size: 23,),
-                onPressed: () => store.editDream(context, widget.dreamSelected))
+              Container(
+                margin: EdgeInsets.only(right: 16),
+                child: InkWell(
+                  onTap: () => store.editDream(context, widget.dreamSelected),
+                  child: Chip(
+                      label: TextUtil.textSubTitle("Editar"),
+                    backgroundColor: AppColors.colorLazulli,
+                  ),
+                ),
+              ),
+
+              // IconButton(
+              //   icon: FaIcon(FontAwesomeIcons.edit, size: 23,),
+              //   onPressed: () => store.editDream(context, widget.dreamSelected))
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -150,7 +163,40 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             );
           },
         ),
-
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ChipButtonWidget(
+              name: "Sonho realizado",
+              icon: FontAwesomeIcons.check,
+              size: 81,
+              onTap: () {
+                alertBottomSheet(context,
+                    msg: "Você realizou seu sonho?",
+                    title: "Sonho realizado",
+                    nameButtonDefault: "Sim",
+                    onTapDefaultButton: () {
+                      store.realizedDream(context, widget.dreamSelected);
+                    });
+              },),
+            ChipButtonWidget(
+                name: "Arquivar sonho",
+                size: 81,
+                icon: FontAwesomeIcons.archive,
+                onTap: () {
+                  alertBottomSheet(context,
+                      msg: "Você realmente deseja arquiva esse sonho? Mesmo arquivado você pode reativa-lo a qualqer momento.",
+                      title: "Arquivar sonho",
+                      nameButtonDefault: "Arquivar",
+                      onTapDefaultButton: () {
+                        store.archiveDream(context, widget.dreamSelected);
+                      });
+                }
+            ),
+          ],
+        ),
+        SpaceWidget()
       ],
     );
   }

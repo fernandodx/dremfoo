@@ -28,5 +28,14 @@ abstract class IDreamRepository {
 
   Future<Dream> updateDream(Dream dream);
 
+  Future<List<Dream>> findAllDreamsArchiveCurrentUser();
+
+  Future<void> updateArchiveDream(Dream dream, {required bool isArchived});
+
+  Future<List<Dream>> findAllDreamsCompletedCurrentUser();
+
+  Future<void> updateRealizedDream(Dream dream, {required DateTime? dateFinish});
+
+
 
 }

@@ -29,4 +29,10 @@ abstract class IDreamDatasource {
 
   Future<Dream> updateDream(Dream dream);
 
+  Future<List<Dream>> findAllDreamsArchive(String uidUser);
+
+  Future<void> updateOnlyFieldDream(Dream dream, String field, dynamic value);
+
+  Future<List<Dream>> findAllDreamsCompleted(String uidUser);
+
 }

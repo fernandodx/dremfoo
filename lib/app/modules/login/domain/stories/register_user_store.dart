@@ -23,6 +23,7 @@ abstract class _RegisterUserStoreBase with Store {
 
   final formKey = GlobalKey<FormState>();
   final validatedEmailController = TextEditingController();
+  final nameTextEditingController = TextEditingController();
   var user =  Modular.get<UserRevo>();
 
   @observable
@@ -33,6 +34,13 @@ abstract class _RegisterUserStoreBase with Store {
 
   @observable
   Widget? containerImage;
+
+  void featch(UserRevo? userRevo) {
+    if(userRevo != null) {
+      nameTextEditingController.text = userRevo.name??"";
+    }
+  }
+
 
 
   @action

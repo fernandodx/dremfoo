@@ -190,4 +190,5 @@ class LoginRepository implements ILoginRepository {
       throw _revoExceptions;
     }
   }
+
 }

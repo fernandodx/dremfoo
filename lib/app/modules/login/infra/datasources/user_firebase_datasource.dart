@@ -48,9 +48,70 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
 
   @override
   Future<bool> isUserUidExist(String uid) async {
-      DocumentSnapshot snapshot = await getRefCurrentUser(uid).get();
+      DocumentSnapshot snapshot = await getRefCurrentUser(uid).get().catchError(handlerError);
       return snapshot.exists;
   }
+
+  @override
+  Future<UserRevo> findUserWithUid(String uid) async {
+    DocumentSnapshot snapshot = await getRefCurrentUser(uid).get().catchError(handlerError);
+    UserRevo user = UserRevo.fromMap(snapshot.data() as Map<String, dynamic>);
+    user.uid = snapshot.id;
+    return user;
+  }
+
+  @override
+  Future<DateTime> findLastDayAcessForUser(String uid, bool excludeToday) async {
+    DocumentReference refUsers = getRefCurrentUser(uid);
+    QuerySnapshot query = await refUsers
+        .collection("hits")
+        .orderBy("dateAcess", descending: true)
+        .limit(2)
+        .get()
+        .catchError(handlerError);
+
+    List<QueryDocumentSnapshot> list = query.docs;
+
+    if(list.isEmpty){
+      return DateTime.now();
+    }
+    int index = 0;
+    if(excludeToday) {
+      index = list.length > 1 ? 1 : 0;
+    }
+    Timestamp dateLastAcess = list[index].get('dateAcess');
+    return dateLastAcess.toDate();
+  }
+
+  @override
+  Future<List<UserRevo>> findRankUser() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(Constants.ENVIRONMENT)
+          .doc(Constants.ENVIRONMENT_NOW)
+          .collection("users")
+          .where("focus.countDaysFocus", isGreaterThan: 1)
+          .orderBy("focus.countDaysFocus", descending: true)
+          .get()
+          .catchError(handlerError);
+      return UserRevo.fromListDocumentSnapshot(querySnapshot.docs);
+  }
+
+  @override
+  Future<void> saveCountDaysAcess(String uidUser, int count) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    refUsers.update({
+      "countDaysAcess" : count
+    }).catchError(handlerError);
+  }
+
+  Future<int> findCountHitsUser(String uidUser) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    QuerySnapshot querySnapshot = await refUsers.collection("hits").get().catchError(handlerError);
+    return querySnapshot.docs.toList().length;
+  }
+
+
+
 
 
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
+import 'package:dremfoo/app/modules/core/infra/datasources/contract/ishared_prefs_datasource.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/ilogin_datasource.dart';
@@ -113,6 +114,59 @@ class RegisterUserRepository extends IRegisterUserRepository {
     } catch(error, stack){
       CrashlyticsUtil.logErro(error, stack);
       throw RevoExceptions.msgToUser(error: Exception(error), msg: Translate.i().get.msg_error_not_possible_save_user, stack:  stack);
+    }
+  }
+
+  @override
+  Future<UserRevo> findCurrentUser() async {
+    try {
+       if(_userRevo.uid != null){
+         return _userDataSource.findUserWithUid(_userRevo.uid!);
+       }else {
+         RevoExceptions _revoExceptions = new RevoExceptions
+             .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+         CrashlyticsUtil.logError(_revoExceptions);
+         throw _revoExceptions;
+       }
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(error: Exception(error), msg: Translate.i().get.msg_error_generic_user_login);
+    }
+  }
+
+
+  @override
+  Future<DateTime> findLastDayAcessForUser(bool excludeToday) async {
+    try {
+      if(_userRevo.uid != null){
+        return _userDataSource.findLastDayAcessForUser(_userRevo.uid!, excludeToday);
+      }else {
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(error: Exception(error), msg: Translate.i().get.msg_error_generic_user_login);
+    }
+  }
+
+  @override
+  Future<List<UserRevo>> findRankUser() async {
+    try {
+      List<UserRevo> listUsers = await _userDataSource.findRankUser();
+      List<UserRevo> listFilter = listUsers.where((user) => user.focus != null && user.focus!.level != null).toList();
+      return listFilter.where((user) => user.countDaysAcess != null && user.countDaysAcess! >= user.focus!.countDaysFocus!).toList();
+      //Atualizar count
+      // for(UserRevo user in listFilter) {
+      //   int count = await _userDataSource.findCountHitsUser(user.uid!);
+      //   await _userDataSource.saveCountDaysAcess(user.uid!, count);
+      // }
+      return listFilter;
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(error: Exception(error), msg: Translate.i().get.msg_error_generic_user_login);
     }
   }
 

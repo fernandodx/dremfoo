@@ -209,4 +209,34 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
     return dream;
   }
 
+  @override
+  Future<List<Dream>> findAllDreamsArchive(String uidUser) async {
+      DocumentReference refUsers = getRefCurrentUser(uidUser);
+      QuerySnapshot querySnapshot = await refUsers
+          .collection("dreams")
+          .where("isDeleted", isEqualTo: true)
+          .get()
+          .catchError(handlerError);
+      return Dream.fromListDocumentSnapshot(querySnapshot.docs);
+  }
+
+  @override
+  Future<void> updateOnlyFieldDream(Dream dream, String field, dynamic value) async {
+    DocumentReference dreamRef = dream.reference!;
+    dreamRef.update({field: value}).catchError(handlerError);
+  }
+
+  @override
+  Future<List<Dream>> findAllDreamsCompleted(String uidUser) async {
+      DocumentReference refUsers = getRefCurrentUser(uidUser);
+
+      QuerySnapshot querySnapshot = await refUsers
+          .collection("dreams")
+          .where("dateFinish", isLessThanOrEqualTo: Timestamp.now())
+          .get()
+          .catchError(handlerError);
+
+      return Dream.fromListDocumentSnapshot(querySnapshot.docs);
+  }
+
 }

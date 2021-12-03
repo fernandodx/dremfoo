@@ -293,6 +293,30 @@ abstract class _DetailDreamStoreBase with Store {
       }
    }
 
+   Future<void> archiveDream(BuildContext context, Dream dream) async {
+      isLoading = true;
+      ResponseApi responseApi = await _dreamCase.archiveDream(dream);
+      msgAlert = responseApi.messageAlert;
+      isLoading = false;
+      if(responseApi.ok){
+         // Navigator.pushNamed(context, Modular.initialRoute);
+         // Modular.to.navigate("/home/dream");
+         Navigator.pop(context, DreamPageDto(isRemoveDream: true, dream: dream));
+      }
+   }
+
+   Future<void> realizedDream(BuildContext context, Dream dream) async {
+      isLoading = true;
+      ResponseApi responseApi = await _dreamCase.realizedDream(dream, dateFinish: DateTime.now());
+      msgAlert = responseApi.messageAlert;
+      isLoading = false;
+      if(responseApi.ok){
+         // Navigator.pushNamed(context, Modular.initialRoute);
+         // Modular.to.navigate("/home/dream");
+         Navigator.pop(context, DreamPageDto(isRemoveDream: true, dream: dream));
+      }
+   }
+
    Future<void> changeTimeModeChart(Dream dreamSelected, bool isChartWeek) async {
       if(listHistoryYaerlyMonthDailyGoals.isEmpty){
          await _findHistoryYearlyMonthDailyGoal(dreamSelected);
