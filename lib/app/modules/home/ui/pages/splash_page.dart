@@ -46,7 +46,7 @@ class SplashPageState extends ModularState<SplashPage, SplashStore> {
       }
     });
 
-    store.featch();
+    store.featch(context);
 
   }
 

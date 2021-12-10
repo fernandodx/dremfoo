@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -820,7 +819,7 @@ class FirebaseService {
     }
   }
 
-  ResponseApi<Void> updateStepToday(String nameStep, bool isSelected) {
+  ResponseApi<void> updateStepToday(String nameStep, bool isSelected) {
     try {
       DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
 

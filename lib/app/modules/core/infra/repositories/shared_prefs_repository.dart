@@ -12,7 +12,7 @@ class SharedPrefsRepository implements ISharedPrefsRepository {
   SharedPrefsRepository(this._sharedDatasource);
 
   @override
-  Future<bool> getBool(String key, bool defaultValue) async {
+  Future<bool?> getBool(String key, bool? defaultValue) async {
     try{
       return _sharedDatasource.getBool(key, defaultValue);
     } catch(error, stack) {

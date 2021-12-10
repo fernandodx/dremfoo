@@ -18,7 +18,7 @@ class SharedPrefdDatasource implements ISharedPrefsDatasource {
   }
 
   @override
-  Future<bool> getBool(String key, bool defaultValue) async {
+  Future<bool?> getBool(String key, bool? defaultValue) async {
     var prefs = await _instance.future;
     return prefs.getBool(key) ?? defaultValue;
   }

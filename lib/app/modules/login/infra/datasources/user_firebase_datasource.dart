@@ -1,31 +1,15 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/level_revo.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/iuser_datasource.dart';
 import 'package:dremfoo/app/resources/constants.dart';
+import 'package:dremfoo/app/utils/crashlytics_util.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
-
-  Completer<String> _instance = Completer<String>();
-  // Completer<FirebaseAuth> _auth = Completer<FirebaseAuth>();
-
-  _init() async {
-
-    Future.delayed(Duration(seconds: 2)).then((value) {
-      _instance.complete(" FirebaseDataSource Finish");
-    });
-
-  }
-
-  UserFirebaseDataSource(){
-   _init();
-  }
-
-  Future exempleMethod() async {
-    var value = await _instance.future;
-  }
-
 
   @override
   Future<void> saveUser(UserRevo user, DateTime initNotification, DateTime finishNotification) async {
@@ -38,6 +22,48 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
       "finishNotification": Timestamp.fromDate(finishNotification)
     }).catchError(handlerError);
   }
+
+  @override
+  Future<void> updatePhotoUser(String uidUser, String urlPhoto) async {
+
+    var currentUser = await FirebaseAuth.instance.currentUser;
+    currentUser?.updatePhotoURL(urlPhoto);
+
+    getRefCurrentUser(uidUser).update({
+      "urlPicture": urlPhoto,
+    }).catchError((onError) => CrashlyticsUtil.logErro(onError, onError));
+  }
+
+  @override
+  Future<void> updateUser(UserRevo user, DateTime initNotification, DateTime finishNotification) async {
+
+    var currentUser = await FirebaseAuth.instance.currentUser;
+
+    if(currentUser != null) {
+      if(user.urlPicture != null){
+        currentUser.updatePhotoURL(user.urlPicture);
+      }
+      if(user.name != null) {
+        currentUser.updateDisplayName(user.name);
+      }
+      if(user.email != null) {
+        currentUser.updateEmail(user.email!);
+      }
+      if(user.password != null) {
+        currentUser.updatePassword(user.password!);
+      }
+    }
+
+    getRefCurrentUser(user.uid!).update({
+      "name": user.name,
+      "email": user.email,
+      "urlPicture": user.urlPicture,
+      "isEnableNotification": Constants.IS_ENABLE_NOTIFICATION_DEFAULT,
+      "initNotification": Timestamp.fromDate(initNotification),
+      "finishNotification": Timestamp.fromDate(finishNotification)
+    }).catchError((onError) => CrashlyticsUtil.logErro(onError, onError));
+  }
+
 
   @override
   Future<Object> saveLastAcessUser(String fireBaseUserUid, Timestamp dateAcess) async {
@@ -104,10 +130,49 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
     }).catchError(handlerError);
   }
 
+  @override
   Future<int> findCountHitsUser(String uidUser) async {
     DocumentReference refUsers = getRefCurrentUser(uidUser);
     QuerySnapshot querySnapshot = await refUsers.collection("hits").get().catchError(handlerError);
     return querySnapshot.docs.toList().length;
+  }
+
+  @override
+  Future<UserFocus?> findFocusUser(String uidUser) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    DocumentSnapshot snapshot = await refUsers
+        .get()
+        .catchError(handlerError);
+
+    UserRevo user = UserRevo.fromMap(snapshot.data() as Map<String, dynamic>);
+    return user.focus;
+  }
+
+  @override
+  Future<UserFocus> updateFocusUser(String uidUser, UserFocus focus) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    refUsers.update({"focus" : focus.toMap()})
+        .catchError(handlerError);
+    return focus;
+  }
+
+  @override
+  Future<LevelRevo> updateLevelUser(String uidUser, LevelRevo level) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    refUsers.update({"level" : level.toMap()})
+        .catchError(handlerError);
+    return level;
+  }
+
+  @override
+  Future<List<LevelRevo>> findLevelsWin(int value) async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("levels")
+          .where("initValue", isLessThanOrEqualTo: value)
+          .orderBy("initValue", descending: false)
+          .get()
+          .catchError(handlerError);
+      return  LevelRevo.fromListDocumentSnapshot(querySnapshot.docs);
   }
 
 

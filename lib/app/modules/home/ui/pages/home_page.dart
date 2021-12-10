@@ -83,10 +83,12 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ChipButtonWidget(
-                        name: "Notificações",
+                        name: "Conteúdo gratuito",
                         size: 80,
-                        icon: FontAwesomeIcons.bell,
-                        onTap: () {},
+                        icon: FontAwesomeIcons.video,
+                        onTap: () {
+                          store.navigatePageFreeVideos(context);
+                        },
                       ),
                       ChipButtonWidget(
                         name: "Redes Sociais",

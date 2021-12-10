@@ -11,6 +11,7 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -23,9 +24,10 @@ class DetailDreamStore = _DetailDreamStoreBase with _$DetailDreamStore;
 abstract class _DetailDreamStoreBase with Store {
 
    IDreamCase _dreamCase;
-   _DetailDreamStoreBase(this._dreamCase);
+   IRegisterUserCase _registerUserCase;
+   _DetailDreamStoreBase(this._dreamCase, this._registerUserCase);
 
-   @observable
+  @observable
    bool isLoading = false;
 
    @observable
@@ -278,6 +280,8 @@ abstract class _DetailDreamStoreBase with Store {
             _updateListDailyGoalHistWeek(dailyGoal, currentDate);
             _updateListDailyGoalHistMonth(dailyGoal, currentDate);
          }
+
+         _registerUserCase.updateContinuosFocus();
       }
    }
 

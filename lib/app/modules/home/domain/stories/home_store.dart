@@ -100,6 +100,10 @@ abstract class _HomeStoreBase with Store {
     Navigator.pushNamed(context, "/socialNetwork");
   }
 
+  void navigatePageFreeVideos(BuildContext context) {
+    Navigator.pushNamed(context, "/freeVideos");
+  }
+
 
 
 

@@ -14,4 +14,5 @@ abstract class ILoginCase {
 
   Future<ResponseApi<String>> checkUserLoging();
 
+
 }

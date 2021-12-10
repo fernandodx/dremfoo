@@ -175,7 +175,7 @@ class TextUtil {
   }
 
   static Text textTituloVideo(String value,
-      {TextAlign align = TextAlign.start, double fontSize = 13,}) {
+      {TextAlign align = TextAlign.start, double fontSize = 12,}) {
     return Text(
       value,
       textAlign: align,

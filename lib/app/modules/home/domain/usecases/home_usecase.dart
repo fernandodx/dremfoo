@@ -101,9 +101,9 @@ class HomeUseCase implements IHomeUsecase {
   Future<ResponseApi<Video>> getRadomVideo() async {
     try{
 
-      List<Video> listRankUser = await _homeRepository.findAllVideos(true);
-      int indexRandom = Random().nextInt(listRankUser.length);
-      return ResponseApi.ok(result: listRankUser[indexRandom]);
+      List<Video> listVideosFree = await _homeRepository.findAllVideos(true);
+      int indexRandom = Random().nextInt(listVideosFree.length);
+      return ResponseApi.ok(result: listVideosFree[indexRandom]);
 
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

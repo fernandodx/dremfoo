@@ -71,7 +71,7 @@ class AppColors {
     return BoxDecoration(
         gradient: LinearGradient(
             colors: [Colors.transparent, AppColors.colorBackground],
-            begin: FractionalOffset.center,
+            begin: FractionalOffset.topCenter,
             end: FractionalOffset.bottomCenter));
   }
 

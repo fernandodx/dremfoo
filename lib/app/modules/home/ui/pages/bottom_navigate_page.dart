@@ -68,6 +68,7 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
               currentIndex: _selectedIndex,
               selectedItemColor: AppColors.colorAcent,
               onTap: (index) {
+                //Arrumar ISSO
                 setState(() {
                   _selectedIndex = index;
                 });

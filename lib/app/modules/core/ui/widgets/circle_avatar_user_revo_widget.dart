@@ -8,27 +8,52 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class CircleAvatarUserRevoWidget extends StatelessWidget {
   final String? urlImage;
   final IconData? icon;
+  final Image? image;
   final double size;
+  final double radiusSize;
+  final bool isShowEdit;
 
-  CircleAvatarUserRevoWidget({
-    this.urlImage,
-    this.icon,
-    this.size = 38});
+  CircleAvatarUserRevoWidget({this.urlImage, this.icon, this.size = 38, this.isShowEdit = false, this.image, this.radiusSize = 19});
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 19,
-      backgroundColor: Colors.white12,
-      child: ClipOval(
-        child: _getImage(),
-      ),
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        CircleAvatar(
+          radius: radiusSize,
+          backgroundColor: AppColors.colorDarkLight,
+          child: ClipOval(
+            child: _getImage(),
+          ),
+        ),
+        Visibility(
+          visible: isShowEdit,
+          child: Container(
+            padding: EdgeInsets.all(8),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FaIcon(
+                FontAwesomeIcons.pencilAlt,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 
   Widget _getImage() {
+
+    if(image != null && image?.image != null) {
+      return CircleAvatar(
+        radius: 43,
+        backgroundImage: image!.image,
+      );
+    }
+
     if (urlImage != null) {
-      return CachedNetworkImage(width: size, height: size, imageUrl: urlImage!);
+      return CachedNetworkImage(width: size, height: size, imageUrl: urlImage!, fit: BoxFit.cover,);
     }
 
     if (icon != null) {
@@ -42,6 +67,7 @@ class CircleAvatarUserRevoWidget extends StatelessWidget {
     return Image(
       width: size,
       height: size,
+      fit: BoxFit.cover,
       image: AssetImage(
         Utils.getPathAssetsImg("icon_user_not_found.png"),
       ),

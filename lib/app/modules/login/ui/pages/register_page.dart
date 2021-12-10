@@ -72,7 +72,7 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
               icon: Icon(
                 Icons.check,
               ),
-              onPressed: () => store.resgisterUser(context),
+              onPressed: () => store.confirmUser(context),
           ),
         ],
       ),
@@ -99,47 +99,56 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
     return Expanded(
               child: Form(
                 key: store.formKey,
-                child: ListView(
-                  children: <Widget>[
-                    AppTextDefault(
-                      name: Translate.i().get.label_name,
-                      maxLength: 40,
-                      controller: store.nameTextEditingController,
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.text,
-                      onSaved: (name) => store.user.name = name,
-                      validator: ValidatorUtil.requiredField,
-                    ),
-                    SpaceWidget(),
-                    AppTextDefault(
-                      name: Translate.i().get.label_email,
-                      maxLength: 50,
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.emailAddress,
-                      onSaved: (email) => store.user.email = email,
-                      validator: ValidatorUtil.validatorEmail,
-                    ),
-                    SpaceWidget(),
-                    AppTextDefault(
-                      name: Translate.i().get.label_confirm_email,
-                      maxLength: 50,
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.emailAddress,
-                      validator: ValidatorUtil.validatorEmail,
-                      controller: store.validatedEmailController,
-                    ),
-                    SpaceWidget(),
-                    AppTextDefault(
-                      name: Translate.i().get.label_password,
-                      maxLength: 12,
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.visiblePassword,
-                      isPassword: true,
-                      onSaved: (password) => store.user.password = password,
-                      validator: ValidatorUtil.validatorPassword,
-                    ),
-                   SpaceWidget(),
-                  ],
+                child: Observer(
+                  builder: (context) => ListView(
+                    children: <Widget>[
+                      AppTextDefault(
+                        name: Translate.i().get.label_name,
+                        maxLength: 40,
+                        controller: store.nameTextEditingController,
+                        inputAction: TextInputAction.next,
+                        inputType: TextInputType.text,
+                        onSaved: (name) => store.user.name = name,
+                        validator: ValidatorUtil.requiredField,
+                      ),
+                      SpaceWidget(),
+                      AppTextDefault(
+                        name: Translate.i().get.label_email,
+                        maxLength: 50,
+                        inputAction: TextInputAction.next,
+                        controller: store.emailTextEditingController,
+                        inputType: TextInputType.emailAddress,
+                        onSaved: (email) => store.user.email = email,
+                        validator: ValidatorUtil.validatorEmail,
+                      ),
+                      SpaceWidget(),
+                      Visibility(
+                        visible: !store.isEdited,
+                        child: AppTextDefault(
+                          name: Translate.i().get.label_confirm_email,
+                          maxLength: 50,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.emailAddress,
+                          validator: ValidatorUtil.validatorEmail,
+                          controller: store.validatedEmailController,
+                        ),
+                      ),
+                      SpaceWidget(),
+                      Visibility(
+                        visible: !store.isEdited,
+                        child: AppTextDefault(
+                          name: Translate.i().get.label_password,
+                          maxLength: 12,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.visiblePassword,
+                          isPassword: true,
+                          onSaved: (password) => store.user.password = password,
+                          validator: ValidatorUtil.validatorPassword,
+                        ),
+                      ),
+                      SpaceWidget(),
+                    ],
+                  ),
                 ),
               ),
             );

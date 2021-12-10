@@ -3,7 +3,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dremfoo/app/model/user_focus.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -50,6 +50,19 @@ class UserRevo {
     map["countDaysAcess"] = this.countDaysAcess;
     map["focus"] = this.focus != null ? this.focus!.toMap() : null;
     return map;
+  }
+
+  void copy(UserRevo userRevo) {
+    uid = userRevo.uid;
+    email = userRevo.email;
+    name = userRevo.name;
+    password = userRevo.password;
+    urlPicture = userRevo.urlPicture;
+    initNotification = userRevo.initNotification;
+    finishNotification = userRevo.finishNotification;
+    isEnableNotification = userRevo.isEnableNotification;
+    countDaysAcess =  userRevo.countDaysAcess;
+    focus = userRevo.focus;
   }
 
   static List<UserRevo> fromListDocumentSnapshot(List<QueryDocumentSnapshot> list){

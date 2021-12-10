@@ -16,6 +16,7 @@ import 'package:dremfoo/app/modules/dreams/ui/pages/dream_completed_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/dreams_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_wait_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_with_focus_page.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/register_user_case.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class DreamsModule extends Module {
@@ -33,7 +34,7 @@ class DreamsModule extends Module {
 
     Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>())),
 
-    Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>())),
+    Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>())),
     Bind.lazySingleton((i) => RegisterDreamWithFocusStore(i.get<DreamUseCase>())),
     Bind.lazySingleton((i) => ChoiceTypeDreamStore()),
     Bind.lazySingleton((i) => DreamStore(i.get<DreamUseCase>())),

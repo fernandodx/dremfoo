@@ -1,6 +1,6 @@
 abstract class ISharedPrefsRepository {
 
-  Future<bool> getBool(String key, bool defaultValue);
+  Future<bool?> getBool(String key, bool? defaultValue);
 
   Future<int> getInt(String key);
 
