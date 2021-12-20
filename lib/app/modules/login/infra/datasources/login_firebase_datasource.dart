@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/app/api/firebase_service.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/ilogin_datasource.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,6 +83,12 @@ class LoginFirebaseDataSource extends BaseDataSource implements ILoginDatasource
   @override
   Future<LoginResult> signInWithFacebook() async {
     return  _facebookSign.login(permissions: ['email', 'public_profile']).catchError(handlerError);
+  }
+
+  @override
+  Future<void> logOut() async {
+    await _googleSign.signOut().catchError(handlerError);
+    return _auth.signOut().catchError(handlerError);
   }
 
 }

@@ -3,6 +3,7 @@ import 'package:dremfoo/app/modules/home/domain/stories/rank_store.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/item_user_rank_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/top_3_rank_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class RankPageState extends ModularState<RankPage, RankStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Rank"),
+        title: Text(Translate.i().get.label_rank),
       ),
       body: Observer(
         builder: (context) {

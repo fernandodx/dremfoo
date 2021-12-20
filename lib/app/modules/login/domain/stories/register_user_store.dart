@@ -8,6 +8,7 @@ import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/circle_avatar_user_revo_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
@@ -22,7 +23,8 @@ class RegisterUserStore = _RegisterUserStoreBase with _$RegisterUserStore;
 
 abstract class _RegisterUserStoreBase with Store {
   IRegisterUserCase _registerUserCase;
-  _RegisterUserStoreBase(this._registerUserCase);
+  ILoginCase _loginCase;
+  _RegisterUserStoreBase(this._registerUserCase, this._loginCase);
 
   final formKey = GlobalKey<FormState>();
   final validatedEmailController = TextEditingController();
@@ -136,6 +138,15 @@ abstract class _RegisterUserStoreBase with Store {
         Modular.to.pop();
       }
       isLoading = false;
+    }
+  }
+
+  Future<void> logOut() async {
+    isLoading = true;
+    ResponseApi responseApi = await _loginCase.logOut();
+    msgAlert = responseApi.messageAlert;
+    if(responseApi.ok){
+      Modular.to.navigate("/userNotFound",);
     }
   }
 

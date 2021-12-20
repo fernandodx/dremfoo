@@ -2,6 +2,7 @@ import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/choice_type_dream_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,14 +16,13 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.colorBackground,
         body: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 new SliverAppBar(
                   pinned: true,
-                  title: TextUtil.textAppbar("Escolha do sonho"),
+                  title: TextUtil.textAppbar(Translate.i().get.label_dream_choice),
                 ),
               ];
             },
@@ -33,7 +33,7 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
                   InkWell(
                     onTap: () => store.startNewDreamAwait(context),
                     child: Card(
-                      color: AppColors.colorDark,
+                      color: Theme.of(context).backgroundColor.withOpacity(0.8),
                       elevation: 8,
                       child: Container(
                         padding: EdgeInsets.all(12),
@@ -41,9 +41,9 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
                           children: [
                             Image.asset(Utils.getPathAssetsImg("icon_sleeping.png"), scale: 6,),
                             SizedBox(height: 10,),
-                            TextUtil.textTitulo("Sonho em espera"),
+                            TextUtil.textTitulo(Translate.i().get.label_dream_hold),
                             SizedBox(height: 16,),
-                            TextUtil.textDefault("Nessa seção, você ainda não precisa definir metas e/ou os passos para a conquista. Apenas definir uma prévia de seu sonho para que seu subconsciente saiba o que você quer."),
+                            TextUtil.textDefault(Translate.i().get.msg_help_dream_hold, align: TextAlign.justify),
                           ],
                         ),
                       ),
@@ -53,7 +53,7 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
                   InkWell(
                     onTap: () => store.startNewDreamWithFocus(context),
                     child: Card(
-                      color: AppColors.colorDark,
+                      color: Theme.of(context).backgroundColor.withOpacity(0.8),
                       elevation: 8,
                       child: Container(
                         padding: EdgeInsets.all(16),
@@ -62,9 +62,9 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
                           children: [
                             Image.asset(Utils.getPathAssetsImg("icon_step_dream.png"), scale: 6,),
                             SizedBox(height: 16,),
-                            TextUtil.textTitulo("Sonho com foco"),
+                            TextUtil.textTitulo(Translate.i().get.label_dream_with_focus),
                             SizedBox(height: 16,),
-                            TextUtil.textDefault("Nesse tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fossem degraus de uma escada, além de criar metas diárias que vão em direção ao seu sonho."),
+                            TextUtil.textDefault(Translate.i().get.msg_help_dream_with_focus, align: TextAlign.justify),
                           ],
                         ),
                       ),

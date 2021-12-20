@@ -4,6 +4,23 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
+  static Color get colorCulture => Utils.colorFromHex("#F5F5F5");
+  static Color get colorOldLavender => Utils.colorFromHex("#665C69");
+  static Color get colorBlackCofee => Utils.colorFromHex("#4B424D");
+  static Color get colorCadetBlue => Utils.colorFromHex("#4E939E");
+  static Color get colorBlizzardBlue => Utils.colorFromHex("#ADE6E8");
+  static Color get colorBlizzardBlueDark => Utils.colorFromHex("#475D7B");
+  static Color get colorDarkLiver => Utils.colorFromHex("#554C57");
+  static Color get colorChineseViolet => Utils.colorFromHex("#6E5773");
+  static Color get colorMintCream => Utils.colorFromHex("#F2FBF9");
+  static Color get colorLightBlue => Utils.colorFromHex("#9FC9D0");
+  static Color get colorEnglishLavender => Utils.colorFromHex("#A8727E");
+  static Color get colorgrayDisabled => Utils.colorFromHex("#808080");
+  static Color get colorTuscany => Utils.colorFromHex("#C69D98");
+
+
+
+
   static Color get colorPrimary => Utils.colorFromHex("#2E2D4D");
   static Color get colorPrimaryDark => Utils.colorFromHex("#171727");
   static Color get colorAcent => Utils.colorFromHex("#00B1B8");

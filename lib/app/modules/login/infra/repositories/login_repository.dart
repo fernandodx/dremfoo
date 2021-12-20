@@ -191,4 +191,14 @@ class LoginRepository implements ILoginRepository {
     }
   }
 
+  @override
+  Future<void> logOut() async {
+    try{
+      _loginDatasource.logOut();
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: Translate.i().get.msg_error_generic_user_login);
+    }
+  }
+
 }

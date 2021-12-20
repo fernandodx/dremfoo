@@ -25,4 +25,8 @@ abstract class IRegisterUserCase {
 
   Future<ResponseApi<LevelRevo>> findLevelCurrent(int countDayFocus);
 
+  Future<ResponseApi<bool>> checkLevelFocusUser();
+
+  Future<ResponseApi<void>> updateCountAcess();
+
 }

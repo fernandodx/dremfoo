@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/core/ui/widgets/no_items_found_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/widget/app_button_default.dart';
@@ -56,7 +57,7 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: TextUtil.textAppbar("Sonhos arquivados"),
+          title: TextUtil.textAppbar(Translate.i().get.label_archived_dreams),
         ),
         body: Observer(
           builder: (context) {
@@ -74,64 +75,9 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
             return _createCard(_dream);
           });
     }else{
-      return NoItemsFoundWidget("Nenhum sonho foi arquivado.");
+      return NoItemsFoundWidget(Translate.i().get.msg_dream_not_archived);
     }
   }
-
-
-  // Container bodyWithDreamDeleted() {
-  //   return Container(
-  //     color: Colors.white,
-  //     child: FutureBuilder(
-  //       future: _bloc.findDreamsDeleted(),
-  //       builder: (BuildContext context, AsyncSnapshot<List<Dream>> snapshot) {
-  //         if (snapshot.hasError) {
-  //           return Container(
-  //             child: TextUtil.textTitulo(snapshot.error as String),
-  //           ); //Criar Tela de erro
-  //         }
-  //
-  //         if (snapshot.hasData) {
-  //           List<Dream> listDream = snapshot.data!;
-  //
-  //           if (listDream == null || listDream.isEmpty) {
-  //             return Column(
-  //               mainAxisSize: MainAxisSize.max,
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 Container(
-  //                   width: 200,
-  //                   height: 200,
-  //                   child: FlareActor(
-  //                     Utils.getPathAssetsAnim("empty_not_found-idle.flr"),
-  //                     shouldClip: true,
-  //                     animation: "idle",
-  //                   ),
-  //                 ),
-  //                 Container(
-  //                   margin: EdgeInsets.all(16),
-  //                   child: Center(
-  //                     child: TextUtil.textTitulo(
-  //                         "Nenhum sonho foi arquivado."),
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           }
-  //
-  //           return ListView.builder(
-  //             itemCount: listDream.length,
-  //             itemBuilder: (context, index) {
-  //               return _createCard(listDream[index]);
-  //             },
-  //           );
-  //         }
-  //
-  //         return _bloc.getSimpleLoadingWidget();
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _createCard(Dream dream) {
     return Container(
@@ -163,7 +109,6 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
                   Container(
                     child: TextUtil.textTitulo(
                       dream.dreamPropose!,
-                      color: AppColors.colorDark
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
@@ -172,17 +117,16 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
                     child: TextUtil.textDefault(
                       dream.descriptionPropose!,
                       fontSize: 14,
-                        color: AppColors.colorDark
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
                   ),
                   Container(
-                    child: TextUtil.textTitulo("Passos",  color: AppColors.colorDark),
+                    child: TextUtil.textTitulo(Translate.i().get.label_steps),
                     padding: EdgeInsets.all(6),
                   ),
                   Wrap(
-                    children: createChipStep(dream.steps!),
+                    children: createChipStep(dream.steps!, context),
                   ),
                   ButtonBarTheme(
                     data: ButtonBarTheme.of(context),
@@ -190,7 +134,7 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
                       children: <Widget>[
                         AppButtonDefault(
                           onPressed: () => store.restoredDream(dream),
-                          label: "RESTAURAR",
+                          label: Translate.i().get.label_restore,
                           type: TypeButton.FLAT,
                         )
                       ],
@@ -217,17 +161,16 @@ class ArchivePageState extends ModularState<ArchivePage, ArchiveStore> {
     );
   }
 
-  List<Widget> createChipStep(List<StepDream> steps) {
+  List<Widget> createChipStep(List<StepDream> steps, BuildContext context) {
     List<Widget> listWidget = [];
 
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorChipPrimary,
-          child: TextUtil.textChip("${stepDream.position}˚",),
+          backgroundColor: Theme.of(context).canvasColor,
+          child: TextUtil.textChip("${stepDream.position}˚", color: Theme.of(context).accentColor),
         ),
-        label: TextUtil.textChip(stepDream.step!),
-        backgroundColor: AppColors.colorChipSecundary,
+        label: TextUtil.textChip(stepDream.step!, color: Theme.of(context).canvasColor),
       );
 
       listWidget.add(Container(

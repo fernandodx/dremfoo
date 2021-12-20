@@ -9,13 +9,15 @@ class CicularProgressRevoWidget extends StatelessWidget {
   final double value;
   final double radius;
   final bool isHalf;
+  final Color colorText;
 
   CicularProgressRevoWidget(
       {required this.titleCenter,
       this.titleBottom,
       required this.value,
       this.radius = 50,
-        this.isHalf = false});
+        this.isHalf = false,
+      this.colorText = Colors.white});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +30,12 @@ class CicularProgressRevoWidget extends StatelessWidget {
         animation: true,
         animationDuration: 1000,
         arcType: ArcType.HALF,
-        center: TextUtil.textSubTitle(titleCenter, fontSize: 10),
-        footer: TextUtil.textSubTitle(titleBottom ?? "", fontSize: 14),
+        center: TextUtil.textChipLight(titleCenter, fontSize: 10, color: colorText),
+        footer: TextUtil.textChipLight(titleBottom ?? "", fontSize: 14, color: colorText),
         circularStrokeCap: CircularStrokeCap.round,
-         backgroundColor: Colors.white38,
+         backgroundColor: Theme.of(context).backgroundColor.withAlpha(200),
         linearGradient: LinearGradient(
-            colors: [AppColors.colorLazulli, AppColors.colorOrangeDark],
+            colors: [Theme.of(context).primaryColorDark, Theme.of(context).hintColor],
            ),
         backgroundWidth: 12,
         startAngle: 180,
@@ -45,11 +47,11 @@ class CicularProgressRevoWidget extends StatelessWidget {
         percent: value,
         animation: true,
         animationDuration: 1000,
-        center: TextUtil.textSubTitle(titleCenter, fontSize: 10),
-        footer: TextUtil.textSubTitle(titleBottom ?? "", fontSize: 14),
+        center: TextUtil.textChipLight(titleCenter, fontSize: 10, color: colorText),
+        footer: TextUtil.textChipLight(titleBottom ?? "", fontSize: 14, color: colorText),
         circularStrokeCap: CircularStrokeCap.round,
-        progressColor: AppColors.colorAcentProgress,
-        backgroundColor: Colors.white38,
+        progressColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).backgroundColor.withAlpha(200),
         backgroundWidth: 12,
         startAngle: 180,
       );

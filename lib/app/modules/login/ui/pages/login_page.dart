@@ -56,7 +56,6 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
   Widget build(BuildContext context) {
     Translate.i().init(context); //Colocar em um local único
     return Scaffold(
-      backgroundColor: AppColors.colorPrimaryDark,
       body: Form(
         key: store.formKey,
         child: Stack(

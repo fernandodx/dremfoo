@@ -37,7 +37,7 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(4),
         ),
-        border: Border.all(color: AppColors.colorLine, width: 1.5),
+        border: Border.all(color: Theme.of(context).canvasColor, width: 1.5),
       ),
       width: MediaQuery.of(context).size.width / 2.5,
       alignment: Alignment.topLeft,
@@ -47,9 +47,9 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
           Container(
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Colors.white12,
+              backgroundColor: Theme.of(context).canvasColor,
               child: ClipOval(
-                child: _getImage(),
+                child: _getImage(context),
               ),
             ),
             margin: EdgeInsets.only(right: 8),
@@ -58,9 +58,8 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextUtil.textSubTitle(title,
-                    color: AppColors.colorTextLight, fontWeight: FontWeight.bold),
-                TextUtil.textSubTitle(subTitle??"", color: AppColors.colorTextLight),
+                TextUtil.textSubTitle(title, fontWeight: FontWeight.bold),
+                TextUtil.textSubTitle(subTitle??""),
               ],
             ),
           ),
@@ -69,11 +68,11 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _getImage(){
+  Widget _getImage(BuildContext context){
     if(urlImage != null){
       return CachedNetworkImage(width: 20, height: 20, imageUrl: urlImage!);
     }else{
-      return FaIcon(icon, size: 17, color: AppColors.colorLine,);
+      return FaIcon(icon, size: 17, color: Theme.of(context).accentColor.withAlpha(240),);
     }
   }
 }

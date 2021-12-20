@@ -124,6 +124,7 @@ class CardLoginWidget extends StatelessWidget {
           Expanded(
             child: SignInButton(
               buttonType: ButtonType.facebook,
+              btnColor: AppColors.colorBlizzardBlueDark,
               onPressed: () => _store.onLoginWithFacebook(context),
               btnText: Translate.i().get.label_login_with_facebook,
               padding: 8,

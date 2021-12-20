@@ -11,4 +11,6 @@ abstract class ILoginRepository {
 
   Future<User> signInWithGoogle();
 
+  Future<void> logOut();
+
 }

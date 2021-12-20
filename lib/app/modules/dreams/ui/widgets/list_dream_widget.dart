@@ -43,6 +43,12 @@ class ListDreamWidget extends StatelessWidget {
         countStep = dream.steps!.length;
         countStepCompleted = dream.steps!
             .where((step) => step.isCompleted??false).toList().length;
+
+        percentStep = 0;
+
+        if(countStepCompleted > 0 && countStep > 0){
+          percentStep = countStepCompleted / countStep;
+        }
       }
 
       if(dream.listHistoryWeekDailyGoals != null && dream.listHistoryWeekDailyGoals!.length > 0){
@@ -51,13 +57,9 @@ class ListDreamWidget extends StatelessWidget {
             .toList().length;
 
         percent = 0;
-        percentStep = 0;
 
         if(countDailyToday > 0 && countDaily > 0) {
           percent = countDailyToday / countDaily;
-        }
-        if(countStepCompleted > 0 && countStep > 0){
-          percentStep = countStepCompleted / countStep;
         }
       }
 
@@ -80,7 +82,7 @@ class ListDreamWidget extends StatelessWidget {
                 onTapCreateFocusDream(dream);
               },
             ),
-            SpaceWidget(),
+            SizedBox(height: 8,),
             TextUtil.textSubTitle(dream.dreamPropose ?? "", fontSize: 12, fontWeight: FontWeight.bold),
             TextUtil.textDefault(dream.descriptionPropose ??"", fontSize: 12),
             SpaceWidget(),

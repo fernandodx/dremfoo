@@ -41,7 +41,7 @@ class ContentStepInfoDreamWidget extends StatelessWidget {
           maxLength: 60,
         ),
        SpaceWidget(),
-        TextUtil.textAccent(Translate.i().get.label_choose_image_dream),
+        TextUtil.textDefault(Translate.i().get.label_choose_image_dream),
        SpaceWidget(),
         Container(
           padding: EdgeInsets.all(8),
@@ -51,15 +51,13 @@ class ContentStepInfoDreamWidget extends StatelessWidget {
             child: getImageDream(),
             onTap: () {
               showModalBottomSheet(
+                  backgroundColor: Theme.of(context).backgroundColor.withOpacity(0.9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(26),)
+                  ),
                   context: context,
                   builder: (context) {
                     return Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.colorDark,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50))
-                      ),
                       padding: EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +69,7 @@ class ContentStepInfoDreamWidget extends StatelessWidget {
                                 CircleAvatar(
                                   child: FaIcon(FontAwesomeIcons.images, size: 15,),
                                 ),
-                                TextUtil.textSubTitle(
+                                TextUtil.textDefault(
                                     Translate.i().get.label_search_gallery,
                                     align: TextAlign.center
                                 ),
@@ -88,7 +86,7 @@ class ContentStepInfoDreamWidget extends StatelessWidget {
                                   // child:  Icon(Icons.wifi_tethering),
                                   child: FaIcon(FontAwesomeIcons.wifi, size: 15,),
                                 ),
-                                TextUtil.textSubTitle(
+                                TextUtil.textDefault(
                                     Translate.i().get.label_search_internet,
                                     align: TextAlign.center
                                 ),

@@ -1,9 +1,9 @@
+
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/detail_dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/cicular_progress_revo_widget.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -25,15 +25,6 @@ class ChartWeekWidget extends StatelessWidget {
         this.goalWeek = 0,
         this.goalMonth = 0});
 
-  final List<Color> availableColors = [
-    Colors.greenAccent,
-    Colors.lightGreen,
-    Colors.lightGreenAccent,
-    Colors.green,
-    Colors.blueGrey,
-    Colors.redAccent,
-  ];
-
   DetailDreamStore _detailDreamStore = Modular.get<DetailDreamStore>();
 
   @override
@@ -42,14 +33,14 @@ class ChartWeekWidget extends StatelessWidget {
     String title = Translate.i().get.label_your_week;
     String subTitle = Translate.i().get.label_monitor_goal_daily;
     double percentCompleted = _detailDreamStore.percentWeekCompleted;
-    BarChartData mainBarData = mainBarWeekData();
+    BarChartData mainBarData = mainBarWeekData(context);
     double goalPercent = goalWeek;
 
     if(!isChartWeek) {
       title = Translate.i().get.label_your_month;
       subTitle = Translate.i().get.label_monitor_goal_month;
       percentCompleted = _detailDreamStore.percentMonthCompleted;
-      mainBarData = mainBarMonthData();
+      mainBarData = mainBarMonthData(context);
       goalPercent = goalMonth;
     }
 
@@ -65,7 +56,7 @@ class ChartWeekWidget extends StatelessWidget {
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-            color: const Color(0xff81e5cd),
+            color: Theme.of(context).primaryColor,
             child: Stack(
               children: <Widget>[
                 Padding(
@@ -75,9 +66,8 @@ class ChartWeekWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      TextUtil.textTitulo(title),
-                      TextUtil.textSubTitle(subTitle,
-                          color: AppColors.colorGreen),
+                      TextUtil.textChipLight(title, fontSize: 16),
+                      TextUtil.textChipLight(subTitle, fontSize: 12),
                       SpaceWidget(),
                       SpaceWidget(),
                       Expanded(
@@ -111,7 +101,7 @@ class ChartWeekWidget extends StatelessWidget {
 
                             Container(
                                 margin: EdgeInsets.only(top: 35, left: 12),
-                                child: TextUtil.textSubTitle(Translate.i().get.label_goal)
+                                child: TextUtil.textChipLight(Translate.i().get.label_goal)
                             ),
                           ],
                         ),
@@ -133,7 +123,7 @@ class ChartWeekWidget extends StatelessWidget {
         ));
   }
 
-  List<BarChartGroupData> showingGroupsDailyGoalWeek() {
+  List<BarChartGroupData> showingGroupsDailyGoalWeek(BuildContext context) {
     List<BarChartGroupData> listBarChart = [];
 
     for (int week = 0; week < 7; week++) {
@@ -144,6 +134,7 @@ class ChartWeekWidget extends StatelessWidget {
       }).toList();
 
       listBarChart.add(makeGroupDataWeek(
+        context: context,
         numberColum: week,
         countDailyGoal: _detailDreamStore.countDailyGoal,
         listWeek: listWeek,
@@ -153,7 +144,7 @@ class ChartWeekWidget extends StatelessWidget {
     return listBarChart;
   }
 
-  List<BarChartGroupData> showingGroupsDailyGoalMonth() {
+  List<BarChartGroupData> showingGroupsDailyGoalMonth(BuildContext context) {
     List<BarChartGroupData> listBarChart = [];
 
     for (int month = 1; month <= 12; month++) {
@@ -163,6 +154,7 @@ class ChartWeekWidget extends StatelessWidget {
       }).toList();
 
       listBarChart.add(makeGroupDataMonth(
+        context: context,
         numberColum: month,
         countMaxDayMonth: _detailDreamStore.countDailyGoalMaxMonth,
         listMonth: listMonth,
@@ -172,7 +164,7 @@ class ChartWeekWidget extends StatelessWidget {
     return listBarChart;
   }
 
-  BarChartData mainBarWeekData() {
+  BarChartData mainBarWeekData(BuildContext context) {
     return BarChartData(
       barTouchData: BarTouchData(
         enabled: false,
@@ -214,12 +206,12 @@ class ChartWeekWidget extends StatelessWidget {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroupsDailyGoalWeek(),
+      barGroups: showingGroupsDailyGoalWeek(context),
       gridData: FlGridData(show: false),
     );
   }
 
-  BarChartData mainBarMonthData() {
+  BarChartData mainBarMonthData(BuildContext context) {
     return BarChartData(
       barTouchData: BarTouchData(
         enabled: false,
@@ -271,12 +263,13 @@ class ChartWeekWidget extends StatelessWidget {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroupsDailyGoalMonth(),
+      barGroups: showingGroupsDailyGoalMonth(context),
       gridData: FlGridData(show: false),
     );
   }
 
   BarChartGroupData makeGroupDataMonth({
+    required BuildContext context,
     required int numberColum,
     required List<DailyGoal>? listMonth,
     int countMaxDayMonth = 1,
@@ -290,7 +283,7 @@ class ChartWeekWidget extends StatelessWidget {
     List<BarChartRodStackItem>? listChart = listMonth?.map((dailyHist) {
 
       var barChart = BarChartRodStackItem(
-          variantStart, variantEnd, availableColors[0]);
+          variantStart, variantEnd, Theme.of(context).hintColor);
 
       variantStart = variantEnd;
       variantEnd = variantEnd + variantConst;
@@ -312,6 +305,7 @@ class ChartWeekWidget extends StatelessWidget {
   }
 
   BarChartGroupData makeGroupDataWeek({
+    required BuildContext context,
     required int numberColum,
     required List<DailyGoal>? listWeek,
     int countDailyGoal = 1,
@@ -325,7 +319,7 @@ class ChartWeekWidget extends StatelessWidget {
 
     List<BarChartRodStackItem>? listChart = listWeek?.map((dailyHist) {
       var barChart = BarChartRodStackItem(
-          variantStart, variantEnd, availableColors[indexColor]);
+          variantStart, variantEnd,Theme.of(context).hintColor);
       variantStart = variantEnd;
       variantEnd = variantEnd + variantConst;
       indexColor++;

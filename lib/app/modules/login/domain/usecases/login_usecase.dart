@@ -31,7 +31,7 @@ class LoginUseCase implements ILoginCase {
       var user = await _loginRepository.signInWithEmailAndPassword(userRevo.email!, userRevo.password!);
       await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
-      _saveLastAcessUser();
+      saveLastAcessUser();
 
 
       return ResponseApi.ok(result: user);
@@ -54,7 +54,7 @@ class LoginUseCase implements ILoginCase {
       var user = await _loginRepository.signInWithFacebook();
       await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
-      _saveLastAcessUser();
+      saveLastAcessUser();
 
       return ResponseApi.ok(result: user);
 
@@ -76,7 +76,7 @@ class LoginUseCase implements ILoginCase {
       var user = await _loginRepository.signInWithGoogle();
       await _saveUserLoging(user.uid);
       _saveUser(_userRevo);
-      _saveLastAcessUser();
+      saveLastAcessUser();
 
       return ResponseApi.ok(result: user);
 
@@ -130,7 +130,8 @@ class LoginUseCase implements ILoginCase {
     return _sharedPrefsRepository.putString("USER_LOG_UID", uid);
   }
 
-  Future<ResponseApi> _saveLastAcessUser() async {
+  @override
+  Future<ResponseApi> saveLastAcessUser() async {
     try{
 
       if(_userRevo.uid != null){
@@ -158,6 +159,24 @@ class LoginUseCase implements ILoginCase {
       }else{
         return ResponseApi.error(messageAlert: MessageAlert.create(Translate.i().get.title_msg_error, "Usuário não logado", TypeAlert.ALERT));
       }
+
+    }on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi> logOut() async {
+    try{
+
+      await _sharedPrefsRepository.removePref("USER_LOG_UID");
+      await _loginRepository.logOut();
+      return ResponseApi.ok();
 
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

@@ -9,6 +9,7 @@ import 'package:dremfoo/app/modules/dreams/ui/widgets/body_item_dream_widget.dar
 import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/week_calendar_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -82,15 +83,12 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
                 child: InkWell(
                   onTap: () => store.editDream(context, widget.dreamSelected),
                   child: Chip(
-                      label: TextUtil.textSubTitle("Editar"),
-                    backgroundColor: AppColors.colorLazulli,
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                      label: TextUtil.textChip(Translate.i().get.label_edit,),
+                    backgroundColor: Theme.of(context).hintColor.withAlpha(180),
                   ),
                 ),
               ),
-
-              // IconButton(
-              //   icon: FaIcon(FontAwesomeIcons.edit, size: 23,),
-              //   onPressed: () => store.editDream(context, widget.dreamSelected))
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -168,27 +166,27 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ChipButtonWidget(
-              name: "Sonho realizado",
+              name: Translate.i().get.label_dream_realized,
               icon: FontAwesomeIcons.check,
               size: 81,
               onTap: () {
                 alertBottomSheet(context,
-                    msg: "Você realizou seu sonho?",
-                    title: "Sonho realizado",
-                    nameButtonDefault: "Sim",
+                    msg: Translate.i().get.msg_question_dream_realized,
+                    title: Translate.i().get.label_dream_realized,
+                    nameButtonDefault: Translate.i().get.label_yes,
                     onTapDefaultButton: () {
                       store.realizedDream(context, widget.dreamSelected);
                     });
               },),
             ChipButtonWidget(
-                name: "Arquivar sonho",
+                name: Translate.i().get.label_file_dream,
                 size: 81,
                 icon: FontAwesomeIcons.archive,
                 onTap: () {
                   alertBottomSheet(context,
-                      msg: "Você realmente deseja arquiva esse sonho? Mesmo arquivado você pode reativa-lo a qualqer momento.",
-                      title: "Arquivar sonho",
-                      nameButtonDefault: "Arquivar",
+                      msg: Translate.i().get.msg_question_file_dream,
+                      title: Translate.i().get.label_file_dream,
+                      nameButtonDefault: Translate.i().get.label_to_file,
                       onTapDefaultButton: () {
                         store.archiveDream(context, widget.dreamSelected);
                       });

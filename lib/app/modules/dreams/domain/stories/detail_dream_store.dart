@@ -279,9 +279,8 @@ abstract class _DetailDreamStoreBase with Store {
             _updateListDailyGoal(index, dailyGoal);
             _updateListDailyGoalHistWeek(dailyGoal, currentDate);
             _updateListDailyGoalHistMonth(dailyGoal, currentDate);
+            _registerUserCase.updateContinuosFocus();
          }
-
-         _registerUserCase.updateContinuosFocus();
       }
    }
 

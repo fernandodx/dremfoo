@@ -23,20 +23,19 @@ class ExpasionPanelListInfoWidget extends StatelessWidget {
       expansionCallback: expansionCallback,
       children: [
         ExpansionPanel(
-          backgroundColor: AppColors.colorBackground,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              title: TextUtil.textAccent(Translate.i().get.label_information),
+              title: TextUtil.textDefault(Translate.i().get.label_information, fontSize: 16),
               leading: Icon(
                 Icons.info_outline,
-                color: AppColors.colorAcent,
+                color: Theme.of(context).canvasColor,
               ),
               onTap: onTap,
             );
           },
           body: Container(
             margin: EdgeInsets.only(left: 8, right: 8, bottom: 16),
-            child: TextUtil.textSubTitle(subtitle),
+            child: TextUtil.textSubTitle(subtitle, align: TextAlign.justify),
           ),
           isExpanded: isExpanded,
         )

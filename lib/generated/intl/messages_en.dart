@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "label_add": MessageLookupByLibrary.simpleMessage("Add"),
+        "label_archived_dreams":
+            MessageLookupByLibrary.simpleMessage("Archived dreams"),
         "label_beginner": MessageLookupByLibrary.simpleMessage("Beginner"),
         "label_challenges": MessageLookupByLibrary.simpleMessage("Challenges"),
         "label_choice_color_dream": MessageLookupByLibrary.simpleMessage(
@@ -35,23 +37,39 @@ class MessageLookup extends MessageLookupByLibrary {
             "Choose an image to represent the dream."),
         "label_confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm email"),
+        "label_contact": MessageLookupByLibrary.simpleMessage("Contact"),
         "label_create_focus":
             MessageLookupByLibrary.simpleMessage("Create focus"),
         "label_daily_goal": MessageLookupByLibrary.simpleMessage("Daily goal"),
         "label_daily_goals":
             MessageLookupByLibrary.simpleMessage("Daily goals"),
+        "label_days": MessageLookupByLibrary.simpleMessage("Days"),
         "label_description_dream":
             MessageLookupByLibrary.simpleMessage("Dream description"),
         "label_disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
         "label_dream": MessageLookupByLibrary.simpleMessage("Dream"),
+        "label_dream_choice":
+            MessageLookupByLibrary.simpleMessage("Dream choice"),
+        "label_dream_hold":
+            MessageLookupByLibrary.simpleMessage("Dream on hold"),
+        "label_dream_realized":
+            MessageLookupByLibrary.simpleMessage("Realized dream"),
+        "label_dream_with_focus":
+            MessageLookupByLibrary.simpleMessage("Dream with focus"),
         "label_dreams": MessageLookupByLibrary.simpleMessage("Dreams"),
+        "label_dreams_completed":
+            MessageLookupByLibrary.simpleMessage("Dreams completed"),
+        "label_edit": MessageLookupByLibrary.simpleMessage("Editar"),
         "label_email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "label_enter": MessageLookupByLibrary.simpleMessage("Login"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinary"),
+        "label_file_dream": MessageLookupByLibrary.simpleMessage("File Dream"),
         "label_finish": MessageLookupByLibrary.simpleMessage("Finish"),
         "label_forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot the password"),
+        "label_free_content":
+            MessageLookupByLibrary.simpleMessage("Free content"),
         "label_goal": MessageLookupByLibrary.simpleMessage("Goal"),
         "label_hist_daily_goal":
             MessageLookupByLibrary.simpleMessage("History of daily goals"),
@@ -62,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Inflection point for week"),
         "label_information":
             MessageLookupByLibrary.simpleMessage("Information"),
+        "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login with Facebook"),
@@ -86,17 +105,27 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("out of average"),
         "label_password": MessageLookupByLibrary.simpleMessage("Password"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Previous"),
+        "label_rank": MessageLookupByLibrary.simpleMessage("Rank"),
+        "label_restore": MessageLookupByLibrary.simpleMessage("To Restore"),
         "label_reward": MessageLookupByLibrary.simpleMessage("Reward"),
         "label_search_gallery":
             MessageLookupByLibrary.simpleMessage("Search the gallery"),
         "label_search_internet":
             MessageLookupByLibrary.simpleMessage("Searching the Internet"),
         "label_settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "label_site": MessageLookupByLibrary.simpleMessage("Site"),
+        "label_social_media":
+            MessageLookupByLibrary.simpleMessage("Social media"),
+        "label_start_email":
+            MessageLookupByLibrary.simpleMessage("Hi Fernando, "),
         "label_statistics": MessageLookupByLibrary.simpleMessage("Statistics"),
         "label_step": MessageLookupByLibrary.simpleMessage("Step"),
         "label_step_to_conquer":
             MessageLookupByLibrary.simpleMessage("Steps to conquer"),
         "label_steps": MessageLookupByLibrary.simpleMessage("Steps"),
+        "label_title_app":
+            MessageLookupByLibrary.simpleMessage("REVO - Focused goals"),
+        "label_to_file": MessageLookupByLibrary.simpleMessage("To file"),
         "label_today": MessageLookupByLibrary.simpleMessage("Today"),
         "label_week_day_fri": MessageLookupByLibrary.simpleMessage("FRI"),
         "label_week_day_mon": MessageLookupByLibrary.simpleMessage("MON"),
@@ -112,10 +141,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly reward"),
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("What is your dream?"),
+        "label_yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "label_your_month": MessageLookupByLibrary.simpleMessage("Your month"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Your week"),
+        "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
+        "msg_dream_not_archived":
+            MessageLookupByLibrary.simpleMessage("No dreams were filed."),
         "msg_email_invalid":
             MessageLookupByLibrary.simpleMessage("Invalid email."),
+        "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
+            "Unable to send an email, make sure you have configured the email app on your mobile."),
         "msg_error_already_credintial_in_use":
             MessageLookupByLibrary.simpleMessage("Incorrect login or password"),
         "msg_error_already_email_diff_credential":
@@ -155,6 +190,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "The email or password is incorrect."),
         "msg_fill_email": MessageLookupByLibrary.simpleMessage(
             "Fill in the email to reset your password."),
+        "msg_help_dream_hold": MessageLookupByLibrary.simpleMessage(
+            "In this section, you still don\'t need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want."),
+        "msg_help_dream_with_focus": MessageLookupByLibrary.simpleMessage(
+            "In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream."),
         "msg_info_settings_dream": MessageLookupByLibrary.simpleMessage(
             "Set the level you would like to be charged. Remember to start small as this will validate your performance towards an extraordinary goal."),
         "msg_info_step_conquer": MessageLookupByLibrary.simpleMessage(
@@ -165,6 +204,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "Here you will define something you have to do if your goals are not being met or achieved. It\'s very simple, what more you need to do to continue climbing the ladder of steps you defined."),
         "msg_info_step_reward": MessageLookupByLibrary.simpleMessage(
             "Set a reward that you will get for each completed step. This is very important, after all you deserve it! For example, a special food, going out to a new place, playing a video game, something you really enjoy!"),
+        "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(
+            "No dream has been realized yet, but I\'m sure it will soon."),
+        "msg_question_dream_realized":
+            MessageLookupByLibrary.simpleMessage("Did you fulfill your dream?"),
+        "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
+            "Do you really want to archive this dream? Even if it is archived, you can reactivate it at any time."),
         "msg_sucess_forgot_password": MessageLookupByLibrary.simpleMessage(
             "An email has been sent with directions to reset your password."),
         "msg_sucess_user_created": MessageLookupByLibrary.simpleMessage(

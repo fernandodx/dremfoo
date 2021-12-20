@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,7 +33,7 @@ class Top3RankWidget extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
-      color: AppColors.colorPrimaryDark,
+      color: Theme.of(context).backgroundColor.withOpacity(0.6),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -48,11 +49,12 @@ class Top3RankWidget extends StatelessWidget {
                     children: [
                       _getImage(user2.urlPicture, 60),
                       TextUtil.textSubTitle(nameUser2.truncate(length: 14, omission: "..."), fontSize: 12),
+                      SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: AppColors.colorlight, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
                           SizedBox(width: 5,),
-                          TextUtil.textDefault("${user2.focus!.countDaysFocus} Dias", color: AppColors.colorlight, fontSize: 12)
+                          TextUtil.textDefault("${user2.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12,)
                         ],
                       )
                     ],
@@ -63,7 +65,6 @@ class Top3RankWidget extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 13,
                       child: TextUtil.textDefault("2˚"),
-                      backgroundColor: AppColors.colorDarkLight,
                     )
                 )
               ],
@@ -79,11 +80,12 @@ class Top3RankWidget extends StatelessWidget {
                     children: [
                       _getImage(user1.urlPicture, 80),
                       TextUtil.textSubTitle(nameUser1.truncate(length: 14, omission: "...") , fontSize: 12),
+                      SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: AppColors.colorlight, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
                           SizedBox(width: 5,),
-                          TextUtil.textDefault("${user1.focus!.countDaysFocus} Dias", color: AppColors.colorlight, fontSize: 12)
+                          TextUtil.textDefault("${user1.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12)
                         ],
                       )
                     ],
@@ -106,11 +108,12 @@ class Top3RankWidget extends StatelessWidget {
                     children: [
                      _getImage(user3.urlPicture, 60),
                       TextUtil.textSubTitle(nameUser3.truncate(length: 14, omission: "...") , fontSize: 12),
+                      SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: AppColors.colorlight, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
                           SizedBox(width: 5,),
-                          TextUtil.textDefault("${user3.focus!.countDaysFocus} Dias", color: AppColors.colorlight, fontSize: 12)
+                          TextUtil.textDefault("${user3.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12)
                         ],
                       )
                     ],
@@ -121,7 +124,6 @@ class Top3RankWidget extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 13,
                       child: TextUtil.textDefault("3˚"),
-                      backgroundColor: AppColors.colorDarkLight,
                     )
                 )
               ],

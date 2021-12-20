@@ -151,6 +151,11 @@ class DreamUseCase extends IDreamCase {
       DateTime firstDay = date.subtract(Duration(days: date.weekday));
       DateTime endDay = firstDay.add(Duration(days: 7));
 
+      if(date.weekday == DateTime.sunday) {
+        firstDay = date;
+        endDay = date;
+      }
+
       List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
       return ResponseApi.ok(result: listHist);
     } on RevoExceptions catch(error){

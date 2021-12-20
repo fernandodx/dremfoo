@@ -16,7 +16,6 @@ class TextUtil {
   static Text textDefault(String value,
       {int maxLines = 10,
       double fontSize = 14,
-      color = Colors.white,
       TextAlign align = TextAlign.start}) {
     return Text(
       value,
@@ -25,7 +24,6 @@ class TextUtil {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: fontSize,
-        color: color
       ),
     );
   }
@@ -33,7 +31,6 @@ class TextUtil {
   static Text textSubTitle(String value,
       {int maxLines = 10,
         double fontSize = 12,
-        color = Colors.white,
         FontWeight fontWeight = FontWeight.normal,
         TextAlign align = TextAlign.start}) {
     return Text(
@@ -45,7 +42,6 @@ class TextUtil {
       style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          color: color
       ),
     );
   }
@@ -53,7 +49,8 @@ class TextUtil {
   static Text textChip(String value,
       {int maxLines = 10,
         double fontSize = 12,
-        TextAlign align = TextAlign.start}) {
+        TextAlign align = TextAlign.start,
+      Color color = Colors.white}) {
     return Text(
       value,
       textAlign: align,
@@ -61,7 +58,7 @@ class TextUtil {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: fontSize,
-          color: AppColors.colorTextChip
+          color: color
       ),
     );
   }
@@ -81,7 +78,8 @@ class TextUtil {
   static Text textChipLight(String value,
       {int maxLines = 10,
         double fontSize = 14,
-        TextAlign align = TextAlign.start}) {
+        TextAlign align = TextAlign.start,
+        Color color = Colors.white}) {
     return Text(
       value,
       textAlign: align,
@@ -89,7 +87,7 @@ class TextUtil {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontSize: fontSize,
-          color: AppColors.colorTextLight
+          color: color
       ),
     );
   }
@@ -152,14 +150,13 @@ class TextUtil {
     );
   }
 
-  static Text textTitulo(String value, {TextAlign align = TextAlign.start, color = Colors.white}) {
+  static Text textTitulo(String value, {TextAlign align = TextAlign.start}) {
     return Text(
       value,
       textAlign: align,
       style: TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: color),
+          fontWeight: FontWeight.bold),
     );
   }
 

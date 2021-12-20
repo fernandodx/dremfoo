@@ -74,7 +74,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sonho"),
+        title: Text(Translate.i().get.label_dream),
       ),
       body: bodyRegisterDreamPage(),
     );
@@ -125,7 +125,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.CONFIG),
       state: store.getStateStep(StepsEnum.CONFIG),
-      title: TextUtil.textTituloStep(Translate.i().get.label_settings),
+      title: TextUtil.textTitulo(Translate.i().get.label_settings),
       content: Observer(
         builder: (context) => ContentStepSettingsDreamWidget(
           expansionInfo: expansionPanelListInfo(StepsEnum.CONFIG.index, Translate.i().get.msg_info_settings_dream),
@@ -150,7 +150,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.INFLECTION),
       state: store.getStateStep(StepsEnum.INFLECTION),
-      title: TextUtil.textTituloStep(Translate.i().get.label_inflection_point),
+      title: TextUtil.textTitulo(Translate.i().get.label_inflection_point),
       content: Observer(
         builder: (context) => ContentStepInflectionDreamWidget(
             expansionInfo: expansionPanelListInfo(StepsEnum.INFLECTION.index, Translate.i().get.msg_info_step_inflection),
@@ -169,7 +169,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.REWARD),
       state: store.getStateStep(StepsEnum.REWARD),
-      title: TextUtil.textTituloStep(Translate.i().get.label_reward),
+      title: TextUtil.textTitulo(Translate.i().get.label_reward),
       content: Observer(
         builder: (context) => ContentStepRewardDreamWidget(
           isRewardWeek: store.dream.isRewardWeek??false,
@@ -206,7 +206,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.DAILY_GOALS),
       state: store.getStateStep(StepsEnum.DAILY_GOALS),
-      title: TextUtil.textTituloStep(
+      title: TextUtil.textTitulo(
         Translate.i().get.label_daily_goals,
       ),
       content: Observer(
@@ -229,7 +229,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
       isActive: store.checkStepActive(StepsEnum.STEPS),
       state: store.getStateStep(StepsEnum.STEPS),
-      title: TextUtil.textTituloStep(Translate.i().get.label_step_to_conquer),
+      title: TextUtil.textTitulo(Translate.i().get.label_step_to_conquer),
       content: Observer(
         builder: (context) {
           print("stepGoalDream -> ${store.listStepsForWin.length}");
@@ -249,7 +249,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Step(
         isActive: store.checkStepActive(StepsEnum.DREAM),
         state: store.getStateStep(StepsEnum.DREAM),
-        title: TextUtil.textTituloStep(Translate.i().get.label_whats_your_dream),
+        title: TextUtil.textTitulo(Translate.i().get.label_whats_your_dream),
         content: Observer(
           builder: (BuildContext context) {
             return  ContentStepInfoDreamWidget(

@@ -3,6 +3,7 @@ import 'package:dremfoo/app/modules/core/ui/widgets/circle_avatar_user_revo_widg
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/login_usecase.dart';
 import 'package:dremfoo/app/modules/login/login_module.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
@@ -136,7 +137,7 @@ class AppbarRevoWidget {
                                 title: TextUtil.textSubTitle("Sair", fontSize: 16),
                                 enableFeedback: true,
                                 onTap: () {
-                                  print("SAIR");
+                                  _registerUserStore.logOut();
                                 },
                               ),
                             ],

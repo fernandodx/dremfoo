@@ -103,7 +103,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                      color: AppColors.colorDark,
+                      color: Theme.of(context).backgroundColor.withAlpha(180),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(40), topRight: Radius.circular(40))),
                   width: double.maxFinite,
@@ -151,7 +151,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                           width: double.maxFinite,
                           margin: EdgeInsets.only(right: 8),
                           child: TextUtil.textTitulo("Conteúdo gratuito",
-                              align: TextAlign.right, color: AppColors.colorTextLight)),
+                              align: TextAlign.right, )),
                       SpaceWidget(),
                       Observer(
                         builder: (context) {

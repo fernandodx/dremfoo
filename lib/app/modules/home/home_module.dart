@@ -17,6 +17,7 @@ import 'package:dremfoo/app/modules/home/ui/pages/home_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/rank_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/social_network_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/splash_page.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/login_usecase.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/register_user_case.dart';
 import 'package:dremfoo/app/modules/login/infra/repositories/RegisterUserRepository.dart';
@@ -40,7 +41,7 @@ class HomeModule extends Module {
     Bind.lazySingleton((i) => BottomNavigateStore()),
     Bind.lazySingleton(
         (i) => SplashStore(i.get<LoginUseCase>(), i.get<RegisterUserCase>())),
-    Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>())),
+    Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>(), i.get<RegisterUserCase>(), i.get<ILoginCase>())),
     Bind.lazySingleton((i) => SocialNetworkStore()),
   ];
 

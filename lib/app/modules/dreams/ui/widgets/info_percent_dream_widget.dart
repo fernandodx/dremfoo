@@ -34,11 +34,11 @@ class InfoPercentDreamWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _createWidgets(),
+          children: _createWidgets(context),
         ));
   }
 
-  List<Widget> _createWidgets() {
+  List<Widget> _createWidgets(BuildContext context) {
     if (isLoading) {
       return [
         Container(
@@ -50,7 +50,7 @@ class InfoPercentDreamWidget extends StatelessWidget {
     if (isDreamAwait) {
       return _getWidgetsDreamAwait();
     } else {
-      return _getWidgetsDreamWithFocus();
+      return _getWidgetsDreamWithFocus(context);
     }
   }
 
@@ -87,18 +87,20 @@ class InfoPercentDreamWidget extends StatelessWidget {
     ];
   }
 
-  List<Widget> _getWidgetsDreamWithFocus() {
+  List<Widget> _getWidgetsDreamWithFocus(BuildContext context) {
     return [
       SpaceWidget(),
       CicularProgressRevoWidget(
           titleCenter: percentStep,
           titleBottom: Translate.i().get.label_steps,
-          value: valueStep??0),
+          value: valueStep??0,
+          colorText: Theme.of(context).primaryColorDark,),
       SpaceWidget(),
       CicularProgressRevoWidget(
           titleCenter: percentToday,
           titleBottom: Translate.i().get.label_today,
-          value: valueToday??0)
+          value: valueToday??0,
+        colorText: Theme.of(context).primaryColorDark,)
     ];
   }
 }

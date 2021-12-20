@@ -5,6 +5,7 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_completed_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextUtil.textAppbar("Sonhos realizados"),
+        title: TextUtil.textAppbar(Translate.i().get.label_dreams_completed),
       ),
       body: Observer(
         builder: (context) {
@@ -72,7 +73,7 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
             return _createCard(_dream);
           });
     }else{
-      return NoItemsFoundWidget("Ainda nenhum sonho foi realizado, mas tenho certeza que em breve vai ter.");
+      return NoItemsFoundWidget(Translate.i().get.msg_no_dreams_completed);
     }
   }
 
@@ -106,7 +107,6 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
                   Container(
                     child: TextUtil.textTitulo(
                       dream.dreamPropose!,
-                      color: AppColors.colorDark
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
@@ -115,13 +115,12 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
                     child: TextUtil.textDefault(
                       dream.descriptionPropose!,
                       fontSize: 14,
-                        color: AppColors.colorDark
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.all(6),
                   ),
                   Container(
-                    child: TextUtil.textTitulo("Passos",   color: AppColors.colorDark),
+                    child: TextUtil.textTitulo(Translate.i().get.label_steps),
                     padding: EdgeInsets.all(6),
                   ),
                   Wrap(
@@ -166,11 +165,10 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
     for (StepDream stepDream in steps) {
       Chip chip = Chip(
         avatar: CircleAvatar(
-          backgroundColor: AppColors.colorChipSecundary,
-          child: TextUtil.textChip("${stepDream.position}˚",),
+          backgroundColor: Theme.of(context).canvasColor,
+          child: TextUtil.textChip("${stepDream.position}˚", color: Theme.of(context).accentColor),
         ),
-        label: TextUtil.textChip(stepDream.step!),
-        backgroundColor: AppColors.colorChipPrimary,
+        label: TextUtil.textChip(stepDream.step!, color: Theme.of(context).canvasColor),
       );
 
       listWidget.add(Container(

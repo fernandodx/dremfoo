@@ -22,13 +22,13 @@ class ChipButtonWidget extends StatelessWidget {
      borderRadius: BorderRadius.all(Radius.circular(22)),
      child: Chip(
        onDeleted: onTap,
-       deleteIcon: Icon(Icons.navigate_next,  color: AppColors.colorTextChipMenu,),
+       deleteIcon: Icon(Icons.navigate_next,  color: Colors.black38,),
        labelPadding: EdgeInsets.only(top: 12, bottom: 12, left: 4, right: 0),
        label:  Container(
            width: size,
            child: TextUtil.textChipMenu(name, maxLines: 1)),
        avatar: CircleAvatar(
-         backgroundColor: AppColors.colorButtonChipDark,
+         backgroundColor: Theme.of(context).canvasColor,
          child: FaIcon(
            icon,
            color: Colors.white70,

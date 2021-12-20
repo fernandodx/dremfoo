@@ -4,7 +4,6 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 
 class WeekCalendarWidget extends StatelessWidget {
-
   Function(DateTime) onTapDay;
   DateTime dateTimeSelectec;
 
@@ -12,10 +11,10 @@ class WeekCalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return Row(
-     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-     children: getDaysOfWeekRow(context),
-   );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: getDaysOfWeekRow(context),
+    );
   }
 
   int weekdayFirsdaySunday(int weekday) {
@@ -26,14 +25,12 @@ class WeekCalendarWidget extends StatelessWidget {
     }
   }
 
-
   List<Widget> getDaysOfWeekRow(context) {
     List<Widget> listWidget = [];
     DateTime now = DateTime.now();
     DateTime firstDay = now.subtract(Duration(days: now.weekday));
 
     for (var i = 1; i <= 7; i++) {
-
       bool isdayEnable = i <= weekdayFirsdaySunday(now.weekday);
       DateTime dateWeek = firstDay.toLocal();
       bool isSelected = weekdayFirsdaySunday(dateTimeSelectec.weekday) == i;
@@ -42,19 +39,21 @@ class WeekCalendarWidget extends StatelessWidget {
         elevation: 2,
         visualDensity: VisualDensity.compact,
         label: TextUtil.textChipLight(firstDay.day.toString(), fontSize: 10),
-        backgroundColor: isdayEnable ? AppColors.colorDark : AppColors.colorDisabled,
-        selectedColor: AppColors.colorViolet,
+        backgroundColor:
+            isdayEnable ? Theme.of(context).hintColor : Theme.of(context).disabledColor,
+        selectedColor: Theme.of(context).focusColor,
         selected: isSelected,
         materialTapTargetSize: MaterialTapTargetSize.padded,
-        onSelected:  (selected) {
+        onSelected: (selected) {
           if (isdayEnable) {
-           onTapDay(dateWeek);
+            onTapDay(dateWeek);
           }
         },
       );
 
       var borderSelected = BoxDecoration(
-          border: Border.all(color: AppColors.colorEggShell, width: 1), borderRadius: BorderRadius.circular(30));
+          border: Border.all(color: Theme.of(context).accentColor, width: 1),
+          borderRadius: BorderRadius.circular(30));
       var borderNormal = BoxDecoration();
 
       var dayContainer = Container(
@@ -65,7 +64,11 @@ class WeekCalendarWidget extends StatelessWidget {
             }
           },
           child: Column(
-            children: [TextUtil.textChipLight(Utils.weekday(firstDay.weekday, true), fontSize: 10), chip],
+            children: [
+              TextUtil.textChipLight(Utils.weekday(firstDay.weekday, true),
+                  fontSize: 10, color: Theme.of(context).accentColor),
+              chip
+            ],
           ),
         ),
         padding: EdgeInsets.all(6),

@@ -175,6 +175,14 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
       return  LevelRevo.fromListDocumentSnapshot(querySnapshot.docs);
   }
 
+  @override
+  Future<void> updateCountDayAcess(String uidUser, int countDays) async {
+    DocumentReference refUsers = getRefCurrentUser(uidUser);
+    refUsers.update({"countDaysAcess": countDays})
+        .catchError(handlerError);
+  }
+
+
 
 
 

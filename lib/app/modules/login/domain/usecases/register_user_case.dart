@@ -189,76 +189,136 @@ class RegisterUserCase extends IRegisterUserCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
-  //TODO REFATORAR
+  bool _hasFocus(UserFocus? userFocus){
+    return userFocus != null && userFocus.dateLastFocus != null && userFocus.countDaysFocus != null;
+  }
+
+  bool _isFocusNoContinuos(UserFocus userFocus){
+    DateTime dateLast = userFocus.dateLastFocus!.toDate();
+    DateTime dateNow = DateTime.now();
+    int countDayLast =  DateUtil().totalLengthOfDays(dateLast.month, dateLast.day, dateLast.year);
+    int countDayNow=  DateUtil().totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
+    int countDayAnyFocus = countDayNow - countDayLast;
+    return countDayAnyFocus > 2;
+  }
+
+  Future<UserFocus> _resetFocus(UserFocus userFocus) async {
+    userFocus.dateLastFocus = Timestamp.now();
+    userFocus.dateInit = Timestamp.now();
+    userFocus.countDaysFocus = 1;
+
+    ResponseApi<LevelRevo> responseApi = await findLevelCurrent(1);
+    if(responseApi.ok) {
+      LevelRevo level = responseApi.result!;
+      level.countDaysFocus = 1;
+      userFocus.level = level;
+    }
+    UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
+    return userFocusUpdate;
+  }
+
+  Future<UserFocus> _incrementFocus(UserFocus userFocus) async {
+    DateTime dateNow = DateTime.now();
+    if(userFocus.dateLastFocus!.toDate().isSameDate(dateNow)){
+      return userFocus;
+    }
+
+    var newCountDayFocus = userFocus.countDaysFocus! + 1;
+    userFocus.dateLastFocus = Timestamp.now();
+    userFocus.countDaysFocus = newCountDayFocus;
+
+    ResponseApi<LevelRevo> responseApi = await findLevelCurrent(newCountDayFocus);
+    if(responseApi.ok) {
+      LevelRevo level = responseApi.result!;
+      level.countDaysFocus = newCountDayFocus;
+      userFocus.level = level;
+    }
+
+    UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
+    return userFocusUpdate;
+  }
+
+  Future<UserFocus> _createFirstUserFocusForCurrentUser() async {
+    UserFocus focus = UserFocus();
+    focus.countDaysFocus = 1;
+    focus.dateLastFocus = Timestamp.now();
+    focus.dateInit = Timestamp.now();
+
+    ResponseApi<LevelRevo> responseApi = await findLevelCurrent(1);
+    if(responseApi.ok) {
+      LevelRevo level = responseApi.result!;
+      level.countDaysFocus = 1;
+      focus.level = level;
+    }
+    UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, focus);
+    return userFocusUpdate;
+  }
+
+  Future<bool> _checkContinuosFocus(UserFocus? userFocus) async {
+    if(_hasFocus(userFocus)) {
+      //2 dias sem fazer nenhuma meta diaria
+      if(_isFocusNoContinuos(userFocus!)) {
+         await _resetFocus(userFocus);
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
   @override
-  Future<ResponseApi> updateContinuosFocus() async {
+  Future<ResponseApi<bool>> checkLevelFocusUser() async {
+    try{
+      UserFocus? userFocus = await _userRepository.findFocusUser(_userRevo.uid);
+      bool isFocusOk = await _checkContinuosFocus(userFocus);
+      ResponseApi.ok(result: isFocusOk);
+
+    }on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+  
+  @override
+  Future<ResponseApi<UserFocus>> updateContinuosFocus() async {
     try{
 
       UserFocus? userFocus = await _userRepository.findFocusUser(_userRevo.uid);
-      if(userFocus != null && userFocus.dateLastFocus != null && userFocus.countDaysFocus != null) {
-
-        DateTime dateLast = userFocus.dateLastFocus!.toDate();
-        DateTime dateNow = DateTime.now();
-
-        int countDayLast =  DateUtil().totalLengthOfDays(dateLast.month, dateLast.day, dateLast.year);
-        int countDayNow=  DateUtil().totalLengthOfDays(dateNow.month, dateNow.day, dateNow.year);
-        int count = countDayNow - countDayLast;
-
-        if(count > 2) {
-          //Reset Focus
-          userFocus.dateLastFocus = Timestamp.now();
-          userFocus.dateInit = Timestamp.now();
-          userFocus.countDaysFocus = 1;
-
-          ResponseApi<LevelRevo> responseApi = await findLevelCurrent(1);
-          if(responseApi.ok) {
-            LevelRevo level = responseApi.result!;
-            level.countDaysFocus = 1;
-            userFocus.level = level;
-          }
-
-          UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
-          return ResponseApi.ok(result: userFocusUpdate);
-
-        }else{
-          //increment Focus
-          if(userFocus.dateLastFocus!.toDate().isSameDate(dateNow)){
-            return ResponseApi.ok(result: userFocus);
-          }
-
-          var newCountDayFocus = userFocus.countDaysFocus! + 1;
-          userFocus.dateLastFocus = Timestamp.now();
-          userFocus.countDaysFocus = newCountDayFocus;
-
-          ResponseApi<LevelRevo> responseApi = await findLevelCurrent(newCountDayFocus);
-          if(responseApi.ok) {
-            LevelRevo level = responseApi.result!;
-            level.countDaysFocus = newCountDayFocus;
-            userFocus.level = level;
-          }
-
-          UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
-          return ResponseApi.ok(result: userFocusUpdate);
-        }
-
+      bool isFocusOk = await _checkContinuosFocus(userFocus);
+      if(isFocusOk){
+        await _incrementFocus(userFocus!);
+        return ResponseApi.ok(result: userFocus);
       }else{
-
-        //Criar o primeiro UserFoco
-        UserFocus focus = UserFocus();
-        focus.countDaysFocus = 1;
-        focus.dateLastFocus = Timestamp.now();
-        focus.dateInit = Timestamp.now();
-
-        ResponseApi<LevelRevo> responseApi = await findLevelCurrent(1);
-        if(responseApi.ok) {
-          LevelRevo level = responseApi.result!;
-          level.countDaysFocus = 1;
-          focus.level = level;
-        }
-        UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, focus);
+        UserFocus userFocusUpdate = await _createFirstUserFocusForCurrentUser();
         return ResponseApi.ok(result: userFocusUpdate);
       }
 
+    }on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<void>> updateCountAcess() async {
+    try{
+
+      if(_userRevo.countDaysAcess != null){
+        _userRevo.countDaysAcess = _userRevo.countDaysAcess! + 1;
+      }else{
+        _userRevo.countDaysAcess = 1;
+      }
+      _userRepository.updateCountDayAcess(_userRevo.uid, _userRevo.countDaysAcess!);
 
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

@@ -37,8 +37,7 @@ class ButtonOutlinedRevoWidget extends StatelessWidget {
             SpaceWidget(
               isSpaceRow: true,
             ),
-            TextUtil.textSubTitle(label,
-                color: AppColors.colorSubText, fontSize: 14)
+            TextUtil.textSubTitle(label, fontSize: 14)
           ],
         ));
   }

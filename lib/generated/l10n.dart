@@ -999,6 +999,286 @@ class S {
       args: [],
     );
   }
+
+  /// `Rank`
+  String get label_rank {
+    return Intl.message(
+      'Rank',
+      name: 'label_rank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Archived dreams`
+  String get label_archived_dreams {
+    return Intl.message(
+      'Archived dreams',
+      name: 'label_archived_dreams',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No dreams were filed.`
+  String get msg_dream_not_archived {
+    return Intl.message(
+      'No dreams were filed.',
+      name: 'msg_dream_not_archived',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To Restore`
+  String get label_restore {
+    return Intl.message(
+      'To Restore',
+      name: 'label_restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dreams completed`
+  String get label_dreams_completed {
+    return Intl.message(
+      'Dreams completed',
+      name: 'label_dreams_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No dream has been realized yet, but I'm sure it will soon.`
+  String get msg_no_dreams_completed {
+    return Intl.message(
+      'No dream has been realized yet, but I\'m sure it will soon.',
+      name: 'msg_no_dreams_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free content`
+  String get label_free_content {
+    return Intl.message(
+      'Free content',
+      name: 'label_free_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social media`
+  String get label_social_media {
+    return Intl.message(
+      'Social media',
+      name: 'label_social_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to send an email, make sure you have configured the email app on your mobile.`
+  String get msg_erro_no_register_email {
+    return Intl.message(
+      'Unable to send an email, make sure you have configured the email app on your mobile.',
+      name: 'msg_erro_no_register_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hi Fernando, `
+  String get label_start_email {
+    return Intl.message(
+      'Hi Fernando, ',
+      name: 'label_start_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `REVO - Focused goals`
+  String get label_title_app {
+    return Intl.message(
+      'REVO - Focused goals',
+      name: 'label_title_app',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Site`
+  String get label_site {
+    return Intl.message(
+      'Site',
+      name: 'label_site',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact`
+  String get label_contact {
+    return Intl.message(
+      'Contact',
+      name: 'label_contact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Youtube`
+  String get label_youtube {
+    return Intl.message(
+      'Youtube',
+      name: 'label_youtube',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Instagram`
+  String get label_instagram {
+    return Intl.message(
+      'Instagram',
+      name: 'label_instagram',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar`
+  String get label_edit {
+    return Intl.message(
+      'Editar',
+      name: 'label_edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Realized dream`
+  String get label_dream_realized {
+    return Intl.message(
+      'Realized dream',
+      name: 'label_dream_realized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Did you fulfill your dream?`
+  String get msg_question_dream_realized {
+    return Intl.message(
+      'Did you fulfill your dream?',
+      name: 'msg_question_dream_realized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get label_yes {
+    return Intl.message(
+      'Yes',
+      name: 'label_yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File Dream`
+  String get label_file_dream {
+    return Intl.message(
+      'File Dream',
+      name: 'label_file_dream',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you really want to archive this dream? Even if it is archived, you can reactivate it at any time.`
+  String get msg_question_file_dream {
+    return Intl.message(
+      'Do you really want to archive this dream? Even if it is archived, you can reactivate it at any time.',
+      name: 'msg_question_file_dream',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To file`
+  String get label_to_file {
+    return Intl.message(
+      'To file',
+      name: 'label_to_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dream choice`
+  String get label_dream_choice {
+    return Intl.message(
+      'Dream choice',
+      name: 'label_dream_choice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dream on hold`
+  String get label_dream_hold {
+    return Intl.message(
+      'Dream on hold',
+      name: 'label_dream_hold',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In this section, you still don't need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want.`
+  String get msg_help_dream_hold {
+    return Intl.message(
+      'In this section, you still don\'t need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want.',
+      name: 'msg_help_dream_hold',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dream with focus`
+  String get label_dream_with_focus {
+    return Intl.message(
+      'Dream with focus',
+      name: 'label_dream_with_focus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream.`
+  String get msg_help_dream_with_focus {
+    return Intl.message(
+      'In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream.',
+      name: 'msg_help_dream_with_focus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Days`
+  String get label_days {
+    return Intl.message(
+      'Days',
+      name: 'label_days',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

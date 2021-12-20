@@ -44,7 +44,6 @@ class AppTextDefault extends StatelessWidget {
       onSaved: onSaved as void Function(String?)?,
       maxLength: maxLength,
       textCapitalization: TextCapitalization.sentences,
-      style: TextStyle(color: AppColors.colorDark, fontSize: 15, ),
       onFieldSubmitted: (value) {
         print(value);
         if (onFieldSubmitted != null) {
@@ -61,17 +60,12 @@ class AppTextDefault extends StatelessWidget {
   InputDecoration inputDecotaration() {
     if (icon != null) {
       return InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), gapPadding: 8, ),
-        contentPadding: EdgeInsets.all(10),
         labelText: name,
         hintText: hint,
-        labelStyle: TextStyle(fontSize: 16, ),
-        prefixIcon: Icon(icon, color: AppColors.colorPrimaryDark, size: 18,),
+        prefixIcon: Icon(icon, size: 18,),
       );
     } else {
       return InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), gapPadding: 8, ),
-        contentPadding: EdgeInsets.all(10),
         labelText: name,
         hintText: hint,
         labelStyle: TextStyle(fontSize: 16, ),

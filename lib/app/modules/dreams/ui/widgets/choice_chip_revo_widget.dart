@@ -4,40 +4,43 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceChipRevoWidget extends StatelessWidget {
-
   String label;
   String color;
   bool isCompleted;
   Function(bool) onSelected;
 
   ChoiceChipRevoWidget(
-  {required this.label, required this.color, required this.isCompleted, required this.onSelected});
+      {required this.label,
+      required this.color,
+      required this.isCompleted,
+      required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 8),
       child: ChoiceChip(
-        elevation: 8,
-        label: TextUtil.textChipMenu(label),
-        backgroundColor: Utils.colorFromHex(color),
-        selectedColor: AppColors.colorPrimary,
-        selected: isCompleted,
-        avatar: isCompleted
-            ? CircleAvatar(
-          backgroundColor: AppColors.colorPrimaryDark,
-          child: Icon(
-            Icons.check,
-            color: AppColors.colorlight,
-            size: 18,
-          ),
-        )
-            : Icon(
-          Icons.radio_button_unchecked,
-          color: AppColors.colorDark,
-        ),
-        onSelected: (isSelected) => onSelected(isSelected)
-      ),
+          padding: EdgeInsets.only(left: 1, right: 8),
+          elevation: 8,
+          label: TextUtil.textChipLight(label, fontSize: 12),
+          backgroundColor: Utils.colorFromHex(color),
+          selectedColor: Theme.of(context).focusColor,
+          selected: isCompleted,
+          avatar: isCompleted
+              ? CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Theme.of(context).primaryColorDark,
+                  child: Icon(
+                    Icons.check,
+                    color: AppColors.colorlight,
+                    size: 14,
+                  ),
+                )
+              : Icon(
+                  Icons.radio_button_unchecked,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+          onSelected: (isSelected) => onSelected(isSelected)),
     );
   }
 }

@@ -33,8 +33,8 @@ class DualButtonsOptionSelectedWidget extends StatelessWidget {
                         bottomLeft: Radius.circular(30)
                     ),
                   ),
-                  primary: isLeftSelect ? AppColors.colorPrimaryLight : AppColors.colorPrimary,
-                  onPrimary: isLeftSelect ? AppColors.colorPrimaryDark :  AppColors.colorPrimaryLight
+                  primary: isLeftSelect ? Theme.of(context).hintColor :Theme.of(context).primaryColorDark,
+                  onPrimary: isLeftSelect ? Theme.of(context).primaryColorDark : Theme.of(context).hintColor
               ),
               onPressed: onPressLeft,
               child: Text(titleLeft, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),)
@@ -51,8 +51,8 @@ class DualButtonsOptionSelectedWidget extends StatelessWidget {
                       bottomRight: Radius.circular(30)
                   ),
                 ),
-                primary: !isLeftSelect ? AppColors.colorPrimaryLight : AppColors.colorPrimary,
-                onPrimary: !isLeftSelect ? AppColors.colorPrimaryDark :  AppColors.colorPrimaryLight
+                primary: !isLeftSelect ? Theme.of(context).hintColor : Theme.of(context).primaryColorDark,
+                onPrimary: !isLeftSelect ? Theme.of(context).primaryColorDark : Theme.of(context).hintColor
             ),
             onPressed: onPressRight,
             child: Text(titleRight),

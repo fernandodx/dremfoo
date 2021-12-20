@@ -36,4 +36,6 @@ abstract class IRegisterUserRepository {
 
   Future<List<LevelRevo>> findLevelsWin(int countDayFocus);
 
+  Future<void> updateCountDayAcess(String? userUid, int countDays);
+
 }

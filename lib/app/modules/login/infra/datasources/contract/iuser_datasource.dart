@@ -33,4 +33,6 @@ abstract class IUserDataSource {
 
   Future<LevelRevo> updateLevelUser(String uidUser, LevelRevo level);
 
+  Future<void> updateCountDayAcess(String uidUser, int countDays);
+
 }

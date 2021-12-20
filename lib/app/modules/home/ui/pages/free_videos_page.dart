@@ -1,17 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/app/model/video.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/no_items_found_widget.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/free_videos_store.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -25,13 +21,6 @@ class FreeVideosPage extends StatefulWidget {
 }
 
 class FreeVideosPageState extends ModularState<FreeVideosPage, FreeVideosStore> {
-
-  YoutubePlayerController _controllerTest = YoutubePlayerController(
-    initialVideoId: "ntRlby2ee",
-    flags: YoutubePlayerFlags(
-      autoPlay: false,
-    ),
-  );
 
   @override
   void initState() {
@@ -66,7 +55,7 @@ class FreeVideosPageState extends ModularState<FreeVideosPage, FreeVideosStore> 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextUtil.textAppbar("Conteúdo gratuito"),
+        title: TextUtil.textAppbar(Translate.i().get.label_free_content),
       ),
       body: Container(
         color: Colors.white,

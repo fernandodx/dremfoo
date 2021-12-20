@@ -114,10 +114,29 @@ class RegisterUserRepository extends IRegisterUserRepository {
 
   @override
   Future<Object> saveLastAcessUser(String fireBaseUserUid, Timestamp dateAcess) async {
-      return _userDataSource.saveLastAcessUser(fireBaseUserUid, dateAcess).catchError((error, stack) {
+      try{
+        return await _userDataSource.saveLastAcessUser(fireBaseUserUid, dateAcess);
+      } catch(error, stack){
         CrashlyticsUtil.logErro(error, stack);
-        throw RevoExceptions.msgToUser(error: error, msg: Translate.i().get.msg_error_not_possible_upload_photo, stack:  stack);
-      });
+        throw RevoExceptions.msgToUser(error: Exception(error), msg: "Não foi possível salvar o ultimo acesso.", stack:  stack);
+      }
+  }
+
+  @override
+  Future<void> updateCountDayAcess(String? userUid, int countDays) async {
+    try{
+      if(userUid == null){
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("fireBaseUserUid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+        return await _userDataSource.updateCountDayAcess(userUid, countDays);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+      throw RevoExceptions.msgToUser(error: Exception(error), msg: "Não foi possível atualizar a quantidade de acessos.", stack:  stack);
+    }
   }
 
   @override

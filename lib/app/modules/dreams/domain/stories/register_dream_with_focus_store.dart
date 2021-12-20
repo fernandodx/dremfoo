@@ -510,13 +510,10 @@ abstract class _RegisterDreamWaitStoreBase with Store {
 
     return Chip(
       avatar: CircleAvatar(
-        backgroundColor: AppColors.colorChipSecundary,
         child: TextUtil.textChip('${position}˚', maxLines: 1),
       ),
       label: TextUtil.textChip(nameStep, maxLines: 1),
-      backgroundColor: AppColors.colorChipPrimary,
       onDeleted: onDeleted,
-      deleteIconColor: Colors.white,
     );
 
   }

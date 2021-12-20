@@ -20,7 +20,6 @@ class BottomNavigatePage extends StatefulWidget {
 }
 
 class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNavigateStore> {
-  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -40,11 +39,10 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
       builder: (context){
         return Scaffold(
           // appBar: store.isAppBarVisible ? myAppBar : null,
-          backgroundColor: AppColors.colorBackground,
           // body: _widgetOptions.elementAt(_selectedIndex),
           body: RouterOutlet(),
           bottomNavigationBar: Theme(
-            data: Theme.of(context).copyWith(canvasColor: AppColors.colorDark),
+            data: Theme.of(context).copyWith(canvasColor: Theme.of(context).backgroundColor),
             child: BottomNavigationBar(
               items: [
                 BottomNavigationBarItem(
@@ -55,42 +53,36 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
                   icon: FaIcon(FontAwesomeIcons.cloud),
                   label: Translate.i().get.label_dreams,
                 ),
-                BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.chartLine),
-                    label: Translate.i().get.label_statistics),
-                BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
-                    label: Translate.i().get.label_challenges),
+                // BottomNavigationBarItem(
+                //     icon: FaIcon(FontAwesomeIcons.chartLine),
+                //     label: Translate.i().get.label_statistics),
+                // BottomNavigationBarItem(
+                //     icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
+                //     label: Translate.i().get.label_challenges),
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.trophy),
-                    label: Translate.i().get.label_challenges),
+                    label: Translate.i().get.label_rank),
               ],
-              currentIndex: _selectedIndex,
-              selectedItemColor: AppColors.colorAcent,
+              currentIndex: store.selectedIndex,
               onTap: (index) {
-                //Arrumar ISSO
-                setState(() {
-                  _selectedIndex = index;
-                });
-                print(index);
-                // setState(() {
-                //   _selectedIndex = index;
-                // });
-                if (index == 0) {
-                  store.showHideAppBar(true);
-                  Modular.to.navigate('/home/dashboard');
-                } else if (index == 1) {
-                  store.showHideAppBar(false);
-                  Modular.to.navigate('/home/dream');
-                } else if (index == 2) {
-                  Modular.to.navigate('/home/chart');
-                } else if (index == 3) {
-                  store.showHideAppBar(false);
-                  Modular.to.navigate('/home/rank');
-                } else if (index == 4) {
-                  store.showHideAppBar(false);
-                  Modular.to.navigate('/home/challenge');
-                }
+
+                store.navigatePageBottomNavigate(index);
+
+                // if (index == 0) {
+                //   store.showHideAppBar(true);
+                //   Modular.to.navigate('/home/dashboard');
+                // } else if (index == 1) {
+                //   store.showHideAppBar(false);
+                //   Modular.to.navigate('/home/dream');
+                // } else if (index == 2) {
+                //   Modular.to.navigate('/home/chart');
+                // } else if (index == 3) {
+                //   store.showHideAppBar(false);
+                //   Modular.to.navigate('/home/rank');
+                // } else if (index == 4) {
+                //   store.showHideAppBar(false);
+                //   Modular.to.navigate('/home/challenge');
+                // }
               },
             ),
           ),

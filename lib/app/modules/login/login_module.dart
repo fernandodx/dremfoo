@@ -42,7 +42,7 @@ class LoginModule extends Module {
 
     //Store
     Bind.lazySingleton((i) => LoginStore(i.get<LoginUseCase>()), export: true),
-    Bind.lazySingleton((i) => RegisterUserStore(i.get<RegisterUserCase>()), export: true),
+    Bind.lazySingleton((i) => RegisterUserStore(i.get<RegisterUserCase>(), i.get<LoginUseCase>()), export: true),
     
   ];
 

@@ -40,9 +40,6 @@ class AppButtonDefault extends StatelessWidget {
               ),
             ],
           ),
-          style: TextButton.styleFrom(
-            primary: AppColors.colorAcent
-          ),
           onPressed: onPressed,
         );
 
@@ -65,11 +62,6 @@ class AppButtonDefault extends StatelessWidget {
                 child: getTextButton(),
               ),
             ],
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors.colorPrimaryDark,
-            onPrimary: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           ),
           onPressed: onPressed,
         );

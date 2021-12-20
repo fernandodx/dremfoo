@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -52,13 +53,13 @@ class ItemUserRankWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextUtil.textDefault(nameUser, color: AppColors.colorDarkLight,),
+                        TextUtil.textDefault(nameUser,),
                         SizedBox(height: 5,),
                         Wrap(
                           children: [
-                            FaIcon(FontAwesomeIcons.bullseye, color: AppColors.colorDark, size: 15,),
+                            FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
                             SizedBox(width: 5,),
-                            TextUtil.textDefault("$daysFocus Dias", color: AppColors.colorDark, fontSize: 12)
+                            TextUtil.textDefault("$daysFocus ${Translate.i().get.label_days}", fontSize: 12)
                           ],
                         ),
                       ],
@@ -68,7 +69,6 @@ class ItemUserRankWidget extends StatelessWidget {
                     flex: 0,
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: AppColors.colorDarkLight,
                       child: ClipOval(
                         child: CachedNetworkImage(width: 20, height: 20, imageUrl: urlIconLevel),
                       ),

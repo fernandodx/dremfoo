@@ -50,10 +50,11 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
     return [
       expansionInfo,
       SpaceWidget(),
+      SpaceWidget(),
       TextUtil.textTitulo(Translate.i().get.label_weekly_goal),
       Container(
         padding: EdgeInsets.only(
-          top: 50,
+          top: 10,
         ),
         child: Slider(
           value: dream.goalWeek??0,
@@ -61,8 +62,6 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
           min: 25,
           max: 100,
           divisions: 3,
-          activeColor: AppColors.colorPink,
-          inactiveColor: AppColors.colorEggShell,
           label: getLabelSlide(dream.goalWeek??0),
         ),
       ),
@@ -70,7 +69,7 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
       TextUtil.textTitulo(Translate.i().get.label_monthly_goal,),
       Container(
         padding: EdgeInsets.only(
-          top: 50,
+          top: 10,
         ),
         child: Slider(
           value: dream.goalMonth??0,
@@ -78,8 +77,6 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
           min: 25,
           max: 100,
           divisions: 3,
-          activeColor: AppColors.colorPink,
-          inactiveColor: AppColors.colorEggShell,
           label: getLabelSlide(dream.goalMonth??0),
         ),
       ),
@@ -109,7 +106,6 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
         children: <Widget>[
           CircleAvatar(
             radius: 22,
-            backgroundColor: AppColors.colorPrimaryLight,
             child: ClipOval(
               child: Image.asset(
                 Utils.getPathAssetsImg("icon_paint.png"),
@@ -119,7 +115,7 @@ class ContentStepSettingsDreamWidget extends StatelessWidget {
           ),
           Container(
               margin: EdgeInsets.only(left: 12),
-              child: TextUtil.textAccent(Translate.i().get.label_choice_color_dream)),
+              child: TextUtil.textDefault(Translate.i().get.label_choice_color_dream)),
         ],
       ),
       Container(

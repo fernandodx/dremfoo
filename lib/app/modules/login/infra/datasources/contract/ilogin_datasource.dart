@@ -19,4 +19,6 @@ abstract class ILoginDatasource {
 
   Future<LoginResult> signInWithFacebook();
 
+  Future<void> logOut();
+
 }

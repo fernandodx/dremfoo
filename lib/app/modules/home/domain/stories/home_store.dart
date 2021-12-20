@@ -5,6 +5,8 @@ import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.da
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/contract/ihome_usecase.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
+import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -16,7 +18,9 @@ class HomeStore = _HomeStoreBase with _$HomeStore;
 abstract class _HomeStoreBase with Store {
 
   IHomeUsecase _homeUsecase;
-  _HomeStoreBase(this._homeUsecase);
+  IRegisterUserCase _registerUserCase;
+  ILoginCase _loginCase;
+  _HomeStoreBase(this._homeUsecase, this._registerUserCase, this._loginCase);
 
   @observable
   MessageAlert? msgAlert;
@@ -36,6 +40,9 @@ abstract class _HomeStoreBase with Store {
 
   Future<void> fetch() async {
     await _findCurrentUser();
+    await _registerUserCase.checkLevelFocusUser();
+    await _registerUserCase.updateCountAcess();
+    await  _loginCase.saveLastAcessUser();
     _findLastDayAcess();
     _loadRankUser();
     _loadVideo();
