@@ -3,8 +3,10 @@ import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/login_module.dart';
+import 'package:dremfoo/app/modules/login/ui/pages/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
@@ -33,8 +35,10 @@ abstract class _LoginStoreBase with Store {
     isLoading = false;
   }
 
-  void onNotRegister() {
-    Modular.to.pushNamed(LoginModule.REGISTER_PAGE);
+  void onNotRegister(BuildContext context) {
+    // Navigator.pushNamed(context, LoginModule.REGISTER_PAGE);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterPage()),);
+    // Modular.to.pushNamed(LoginModule.REGISTER_PAGE);
   }
 
   void onLoginWithGoogle(BuildContext context) async {

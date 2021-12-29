@@ -9,6 +9,7 @@ import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 part 'dream_store.g.dart';
 
@@ -40,16 +41,30 @@ abstract class _DreamStoreBase with Store {
       List<Dream> list = responseApi.result!;
       listDream = list;
       isLoading = false;
-      isloadingDailyStep = true;
-      for(Dream dream in list){
-        await _loadHistoryWeekDailyGoal(dream);
-        await _loadStepDream(dream);
-        await _loadDailyGoalDream(dream);
-      }
-      isloadingDailyStep = false;
-      listDream = list;
+      _checkPercentsGoals(list);
     }
     return responseApi;
+  }
+
+  Future<void> _loadStepsGoalsHistory(Dream dream) async {
+    await _loadHistoryWeekDailyGoal(dream);
+    await _loadStepDream(dream);
+    await _loadDailyGoalDream(dream);
+  }
+
+  @action
+  Future<void> _checkPercentsGoals(List<Dream> list) async {
+    isloadingDailyStep = true;
+    for(Dream dream in list){
+      if(dream.percentToday == null && dream.percentStep == null) {
+        await _loadStepsGoalsHistory(dream);
+        await _dreamCase.updatePercentsGoalsAndSteps(dream);
+      }else{
+        //use store
+      }
+    }
+    isloadingDailyStep = false;
+    listDream = list;
   }
 
   @action
@@ -136,6 +151,10 @@ abstract class _DreamStoreBase with Store {
   void newDream(BuildContext context){
     Navigator.pushNamed(context, "/home/dream/choiceDream");
     // Modular.to.navigate("/dream/newDream");
+  }
+
+  bool isPercentTodayUpdated(){
+    return _dreamCase.checkPercentIsToday();
   }
 
 

@@ -20,6 +20,7 @@ class UserRevo {
   File? picture;
   UserFocus? focus;
   int? countDaysAcess;
+  Timestamp? dateLastAcess;
   User? userFirebase;
 
   UserRevo();
@@ -34,6 +35,7 @@ class UserRevo {
     finishNotification = map["finishNotification"];
     isEnableNotification = map["isEnableNotification"];
     countDaysAcess =  map["countDaysAcess"];
+    dateLastAcess =  map["dateLastAcess"];
     focus = UserFocus.fromMap(map['focus']);
   }
 
@@ -48,6 +50,7 @@ class UserRevo {
     map["finishNotification"] = this.finishNotification;
     map["isEnableNotification"] = this.isEnableNotification;
     map["countDaysAcess"] = this.countDaysAcess;
+    map["dateLastAcess"] = this.dateLastAcess;
     map["focus"] = this.focus != null ? this.focus!.toMap() : null;
     return map;
   }
@@ -62,6 +65,7 @@ class UserRevo {
     finishNotification = userRevo.finishNotification;
     isEnableNotification = userRevo.isEnableNotification;
     countDaysAcess =  userRevo.countDaysAcess;
+    dateLastAcess = userRevo.dateLastAcess;
     focus = userRevo.focus;
   }
 

@@ -27,52 +27,16 @@ class ListDreamWidget extends StatelessWidget {
 
     listDream.forEach((dream) {
 
-      var countDaily = 0;
-      var countStep = 0;
-      var countDailyToday = 0;
-      var countStepCompleted = 0;
-      double? percent = null;
-      double? percentStep = null;
-
-
-      if(dream.dailyGoals != null) {
-        countDaily = dream.dailyGoals!.length;
-      }
-
-      if(dream.steps != null){
-        countStep = dream.steps!.length;
-        countStepCompleted = dream.steps!
-            .where((step) => step.isCompleted??false).toList().length;
-
-        percentStep = 0;
-
-        if(countStepCompleted > 0 && countStep > 0){
-          percentStep = countStepCompleted / countStep;
-        }
-      }
-
-      if(dream.listHistoryWeekDailyGoals != null && dream.listHistoryWeekDailyGoals!.length > 0){
-        countDailyToday = dream.listHistoryWeekDailyGoals!
-            .where((daily) => daily.lastDateCompleted!.toDate().isSameDate(DateTime.now()))
-            .toList().length;
-
-        percent = 0;
-
-        if(countDailyToday > 0 && countDaily > 0) {
-          percent = countDailyToday / countDaily;
-        }
-      }
-
       children.add(Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HeaderItemDreamWidget(
               isLoading: isLoadingStepDaily,
-              percentStep: percentStep?.toIntPercent??"0%",
-              percentToday: percent?.toIntPercent??"0%",
-              valueToday: percent,
-              valueStep: percentStep,
+              percentStep: dream.percentStep?.toIntPercent??"0%",
+              percentToday: _checkPercentUpdatedToday(dream) ? dream.percentToday?.toIntPercent??"0%" : "0%",
+              valueToday: _checkPercentUpdatedToday(dream) ? dream.percentToday : 0,
+              valueStep: dream.percentStep,
               imageBase64: dream.imgDream,
               onTapImage: () {
                 onTapDetailDream(dream);
@@ -95,6 +59,14 @@ class ListDreamWidget extends StatelessWidget {
     return ListView(
     children: children,
     );
+  }
+
+  bool _checkPercentUpdatedToday(Dream dream){
+    if(dream.dateUpdate != null
+      && dream.dateUpdate!.toDate().isSameDate(DateTime.now())){
+      return  true;
+    }
+    return false;
   }
 
   @override

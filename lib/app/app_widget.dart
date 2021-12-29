@@ -38,7 +38,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         builder: (BuildContext context, ThemeData theme, Widget? child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: lightTheme,
+            theme: controller.notifierTheme.value,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
           ).modular();
@@ -49,7 +49,6 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         textTheme: GoogleFonts.alataTextTheme(Theme.of(context).textTheme).apply(
             bodyColor: AppColors.colorDarkLiver,
             decorationColor: AppColors.colorCadetBlue,
-            displayColor: Colors.blueGrey,
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         cardColor: AppColors.colorCulture,
@@ -106,14 +105,10 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
           secondaryLabelStyle: TextStyle(color: AppColors.colorBlizzardBlue),
           brightness: Brightness.light,
         ),
-
         switchTheme: SwitchThemeData(
           thumbColor: MaterialStateProperty.all(AppColors.colorOldLavender),
           trackColor: MaterialStateProperty.all(AppColors.colorEnglishLavender),
-          overlayColor: MaterialStateProperty.all(Colors.pink),
         ),
-
-
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           unselectedItemColor: AppColors.colorMintCream,
           selectedItemColor: AppColors.colorBlizzardBlueDark,
@@ -122,5 +117,79 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
           ),
         ),
       );
+
+  ThemeData get darkTheme => ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: AppColors.colorRaisinBlack,
+    textTheme: GoogleFonts.alataTextTheme(Theme.of(context).textTheme).apply(
+      bodyColor: AppColors.colorMintCream,
+      decorationColor: AppColors.colorAlabaster,
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    cardColor: AppColors.colorBlackCofee,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: AppColors.colorBlizzardBlueDark,
+      selectionColor: AppColors.colorBlizzardBlue,
+      selectionHandleColor: AppColors.colorBlizzardBlueDark,
+    ),
+    primaryColor: AppColors.colorOldLavender,
+    primaryColorDark: AppColors.colorDarkLiver,
+    accentColor: AppColors.colorMintCream,
+    backgroundColor:AppColors.colorDarkLiver,
+    canvasColor: AppColors.colorTuscany,
+    hintColor: AppColors.colorTuscany,
+    disabledColor: AppColors.colorgrayDisabled,
+    focusColor: AppColors.colorCadetBlue,
+    colorScheme: ThemeData.dark()
+        .colorScheme
+        .copyWith(secondary: AppColors.colorTuscany, primary: AppColors.colorEnglishLavender),
+    inputDecorationTheme: InputDecorationTheme(
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          gapPadding: 8,
+          borderSide: BorderSide(color: AppColors.colorEnglishLavender, width: 1.5)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          gapPadding: 8,
+          borderSide: BorderSide(width: 1.5)),
+      contentPadding: EdgeInsets.all(10),
+      labelStyle:
+      TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorMintCream),
+    ),
+    textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+            primary: AppColors.colorTuscany,
+        )
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: AppColors.colorEnglishLavender,
+      disabledColor: Colors.grey,
+      deleteIconColor: AppColors.colorMintCream,
+      selectedColor: AppColors.colorLightBlue,
+      secondarySelectedColor: AppColors.colorMintCream,
+      padding: EdgeInsets.only(left: 1, right: 1, top: 1, bottom: 1),
+      labelStyle: ThemeData.dark().textTheme.bodyText1!.copyWith(
+          color:  AppColors.colorMintCream,
+          fontSize: 12,
+          fontFamily: GoogleFonts.alata().fontFamily),
+      secondaryLabelStyle: TextStyle(color: AppColors.colorBlizzardBlue),
+      brightness: Brightness.dark,
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.all(AppColors.colorOldLavender),
+      trackColor: MaterialStateProperty.all(AppColors.colorEnglishLavender),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      unselectedItemColor: AppColors.colorMintCream,
+      selectedItemColor: AppColors.colorTuscany,
+      selectedIconTheme: IconThemeData(
+          color: AppColors.colorTuscany
+      ),
+    ),
+  );
 
 }

@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dremfoo/app/app_controller.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/circle_avatar_user_revo_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
@@ -30,6 +32,8 @@ class Top3RankWidget extends StatelessWidget {
     String nameUser2 = user2.name != null ? user2.name! : user2.email!;
     String nameUser3 = user3.name != null ? user3.name! : user3.email!;
 
+    Color colorIcon = AppController.getInstance().isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark;
+
 
     return Container(
       padding: EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
@@ -47,12 +51,12 @@ class Top3RankWidget extends StatelessWidget {
                   padding: EdgeInsets.only(top: 30),
                   child: Column(
                     children: [
-                      _getImage(user2.urlPicture, 60),
+                      CircleAvatarUserRevoWidget(urlImage: user2.urlPicture, radiusSize: 33, size: 60,),
                       TextUtil.textSubTitle(nameUser2.truncate(length: 14, omission: "..."), fontSize: 12),
                       SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: colorIcon, size: 15,),
                           SizedBox(width: 5,),
                           TextUtil.textDefault("${user2.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12,)
                         ],
@@ -78,12 +82,12 @@ class Top3RankWidget extends StatelessWidget {
                   padding: EdgeInsets.only(top: 18),
                   child: Column(
                     children: [
-                      _getImage(user1.urlPicture, 80),
+                      CircleAvatarUserRevoWidget(urlImage: user1.urlPicture, radiusSize: 43, size: 80,),
                       TextUtil.textSubTitle(nameUser1.truncate(length: 14, omission: "...") , fontSize: 12),
                       SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: colorIcon, size: 15,),
                           SizedBox(width: 5,),
                           TextUtil.textDefault("${user1.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12)
                         ],
@@ -106,12 +110,12 @@ class Top3RankWidget extends StatelessWidget {
                   padding: EdgeInsets.only(top: 30),
                   child: Column(
                     children: [
-                     _getImage(user3.urlPicture, 60),
+                      CircleAvatarUserRevoWidget(urlImage: user3.urlPicture, radiusSize: 33, size: 60,),
                       TextUtil.textSubTitle(nameUser3.truncate(length: 14, omission: "...") , fontSize: 12),
                       SizedBox(height: 5,),
                       Wrap(
                         children: [
-                          FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
+                          FaIcon(FontAwesomeIcons.bullseye, color: colorIcon, size: 15,),
                           SizedBox(width: 5,),
                           TextUtil.textDefault("${user3.focus!.countDaysFocus} ${Translate.i().get.label_days}", fontSize: 12)
                         ],

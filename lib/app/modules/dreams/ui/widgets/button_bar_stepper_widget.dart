@@ -20,14 +20,12 @@ class ButtonBarStepperWidget extends StatelessWidget {
           buttonPadding: EdgeInsets.all(6),
           buttonTextTheme: ButtonTextTheme.accent),
       child: Container(
-        color: Colors.white,
         child: ButtonBar(
           children: [
             ElevatedButton(
               onPressed: onStepContinue,
               child: Text(
                 labelContinue,
-                style: TextStyle(color: Colors.white),
               ),
             ),
             TextButton(

@@ -68,6 +68,9 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
   @override
   Future<Object> saveLastAcessUser(String fireBaseUserUid, Timestamp dateAcess) async {
     DocumentReference refUsers = getRefCurrentUser(fireBaseUserUid);
+    refUsers.update({
+      "dateLastAcess" : dateAcess
+    }).catchError(handlerError);
     return refUsers.collection("hits").add({"dateAcess": dateAcess})
             .catchError(handlerError);
   }

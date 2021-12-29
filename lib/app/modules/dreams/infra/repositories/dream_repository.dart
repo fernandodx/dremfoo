@@ -244,6 +244,23 @@ class DreamRespository extends IDreamRepository {
     }
   }
 
+  @override
+  Future<Dream> updatePercentsGoalsDream(Dream dream) async {
+    try{
+      if(dream.reference != null){
+        return _datasource.updatePercentsGoalsDream(dream);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("dream.reference == null"), msg: "Referencia do Dream não encontrada.");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
 
 
 

@@ -35,4 +35,6 @@ abstract class IDreamDatasource {
 
   Future<List<Dream>> findAllDreamsCompleted(String uidUser);
 
+  Future<Dream> updatePercentsGoalsDream(Dream dream);
+
 }

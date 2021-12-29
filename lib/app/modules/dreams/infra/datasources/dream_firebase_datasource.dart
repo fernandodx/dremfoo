@@ -187,6 +187,18 @@ class DreamFirebaseDatasource extends BaseDataSource implements IDreamDatasource
   }
 
   @override
+  Future<Dream> updatePercentsGoalsDream(Dream dream) async {
+    DocumentReference dreamRef = dream.reference!;
+    dreamRef.update({
+      "percentStep" : dream.percentStep,
+      "percentToday" : dream.percentToday,
+      "dateUpdate": Timestamp.now()
+    }).catchError(handlerError);
+    return dream;
+  }
+
+
+  @override
   Future<Dream> updateDream(Dream dream) async {
     await FirebaseFirestore.instance.runTransaction((transaction) async {
 

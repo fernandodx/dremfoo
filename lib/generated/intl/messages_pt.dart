@@ -23,10 +23,13 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "label_add": MessageLookupByLibrary.simpleMessage("Adicionar"),
+        "label_archive": MessageLookupByLibrary.simpleMessage("Arquivo"),
         "label_archived_dreams":
             MessageLookupByLibrary.simpleMessage("Sonhos arquivados"),
         "label_beginner": MessageLookupByLibrary.simpleMessage("Iniciante"),
         "label_challenges": MessageLookupByLibrary.simpleMessage("Desafios"),
+        "label_change_profile":
+            MessageLookupByLibrary.simpleMessage("Alterar perfil"),
         "label_choice_color_dream": MessageLookupByLibrary.simpleMessage(
             "Escolha uma cor de representação"),
         "label_choice_diff_inflection": MessageLookupByLibrary.simpleMessage(
@@ -43,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_daily_goal": MessageLookupByLibrary.simpleMessage("Meta diária"),
         "label_daily_goals":
             MessageLookupByLibrary.simpleMessage("Metas diárias"),
+        "label_dark_theme": MessageLookupByLibrary.simpleMessage("Tema escuro"),
         "label_days": MessageLookupByLibrary.simpleMessage("Dias"),
         "label_description_dream":
             MessageLookupByLibrary.simpleMessage("Descrição do sonho"),
@@ -60,11 +64,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_edit": MessageLookupByLibrary.simpleMessage("Editar"),
         "label_email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "label_enter": MessageLookupByLibrary.simpleMessage("Entrar"),
+        "label_exit": MessageLookupByLibrary.simpleMessage("Sair"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinário"),
         "label_file_dream":
             MessageLookupByLibrary.simpleMessage("Arquivar sonho"),
         "label_finish": MessageLookupByLibrary.simpleMessage("Finalizar"),
+        "label_focus": MessageLookupByLibrary.simpleMessage("Foco"),
         "label_forgot_password":
             MessageLookupByLibrary.simpleMessage("Esqueci a senha"),
         "label_free_content":
@@ -80,6 +86,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_information":
             MessageLookupByLibrary.simpleMessage("Informações"),
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
+        "label_level": MessageLookupByLibrary.simpleMessage("Nível"),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login com Facebook"),
@@ -103,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_out_average":
             MessageLookupByLibrary.simpleMessage("Fora da média"),
         "label_password": MessageLookupByLibrary.simpleMessage("Senha"),
+        "label_perfomed": MessageLookupByLibrary.simpleMessage("Realizados"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Anterior"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Classificação"),
         "label_restore": MessageLookupByLibrary.simpleMessage("Restaurar"),
@@ -111,10 +119,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Pesquisar na galeria"),
         "label_search_internet":
             MessageLookupByLibrary.simpleMessage("Pesquisar na internet"),
+        "label_setting": MessageLookupByLibrary.simpleMessage("Configurações"),
         "label_settings": MessageLookupByLibrary.simpleMessage("Configurações"),
         "label_site": MessageLookupByLibrary.simpleMessage("Site"),
         "label_social_media":
             MessageLookupByLibrary.simpleMessage("Mídias sociais"),
+        "label_social_network":
+            MessageLookupByLibrary.simpleMessage("Social networks"),
         "label_start_email":
             MessageLookupByLibrary.simpleMessage("Olá Fernando, "),
         "label_statistics":
@@ -145,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_your_month": MessageLookupByLibrary.simpleMessage("Seu mês"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Sua semana"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
+        "last_acess": MessageLookupByLibrary.simpleMessage("Último acesso"),
         "msg_dream_not_archived":
             MessageLookupByLibrary.simpleMessage("Nenhum sonho foi arquivado."),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(

@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dremfoo/app/app_controller.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/circle_avatar_user_revo_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
@@ -46,7 +48,7 @@ class ItemUserRankWidget extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 16),
-                    child: _getImage(urlImageUser),
+                    child: CircleAvatarUserRevoWidget(urlImage: urlImageUser),
                   ),
                   Expanded(
                     flex: 1,
@@ -57,7 +59,7 @@ class ItemUserRankWidget extends StatelessWidget {
                         SizedBox(height: 5,),
                         Wrap(
                           children: [
-                            FaIcon(FontAwesomeIcons.bullseye, color: Theme.of(context).primaryColorDark, size: 15,),
+                            FaIcon(FontAwesomeIcons.bullseye, color: AppController.getInstance().isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark, size: 15,),
                             SizedBox(width: 5,),
                             TextUtil.textDefault("$daysFocus ${Translate.i().get.label_days}", fontSize: 12)
                           ],

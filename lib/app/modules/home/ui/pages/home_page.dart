@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/appbar_revo_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
@@ -6,15 +6,14 @@ import 'package:dremfoo/app/modules/home/domain/stories/home_store.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/outline_button_with_image_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/video_youtube_widget.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -45,7 +44,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
       return Scaffold(
         appBar: AppbarRevoWidget(
             context: context,
-            title: "Revo - Metas com foco",
+            title: Translate.i().get.label_title_app,
             userRevo: store.currentUser).appBar,
         body: Container(
             margin: EdgeInsets.only(
@@ -60,7 +59,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ChipButtonWidget(
-                        name: "Arquivo",
+                        name: Translate.i().get.label_archive,
                         size: 80,
                         icon: FontAwesomeIcons.folderOpen,
                         onTap: () {
@@ -68,7 +67,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                         },
                       ),
                       ChipButtonWidget(
-                        name: "Realizados",
+                        name: Translate.i().get.label_perfomed,
                         size: 80,
                         icon: FontAwesomeIcons.clipboardCheck,
                         onTap: () {
@@ -83,7 +82,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ChipButtonWidget(
-                        name: "Conteúdo gratuito",
+                        name: Translate.i().get.label_free_content,
                         size: 80,
                         icon: FontAwesomeIcons.video,
                         onTap: () {
@@ -91,7 +90,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                         },
                       ),
                       ChipButtonWidget(
-                        name: "Redes Sociais",
+                        name: Translate.i().get.label_social_network,
                         size: 80,
                         icon: FontAwesomeIcons.heart,
                         onTap: () {
@@ -116,14 +115,14 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                           Observer(builder: (context) {
                             return OutlineButtonWithImageWidget(
                                 urlImage: store.currentUser?.focus?.level?.urlIcon,
-                                title: "Nível",
+                                title: Translate.i().get.label_level,
                                 subTitle: store.currentUser?.focus?.level?.name);
                           }),
                           Observer(builder: (context) {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.fire,
-                                title: "Foco",
-                                subTitle: "${store.currentUser?.focus?.countDaysFocus} dias");
+                                title: Translate.i().get.label_focus,
+                                subTitle: "${store.currentUser?.focus?.countDaysFocus} ${Translate.i().get.label_days}");
                           }),
                         ],
                       ),
@@ -134,13 +133,13 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                           Observer(builder: (context) {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.trophy,
-                                title: "Rank",
+                                title: Translate.i().get.label_rank,
                                 subTitle: store.postionRankFormat);
                           }),
                           Observer(builder: (context) {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.checkCircle,
-                                title: "Último acesso",
+                                title: Translate.i().get.last_acess,
                                 subTitle: "${store.lastDateAcess?.format()}");
                           }),
                         ],
@@ -150,7 +149,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                       Container(
                           width: double.maxFinite,
                           margin: EdgeInsets.only(right: 8),
-                          child: TextUtil.textTitulo("Conteúdo gratuito",
+                          child: TextUtil.textTitulo(Translate.i().get.label_free_content,
                               align: TextAlign.right, )),
                       SpaceWidget(),
                       Observer(

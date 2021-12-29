@@ -82,7 +82,6 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
 
   Container bodyRegisterDreamPage() {
     return Container(
-      color: AppColors.colorCard,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[

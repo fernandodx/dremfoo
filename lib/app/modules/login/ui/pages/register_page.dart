@@ -95,59 +95,62 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
     );
   }
 
-  Expanded body() {
+  Widget body() {
     return Expanded(
-              child: Form(
-                key: store.formKey,
-                child: Observer(
-                  builder: (context) => ListView(
-                    children: <Widget>[
-                      AppTextDefault(
-                        name: Translate.i().get.label_name,
-                        maxLength: 40,
-                        controller: store.nameTextEditingController,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.text,
-                        onSaved: (name) => store.user.name = name,
-                        validator: ValidatorUtil.requiredField,
-                      ),
-                      SpaceWidget(),
-                      AppTextDefault(
-                        name: Translate.i().get.label_email,
-                        maxLength: 50,
-                        inputAction: TextInputAction.next,
-                        controller: store.emailTextEditingController,
-                        inputType: TextInputType.emailAddress,
-                        onSaved: (email) => store.user.email = email,
-                        validator: ValidatorUtil.validatorEmail,
-                      ),
-                      SpaceWidget(),
-                      Visibility(
-                        visible: !store.isEdited,
-                        child: AppTextDefault(
-                          name: Translate.i().get.label_confirm_email,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Form(
+                  key: store.formKey,
+                  child: Observer(
+                    builder: (context) => ListView(
+                      children: <Widget>[
+                        AppTextDefault(
+                          name: Translate.i().get.label_name,
+                          maxLength: 40,
+                          controller: store.nameTextEditingController,
+                          inputAction: TextInputAction.next,
+                          inputType: TextInputType.text,
+                          onSaved: (name) => store.user.name = name,
+                          validator: ValidatorUtil.requiredField,
+                        ),
+                        SpaceWidget(),
+                        AppTextDefault(
+                          name: Translate.i().get.label_email,
                           maxLength: 50,
                           inputAction: TextInputAction.next,
+                          controller: store.emailTextEditingController,
                           inputType: TextInputType.emailAddress,
+                          onSaved: (email) => store.user.email = email,
                           validator: ValidatorUtil.validatorEmail,
-                          controller: store.validatedEmailController,
                         ),
-                      ),
-                      SpaceWidget(),
-                      Visibility(
-                        visible: !store.isEdited,
-                        child: AppTextDefault(
-                          name: Translate.i().get.label_password,
-                          maxLength: 12,
-                          inputAction: TextInputAction.next,
-                          inputType: TextInputType.visiblePassword,
-                          isPassword: true,
-                          onSaved: (password) => store.user.password = password,
-                          validator: ValidatorUtil.validatorPassword,
+                        SpaceWidget(),
+                        Visibility(
+                          visible: !store.isEdited,
+                          child: AppTextDefault(
+                            name: Translate.i().get.label_confirm_email,
+                            maxLength: 50,
+                            inputAction: TextInputAction.next,
+                            inputType: TextInputType.emailAddress,
+                            validator: ValidatorUtil.validatorEmail,
+                            controller: store.validatedEmailController,
+                          ),
                         ),
-                      ),
-                      SpaceWidget(),
-                    ],
+                        SpaceWidget(),
+                        Visibility(
+                          visible: !store.isEdited,
+                          child: AppTextDefault(
+                            name: Translate.i().get.label_password,
+                            maxLength: 12,
+                            inputAction: TextInputAction.next,
+                            inputType: TextInputType.visiblePassword,
+                            isPassword: true,
+                            onSaved: (password) => store.user.password = password,
+                            validator: ValidatorUtil.validatorPassword,
+                          ),
+                        ),
+                        SpaceWidget(),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -163,12 +166,12 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
             height: 90,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [AppColors.colorPrimary, AppColors.colorPrimaryDark],
+                  colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorDark],
                   begin: FractionalOffset.topCenter,
                   end: FractionalOffset.bottomCenter),
               borderRadius: BorderRadiusDirectional.only(
-                  bottomEnd: Radius.elliptical(300, 160),
-                  bottomStart: Radius.elliptical(300, 160),
+                  bottomEnd: Radius.elliptical(250, 150),
+                  bottomStart: Radius.elliptical(250, 150),
               ),
             ),
           ),
@@ -178,7 +181,7 @@ class _RegisterPageState extends ModularState<RegisterPage, RegisterUserStore> {
               Container(
                 margin: EdgeInsets.only(top: 23),
                 decoration: BoxDecoration(
-                  color: AppColors.colorlight, // border color
+                  color: Theme.of(context).hintColor, // border color
                   shape: BoxShape.circle,
                 ),
                 width: 100,

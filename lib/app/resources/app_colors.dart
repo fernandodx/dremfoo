@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
 
+  //LIGHT
   static Color get colorCulture => Utils.colorFromHex("#F5F5F5");
   static Color get colorOldLavender => Utils.colorFromHex("#665C69");
   static Color get colorBlackCofee => Utils.colorFromHex("#4B424D");
@@ -17,6 +18,11 @@ class AppColors {
   static Color get colorEnglishLavender => Utils.colorFromHex("#A8727E");
   static Color get colorgrayDisabled => Utils.colorFromHex("#808080");
   static Color get colorTuscany => Utils.colorFromHex("#C69D98");
+
+  //DARK
+  static Color get colorBackground => Utils.colorFromHex("#332E3C");
+  static Color get colorRaisinBlack => Utils.colorFromHex("#2A262C");
+  static Color get colorAlabaster => Utils.colorFromHex("#E5E2D9");
 
 
 
@@ -51,7 +57,7 @@ class AppColors {
   static Color get colorEletric => Utils.colorFromHex("#7EFAFF");
   static Color get colorWebColor => Utils.colorFromHex("#EBFFFB");
   static Color get colorDisabled => Utils.colorFromHex("#808080");
-  static Color get colorBackground => Utils.colorFromHex("#332E3C");
+
   static Color get colorAcentProgress => Utils.colorFromHex("#CDE7B0");
 
 

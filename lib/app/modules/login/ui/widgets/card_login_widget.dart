@@ -75,7 +75,7 @@ class CardLoginWidget extends StatelessWidget {
               decoration: TextDecoration.underline,
               label: Translate.i().get.label_not_rigister,
               type: TypeButton.FLAT,
-              onPressed: () => _store.onNotRegister(),
+              onPressed: () => _store.onNotRegister(context),
               ),
           AppButtonDefault(
               decoration: TextDecoration.underline,
@@ -87,20 +87,20 @@ class CardLoginWidget extends StatelessWidget {
       Row(
         children: <Widget>[
           LineWidget(
-            color: AppColors.colorPrimary,
+            color: Theme.of(context).hintColor,
           ),
           SpaceWidget(
             isSpaceRow: true,
           ),
           Text(
             Translate.i().get.label_or,
-            style: TextStyle(color: AppColors.colorPrimary, fontWeight: FontWeight.bold),
+            style: TextStyle(color:Theme.of(context).hintColor, fontWeight: FontWeight.bold),
           ),
           SpaceWidget(
             isSpaceRow: true,
           ),
           LineWidget(
-            color: AppColors.colorPrimary,
+            color: Theme.of(context).hintColor,
           ),
         ],
       ),

@@ -12,6 +12,7 @@ import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
 import 'contract/ilogin_case.dart';
 
@@ -133,6 +134,11 @@ class LoginUseCase implements ILoginCase {
   @override
   Future<ResponseApi> saveLastAcessUser() async {
     try{
+
+      if(_userRevo.dateLastAcess != null
+          && _userRevo.dateLastAcess!.toDate().isSameDate(DateTime.now())){
+        return ResponseApi.ok();
+      }
 
       if(_userRevo.uid != null){
         await _userRepository.saveLastAcessUser(_userRevo.uid!, Timestamp.now());

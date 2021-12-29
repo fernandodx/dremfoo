@@ -168,7 +168,7 @@ class DreamCompletedPageState extends ModularState<DreamCompletedPage, DreamComp
           backgroundColor: Theme.of(context).canvasColor,
           child: TextUtil.textChip("${stepDream.position}˚", color: Theme.of(context).accentColor),
         ),
-        label: TextUtil.textChip(stepDream.step!, color: Theme.of(context).canvasColor),
+        label: TextUtil.textChip(stepDream.step!, color: Theme.of(context).accentColor),
       );
 
       listWidget.add(Container(

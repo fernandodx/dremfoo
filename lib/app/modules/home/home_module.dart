@@ -48,7 +48,7 @@ class HomeModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => SplashPage()),
-    ChildRoute("/userNotFound", child: (_, args) => LoginPage()),
+    ModuleRoute("/userNotFound", module: LoginModule()),
     ChildRoute("/home", child: (_, args) => BottomNavigatePage(), children: [
       ChildRoute("/dashboard", child: (_, arg) => HomePage()),
       // ChildRoute("/dream", child: (_, arg) => DreamsPage()),

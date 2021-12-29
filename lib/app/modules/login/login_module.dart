@@ -50,6 +50,7 @@ class LoginModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => LoginPage()),
     ChildRoute(REGISTER_PAGE, child: (_, args) => RegisterPage()),
+    // ChildRoute(REGISTER_PAGE, child: (_, args) => RegisterPage()),
     // ModuleRoute("/home", module: HomeModule()),
   ];
 

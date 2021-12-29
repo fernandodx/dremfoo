@@ -58,7 +58,6 @@ class FreeVideosPageState extends ModularState<FreeVideosPage, FreeVideosStore> 
         title: TextUtil.textAppbar(Translate.i().get.label_free_content),
       ),
       body: Container(
-        color: Colors.white,
         child: Observer(
           builder: (context) {
             if (store.listVideo.length > 0) {

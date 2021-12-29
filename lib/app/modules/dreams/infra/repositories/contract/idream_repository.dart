@@ -36,6 +36,8 @@ abstract class IDreamRepository {
 
   Future<void> updateRealizedDream(Dream dream, {required DateTime? dateFinish});
 
+  Future<Dream> updatePercentsGoalsDream(Dream dream);
+
 
 
 }

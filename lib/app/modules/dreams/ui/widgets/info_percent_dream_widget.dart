@@ -5,6 +5,7 @@ import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../app_controller.dart';
 import 'cicular_progress_revo_widget.dart';
 
 class InfoPercentDreamWidget extends StatelessWidget {
@@ -88,19 +89,20 @@ class InfoPercentDreamWidget extends StatelessWidget {
   }
 
   List<Widget> _getWidgetsDreamWithFocus(BuildContext context) {
+    AppController controller = AppController.getInstance();
     return [
       SpaceWidget(),
       CicularProgressRevoWidget(
           titleCenter: percentStep,
           titleBottom: Translate.i().get.label_steps,
           value: valueStep??0,
-          colorText: Theme.of(context).primaryColorDark,),
+          colorText: controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
       SpaceWidget(),
       CicularProgressRevoWidget(
           titleCenter: percentToday,
           titleBottom: Translate.i().get.label_today,
           value: valueToday??0,
-        colorText: Theme.of(context).primaryColorDark,)
+        colorText:controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
     ];
   }
 }

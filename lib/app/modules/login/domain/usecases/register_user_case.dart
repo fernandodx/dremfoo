@@ -203,7 +203,6 @@ class RegisterUserCase extends IRegisterUserCase {
   }
 
   Future<UserFocus> _resetFocus(UserFocus userFocus) async {
-    userFocus.dateLastFocus = Timestamp.now();
     userFocus.dateInit = Timestamp.now();
     userFocus.countDaysFocus = 1;
 
@@ -318,7 +317,12 @@ class RegisterUserCase extends IRegisterUserCase {
       }else{
         _userRevo.countDaysAcess = 1;
       }
-      _userRepository.updateCountDayAcess(_userRevo.uid, _userRevo.countDaysAcess!);
+      if(_userRevo.dateLastAcess != null
+        && _userRevo.dateLastAcess!.toDate().isSameDate(DateTime.now())){
+        return ResponseApi.ok();
+      }
+      await _userRepository.updateCountDayAcess(_userRevo.uid, _userRevo.countDaysAcess!);
+      return ResponseApi.ok();
 
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

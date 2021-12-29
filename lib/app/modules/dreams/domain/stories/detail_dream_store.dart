@@ -27,7 +27,7 @@ abstract class _DetailDreamStoreBase with Store {
    IRegisterUserCase _registerUserCase;
    _DetailDreamStoreBase(this._dreamCase, this._registerUserCase);
 
-  @observable
+   @observable
    bool isLoading = false;
 
    @observable
@@ -50,6 +50,10 @@ abstract class _DetailDreamStoreBase with Store {
 
    @observable
    bool isChartWeek = true;
+
+   double percentToday = 0;
+   double percentStep = 0;
+   Timestamp? dateUpdate;
 
    var user =  Modular.get<UserRevo>();
 
@@ -266,9 +270,21 @@ abstract class _DetailDreamStoreBase with Store {
       // isLoading = false;
    }
 
+  Future<void> _updatePercentTodayAndStep(Dream dreamSelected) async {
+    dreamSelected.dailyGoals = listDailyGoals;
+    dreamSelected.steps = listStep;
+    dreamSelected.listHistoryWeekDailyGoals = listHistoryWeekDailyGoals;
+    ResponseApi<Dream> responseApi = await _dreamCase.updatePercentsGoalsAndSteps(dreamSelected);
+    if(responseApi.ok) {
+      Dream result = responseApi.result!;
+      percentToday = result.percentToday??0;
+      percentStep = result.percentStep??0;
+      dateUpdate = Timestamp.now();
 
+    }
+  }
 
-   Future<void> updateDailyGoal(DailyGoal? dailyGoal, bool isSelected) async  {
+   Future<void> updateDailyGoal(DailyGoal? dailyGoal, bool isSelected, Dream dreamSelected) async  {
       if(dailyGoal != null) {
          var index = listDailyGoals.indexOf(dailyGoal);
          dailyGoal.lastDateCompleted = isSelected ? Timestamp.fromDate(currentDate) : null;
@@ -280,11 +296,13 @@ abstract class _DetailDreamStoreBase with Store {
             _updateListDailyGoalHistWeek(dailyGoal, currentDate);
             _updateListDailyGoalHistMonth(dailyGoal, currentDate);
             _registerUserCase.updateContinuosFocus();
+
+            _updatePercentTodayAndStep(dreamSelected);
          }
       }
    }
 
-   Future<void> updateStepDream(StepDream? stepDream, bool isSelected) async  {
+   Future<void> updateStepDream(StepDream? stepDream, bool isSelected, Dream dreamSelected) async  {
       if(stepDream != null) {
          var index = listStep.indexOf(stepDream);
          stepDream.dateCompleted = isSelected ? Timestamp.fromDate(currentDate) : null;
@@ -292,6 +310,8 @@ abstract class _DetailDreamStoreBase with Store {
          msgAlert = responseApi.messageAlert;
          if(responseApi.ok){
             _updateListStepDream(index, stepDream);
+
+            _updatePercentTodayAndStep(dreamSelected);
          }
       }
    }

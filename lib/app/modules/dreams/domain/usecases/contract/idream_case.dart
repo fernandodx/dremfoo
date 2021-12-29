@@ -40,5 +40,11 @@ abstract class IDreamCase {
 
   Future<ResponseApi> realizedDream(Dream dream,  {required DateTime? dateFinish});
 
+  Future<ResponseApi<Dream>> updatePercentsGoalsDream(Dream dream);
+
+  Future<ResponseApi<Dream>> updatePercentsGoalsAndSteps(Dream dream);
+
+  bool checkPercentIsToday();
+
 
 }

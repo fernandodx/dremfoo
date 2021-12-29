@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
@@ -14,17 +15,21 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:dremfoo/app/modules/dreams/infra/repositories/contract/idream_repository.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class DreamUseCase extends IDreamCase {
 
   IDreamRepository _repository;
   IUploadImageRepository _imageRepository;
   DreamUseCase(this._repository, this._imageRepository);
+
+  var _userRevo = Modular.get<UserRevo>();
 
   @override
   Future<ResponseApi<List<Dream>>> findDreamsForUser() async {
@@ -369,6 +374,101 @@ class DreamUseCase extends IDreamCase {
     var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
     return ResponseApi.error(messageAlert: alert);
   }
+
+  @override
+  Future<ResponseApi<Dream>> updatePercentsGoalsDream(Dream dream) async {
+    try{
+
+     Dream dreamResp = await _repository.updatePercentsGoalsDream(dream);
+     return ResponseApi.ok(result: dreamResp);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<Dream>> updatePercentsGoalsAndSteps(Dream dream) async {
+    try{
+
+      double? percentToday = 0;
+      double? percentStep = 0;
+
+      percentStep = _countPercentStep(dream.steps);
+      percentToday = _countPercentToday(dream.listHistoryWeekDailyGoals, dream.dailyGoals);
+
+      dream.percentStep = percentStep;
+      dream.percentToday = percentToday;
+
+      _userRevo.focus?.dateLastFocus = Timestamp.now();
+
+      var response = await updatePercentsGoalsDream(dream);
+      return response;
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  double _countPercentStep(List<StepDream>? listStep) {
+    double percentStep = 0;
+    int countStep = 0;
+    int countStepCompleted = 0;
+
+    if(listStep != null){
+      countStep = listStep.length;
+      countStepCompleted = listStep
+          .where((step) => step.isCompleted??false).toList().length;
+
+      if(countStepCompleted > 0 && countStep > 0){
+        percentStep = countStepCompleted / countStep;
+      }
+    }
+    return percentStep;
+  }
+
+  @override
+  bool checkPercentIsToday() {
+    if(_userRevo.focus?.dateLastFocus != null
+        && !_userRevo.focus!.dateLastFocus!.toDate().isSameDate(DateTime.now())){
+      return false;
+    }
+    return true;
+  }
+
+  double _countPercentToday(List<DailyGoal>? listHistoryWeekDailyGoals, List<DailyGoal>? listDaily) {
+    double percentToday = 0;
+    int countDailyToday = 0;
+    int countDaily = 0;
+
+    if(listDaily != null) {
+      countDaily = listDaily.length;
+    }
+
+    if(listHistoryWeekDailyGoals != null && listHistoryWeekDailyGoals.length > 0){
+      countDailyToday = listHistoryWeekDailyGoals
+          .where((daily) => daily.lastDateCompleted!.toDate().isSameDate(DateTime.now()))
+          .toList().length;
+
+      if(countDailyToday > 0 && countDaily > 0) {
+        percentToday = countDailyToday / countDaily;
+      }
+    }
+    return percentToday;
+  }
+
 
 
 

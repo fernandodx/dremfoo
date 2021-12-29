@@ -3,6 +3,7 @@ import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/detail_dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/body_item_dream_widget.dart';
@@ -75,7 +76,12 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               dream.dailyGoals = store.listDailyGoals;
               dream.steps = store.listStep;
               dream.listHistoryWeekDailyGoals = store.listHistoryWeekDailyGoals;
-              Navigator.pop(context, dream);
+              dream.percentStep = store.percentStep;
+              dream.percentToday = store.percentToday;
+              dream.dateUpdate = store.dateUpdate;
+
+              DreamPageDto _returnDreamDto = DreamPageDto(dream: dream);
+              Navigator.pop(context, _returnDreamDto);
             },),
             actions: [
               Container(
@@ -153,10 +159,10 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
                 store.changeTimeModeChart(widget.dreamSelected, isChartWeek);
               },
               onTapDailyGoal: (bool isSelected, DailyGoal dailyGoal) {
-                store.updateDailyGoal(dailyGoal, isSelected);
+                store.updateDailyGoal(dailyGoal, isSelected, widget.dreamSelected);
               },
               onTapStep: (bool isSelected, StepDream step) {
-                store.updateStepDream(step, isSelected);
+                store.updateStepDream(step, isSelected, widget.dreamSelected);
               },
             );
           },

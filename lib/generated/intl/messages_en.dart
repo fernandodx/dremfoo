@@ -23,10 +23,13 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "label_add": MessageLookupByLibrary.simpleMessage("Add"),
+        "label_archive": MessageLookupByLibrary.simpleMessage("Archive"),
         "label_archived_dreams":
             MessageLookupByLibrary.simpleMessage("Archived dreams"),
         "label_beginner": MessageLookupByLibrary.simpleMessage("Beginner"),
         "label_challenges": MessageLookupByLibrary.simpleMessage("Challenges"),
+        "label_change_profile":
+            MessageLookupByLibrary.simpleMessage("Change profile"),
         "label_choice_color_dream": MessageLookupByLibrary.simpleMessage(
             "Choose a representation color"),
         "label_choice_diff_inflection": MessageLookupByLibrary.simpleMessage(
@@ -43,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_daily_goal": MessageLookupByLibrary.simpleMessage("Daily goal"),
         "label_daily_goals":
             MessageLookupByLibrary.simpleMessage("Daily goals"),
+        "label_dark_theme": MessageLookupByLibrary.simpleMessage("Dark theme"),
         "label_days": MessageLookupByLibrary.simpleMessage("Days"),
         "label_description_dream":
             MessageLookupByLibrary.simpleMessage("Dream description"),
@@ -62,10 +66,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_edit": MessageLookupByLibrary.simpleMessage("Editar"),
         "label_email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "label_enter": MessageLookupByLibrary.simpleMessage("Login"),
+        "label_exit": MessageLookupByLibrary.simpleMessage("Logout"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinary"),
         "label_file_dream": MessageLookupByLibrary.simpleMessage("File Dream"),
         "label_finish": MessageLookupByLibrary.simpleMessage("Finish"),
+        "label_focus": MessageLookupByLibrary.simpleMessage("Focus"),
         "label_forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot the password"),
         "label_free_content":
@@ -81,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_information":
             MessageLookupByLibrary.simpleMessage("Information"),
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
+        "label_level": MessageLookupByLibrary.simpleMessage("Level"),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login with Facebook"),
@@ -98,12 +105,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_new_dream": MessageLookupByLibrary.simpleMessage("New Dream"),
         "label_next": MessageLookupByLibrary.simpleMessage("Next"),
         "label_not_rigister":
-            MessageLookupByLibrary.simpleMessage("I don\'t have an account"),
+            MessageLookupByLibrary.simpleMessage("No account"),
         "label_on_hold": MessageLookupByLibrary.simpleMessage("On hold"),
         "label_or": MessageLookupByLibrary.simpleMessage("OR"),
         "label_out_average":
             MessageLookupByLibrary.simpleMessage("out of average"),
         "label_password": MessageLookupByLibrary.simpleMessage("Password"),
+        "label_perfomed": MessageLookupByLibrary.simpleMessage("Performed"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Rank"),
         "label_restore": MessageLookupByLibrary.simpleMessage("To Restore"),
@@ -112,10 +120,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Search the gallery"),
         "label_search_internet":
             MessageLookupByLibrary.simpleMessage("Searching the Internet"),
+        "label_setting": MessageLookupByLibrary.simpleMessage("Settings"),
         "label_settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "label_site": MessageLookupByLibrary.simpleMessage("Site"),
         "label_social_media":
             MessageLookupByLibrary.simpleMessage("Social media"),
+        "label_social_network":
+            MessageLookupByLibrary.simpleMessage("Social networks"),
         "label_start_email":
             MessageLookupByLibrary.simpleMessage("Hi Fernando, "),
         "label_statistics": MessageLookupByLibrary.simpleMessage("Statistics"),
@@ -145,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_your_month": MessageLookupByLibrary.simpleMessage("Your month"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Your week"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
+        "last_acess": MessageLookupByLibrary.simpleMessage("Last acess"),
         "msg_dream_not_archived":
             MessageLookupByLibrary.simpleMessage("No dreams were filed."),
         "msg_email_invalid":

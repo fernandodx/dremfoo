@@ -9,7 +9,7 @@
   "label_login_with_google": "Login with Google",
   "label_login_with_facebook": "Login with Facebook",
   "label_forgot_password": "Forgot the password",
-  "label_not_rigister": "I don't have an account",
+  "label_not_rigister": "No account",
   "title_register_email": "Register",
   "label_name": "Name",
   "label_confirm_email": "Confirm email",
@@ -122,6 +122,16 @@
   "msg_help_dream_hold": "In this section, you still don't need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want.",
   "label_dream_with_focus": "Dream with focus",
   "msg_help_dream_with_focus": "In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream.",
-  "label_days": "Days"
+  "label_days": "Days",
+  "label_archive": "Archive",
+  "label_perfomed": "Performed",
+  "label_social_network": "Social networks",
+  "label_focus": "Focus",
+  "label_level": "Level",
+  "last_acess": "Last acess",
+  "label_setting": "Settings",
+  "label_change_profile": "Change profile",
+  "label_dark_theme": "Dark theme",
+  "label_exit": "Logout"
 
 }

@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `I don't have an account`
+  /// `No account`
   String get label_not_rigister {
     return Intl.message(
-      'I don\'t have an account',
+      'No account',
       name: 'label_not_rigister',
       desc: '',
       args: [],
@@ -1275,6 +1275,106 @@ class S {
     return Intl.message(
       'Days',
       name: 'label_days',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Archive`
+  String get label_archive {
+    return Intl.message(
+      'Archive',
+      name: 'label_archive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Performed`
+  String get label_perfomed {
+    return Intl.message(
+      'Performed',
+      name: 'label_perfomed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Social networks`
+  String get label_social_network {
+    return Intl.message(
+      'Social networks',
+      name: 'label_social_network',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Focus`
+  String get label_focus {
+    return Intl.message(
+      'Focus',
+      name: 'label_focus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level`
+  String get label_level {
+    return Intl.message(
+      'Level',
+      name: 'label_level',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last acess`
+  String get last_acess {
+    return Intl.message(
+      'Last acess',
+      name: 'last_acess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get label_setting {
+    return Intl.message(
+      'Settings',
+      name: 'label_setting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change profile`
+  String get label_change_profile {
+    return Intl.message(
+      'Change profile',
+      name: 'label_change_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark theme`
+  String get label_dark_theme {
+    return Intl.message(
+      'Dark theme',
+      name: 'label_dark_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get label_exit {
+    return Intl.message(
+      'Logout',
+      name: 'label_exit',
       desc: '',
       args: [],
     );

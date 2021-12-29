@@ -1,13 +1,10 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/login_store.dart';
-import 'package:dremfoo/app/modules/login/login_module.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/background_widget.dart';
 import 'package:dremfoo/app/modules/login/ui/widgets/card_login_widget.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/utils.dart';
 import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';

@@ -121,7 +121,17 @@
   "msg_help_dream_hold": "Nessa seção, você ainda não precisa definir metas e/ou os passos para a conquista. Apenas definir uma prévia de seu sonho para que seu subconsciente saiba o que você quer.",
   "label_dream_with_focus": "Sonho com foco",
   "msg_help_dream_with_focus": "Nesse tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fossem degraus de uma escada, além de criar metas diárias que vão em direção ao seu sonho.",
-  "label_days": "Dias"
+  "label_days": "Dias",
+  "label_archive": "Arquivo",
+  "label_perfomed": "Realizados",
+  "label_social_network": "Social networks",
+  "label_focus": "Foco",
+  "label_level": "Nível",
+  "last_acess": "Último acesso",
+  "label_setting": "Configurações",
+  "label_change_profile": "Alterar perfil",
+  "label_dark_theme": "Tema escuro",
+  "label_exit": "Sair"
 
 
 }

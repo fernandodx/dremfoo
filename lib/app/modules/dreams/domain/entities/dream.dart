@@ -28,6 +28,9 @@ class Dream {
   List<StepDream>? steps = [];
   List<DailyGoal>? dailyGoals = [];
   List<DailyGoal>? listHistoryWeekDailyGoals = [];
+  double? percentStep;
+  double? percentToday;
+  Timestamp? dateUpdate;
   DocumentReference? reference;
 
   static Dream copy(Dream data){
@@ -56,6 +59,9 @@ class Dream {
     dream.color = data.color;
     dream.isDreamWait = data.isDreamWait;
     dream.listHistoryWeekDailyGoals = data.listHistoryWeekDailyGoals;
+    dream.percentStep = data.percentStep;
+    dream.percentToday = data.percentToday;
+    dream.dateUpdate = data.dateUpdate;
     return dream;
   }
 
@@ -80,6 +86,9 @@ class Dream {
     dream.isDeleted = data['isDeleted'];
     dream.isDreamWait = data['isDreamWait'];
     dream.color = ColorDream.fromMap(data['color']);
+    dream.percentStep = data['percentStep'];
+    dream.percentToday = data['percentToday'];
+    dream.dateUpdate = data['dateUpdate'];
     return dream;
   }
 
@@ -113,6 +122,9 @@ class Dream {
     data['color'] = this.color!.toMap();
     data['isDreamWait'] = this.isDreamWait;
     data['dateFinish'] = this.dateFinish;
+    data['percentStep'] = this.percentStep;
+    data['percentToday'] = this.percentToday;
+    data['dateUpdate'] = this.dateUpdate;
 //    data['steps'] = this.steps;
     return data;
   }
