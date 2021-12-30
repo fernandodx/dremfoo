@@ -87,11 +87,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Informações"),
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
         "label_level": MessageLookupByLibrary.simpleMessage("Nível"),
+        "label_loading": MessageLookupByLibrary.simpleMessage("Carregando..."),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login com Facebook"),
         "label_login_with_google":
             MessageLookupByLibrary.simpleMessage("Login com Google"),
+        "label_min_character_password": MessageLookupByLibrary.simpleMessage(
+            "Sua senha tem que ter no minímo 8 dígitos"),
         "label_moderate": MessageLookupByLibrary.simpleMessage("Moderado"),
         "label_monitor_goal_daily": MessageLookupByLibrary.simpleMessage(
             "Acompanhamento diário das metas"),
@@ -109,10 +112,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_or": MessageLookupByLibrary.simpleMessage("OU"),
         "label_out_average":
             MessageLookupByLibrary.simpleMessage("Fora da média"),
+        "label_passaword_invalid":
+            MessageLookupByLibrary.simpleMessage("E-mail é inválido"),
         "label_password": MessageLookupByLibrary.simpleMessage("Senha"),
+        "label_password_no_match":
+            MessageLookupByLibrary.simpleMessage("Senha não confere"),
         "label_perfomed": MessageLookupByLibrary.simpleMessage("Realizados"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Anterior"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Classificação"),
+        "label_required_email":
+            MessageLookupByLibrary.simpleMessage("E-mail é obrigatório"),
+        "label_required_field":
+            MessageLookupByLibrary.simpleMessage("Campo é obrigatório"),
+        "label_required_password":
+            MessageLookupByLibrary.simpleMessage("Senha é obrigatório"),
         "label_restore": MessageLookupByLibrary.simpleMessage("Restaurar"),
         "label_reward": MessageLookupByLibrary.simpleMessage("Recompensa"),
         "label_search_gallery":
@@ -157,8 +170,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_your_week": MessageLookupByLibrary.simpleMessage("Sua semana"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
         "last_acess": MessageLookupByLibrary.simpleMessage("Último acesso"),
+        "msg_add_daily_goal_required": MessageLookupByLibrary.simpleMessage(
+            "Adicione pelo menos uma meta diária"),
+        "msg_add_step_required": MessageLookupByLibrary.simpleMessage(
+            "Adicione pelo menos um passo para conquistar"),
+        "msg_choice_color_required": MessageLookupByLibrary.simpleMessage(
+            "Escolha uma cor de representaçã"),
+        "msg_dream_is_required":
+            MessageLookupByLibrary.simpleMessage("Dream is required"),
         "msg_dream_not_archived":
             MessageLookupByLibrary.simpleMessage("Nenhum sonho foi arquivado."),
+        "msg_drescription_dream_required": MessageLookupByLibrary.simpleMessage(
+            "A descrição do sonho é obrigatória"),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
             "Não foi possível enviar um e-mail, verique se você configurou o app de e-mail no celular."),
         "msg_error_already_credintial_in_use":
@@ -203,6 +226,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Nessa seção, você ainda não precisa definir metas e/ou os passos para a conquista. Apenas definir uma prévia de seu sonho para que seu subconsciente saiba o que você quer."),
         "msg_help_dream_with_focus": MessageLookupByLibrary.simpleMessage(
             "Nesse tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fossem degraus de uma escada, além de criar metas diárias que vão em direção ao seu sonho."),
+        "msg_img_required": MessageLookupByLibrary.simpleMessage(
+            "A imagem do sonho é obrigatória"),
+        "msg_inflection_point_required": MessageLookupByLibrary.simpleMessage(
+            "O ponto de inflexão é obrigatório"),
         "msg_info_settings_dream": MessageLookupByLibrary.simpleMessage(
             "Defina o nível que você gostaria de ser cobrado. Lembre-se de começar aos poucos, pois isso vai validar a sua performace para uma meta extraordinária."),
         "msg_info_step_conquer": MessageLookupByLibrary.simpleMessage(
@@ -215,10 +242,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(
             "Ainda nenhum sonho foi realizado, mas tenho certeza que em breve vai ter."),
+        "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
+            "Hora de adicionar seu primeiro sonho!"),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Você realizou seu sonho?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
             "Você realmente deseja arquivar esse sonho? Mesmo arquivado você pode reativa-lo a qualquer momento."),
+        "msg_reward_required":
+            MessageLookupByLibrary.simpleMessage("A recompensa é obrigatória"),
         "msg_sucess_forgot_password": MessageLookupByLibrary.simpleMessage(
             "Um e-mail foi enviado com orientações para reiniciar a sua senha."),
         "msg_sucess_user_created": MessageLookupByLibrary.simpleMessage(

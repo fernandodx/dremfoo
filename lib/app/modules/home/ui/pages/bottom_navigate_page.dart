@@ -1,10 +1,5 @@
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/appbar_revo_widget.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
-import 'package:dremfoo/app/modules/home/ui/pages/home_page.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
-import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';

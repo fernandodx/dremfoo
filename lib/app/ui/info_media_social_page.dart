@@ -4,7 +4,7 @@ import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/utils/utils.dart';
-import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/widget/app_drawer_menu.dart';
 import 'package:email_launcher/email_launcher.dart';
 import 'package:flutter/cupertino.dart';

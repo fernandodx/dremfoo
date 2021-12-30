@@ -16,7 +16,7 @@ import 'package:dremfoo/app/ui/register_dreams_page.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/nav.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
-import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/widget/search_picture_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -90,7 +90,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
                 builder: (context) => StepperRegisterDreamWidget(
                   listStep: getSteps(),
                   currentStep: store.currentStep,
-                  onStepContinue: () => store.nextStep(),
+                  onStepContinue: () => store.nextStep(context),
                   onStepCancel: () => store.cancelStep(),
                   onStepTapped: (step) => store.goToStep(step),
                   isLastStep: store.isLastStepCurrent,

@@ -27,7 +27,7 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
               ];
             },
             body: Container(
-              margin: EdgeInsets.all(24),
+              margin: EdgeInsets.all(16),
               child: ListView(
                 children: [
                   InkWell(
@@ -49,7 +49,7 @@ class ChoiceTypeDreamPageState extends ModularState<ChoiceTypeDreamPage, ChoiceT
                       ),
                     ),
                   ),
-                  SizedBox(height: 24,),
+                  SizedBox(height: 16,),
                   InkWell(
                     onTap: () => store.startNewDreamWithFocus(context),
                     child: Card(

@@ -20,25 +20,32 @@ class RemoteConfigUtil {
   static Future<void> init() async {
     _instance = await RemoteConfig.instance;
 
-    await _instance.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: Duration(seconds: 10),
-      minimumFetchInterval: Duration(minutes: 20)
-    ));
+    try{
 
-    // await _instance.setDefaults({
-    //   enableMenuVideoRevo: true,
-    //   enableMenuSocialMedia: true,
-    //   enableMenuShare: true,
-    //   enableMenuNotificacao: true,
-    //   enableMenuArchive: true,
-    //   enableMediaInstagram: true,
-    //   enableMediaYoutube: true,
-    //   enableMediaSite: true,
-    //   enableMediaContato: true,
-    //   enableMenuDreamCompleted: true,
-    // });
+      await _instance.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: Duration(seconds: 5),
+        minimumFetchInterval: Duration(days: 1),
+      ));
 
-    await _instance.fetch();
+      await _instance.fetch();
+
+    }catch(error){
+
+      await _instance.setDefaults({
+        enableMenuVideoRevo: true,
+        enableMenuSocialMedia: true,
+        enableMenuShare: true,
+        enableMenuNotificacao: true,
+        enableMenuArchive: true,
+        enableMediaInstagram: true,
+        enableMediaYoutube: true,
+        enableMediaSite: true,
+        enableMediaContato: true,
+        enableMenuDreamCompleted: true,
+      });
+
+    }
+
     await _instance.activate();
   }
 
@@ -54,13 +61,21 @@ class RemoteConfigUtil {
   }
 
   bool isEnableMenuSocialMedia() => _instance.getBool(enableMenuSocialMedia);
+
   bool isEnableMenuShare() => _instance.getBool(enableMenuShare);
+
   bool isEnableMenuNotificacao() => _instance.getBool(enableMenuNotificacao);
+
   bool isEnableMenuArchive() => _instance.getBool(enableMenuArchive);
+
   bool isEnableMenuDreamCompleted() => _instance.getBool(enableMenuDreamCompleted);
+
   bool isEnableMediaInstagram() => _instance.getBool(enableMediaInstagram);
+
   bool isEnableMediaYoutube() => _instance.getBool(enableMediaYoutube);
+
   bool isEnableMediaSite() => _instance.getBool(enableMediaSite);
+
   bool isEnableMediaContato() => _instance.getBool(enableMediaContato);
 
 }

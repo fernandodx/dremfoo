@@ -1379,6 +1379,166 @@ class S {
       args: [],
     );
   }
+
+  /// `Field is required`
+  String get label_required_field {
+    return Intl.message(
+      'Field is required',
+      name: 'label_required_field',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `E-mail is required`
+  String get label_required_email {
+    return Intl.message(
+      'E-mail is required',
+      name: 'label_required_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password is required`
+  String get label_required_password {
+    return Intl.message(
+      'Password is required',
+      name: 'label_required_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password is invalid`
+  String get label_passaword_invalid {
+    return Intl.message(
+      'Password is invalid',
+      name: 'label_passaword_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your password must be at least 8 digits long`
+  String get label_min_character_password {
+    return Intl.message(
+      'Your password must be at least 8 digits long',
+      name: 'label_min_character_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password does not match`
+  String get label_password_no_match {
+    return Intl.message(
+      'Password does not match',
+      name: 'label_password_no_match',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time to add your first dream!`
+  String get msg_not_found_dream {
+    return Intl.message(
+      'Time to add your first dream!',
+      name: 'msg_not_found_dream',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dream is required`
+  String get msg_dream_is_required {
+    return Intl.message(
+      'Dream is required',
+      name: 'msg_dream_is_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The dream description is required`
+  String get msg_drescription_dream_required {
+    return Intl.message(
+      'The dream description is required',
+      name: 'msg_drescription_dream_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The dream image is required`
+  String get msg_img_required {
+    return Intl.message(
+      'The dream image is required',
+      name: 'msg_img_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add at least one step to conquer`
+  String get msg_add_step_required {
+    return Intl.message(
+      'Add at least one step to conquer',
+      name: 'msg_add_step_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add at least one daily goal`
+  String get msg_add_daily_goal_required {
+    return Intl.message(
+      'Add at least one daily goal',
+      name: 'msg_add_daily_goal_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The reward is required`
+  String get msg_reward_required {
+    return Intl.message(
+      'The reward is required',
+      name: 'msg_reward_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inflection point is required`
+  String get msg_inflection_point_required {
+    return Intl.message(
+      'Inflection point is required',
+      name: 'msg_inflection_point_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a representation color`
+  String get msg_choice_color_required {
+    return Intl.message(
+      'Choose a representation color',
+      name: 'msg_choice_color_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading...`
+  String get label_loading {
+    return Intl.message(
+      'Loading...',
+      name: 'label_loading',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -8,9 +8,12 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
+import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/ui/register_dreams_page.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/widget/search_picture_internet.dart';
 import 'package:flutter/material.dart';
@@ -182,13 +185,13 @@ abstract class _RegisterDreamWaitStoreBase with Store {
   }
 
   @action
-  Future<void> finishRegisterDream() async {
+  Future<void> finishRegisterDream(BuildContext context) async {
     setDataDream();
 
     if (validDataStream()) {
       isLoading = true;
       if (dream.reference == null) {
-        await _saveDream();
+        await _saveDream(context);
       } else {
         await _editDream();
       }
@@ -196,9 +199,9 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     }
   }
 
-  void nextStep() {
+  void nextStep(BuildContext context) {
     if(isLastStepCurrent){
-      finishRegisterDream();
+      finishRegisterDream(context);
     }else{
       goToStep(currentStep + 1);
     }
@@ -215,19 +218,27 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     currentStep = numberStep;
   }
 
-  Future<void> _saveDream() async {
+  Future<void> _saveDream(BuildContext context) async {
     ResponseApi<Dream> responseApi = await _dreamCase.saveDream(dream);
     msgAlert = responseApi.messageAlert;
     if(responseApi.ok){
-      Modular.to.navigate(Modular.initialRoute);
+      await _returnDreamPage();
     }
+  }
+
+  Future<void> _returnDreamPage() async {
+    BottomNavigateStore bottomNavigateStore = Modular.get<BottomNavigateStore>();
+    DreamStore dreamStore = Modular.get<DreamStore>();
+
+    dreamStore.fetch();
+    bottomNavigateStore.navigatePageBottomNavigate(1);
   }
 
   Future<void> _editDream() async {
      ResponseApi<Dream> responseApi = await _dreamCase.updateDream(dream);
      msgAlert = responseApi.messageAlert;
      if(responseApi.ok){
-       Modular.to.navigate(Modular.initialRoute);
+       await _returnDreamPage();
      }
   }
 
@@ -248,44 +259,44 @@ abstract class _RegisterDreamWaitStoreBase with Store {
 
     if (dream.dreamPropose == null || dream.dreamPropose?.isEmpty == true) {
       stepErrors.add(StepsEnum.DREAM.index);
-      msg += "O sonho é obrigatório\n";
+      msg += "${Translate.i().get.msg_dream_is_required}\n";
     }
 
     if (dream.descriptionPropose == null || dream.descriptionPropose?.isEmpty == true) {
       stepErrors.add(StepsEnum.DREAM.index);
-      msg += "A descrição do sonho é obrigatória\n";
+      msg += "${Translate.i().get.msg_drescription_dream_required}\n";
     }
 
     if (dream.imgDream == null || dream.imgDream?.isEmpty == true) {
       stepErrors.add(StepsEnum.DREAM.index);
-      msg += "A image do sonho é obrigatória\n";
+      msg += "${Translate.i().get.msg_img_required}\n";
     }
 
     if (!dream.isDreamWait!) {
       if (dream.steps == null || dream.steps?.isEmpty == true) {
         stepErrors.add(StepsEnum.STEPS.index);
-        msg += "Adicione pelo menos um passo para conquistar\n";
+        msg += "${Translate.i().get.msg_add_step_required}\n";
       }
 
       if (dream.dailyGoals == null || dream.dailyGoals?.isEmpty == true) {
         stepErrors.add(StepsEnum.DAILY_GOALS.index);
-        msg += "Adicione pelo menos uma meta diária\n";
+        msg += "${Translate.i().get.msg_add_daily_goal_required}\n";
       }
 
       if (dream.reward == null || dream.reward?.isEmpty == true) {
         stepErrors.add(StepsEnum.REWARD.index);
-        msg += "A recompensa é obrigatória\n";
+        msg += "${Translate.i().get.msg_reward_required}\n";
       }
 
       if (dream.inflection == null || dream.inflection?.isEmpty == true) {
         stepErrors.add(StepsEnum.INFLECTION.index);
-        msg += "O ponto de inflexão é obrigatório\n";
+        msg += "${Translate.i().get.msg_inflection_point_required}\n";
       }
     }
 
     if (dream.color == null) {
       stepErrors.add(StepsEnum.CONFIG.index);
-      msg += "Escolha uma cor de representação\n";
+      msg += "${Translate.i().get.msg_choice_color_required}\n";
     }
 
     if (stepErrors.isNotEmpty) {

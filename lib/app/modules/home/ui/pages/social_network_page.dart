@@ -5,7 +5,7 @@ import 'package:dremfoo/app/modules/home/domain/stories/social_network_store.dar
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
-import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:email_launcher/email_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';

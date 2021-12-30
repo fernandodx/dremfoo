@@ -1,9 +1,4 @@
-import 'package:dremfoo/app//app_controller.dart';
-import 'package:dremfoo/app/app_widget.dart';
-import 'package:dremfoo/app/modules/dreams/dreams_module.dart';
 import 'package:dremfoo/app/modules/home/home_module.dart';
-import 'package:dremfoo/app/modules/login/login_module.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {

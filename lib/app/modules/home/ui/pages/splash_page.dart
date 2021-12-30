@@ -1,11 +1,11 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/loading_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/no_items_found_widget.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
-import 'package:dremfoo/app/utils/Translate.dart';
-import 'package:dremfoo/app/widget/alert_bottom_sheet.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/splash_store.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 class SplashPage extends StatefulWidget {
@@ -62,7 +62,7 @@ class SplashPageState extends ModularState<SplashPage, SplashStore> {
       body: Column(
         children: <Widget>[
           Center(
-            child: NoItemsFoundWidget("Carregado dados ..."),
+            child: LoadingWidget(Translate.i().get.label_loading),
           )
         ],
       ),

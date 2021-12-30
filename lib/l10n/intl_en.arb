@@ -132,6 +132,22 @@
   "label_setting": "Settings",
   "label_change_profile": "Change profile",
   "label_dark_theme": "Dark theme",
-  "label_exit": "Logout"
+  "label_exit": "Logout",
+  "label_required_field": "Field is required",
+  "label_required_email": "E-mail is required",
+  "label_required_password": "Password is required",
+  "label_passaword_invalid": "Password is invalid",
+  "label_min_character_password" : "Your password must be at least 8 digits long",
+  "label_password_no_match": "Password does not match",
+  "msg_not_found_dream": "Time to add your first dream!",
+  "msg_dream_is_required": "Dream is required",
+  "msg_drescription_dream_required": "The dream description is required",
+  "msg_img_required": "The dream image is required",
+  "msg_add_step_required": "Add at least one step to conquer",
+  "msg_add_daily_goal_required": "Add at least one daily goal",
+  "msg_reward_required": "The reward is required",
+  "msg_inflection_point_required": "Inflection point is required",
+  "msg_choice_color_required": "Choose a representation color",
+  "label_loading": "Loading..."
 
 }

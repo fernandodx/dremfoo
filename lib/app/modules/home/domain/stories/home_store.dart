@@ -2,6 +2,7 @@ import 'package:dremfoo/app/model/level_revo.dart';
 import 'package:dremfoo/app/model/video.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/contract/ihome_usecase.dart';
@@ -40,7 +41,10 @@ abstract class _HomeStoreBase with Store {
 
   Future<void> fetch() async {
     await _findCurrentUser();
-    await _registerUserCase.checkLevelFocusUser();
+    ResponseApi<UserRevo> responseUserLevel =  await _registerUserCase.checkLevelFocusUser();
+    if(responseUserLevel.ok){
+      currentUser = responseUserLevel.result;
+    }
     await _registerUserCase.updateCountAcess();
     await  _loginCase.saveLastAcessUser();
     _findLastDayAcess();

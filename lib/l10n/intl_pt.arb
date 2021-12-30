@@ -131,7 +131,21 @@
   "label_setting": "Configurações",
   "label_change_profile": "Alterar perfil",
   "label_dark_theme": "Tema escuro",
-  "label_exit": "Sair"
-
-
+  "label_exit": "Sair",
+  "label_required_field": "Campo é obrigatório",
+  "label_required_email": "E-mail é obrigatório",
+  "label_required_password": "Senha é obrigatório",
+  "label_passaword_invalid" : "E-mail é inválido",
+  "label_min_character_password" : "Sua senha tem que ter no minímo 8 dígitos",
+  "label_password_no_match": "Senha não confere",
+  "msg_not_found_dream": "Hora de adicionar seu primeiro sonho!",
+  "msg_dream_is_required": "Dream is required",
+  "msg_drescription_dream_required": "A descrição do sonho é obrigatória",
+  "msg_img_required": "A imagem do sonho é obrigatória",
+  "msg_add_step_required": "Adicione pelo menos um passo para conquistar",
+  "msg_add_daily_goal_required": "Adicione pelo menos uma meta diária",
+  "msg_reward_required": "A recompensa é obrigatória",
+  "msg_inflection_point_required": "O ponto de inflexão é obrigatório",
+  "msg_choice_color_required": "Escolha uma cor de representaçã",
+  "label_loading": "Carregando..."
 }

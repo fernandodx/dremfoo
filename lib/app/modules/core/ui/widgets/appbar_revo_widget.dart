@@ -1,19 +1,12 @@
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/circle_avatar_user_revo_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/settings_dialog_widgets.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
-import 'package:dremfoo/app/modules/login/domain/usecases/login_usecase.dart';
-import 'package:dremfoo/app/modules/login/login_module.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
-import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppbarRevoWidget {
   final UserRevo? userRevo;

@@ -72,8 +72,11 @@ abstract class _DreamStoreBase with Store {
     listDream = ObservableList.of(newList);
   }
 
-  void fetch() async {
-    ResponseApi responseApiDream = await _findDreams();
+  Future<ResponseApi<List<Dream>>> fetch() async {
+    print("FEATCH - INICIOU");
+    var response = await _findDreams();
+    print("FEATCH - Finalizou");
+    return response;
   }
 
   Future<ResponseApi<List<DailyGoal>>> _loadHistoryWeekDailyGoal(Dream dream) async {

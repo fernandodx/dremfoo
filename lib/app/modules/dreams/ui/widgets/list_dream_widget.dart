@@ -1,8 +1,10 @@
 import 'package:dremfoo/app/model/daily_goal.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/no_items_found_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/header_item_dream_widget.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
@@ -23,6 +25,11 @@ class ListDreamWidget extends StatelessWidget {
   });
 
   createListView() {
+
+    if(listDream.isEmpty) {
+      return NoItemsFoundWidget(Translate.i().get.msg_not_found_dream);
+    }
+
     List<Widget> children = [];
 
     listDream.forEach((dream) {

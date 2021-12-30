@@ -266,11 +266,18 @@ class RegisterUserCase extends IRegisterUserCase {
   }
 
   @override
-  Future<ResponseApi<bool>> checkLevelFocusUser() async {
+  Future<ResponseApi<UserRevo>> checkLevelFocusUser() async {
     try{
       UserFocus? userFocus = await _userRepository.findFocusUser(_userRevo.uid);
+
+      if(userFocus != null && userFocus.level == null) {
+        UserFocus userFocusUpdated = await _resetFocus(userFocus);
+        _userRevo.focus = userFocusUpdated;
+        return ResponseApi.ok(result: _userRevo);
+      }
+
       bool isFocusOk = await _checkContinuosFocus(userFocus);
-      ResponseApi.ok(result: isFocusOk);
+      return ResponseApi.ok(result: _userRevo);
 
     }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);

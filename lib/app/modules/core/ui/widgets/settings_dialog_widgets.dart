@@ -27,7 +27,6 @@ class SettingsDialogWidgets extends StatelessWidget {
       child: Container(
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
             borderRadius: BorderRadius.circular(30),
           ),
           padding: EdgeInsets.all(16),

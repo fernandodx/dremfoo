@@ -88,11 +88,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Information"),
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
         "label_level": MessageLookupByLibrary.simpleMessage("Level"),
+        "label_loading": MessageLookupByLibrary.simpleMessage("Loading..."),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login with Facebook"),
         "label_login_with_google":
             MessageLookupByLibrary.simpleMessage("Login with Google"),
+        "label_min_character_password": MessageLookupByLibrary.simpleMessage(
+            "Your password must be at least 8 digits long"),
         "label_moderate": MessageLookupByLibrary.simpleMessage("Moderate"),
         "label_monitor_goal_daily":
             MessageLookupByLibrary.simpleMessage("Daily monitoring of goals"),
@@ -110,10 +113,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_or": MessageLookupByLibrary.simpleMessage("OR"),
         "label_out_average":
             MessageLookupByLibrary.simpleMessage("out of average"),
+        "label_passaword_invalid":
+            MessageLookupByLibrary.simpleMessage("Password is invalid"),
         "label_password": MessageLookupByLibrary.simpleMessage("Password"),
+        "label_password_no_match":
+            MessageLookupByLibrary.simpleMessage("Password does not match"),
         "label_perfomed": MessageLookupByLibrary.simpleMessage("Performed"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Rank"),
+        "label_required_email":
+            MessageLookupByLibrary.simpleMessage("E-mail is required"),
+        "label_required_field":
+            MessageLookupByLibrary.simpleMessage("Field is required"),
+        "label_required_password":
+            MessageLookupByLibrary.simpleMessage("Password is required"),
         "label_restore": MessageLookupByLibrary.simpleMessage("To Restore"),
         "label_reward": MessageLookupByLibrary.simpleMessage("Reward"),
         "label_search_gallery":
@@ -157,8 +170,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_your_week": MessageLookupByLibrary.simpleMessage("Your week"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
         "last_acess": MessageLookupByLibrary.simpleMessage("Last acess"),
+        "msg_add_daily_goal_required":
+            MessageLookupByLibrary.simpleMessage("Add at least one daily goal"),
+        "msg_add_step_required": MessageLookupByLibrary.simpleMessage(
+            "Add at least one step to conquer"),
+        "msg_choice_color_required": MessageLookupByLibrary.simpleMessage(
+            "Choose a representation color"),
+        "msg_dream_is_required":
+            MessageLookupByLibrary.simpleMessage("Dream is required"),
         "msg_dream_not_archived":
             MessageLookupByLibrary.simpleMessage("No dreams were filed."),
+        "msg_drescription_dream_required": MessageLookupByLibrary.simpleMessage(
+            "The dream description is required"),
         "msg_email_invalid":
             MessageLookupByLibrary.simpleMessage("Invalid email."),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
@@ -206,6 +229,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "In this section, you still don\'t need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want."),
         "msg_help_dream_with_focus": MessageLookupByLibrary.simpleMessage(
             "In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream."),
+        "msg_img_required":
+            MessageLookupByLibrary.simpleMessage("The dream image is required"),
+        "msg_inflection_point_required": MessageLookupByLibrary.simpleMessage(
+            "Inflection point is required"),
         "msg_info_settings_dream": MessageLookupByLibrary.simpleMessage(
             "Set the level you would like to be charged. Remember to start small as this will validate your performance towards an extraordinary goal."),
         "msg_info_step_conquer": MessageLookupByLibrary.simpleMessage(
@@ -218,10 +245,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Set a reward that you will get for each completed step. This is very important, after all you deserve it! For example, a special food, going out to a new place, playing a video game, something you really enjoy!"),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(
             "No dream has been realized yet, but I\'m sure it will soon."),
+        "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
+            "Time to add your first dream!"),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Did you fulfill your dream?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
             "Do you really want to archive this dream? Even if it is archived, you can reactivate it at any time."),
+        "msg_reward_required":
+            MessageLookupByLibrary.simpleMessage("The reward is required"),
         "msg_sucess_forgot_password": MessageLookupByLibrary.simpleMessage(
             "An email has been sent with directions to reset your password."),
         "msg_sucess_user_created": MessageLookupByLibrary.simpleMessage(

@@ -32,7 +32,6 @@ class VideoYoutubeWidget extends StatelessWidget {
         showDialogPlayVideo(context, video!.id!);
       },
       child: Container(
-        padding: EdgeInsets.all(6),
         child: Column(
           children: [
             Stack(
@@ -59,7 +58,7 @@ class VideoYoutubeWidget extends StatelessWidget {
             SizedBox(
               height: 8,
             ),
-            TextUtil.textSubTitle("${video?.name} | ${video?.time}", align: TextAlign.justify)
+            TextUtil.textSubTitle("${video?.name} | ${video?.time}", align: TextAlign.justify, fontSize: 11)
           ],
         ),
       ),

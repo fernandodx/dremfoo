@@ -34,7 +34,7 @@ class CircleAvatarUserRevoWidget extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomRight,
               child: FaIcon(
-                FontAwesomeIcons.pencilAlt,
+                FontAwesomeIcons.pencilAlt, color: Theme.of(context).canvasColor,
               ),
             ),
           ),

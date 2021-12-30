@@ -1,23 +1,24 @@
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:flutter/cupertino.dart';
 
 class ValidatorUtil {
   static String? validatorEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return "E-mail é obrigatório";
+      return Translate.i().get.label_required_email;
     }
 
     if(!value.contains("@")){
-      return "E-mail é inválido";
+      return Translate.i().get.label_passaword_invalid;
     }
     return null;
   }
 
   static String? validatorPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return "Senha é obrigatória";
+      return Translate.i().get.label_required_password;
     }
     if (value.length < 4) {
-      return "Sua senha tem que ter no minímo 8 dígitos";
+      return Translate.i().get.label_min_character_password;
     }
     return null;
   }
@@ -26,13 +27,13 @@ class ValidatorUtil {
       String value, TextEditingController controllerRepit) {
 
     if (value.isEmpty) {
-      return "Senha é obrigatória";
+      return Translate.i().get.label_required_password;
     }
     if (value.length < 4) {
-      return "Sua senha tem que ter no minímo 8 dígitos";
+      return Translate.i().get.label_min_character_password;
     }
     if(controllerRepit != null && controllerRepit.text != value){
-      return "A senha não confere";
+      return Translate.i().get.label_password_no_match;
     }
 
     return null;
@@ -40,7 +41,7 @@ class ValidatorUtil {
 
   static String?  requiredField(String? value) {
     if (value == null || value.isEmpty) {
-      return "Campo obrigatório";
+      return Translate.i().get.label_required_field;
     }
     return null;
   }

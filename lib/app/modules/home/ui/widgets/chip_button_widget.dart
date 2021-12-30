@@ -28,7 +28,7 @@ class ChipButtonWidget extends StatelessWidget {
            width: size,
            child: TextUtil.textChipMenu(name, maxLines: 1)),
        avatar: CircleAvatar(
-         backgroundColor: Theme.of(context).backgroundColor,
+         backgroundColor: Theme.of(context).primaryColorDark,
          child: FaIcon(
            icon,
            color: Colors.white70,

@@ -17,7 +17,7 @@ class AppController  {
     return _instance!;
   }
 
-  ValueNotifier<ThemeData> notifierTheme = ValueNotifier(ThemeData.dark());
+  late ValueNotifier<ThemeData> notifierTheme = ValueNotifier(ThemeData.dark());
   late BuildContext _context;
 
   void changeTheme(bool isThemeDark, BuildContext context){
@@ -94,8 +94,8 @@ class AppController  {
       brightness: Brightness.light,
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.all(AppColors.colorOldLavender),
-      trackColor: MaterialStateProperty.all(AppColors.colorEnglishLavender),
+      thumbColor: MaterialStateProperty.all(AppColors.colorTuscany),
+      trackColor: MaterialStateProperty.all(AppColors.colorOldLavender),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       unselectedItemColor: AppColors.colorMintCream,

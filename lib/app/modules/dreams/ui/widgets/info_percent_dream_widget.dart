@@ -29,7 +29,6 @@ class InfoPercentDreamWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 8),
         width: double.maxFinite,
         alignment: Alignment.topRight,
         child: Column(
@@ -80,7 +79,7 @@ class InfoPercentDreamWidget extends StatelessWidget {
                 size: 20,
                 color: AppColors.colorDarkLight,
               ),
-              TextUtil.textSubTitle(Translate.i().get.label_create_focus),
+              TextUtil.textSubTitle(Translate.i().get.label_create_focus, fontSize: 11),
             ],
           ),
         ),
@@ -92,17 +91,23 @@ class InfoPercentDreamWidget extends StatelessWidget {
     AppController controller = AppController.getInstance();
     return [
       SpaceWidget(),
-      CicularProgressRevoWidget(
-          titleCenter: percentStep,
-          titleBottom: Translate.i().get.label_steps,
-          value: valueStep??0,
-          colorText: controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
+      Container(
+        margin: EdgeInsets.only(right: 8),
+        child: CicularProgressRevoWidget(
+            titleCenter: percentStep,
+            titleBottom: Translate.i().get.label_steps,
+            value: valueStep??0,
+            colorText: controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
+      ),
       SpaceWidget(),
-      CicularProgressRevoWidget(
+      Container(
+        margin: EdgeInsets.only(right: 8),
+        child: CicularProgressRevoWidget(
           titleCenter: percentToday,
           titleBottom: Translate.i().get.label_today,
           value: valueToday??0,
-        colorText:controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
+          colorText:controller.isThemeDark() ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark,),
+      )
     ];
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dremfoo/app/modules/login/domain/entities/level_revo.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +26,8 @@ abstract class IRegisterUserCase {
 
   Future<ResponseApi<LevelRevo>> findLevelCurrent(int countDayFocus);
 
-  Future<ResponseApi<bool>> checkLevelFocusUser();
+  // Future<ResponseApi<bool>> checkLevelFocusUser();
+  Future<ResponseApi<UserRevo>> checkLevelFocusUser();
 
   Future<ResponseApi<void>> updateCountAcess();
 
