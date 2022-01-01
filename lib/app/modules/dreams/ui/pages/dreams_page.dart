@@ -1,4 +1,5 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/loading_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/list_dream_widget.dart';
@@ -33,7 +34,7 @@ class DreamsPageState extends ModularState<DreamsPage, DreamStore>
       return Container(
         color: Colors.black38,
         alignment: Alignment.center,
-        child: CircularProgressIndicator(),
+        child: LoadingWidget(Translate.i().get.msg_loading_dream),
       );
     });
 

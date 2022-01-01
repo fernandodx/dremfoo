@@ -43,7 +43,7 @@
   "label_step": "Step",
   "label_today": "Today",
   "label_your_week": "Your week",
-  "label_your_month": "Your month",
+  "label_your_month": "Your months",
   "label_monitor_goal_daily": "Daily monitoring of goals",
   "label_monitor_goal_month": "Monthly monitoring of goals",
   "label_goal": "Goal",
@@ -148,6 +148,7 @@
   "msg_reward_required": "The reward is required",
   "msg_inflection_point_required": "Inflection point is required",
   "msg_choice_color_required": "Choose a representation color",
-  "label_loading": "Loading..."
+  "label_loading": "Loading...",
+  "msg_loading_dream" : "Dreams being carried..."
 
 }

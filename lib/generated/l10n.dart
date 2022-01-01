@@ -480,10 +480,10 @@ class S {
     );
   }
 
-  /// `Your month`
+  /// `Your months`
   String get label_your_month {
     return Intl.message(
-      'Your month',
+      'Your months',
       name: 'label_your_month',
       desc: '',
       args: [],
@@ -1535,6 +1535,16 @@ class S {
     return Intl.message(
       'Loading...',
       name: 'label_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dreams being carried...`
+  String get msg_loading_dream {
+    return Intl.message(
+      'Dreams being carried...',
+      name: 'msg_loading_dream',
       desc: '',
       args: [],
     );

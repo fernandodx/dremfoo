@@ -56,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Escolha do sonho"),
         "label_dream_hold":
             MessageLookupByLibrary.simpleMessage("Sonho em espera"),
+        "label_dream_realized":
+            MessageLookupByLibrary.simpleMessage("Sonho realizado"),
         "label_dream_with_focus":
             MessageLookupByLibrary.simpleMessage("Sonho com foco"),
         "label_dreams": MessageLookupByLibrary.simpleMessage("Sonhos"),
@@ -166,7 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("Qual o seu sonho?"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Sim"),
-        "label_your_month": MessageLookupByLibrary.simpleMessage("Seu mês"),
+        "label_your_month": MessageLookupByLibrary.simpleMessage("Seus meses"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Sua semana"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
         "last_acess": MessageLookupByLibrary.simpleMessage("Último acesso"),
@@ -240,6 +242,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcançadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
         "msg_info_step_reward": MessageLookupByLibrary.simpleMessage(
             "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
+        "msg_loading_dream":
+            MessageLookupByLibrary.simpleMessage("Sonhos sendo carregados..."),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(
             "Ainda nenhum sonho foi realizado, mas tenho certeza que em breve vai ter."),
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(

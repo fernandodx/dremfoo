@@ -1,5 +1,6 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/button_appbar_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
@@ -72,28 +73,14 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             floating: false,
             expandedHeight: 230.0,
             leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
-              Dream dream = widget.dreamSelected;
-              dream.dailyGoals = store.listDailyGoals;
-              dream.steps = store.listStep;
-              dream.listHistoryWeekDailyGoals = store.listHistoryWeekDailyGoals;
-              dream.percentStep = store.percentStep;
-              dream.percentToday = store.percentToday;
-              dream.dateUpdate = store.dateUpdate;
-
-              DreamPageDto _returnDreamDto = DreamPageDto(dream: dream);
-              Navigator.pop(context, _returnDreamDto);
+              _navigationPopDreamPage(context);
             },),
             actions: [
-              Container(
-                margin: EdgeInsets.only(right: 16),
-                child: InkWell(
-                  onTap: () => store.editDream(context, widget.dreamSelected),
-                  child: Chip(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                      label: TextUtil.textChip(Translate.i().get.label_edit,),
-                    backgroundColor: Theme.of(context).hintColor.withAlpha(180),
-                  ),
-                ),
+              ButtonAppbarWidget(
+                  labelButton: Translate.i().get.label_edit,
+                  onTapButton: () {
+                    store.editDream(context, widget.dreamSelected);
+                  },
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -133,12 +120,32 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
     );
   }
 
+  void _navigationPopDreamPage(BuildContext context) {
+      Dream dream = widget.dreamSelected;
+      dream.dailyGoals = store.listDailyGoals;
+      dream.steps = store.listStep;
+      dream.listHistoryWeekDailyGoals = store.listHistoryWeekDailyGoals;
+      dream.percentStep = store.percentStep;
+      dream.percentToday = store.percentToday;
+      dream.dateUpdate = store.dateUpdate;
+
+      DreamPageDto _returnDreamDto = DreamPageDto(dream: dream);
+      Navigator.pop(context, _returnDreamDto);
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:getPage(),
+    return WillPopScope(
+        child: getPage(),
+        onWillPop: () async {
+          _navigationPopDreamPage(context);
+          return false;
+        }
     );
+    // return Scaffold(
+    //   body:getPage(),
+    // );
   }
 
   ListView body() {

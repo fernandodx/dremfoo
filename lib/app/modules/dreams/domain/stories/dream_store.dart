@@ -136,13 +136,20 @@ abstract class _DreamStoreBase with Store {
     }
   }
 
-  void _editDream(BuildContext context, Dream dreamSelected) {
-    // Modular.to.navigate('/home/dream/detail', arguments: dreamSelected);
-    // Modular.to.navigate('/dream/detail', arguments: dreamSelected);
-    // Navigator.pushNamed(context, "/home/dream/detail", arguments: dreamSelected);
+  Future<void> _editDream(BuildContext context, Dream dreamSelected) async {
 
-    Navigator.pushNamed(context, "/home/dream/newDreamWithFocus",
-        arguments: DreamPageDto(isDreamWait: dreamSelected.isDreamWait??false, dream: dreamSelected));
+    DreamPageDto? _dreamDto = await  Navigator.pushNamed(context, "/home/dream/newDreamWithFocus",
+        arguments: DreamPageDto(isDreamWait: dreamSelected.isDreamWait??false, dream: dreamSelected)) as DreamPageDto?;
+
+    if(_dreamDto != null && _dreamDto.dream != null) {
+      int index = listDream.indexWhere((dream) => dream.uid == _dreamDto.dream!.uid);
+      if(_dreamDto.isRemoveDream){
+        listDream.remove(_dreamDto.dream);
+      }else{
+        listDream[index] = _dreamDto.dream!;
+      }
+      updateListDream(listDream);
+    }
   }
 
   void createFocusDream(BuildContext context, Dream dreamSelected) {

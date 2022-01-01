@@ -1,5 +1,6 @@
 
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/button_appbar_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
@@ -75,6 +76,17 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
     return Scaffold(
       appBar: AppBar(
         title: Text(Translate.i().get.label_dream),
+        actions: [
+          Visibility(
+            visible: widget.dreamPageDto.isDreamWait,
+            child: ButtonAppbarWidget(
+              labelButton: Translate.i().get.label_file_dream,
+              onTapButton: () {
+                store.archiveDream(context, widget.dreamPageDto.dream!);
+              },
+            ),
+          ),
+        ],
       ),
       body: bodyRegisterDreamPage(),
     );

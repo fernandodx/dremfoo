@@ -42,7 +42,7 @@
   "label_step": "Passo",
   "label_today": "Hoje",
   "label_your_week": "Sua semana",
-  "label_your_month": "Seu mês",
+  "label_your_month": "Seus meses",
   "label_monitor_goal_daily": "Acompanhamento diário das metas",
   "label_monitor_goal_month": "Acompanhamento mensal das metas",
   "label_goal": "Meta",
@@ -110,7 +110,7 @@
   "label_youtube": "Youtube",
   "label_instagram": "Instagram",
   "label_edit": "Editar",
-  "label_dream_relized": "Sonho realizado",
+  "label_dream_realized": "Sonho realizado",
   "msg_question_dream_realized": "Você realizou seu sonho?",
   "label_yes": "Sim",
   "label_file_dream": "Arquivar sonho",
@@ -147,5 +147,6 @@
   "msg_reward_required": "A recompensa é obrigatória",
   "msg_inflection_point_required": "O ponto de inflexão é obrigatório",
   "msg_choice_color_required": "Escolha uma cor de representaçã",
-  "label_loading": "Carregando..."
+  "label_loading": "Carregando...",
+  "msg_loading_dream" : "Sonhos sendo carregados..."
 }

@@ -21,6 +21,10 @@ class SettingsDialogWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    _registerUserStore.isThemeDarkUser().then(
+            (isDark) => _registerUserStore.changeThemeDarkUser(isDark, context));
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 10,

@@ -8,6 +8,7 @@ import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/contract/ihome_usecase.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
+import 'package:dremfoo/app/utils/notification_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -40,6 +41,7 @@ abstract class _HomeStoreBase with Store {
 
 
   Future<void> fetch() async {
+    NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
     await _findCurrentUser();
     ResponseApi<UserRevo> responseUserLevel =  await _registerUserCase.checkLevelFocusUser();
     if(responseUserLevel.ok){

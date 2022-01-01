@@ -113,6 +113,15 @@ abstract class _RegisterUserStoreBase with Store {
     }
   }
 
+  Future<bool> isThemeDarkUser() async {
+    ResponseApi<bool> responseApi = await _registerUserCase.isThemeDarkPrefsUser();
+    if(responseApi.ok) {
+      return responseApi.result!;
+    }
+    return false;
+  }
+
+
   Future<void> _resgisterUser(BuildContext context) async {
     bool isOk = validFields(context);
     if (isOk) {

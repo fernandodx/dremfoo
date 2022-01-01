@@ -7,6 +7,7 @@ import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
@@ -572,6 +573,18 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     dailyGoalTextEditController.clear();
     addItemDailyGoal(newChip);
     AnalyticsUtil.sendAnalyticsEvent(EventRevo.addDailyForDream);
+  }
+
+  Future<void> archiveDream(BuildContext context, Dream dream) async {
+    isLoading = true;
+    ResponseApi responseApi = await _dreamCase.archiveDream(dream);
+    msgAlert = responseApi.messageAlert;
+    isLoading = false;
+    if(responseApi.ok){
+      // Navigator.pushNamed(context, Modular.initialRoute);
+      // Modular.to.navigate("/home/dream");
+      Navigator.pop(context, DreamPageDto(isRemoveDream: true, dream: dream));
+    }
   }
 
 }

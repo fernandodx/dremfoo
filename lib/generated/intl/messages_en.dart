@@ -166,7 +166,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("What is your dream?"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Yes"),
-        "label_your_month": MessageLookupByLibrary.simpleMessage("Your month"),
+        "label_your_month": MessageLookupByLibrary.simpleMessage("Your months"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Your week"),
         "label_youtube": MessageLookupByLibrary.simpleMessage("Youtube"),
         "last_acess": MessageLookupByLibrary.simpleMessage("Last acess"),
@@ -243,6 +243,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Here you will define something you have to do if your goals are not being met or achieved. It\'s very simple, what more you need to do to continue climbing the ladder of steps you defined."),
         "msg_info_step_reward": MessageLookupByLibrary.simpleMessage(
             "Set a reward that you will get for each completed step. This is very important, after all you deserve it! For example, a special food, going out to a new place, playing a video game, something you really enjoy!"),
+        "msg_loading_dream":
+            MessageLookupByLibrary.simpleMessage("Dreams being carried..."),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(
             "No dream has been realized yet, but I\'m sure it will soon."),
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
