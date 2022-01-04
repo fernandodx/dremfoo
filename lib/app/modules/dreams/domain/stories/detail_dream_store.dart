@@ -4,6 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/usecases/contract/iseo_user_case.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
@@ -13,8 +17,11 @@ import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:mobx/mobx.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 
@@ -25,7 +32,8 @@ abstract class _DetailDreamStoreBase with Store {
 
    IDreamCase _dreamCase;
    IRegisterUserCase _registerUserCase;
-   _DetailDreamStoreBase(this._dreamCase, this._registerUserCase);
+   ISeoUserCase _seoUserCase;
+   _DetailDreamStoreBase(this._dreamCase, this._registerUserCase, this._seoUserCase);
 
    @observable
    bool isLoading = false;
@@ -50,6 +58,16 @@ abstract class _DetailDreamStoreBase with Store {
 
    @observable
    bool isChartWeek = true;
+
+   @observable
+   bool isDismissBanner = false;
+
+   @observable
+   bool isOpenReview = false;
+
+   bool isLoadBannerAfterConclusionGoal = false;
+
+   InterstitialAd?  bannerAfterConclusionGoal;
 
    double percentToday = 0;
    double percentStep = 0;
@@ -186,6 +204,79 @@ abstract class _DetailDreamStoreBase with Store {
       return countDaily * daysInMonth;
    }
 
+   void fetch(Dream dream) async {
+      // isLoading = true;
+       percentToday = dream.percentToday??0;
+       percentStep = dream.percentStep??0;
+       dateUpdate = dream.dateUpdate;
+
+      _findStepDream(dream);
+      _findDailyGoal(dream);
+      _findHistoryWeekDailyGoal(dream);
+      _loadBannerAfterConclusionGoal();
+      // isLoading = false;
+   }
+
+   Future<void> startReviewApp() async {
+
+      _seoUserCase.saveLastDateReviewApp(DateTime.now());
+
+      AnalyticsUtil.sendAnalyticsEvent(EventRevo.likeRevo);
+
+      final InAppReview inAppReview = InAppReview.instance;
+      var isAvailable = await inAppReview.isAvailable();
+
+      if (isAvailable) {
+         await inAppReview.requestReview();
+      }
+      isDismissBanner = true;
+   }
+
+   void registerNoLikeApp() {
+      AnalyticsUtil.sendAnalyticsEvent(EventRevo.noLikeRevo);
+      isDismissBanner = true;
+   }
+
+
+   @action
+   Future<void> checkShowBannerOrPopPage(BuildContext context) async {
+
+      bool isShowReview = await _seoUserCase.isCanShowReviewApp();
+
+      isOpenReview = isShowReview;
+
+      if(RemoteConfigUtil().isEnableAd() && isLoadBannerAfterConclusionGoal && !isShowReview){
+         bannerAfterConclusionGoal?.show();
+      }else if(!isShowReview){
+         isDismissBanner = true;
+      }
+
+   }
+
+   void _loadBannerAfterConclusionGoal() {
+      InterstitialAd.load(
+         adUnitId: AdUtil.bannerAfterConclusionGoalId,
+         request: AdRequest(),
+         adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (ad) {
+               this.bannerAfterConclusionGoal = ad;
+
+               ad.fullScreenContentCallback = FullScreenContentCallback(
+                  onAdDismissedFullScreenContent: (ad) {
+                     isDismissBanner = true;
+                  },
+               );
+
+               isLoadBannerAfterConclusionGoal = true;
+            },
+            onAdFailedToLoad: (err) {
+               print('Failed to load an interstitial ad: ${err.message}');
+               isLoadBannerAfterConclusionGoal = false;
+            },
+         ),
+      );
+   }
+
    void _updateListDailyGoal(int index, DailyGoal? dailyGoal) {
       if(dailyGoal != null) {
          List<DailyGoal> listTemp = [];
@@ -262,24 +353,19 @@ abstract class _DetailDreamStoreBase with Store {
       _setListDailyGoals(listCurrentDate);
    }
 
-   void fetch(Dream dream) async {
-      // isLoading = true;
-      _findStepDream(dream);
-      _findDailyGoal(dream);
-      _findHistoryWeekDailyGoal(dream);
-      // isLoading = false;
-   }
+
 
   Future<void> _updatePercentTodayAndStep(Dream dreamSelected) async {
     dreamSelected.dailyGoals = listDailyGoals;
     dreamSelected.steps = listStep;
     dreamSelected.listHistoryWeekDailyGoals = listHistoryWeekDailyGoals;
+    dreamSelected.dateUpdate = Timestamp.now();
     ResponseApi<Dream> responseApi = await _dreamCase.updatePercentsGoalsAndSteps(dreamSelected);
     if(responseApi.ok) {
       Dream result = responseApi.result!;
       percentToday = result.percentToday??0;
       percentStep = result.percentStep??0;
-      dateUpdate = Timestamp.now();
+      dateUpdate = result.dateUpdate;
 
     }
   }

@@ -1,4 +1,5 @@
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/button_appbar_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
@@ -12,6 +13,7 @@ import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/week_calendar_widget.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,32 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
       }
     });
 
+    reaction<bool>((_) => store.isDismissBanner, (isDismiss) {
+      if(isDismiss){
+        _navigationPopDreamPage(context);
+      }
+    });
+
+    reaction<bool>((_) => store.isOpenReview, (isOpen) {
+      if(isOpen){
+        alertBottomSheet(context,
+            msg: Translate.i().get.msg_is_like_app,
+            title: Translate.i().get.label_assessment,
+            type: TypeAlert.ALERT,
+            nameButtonDefault: Translate.i().get.label_yes,
+            onTapDefaultButton: ()  {
+              store.startReviewApp();
+            },
+            listButtonsAddtional: [
+              TextButton(
+                  onPressed: ()  {
+                    store.registerNoLikeApp();
+                  },
+                  child: Text(Translate.i().get.label_no))
+            ]);
+      }
+    });
+
     store.fetch(widget.dreamSelected);
 
   }
@@ -73,7 +101,7 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             floating: false,
             expandedHeight: 230.0,
             leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
-              _navigationPopDreamPage(context);
+              store.checkShowBannerOrPopPage(context);
             },),
             actions: [
               ButtonAppbarWidget(
@@ -139,14 +167,13 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
     return WillPopScope(
         child: getPage(),
         onWillPop: () async {
-          _navigationPopDreamPage(context);
+          store.checkShowBannerOrPopPage(context);
           return false;
         }
     );
-    // return Scaffold(
-    //   body:getPage(),
-    // );
   }
+
+
 
   ListView body() {
     return ListView(

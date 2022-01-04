@@ -148,5 +148,8 @@
   "msg_inflection_point_required": "O ponto de inflexão é obrigatório",
   "msg_choice_color_required": "Escolha uma cor de representaçã",
   "label_loading": "Carregando...",
-  "msg_loading_dream" : "Sonhos sendo carregados..."
+  "msg_loading_dream" : "Sonhos sendo carregados...",
+  "msg_is_like_app" : "Esta gostando do Revo - Metas com foco?",
+  "label_assessment" : "Avaliação",
+  "label_no" : "Não"
 }

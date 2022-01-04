@@ -1,6 +1,7 @@
 import 'package:dremfoo/app/model/level_revo.dart';
 import 'package:dremfoo/app/model/video.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
@@ -12,6 +13,8 @@ import 'package:dremfoo/app/utils/notification_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_store.g.dart';
@@ -39,6 +42,10 @@ abstract class _HomeStoreBase with Store {
   @observable
   List<UserRevo> listRankUser = ObservableList<UserRevo>();
 
+  @observable
+  bool isBannerAdReady = false;
+
+  BannerAd? bannerAd;
 
   Future<void> fetch() async {
     NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
@@ -52,6 +59,28 @@ abstract class _HomeStoreBase with Store {
     _findLastDayAcess();
     _loadRankUser();
     _loadVideo();
+    _loadBanner();
+
+  }
+
+  void _loadBanner() {
+    bannerAd = BannerAd(
+      adUnitId: AdUtil.bannerDashboardId,
+      request: AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+            isBannerAdReady = true;
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    bannerAd!.load();
   }
 
   @action

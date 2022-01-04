@@ -71,4 +71,6 @@ class EventRevo {
   static String menuMediaSocial = "menu_media_social";
   static String menuShare = "menu_share";
   static String menuExit = "menu_exit";
+  static String likeRevo = "like_revo";
+  static String noLikeRevo = "no_like_revo";
 }

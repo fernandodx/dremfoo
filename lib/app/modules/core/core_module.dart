@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/modules/core/domain/usecases/SeoUserCase.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/shared_prefs_datasource.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/upload_image_picker_datasource.dart';
@@ -16,11 +17,14 @@ class CoreModule extends Module {
     Bind.lazySingleton((i) => UserRevo(), export: true),
     Bind.lazySingleton((i) => Dream(), export: true),
 
+
     Bind.lazySingleton((i) => UploadImagePickerDataSource(), export: true),
     Bind.lazySingleton((i) => SharedPrefdDatasource(), export: true),
 
     Bind.lazySingleton((i) => UploadImageRepository(i.get<UploadImagePickerDataSource>()), export: true),
     Bind.lazySingleton((i) => SharedPrefsRepository(i.get<SharedPrefdDatasource>()), export: true),
+
+    Bind.lazySingleton((i) => SeoUserCase(i.get<SharedPrefsRepository>()), export: true),
   ];
 
   @override

@@ -4,6 +4,7 @@ import 'package:dremfoo/app/app_module.dart';
 import 'package:dremfoo/app/app_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'app/api/eventbus/main_event_bus.dart';
 import 'app/api/eventbus/user_event_bus.dart';
@@ -43,11 +44,16 @@ void main() async {
   await Firebase.initializeApp();
   await RemoteConfigUtil.init();
   CrashlyticsUtil.init();
+  _initGoogleMobileAds();
   AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
   initConfigNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // runApp(MyApp());
   runApp(ModularApp(module: AppModule(), child: AppWidget()));
+}
+
+Future<InitializationStatus> _initGoogleMobileAds() {
+  return MobileAds.instance.initialize();
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

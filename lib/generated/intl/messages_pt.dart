@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_archive": MessageLookupByLibrary.simpleMessage("Arquivo"),
         "label_archived_dreams":
             MessageLookupByLibrary.simpleMessage("Sonhos arquivados"),
+        "label_assessment": MessageLookupByLibrary.simpleMessage("Avaliação"),
         "label_beginner": MessageLookupByLibrary.simpleMessage("Iniciante"),
         "label_challenges": MessageLookupByLibrary.simpleMessage("Desafios"),
         "label_change_profile":
@@ -108,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_name": MessageLookupByLibrary.simpleMessage("Nome"),
         "label_new_dream": MessageLookupByLibrary.simpleMessage("Novo Sonho"),
         "label_next": MessageLookupByLibrary.simpleMessage("Próximo"),
+        "label_no": MessageLookupByLibrary.simpleMessage("Não"),
         "label_not_rigister":
             MessageLookupByLibrary.simpleMessage("Não tenho conta"),
         "label_on_hold": MessageLookupByLibrary.simpleMessage("Em espera"),
@@ -242,6 +244,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Aqui você vai definir algo que tenha que fazer, caso suas metas não estejam sendo cumpridas ou alcançadas. É bem simples, o que você precisa fazer a mais para continuar subindo a escada de passos que você definiu."),
         "msg_info_step_reward": MessageLookupByLibrary.simpleMessage(
             "Defina uma recompensa que você vai ter a cada passo concluido. Isso é muito importante, afinal você merece! Por exemplo, uma comida especial, sair para um lugar novo, jogar um vídeo game, algo que realmente goste!"),
+        "msg_is_like_app": MessageLookupByLibrary.simpleMessage(
+            "Esta gostando do Revo - Metas com foco?"),
         "msg_loading_dream":
             MessageLookupByLibrary.simpleMessage("Sonhos sendo carregados..."),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(

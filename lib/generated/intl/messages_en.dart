@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_archive": MessageLookupByLibrary.simpleMessage("Archive"),
         "label_archived_dreams":
             MessageLookupByLibrary.simpleMessage("Archived dreams"),
+        "label_assessment": MessageLookupByLibrary.simpleMessage("Assessment"),
         "label_beginner": MessageLookupByLibrary.simpleMessage("Beginner"),
         "label_challenges": MessageLookupByLibrary.simpleMessage("Challenges"),
         "label_change_profile":
@@ -107,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_name": MessageLookupByLibrary.simpleMessage("Name"),
         "label_new_dream": MessageLookupByLibrary.simpleMessage("New Dream"),
         "label_next": MessageLookupByLibrary.simpleMessage("Next"),
+        "label_no": MessageLookupByLibrary.simpleMessage("No"),
         "label_not_rigister":
             MessageLookupByLibrary.simpleMessage("No account"),
         "label_on_hold": MessageLookupByLibrary.simpleMessage("On hold"),
@@ -243,6 +245,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Here you will define something you have to do if your goals are not being met or achieved. It\'s very simple, what more you need to do to continue climbing the ladder of steps you defined."),
         "msg_info_step_reward": MessageLookupByLibrary.simpleMessage(
             "Set a reward that you will get for each completed step. This is very important, after all you deserve it! For example, a special food, going out to a new place, playing a video game, something you really enjoy!"),
+        "msg_is_like_app": MessageLookupByLibrary.simpleMessage(
+            "Are you enjoying Revo - Focused Goals?"),
         "msg_loading_dream":
             MessageLookupByLibrary.simpleMessage("Dreams being carried..."),
         "msg_no_dreams_completed": MessageLookupByLibrary.simpleMessage(

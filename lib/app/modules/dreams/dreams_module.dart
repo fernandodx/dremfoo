@@ -1,4 +1,5 @@
 import 'package:dremfoo/app/modules/core/core_module.dart';
+import 'package:dremfoo/app/modules/core/domain/usecases/SeoUserCase.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/upload_image_repository.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/archive_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/choice_type_dream_store.dart';
@@ -34,7 +35,7 @@ class DreamsModule extends Module {
 
     Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>())),
 
-    Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>())),
+    Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>(), i.get<SeoUserCase>())),
     Bind.lazySingleton((i) => RegisterDreamWithFocusStore(i.get<DreamUseCase>())),
     Bind.lazySingleton((i) => ChoiceTypeDreamStore()),
     Bind.lazySingleton((i) => DreamStore(i.get<DreamUseCase>())),

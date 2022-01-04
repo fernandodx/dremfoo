@@ -182,6 +182,7 @@ class LoginUseCase implements ILoginCase {
 
       await _sharedPrefsRepository.removePref("USER_LOG_UID");
       await _loginRepository.logOut();
+      _userRevo = new UserRevo();
       return ResponseApi.ok();
 
     }on RevoExceptions catch(error){

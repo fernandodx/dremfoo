@@ -121,14 +121,17 @@ class CardLoginWidget extends StatelessWidget {
       SizedBox(height: 16),
       Row(
         children: <Widget>[
-          Expanded(
-            child: SignInButton(
-              buttonType: ButtonType.facebook,
-              btnColor: AppColors.colorBlizzardBlueDark,
-              onPressed: () => _store.onLoginWithFacebook(context),
-              btnText: Translate.i().get.label_login_with_facebook,
-              padding: 8,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          Visibility(
+            visible: false,
+            child: Expanded(
+              child: SignInButton(
+                buttonType: ButtonType.facebook,
+                btnColor: AppColors.colorBlizzardBlueDark,
+                onPressed: () => _store.onLoginWithFacebook(context),
+                btnText: Translate.i().get.label_login_with_facebook,
+                padding: 8,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              ),
             ),
           ),
         ],

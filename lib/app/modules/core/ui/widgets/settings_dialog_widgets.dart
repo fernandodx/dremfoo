@@ -125,6 +125,7 @@ class SettingsDialogWidgets extends StatelessWidget {
                 enableFeedback: true,
                 onTap: () {
                   _registerUserStore.logOut();
+
                 },
               ),
             ],

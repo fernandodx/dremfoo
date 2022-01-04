@@ -10,7 +10,7 @@ import 'package:mobx/mobx.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;
-  const SplashPage({Key? key, this.title = 'SplashPage'}) : super(key: key);
+  const SplashPage({Key? key, this.title = 'Loading...'}) : super(key: key);
   @override
   SplashPageState createState() => SplashPageState();
 }

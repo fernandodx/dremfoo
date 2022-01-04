@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/core/infra/datasources/base_datasource.dart'
 import 'package:dremfoo/app/modules/login/domain/entities/level_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
+import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/modules/login/infra/datasources/contract/iuser_datasource.dart';
 import 'package:dremfoo/app/resources/constants.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
@@ -84,6 +85,10 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
   @override
   Future<UserRevo> findUserWithUid(String uid) async {
     DocumentSnapshot snapshot = await getRefCurrentUser(uid).get().catchError(handlerError);
+    if(snapshot.data() == null ){
+      throw new RevoExceptions
+          .msgToUser(error: Exception("Uid não encontrado na base"), msg: "Login não encontrado!");
+    }
     UserRevo user = UserRevo.fromMap(snapshot.data() as Map<String, dynamic>);
     user.uid = snapshot.id;
     return user;

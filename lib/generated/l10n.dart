@@ -1549,6 +1549,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you enjoying Revo - Focused Goals?`
+  String get msg_is_like_app {
+    return Intl.message(
+      'Are you enjoying Revo - Focused Goals?',
+      name: 'msg_is_like_app',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Assessment`
+  String get label_assessment {
+    return Intl.message(
+      'Assessment',
+      name: 'label_assessment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get label_no {
+    return Intl.message(
+      'No',
+      name: 'label_no',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

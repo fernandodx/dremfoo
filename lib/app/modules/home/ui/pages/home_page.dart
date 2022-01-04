@@ -1,18 +1,21 @@
+
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/appbar_revo_widget.dart';
+import 'package:dremfoo/app/modules/core/ui/widgets/loading_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/home_store.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/outline_button_with_image_widget.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/video_youtube_widget.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
-import 'package:dremfoo/app/utils/text_util.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,21 +34,27 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
 
     reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
       if (msgErro != null) {
-        alertBottomSheet(context, msg: msgErro.msg, title: msgErro.title, type: msgErro.type);
+        alertBottomSheet(context,
+            msg: msgErro.msg,
+            title: msgErro.title,
+            type: msgErro.type
+        );
       }
     });
 
     store.fetch();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return Scaffold(
         appBar: AppbarRevoWidget(
-            context: context,
-            title: Translate.i().get.label_title_app,
-            userRevo: store.currentUser).appBar,
+                context: context,
+                title: Translate.i().get.label_title_app,
+                userRevo: store.currentUser)
+            .appBar,
         body: Container(
             margin: EdgeInsets.only(
               top: 16,
@@ -122,7 +131,8 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.fire,
                                 title: Translate.i().get.label_focus,
-                                subTitle: "${store.currentUser?.focus?.countDaysFocus} ${Translate.i().get.label_days}");
+                                subTitle:
+                                    "${store.currentUser?.focus?.countDaysFocus} ${Translate.i().get.label_days}");
                           }),
                         ],
                       ),
@@ -140,16 +150,10 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.checkCircle,
                                 title: Translate.i().get.last_acess,
-                                subTitle: "${store.lastDateAcess?.format()}");
+                                subTitle: store.lastDateAcess != null ? "${store.lastDateAcess?.format()}" : "");
                           }),
                         ],
                       ),
-                      SpaceWidget(),
-                      Container(
-                          width: double.maxFinite,
-                          margin: EdgeInsets.only(right: 8),
-                          child: TextUtil.textTitulo(Translate.i().get.label_free_content,
-                              align: TextAlign.right, )),
                       SpaceWidget(),
                       Observer(
                         builder: (context) {
@@ -157,7 +161,25 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                             video: store.video,
                           );
                         },
-                      )
+                      ),
+                      SpaceWidget(),
+                      Observer(builder: (context) {
+
+                        Widget ad = LoadingWidget("");
+
+                        if(store.bannerAd != null) {
+                          ad =  AdWidget(ad: store.bannerAd!,);
+                        }
+
+                        return Visibility(
+                            visible:RemoteConfigUtil().isEnableAd() && store.isBannerAdReady,
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: double.maxFinite,
+                              height: store.bannerAd?.size.height.toDouble(),
+                              child: ad,
+                            ));
+                      })
                     ],
                   ),
                 )
@@ -165,6 +187,11 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
             )),
       );
     });
+  }
 
+  @override
+  void dispose() {
+    store.bannerAd?.dispose();
+    super.dispose();
   }
 }

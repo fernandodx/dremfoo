@@ -14,6 +14,7 @@ class RemoteConfigUtil {
   static const enableMediaYoutube = "enableMediaYoutube";
   static const enableMediaSite = "enableMediaSite";
   static const enableMediaContato = "enableMediaContato";
+  static const enableAd = "enableAd";
 
   static late RemoteConfig _instance;
 
@@ -42,6 +43,7 @@ class RemoteConfigUtil {
         enableMediaSite: true,
         enableMediaContato: true,
         enableMenuDreamCompleted: true,
+        enableAd: true
       });
 
     }
@@ -77,5 +79,7 @@ class RemoteConfigUtil {
   bool isEnableMediaSite() => _instance.getBool(enableMediaSite);
 
   bool isEnableMediaContato() => _instance.getBool(enableMediaContato);
+
+  bool isEnableAd() => _instance.getBool(enableAd);
 
 }

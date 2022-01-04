@@ -40,7 +40,7 @@ class VideoYoutubeWidget extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: "https://img.youtube.com/vi/${video?.id}/hqdefault.jpg",
                     fit: BoxFit.cover,
-                    height: 130,
+                    height: 120,
                     width: double.maxFinite,
                   ),
                   borderRadius: BorderRadius.circular(30),
@@ -49,7 +49,7 @@ class VideoYoutubeWidget extends StatelessWidget {
                   child: FaIcon(
                     FontAwesomeIcons.playCircle,
                     color: Colors.white70,
-                    size: 80,
+                    size: 70,
                   ),
                 )
               ],
@@ -58,7 +58,7 @@ class VideoYoutubeWidget extends StatelessWidget {
             SizedBox(
               height: 8,
             ),
-            TextUtil.textSubTitle("${video?.name} | ${video?.time}", align: TextAlign.justify, fontSize: 11)
+            TextUtil.textSubTitle("${video?.name}", align: TextAlign.justify, fontSize: 11)
           ],
         ),
       ),
