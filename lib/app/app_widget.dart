@@ -1,4 +1,5 @@
 import 'package:dremfoo/app/app_controller.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,18 @@ class AppWidget extends StatefulWidget {
 
 class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
   AppController controller = AppController.getInstance();
+  AppPurchase appPurchase = Modular.get<AppPurchase>();
 
   @override
   void initState() {
     super.initState();
     changeTheme();
+    initPurchaseListener();
+  }
+
+  Future<void> initPurchaseListener() async {
+    await appPurchase.initListenerPurchase();
+    await appPurchase.restorePurchase();
   }
 
   void changeTheme() {

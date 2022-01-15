@@ -8,11 +8,13 @@ class ChipButtonWidget extends StatelessWidget {
   late IconData icon;
   late Function()? onTap;
   late double size;
+  late double fontSize;
 
   ChipButtonWidget({
     required this.name,
     required this.icon,
     this.size = 70,
+    this.fontSize = 10,
     this.onTap});
 
   @override
@@ -26,7 +28,7 @@ class ChipButtonWidget extends StatelessWidget {
        labelPadding: EdgeInsets.only(top: 12, bottom: 12, left: 4, right: 0),
        label:  Container(
            width: size,
-           child: TextUtil.textChipMenu(name, maxLines: 1)),
+           child: TextUtil.textChipMenu(name, maxLines: 1, fontSize: fontSize)),
        avatar: CircleAvatar(
          backgroundColor: Theme.of(context).primaryColorDark,
          child: FaIcon(

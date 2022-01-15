@@ -8,6 +8,7 @@ import 'package:dremfoo/app/modules/home/domain/stories/home_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/rank_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/social_network_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/splash_store.dart';
+import 'package:dremfoo/app/modules/home/domain/stories/subscription_plan_store.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/home_usecase.dart';
 import 'package:dremfoo/app/modules/home/infra/datasources/home_datasource.dart';
 import 'package:dremfoo/app/modules/home/infra/repositories/home_repository.dart';
@@ -17,6 +18,7 @@ import 'package:dremfoo/app/modules/home/ui/pages/home_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/rank_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/social_network_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/splash_page.dart';
+import 'package:dremfoo/app/modules/home/ui/pages/subscription_plan_page.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/login_usecase.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/register_user_case.dart';
@@ -43,6 +45,7 @@ class HomeModule extends Module {
         (i) => SplashStore(i.get<LoginUseCase>(), i.get<RegisterUserCase>())),
     Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>(), i.get<RegisterUserCase>(), i.get<ILoginCase>())),
     Bind.lazySingleton((i) => SocialNetworkStore()),
+    Bind.lazySingleton((i) => SubscriptionPlanStore()),
   ];
 
   @override
@@ -51,11 +54,11 @@ class HomeModule extends Module {
     ModuleRoute("/userNotFound", module: LoginModule()),
     ChildRoute("/home", child: (_, args) => BottomNavigatePage(), children: [
       ChildRoute("/dashboard", child: (_, arg) => HomePage()),
-      // ChildRoute("/dream", child: (_, arg) => DreamsPage()),
       ModuleRoute("/dream", module: DreamsModule()),
       ChildRoute("/chart", child: (_, arg) => DreamsPage()),
       ChildRoute("/rank", child: (_, arg) => RankPage()),
       ChildRoute("/challenge", child: (_, arg) => RankPage()),
+      ChildRoute("/subscriptionPlan", child: (_, arg) => SubscriptionPlanPage())
     ]),
     ModuleRoute("/dream", module: DreamsModule()),
     // ModuleRoute(LoginModule.REGISTER_PAGE, module: LoginModule(), ),

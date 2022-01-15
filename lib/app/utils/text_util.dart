@@ -71,6 +71,9 @@ class TextUtil {
       value,
       textAlign: align,
       maxLines: maxLines,
+      style: TextStyle(
+          fontSize: fontSize,
+      ),
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -135,8 +138,7 @@ class TextUtil {
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-          fontSize: fontSize,
-          color: AppColors.colorTextSubTitleMenu,),
+          fontSize: fontSize,),
     );
   }
 

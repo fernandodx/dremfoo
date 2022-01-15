@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
@@ -241,11 +242,16 @@ abstract class _DetailDreamStoreBase with Store {
    @action
    Future<void> checkShowBannerOrPopPage(BuildContext context) async {
 
+      AppPurchase _appPurchase = Modular.get<AppPurchase>();
+
       bool isShowReview = await _seoUserCase.isCanShowReviewApp();
 
       isOpenReview = isShowReview;
 
-      if(RemoteConfigUtil().isEnableAd() && isLoadBannerAfterConclusionGoal && !isShowReview){
+      if(_appPurchase.isShowAd
+          && RemoteConfigUtil().isEnableAd()
+          && isLoadBannerAfterConclusionGoal
+          && !isShowReview){
          bannerAfterConclusionGoal?.show();
       }else if(!isShowReview){
          isDismissBanner = true;

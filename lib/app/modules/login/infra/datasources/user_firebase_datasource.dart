@@ -177,7 +177,7 @@ class UserFirebaseDataSource extends BaseDataSource implements IUserDataSource {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("levels")
           .where("initValue", isLessThanOrEqualTo: value)
-          .orderBy("initValue", descending: false)
+          .orderBy("initValue", descending: true)
           .get()
           .catchError(handlerError);
       return  LevelRevo.fromListDocumentSnapshot(querySnapshot.docs);

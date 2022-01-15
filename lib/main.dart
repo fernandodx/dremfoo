@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dremfoo/app/app_module.dart';
 import 'package:dremfoo/app/app_widget.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 import 'app/api/eventbus/main_event_bus.dart';
 import 'app/api/eventbus/user_event_bus.dart';
@@ -39,6 +42,8 @@ class ReceivedNotification {
   });
 }
 
+late StreamSubscription<List<PurchaseDetails>> _subscription;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -48,9 +53,9 @@ void main() async {
   AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
   initConfigNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // runApp(MyApp());
   runApp(ModularApp(module: AppModule(), child: AppWidget()));
 }
+
 
 Future<InitializationStatus> _initGoogleMobileAds() {
   return MobileAds.instance.initialize();
@@ -140,6 +145,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
 
 
 

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:dremfoo/app/model/level_revo.dart';
 import 'package:dremfoo/app/model/video.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
@@ -11,20 +14,23 @@ import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.d
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/notification_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_store.g.dart';
 
 class HomeStore = _HomeStoreBase with _$HomeStore;
-abstract class _HomeStoreBase with Store {
 
+abstract class _HomeStoreBase with Store {
   IHomeUsecase _homeUsecase;
   IRegisterUserCase _registerUserCase;
   ILoginCase _loginCase;
+
   _HomeStoreBase(this._homeUsecase, this._registerUserCase, this._loginCase);
 
   @observable
@@ -50,18 +56,21 @@ abstract class _HomeStoreBase with Store {
   Future<void> fetch() async {
     NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
     await _findCurrentUser();
-    ResponseApi<UserRevo> responseUserLevel =  await _registerUserCase.checkLevelFocusUser();
-    if(responseUserLevel.ok){
+    ResponseApi<UserRevo> responseUserLevel = await _registerUserCase.checkLevelFocusUser();
+    if (responseUserLevel.ok) {
       currentUser = responseUserLevel.result;
     }
     await _registerUserCase.updateCountAcess();
-    await  _loginCase.saveLastAcessUser();
+    await _loginCase.saveLastAcessUser();
     _findLastDayAcess();
     _loadRankUser();
     _loadVideo();
     _loadBanner();
 
+    AppPurchase _appPurchase = Modular.get<AppPurchase>();
+    _appPurchase.findProductsForSale();
   }
+
 
   void _loadBanner() {
     bannerAd = BannerAd(
@@ -70,7 +79,7 @@ abstract class _HomeStoreBase with Store {
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (_) {
-            isBannerAdReady = true;
+          isBannerAdReady = true;
         },
         onAdFailedToLoad: (ad, err) {
           print('Failed to load a banner ad: ${err.message}');
@@ -87,7 +96,7 @@ abstract class _HomeStoreBase with Store {
   Future<void> _findCurrentUser() async {
     ResponseApi<UserRevo> responseApi = await _homeUsecase.findCurrentUser();
     msgAlert = responseApi.messageAlert;
-    if(responseApi.ok){
+    if (responseApi.ok) {
       UserRevo _user = responseApi.result!;
       this.currentUser = _user;
     }
@@ -97,7 +106,7 @@ abstract class _HomeStoreBase with Store {
   Future<void> _findLastDayAcess() async {
     ResponseApi<DateTime> responseApi = await _homeUsecase.findLastDayAcessForUser();
     msgAlert = responseApi.messageAlert;
-    if(responseApi.ok){
+    if (responseApi.ok) {
       DateTime _date = responseApi.result!;
       this.lastDateAcess = _date;
     }
@@ -107,8 +116,8 @@ abstract class _HomeStoreBase with Store {
   Future<void> _loadRankUser() async {
     ResponseApi<List<UserRevo>> responseApi = await _homeUsecase.findRankUser();
     msgAlert = responseApi.messageAlert;
-    if(responseApi.ok){
-    List<UserRevo> _listRank = responseApi.result!;
+    if (responseApi.ok) {
+      List<UserRevo> _listRank = responseApi.result!;
       this.listRankUser = ObservableList.of(_listRank);
     }
   }
@@ -117,15 +126,15 @@ abstract class _HomeStoreBase with Store {
   Future<void> _loadVideo() async {
     ResponseApi<Video> responseApi = await _homeUsecase.getRadomVideo();
     msgAlert = responseApi.messageAlert;
-    if(responseApi.ok){
+    if (responseApi.ok) {
       this.video = responseApi.result;
     }
   }
 
   String get postionRankFormat {
     int index = listRankUser.indexWhere((rankUser) => rankUser.email == currentUser?.email);
-    if(index >= 0){
-      return "Posição: ${index+1}˚";
+    if (index >= 0) {
+      return "Posição: ${index + 1}˚";
     }
     return "Sem posição";
   }
@@ -145,8 +154,4 @@ abstract class _HomeStoreBase with Store {
   void navigatePageFreeVideos(BuildContext context) {
     Navigator.pushNamed(context, "/freeVideos");
   }
-
-
-
-
 }

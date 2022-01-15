@@ -57,27 +57,13 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
                 BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.trophy),
                     label: Translate.i().get.label_rank),
+                BottomNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.award),
+                    label: Translate.i().get.label_acess_premium),
               ],
               currentIndex: store.selectedIndex,
               onTap: (index) {
-
                 store.navigatePageBottomNavigate(index);
-
-                // if (index == 0) {
-                //   store.showHideAppBar(true);
-                //   Modular.to.navigate('/home/dashboard');
-                // } else if (index == 1) {
-                //   store.showHideAppBar(false);
-                //   Modular.to.navigate('/home/dream');
-                // } else if (index == 2) {
-                //   Modular.to.navigate('/home/chart');
-                // } else if (index == 3) {
-                //   store.showHideAppBar(false);
-                //   Modular.to.navigate('/home/rank');
-                // } else if (index == 4) {
-                //   store.showHideAppBar(false);
-                //   Modular.to.navigate('/home/challenge');
-                // }
               },
             ),
           ),

@@ -40,9 +40,9 @@ abstract class _DreamStoreBase with Store {
     if(responseApi.ok){
       List<Dream> list = responseApi.result!;
       listDream = list;
-      isLoading = false;
       _checkPercentsGoals(list);
     }
+    isLoading = false;
     return responseApi;
   }
 

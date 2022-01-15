@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cryptoutils/cryptoutils.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/contract/ishared_prefs_datasource.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/contract/ishared_prefs_repository.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
@@ -45,7 +44,7 @@ class SharedPrefsRepository implements ISharedPrefsRepository {
   Future<String> getString(String key) async {
     try{
       String value = await _sharedDatasource.getString(key);
-      var bytes = CryptoUtils.base64StringToBytes(value);
+      var bytes = base64.decode(value);
       return Utf8Decoder().convert(bytes);
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);
@@ -87,7 +86,7 @@ class SharedPrefsRepository implements ISharedPrefsRepository {
   Future<void> putString(String key, String value) async {
     try{
       var bytes = Utf8Encoder().convert(value);
-      var valueBase64 =  CryptoUtils.bytesToBase64(bytes);
+      var valueBase64 = base64.encode(bytes);
       return _sharedDatasource.putString(key, valueBase64);
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);

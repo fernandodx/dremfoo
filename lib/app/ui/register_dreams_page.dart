@@ -311,9 +311,8 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
                     onStepContinue: next,
                     onStepCancel: cancel,
                     onStepTapped: (step) => goTo(step),
-                    controlsBuilder: (BuildContext context,
-                        {VoidCallback? onStepContinue,
-                        VoidCallback? onStepCancel}) {
+                    controlsBuilder: (context,
+                        detail) {
                       return ButtonBarTheme(
                         data: ButtonBarThemeData(
                             buttonPadding: EdgeInsets.all(6),
@@ -323,7 +322,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
                           child: ButtonBar(
                             children: [
                               RaisedButton(
-                                onPressed: onStepContinue,
+                                onPressed: next,
                                 child: const Text(
                                   'Continuar',
                                   style: TextStyle(color: Colors.white),
@@ -333,7 +332,7 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
                                     borderRadius: BorderRadius.circular(6.0)),
                               ),
                               FlatButton(
-                                onPressed: onStepCancel,
+                                onPressed: cancel,
                                 child: const Text(
                                   'Anterior',
                                 ),

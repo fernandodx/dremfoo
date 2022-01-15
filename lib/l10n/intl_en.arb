@@ -152,6 +152,7 @@
   "msg_loading_dream" : "Dreams being carried...",
   "msg_is_like_app" : "Are you enjoying Revo - Focused Goals?",
   "label_assessment" : "Assessment",
-  "label_no" : "No"
+  "label_no" : "No",
+  "label_acess_premium": "Premium"
 
 }

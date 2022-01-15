@@ -28,9 +28,7 @@ class StepperRegisterDreamWidget extends StatelessWidget {
       onStepContinue: onStepContinue,
       onStepCancel: onStepCancel,
       onStepTapped: onStepTapped,
-      controlsBuilder: (BuildContext context,
-          {VoidCallback? onStepContinue,
-            VoidCallback? onStepCancel}) {
+      controlsBuilder: (context, detail) {
         return ButtonBarStepperWidget(
             isLastStep: isLastStep,
             onStepCancel: onStepCancel,

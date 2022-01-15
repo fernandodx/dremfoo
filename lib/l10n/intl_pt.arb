@@ -151,5 +151,6 @@
   "msg_loading_dream" : "Sonhos sendo carregados...",
   "msg_is_like_app" : "Esta gostando do Revo - Metas com foco?",
   "label_assessment" : "Avaliação",
-  "label_no" : "Não"
+  "label_no" : "Não",
+  "label_acess_premium": "Premium"
 }

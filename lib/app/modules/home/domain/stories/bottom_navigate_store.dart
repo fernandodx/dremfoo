@@ -37,6 +37,11 @@ abstract class _BottomNavigateStoreBase with Store {
         Modular.to.navigate('/home/rank');
         break;
       }
+      case 3 : {
+        showHideAppBar(false);
+        Modular.to.navigate('/home/subscriptionPlan');
+        break;
+      }
     }
   }
 }

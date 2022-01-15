@@ -1579,6 +1579,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Premium`
+  String get label_acess_premium {
+    return Intl.message(
+      'Premium',
+      name: 'label_acess_premium',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

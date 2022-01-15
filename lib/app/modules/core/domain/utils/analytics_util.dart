@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AnalyticsUtil {
 
-  static final FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
 
   static void sendAnalyticsEvent(String nameEvent, {Map<String, dynamic>? parameters}) {
     _analytics.logEvent(
@@ -12,7 +12,7 @@ class AnalyticsUtil {
   }
 
   static void setUserId(String id, ) {
-    _analytics.setUserId(id);
+    _analytics.setUserId(id: id);
   }
 
   static void setCurrentScreen(String screenName, String nameClass) async {

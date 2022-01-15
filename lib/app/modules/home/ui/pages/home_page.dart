@@ -1,6 +1,8 @@
 
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/appbar_revo_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/loading_widget.dart';
@@ -28,6 +30,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends ModularState<HomePage, HomeStore> {
+
+  AppPurchase _appPurchase = Modular.get<AppPurchase>();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,26 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
             msg: msgErro.msg,
             title: msgErro.title,
             type: msgErro.type
+        );
+      }
+    });
+
+    reaction<bool>((_) => _appPurchase.isError, (isErro) {
+      if (isErro) {
+        alertBottomSheet(context,
+            msg: "Tivemos um erro na compra da sua assinatura, verifique a google play.",
+            title: "Erro na assinatura do Revo",
+            type: TypeAlert.ERROR
+        );
+      }
+    });
+
+    reaction<bool>((_) => _appPurchase.isPending, (isPending) {
+      if (isPending) {
+        alertBottomSheet(context,
+            msg: "O pgamento da sua assinatura esta pendente, verifique a google play.",
+            title: "Pagamento pendente na assinatura do Revo",
+            type: TypeAlert.ERROR
         );
       }
     });
@@ -167,12 +192,14 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
 
                         Widget ad = LoadingWidget("");
 
-                        if(store.bannerAd != null) {
+                        // if(store.bannerAd != null && _appPurchase.isShowAd) {
+                        if(store.bannerAd != null){
                           ad =  AdWidget(ad: store.bannerAd!,);
                         }
 
                         return Visibility(
-                            visible:RemoteConfigUtil().isEnableAd() && store.isBannerAdReady,
+                            // visible: AppPurchase.getInstance().isShowAd && RemoteConfigUtil().isEnableAd() && store.isBannerAdReady,
+                            visible: store.isBannerAdReady && _appPurchase.isShowAd,
                             child: Container(
                               alignment: Alignment.center,
                               width: double.maxFinite,

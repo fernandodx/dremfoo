@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "label_acess_premium": MessageLookupByLibrary.simpleMessage("Premium"),
         "label_add": MessageLookupByLibrary.simpleMessage("Adicionar"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Arquivo"),
         "label_archived_dreams":

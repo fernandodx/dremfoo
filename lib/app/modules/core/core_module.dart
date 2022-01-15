@@ -1,3 +1,5 @@
+import 'package:dremfoo/app/app_module.dart';
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/usecases/SeoUserCase.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/infra/datasources/shared_prefs_datasource.dart';
@@ -9,6 +11,7 @@ import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class CoreModule extends Module {
+
   @override
   final List<Bind> binds = [
 
@@ -16,7 +19,6 @@ class CoreModule extends Module {
     Bind.lazySingleton((i) => RevoAnalytics(), export: true),
     Bind.lazySingleton((i) => UserRevo(), export: true),
     Bind.lazySingleton((i) => Dream(), export: true),
-
 
     Bind.lazySingleton((i) => UploadImagePickerDataSource(), export: true),
     Bind.lazySingleton((i) => SharedPrefdDatasource(), export: true),
