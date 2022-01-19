@@ -152,5 +152,18 @@
   "msg_is_like_app" : "Esta gostando do Revo - Metas com foco?",
   "label_assessment" : "Avaliação",
   "label_no" : "Não",
-  "label_acess_premium": "Premium"
+  "label_acess_premium": "Premium",
+  "msg_erro_purchase" : "Tivemos um erro na compra da sua assinatura, verifique a google play.",
+  "title_erro_purchase" : "Erro na assinatura do Revo",
+  "msg_erro_pending_purchase" : "O pagamento da sua assinatura esta pendente, verifique a google play.",
+  "label_erro_pending_purchase" : "Pagamento pendente na assinatura do Revo",
+  "label_loading_plans" : "Carregando planos",
+  "label_premium_access" : "Acesso Premium",
+  "label_description_subscription" : "Assinatura Revo - Metas com foco",
+  "msg_purchase_2022" : "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas báscicas.",
+  "label_no_ad" : "Sem propagandas",
+  "label_no_ad_description" : "Navegue tranquilo pelo app sem publicidade.",
+  "label_access_new_features" : "Acesso às novas funcionalidades",
+  "label_no_miss_features" : "Não perca a chance de acessar as melhores funções que estão por vir.",
+  "title_subscription_donated" : "100% do valor será doado para @movimentodesperte"
 }

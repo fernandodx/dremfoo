@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "label_access_new_features":
+            MessageLookupByLibrary.simpleMessage("Access to new features"),
         "label_acess_premium": MessageLookupByLibrary.simpleMessage("Premium"),
         "label_add": MessageLookupByLibrary.simpleMessage("Add"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Archive"),
@@ -52,6 +54,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_days": MessageLookupByLibrary.simpleMessage("Days"),
         "label_description_dream":
             MessageLookupByLibrary.simpleMessage("Dream description"),
+        "label_description_subscription": MessageLookupByLibrary.simpleMessage(
+            "Revo Subscription - Focused Goals"),
         "label_disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
         "label_dream": MessageLookupByLibrary.simpleMessage("Dream"),
         "label_dream_choice":
@@ -68,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_edit": MessageLookupByLibrary.simpleMessage("Editar"),
         "label_email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "label_enter": MessageLookupByLibrary.simpleMessage("Login"),
+        "label_erro_pending_purchase": MessageLookupByLibrary.simpleMessage(
+            "Payment pending on Revo subscription"),
         "label_exit": MessageLookupByLibrary.simpleMessage("Logout"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinary"),
@@ -91,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
         "label_level": MessageLookupByLibrary.simpleMessage("Level"),
         "label_loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "label_loading_plans":
+            MessageLookupByLibrary.simpleMessage("Loading plans"),
         "label_login": MessageLookupByLibrary.simpleMessage("Login"),
         "label_login_with_facebook":
             MessageLookupByLibrary.simpleMessage("Login with Facebook"),
@@ -110,6 +118,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_new_dream": MessageLookupByLibrary.simpleMessage("New Dream"),
         "label_next": MessageLookupByLibrary.simpleMessage("Next"),
         "label_no": MessageLookupByLibrary.simpleMessage("No"),
+        "label_no_ad":
+            MessageLookupByLibrary.simpleMessage("No advertisements"),
+        "label_no_ad_description": MessageLookupByLibrary.simpleMessage(
+            "Browse through the app without advertising."),
+        "label_no_miss_features": MessageLookupByLibrary.simpleMessage(
+            "Don\'t miss your chance to access the best features to come."),
         "label_not_rigister":
             MessageLookupByLibrary.simpleMessage("No account"),
         "label_on_hold": MessageLookupByLibrary.simpleMessage("On hold"),
@@ -122,6 +136,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_password_no_match":
             MessageLookupByLibrary.simpleMessage("Password does not match"),
         "label_perfomed": MessageLookupByLibrary.simpleMessage("Performed"),
+        "label_premium_access":
+            MessageLookupByLibrary.simpleMessage("Premium Access"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Rank"),
         "label_required_email":
@@ -189,6 +205,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid email."),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
             "Unable to send an email, make sure you have configured the email app on your mobile."),
+        "msg_erro_pending_purchase": MessageLookupByLibrary.simpleMessage(
+            "Payment for your subscription is pending, check google play."),
+        "msg_erro_purchase": MessageLookupByLibrary.simpleMessage(
+            "An error purchasing your subscription to google play."),
         "msg_error_already_credintial_in_use":
             MessageLookupByLibrary.simpleMessage("Incorrect login or password"),
         "msg_error_already_email_diff_credential":
@@ -254,6 +274,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No dream has been realized yet, but I\'m sure it will soon."),
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
             "Time to add your first dream!"),
+        "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
+            "In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets."),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Did you fulfill your dream?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
@@ -266,10 +288,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your login was created successfully!"),
         "name_app":
             MessageLookupByLibrary.simpleMessage("Revo - Focused Goals"),
+        "title_erro_purchase":
+            MessageLookupByLibrary.simpleMessage("Revo subscription error"),
         "title_forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
         "title_msg_error": MessageLookupByLibrary.simpleMessage("Oops!"),
         "title_msg_sucess": MessageLookupByLibrary.simpleMessage("Success"),
-        "title_register_email": MessageLookupByLibrary.simpleMessage("Register")
+        "title_register_email":
+            MessageLookupByLibrary.simpleMessage("Register"),
+        "title_subscription_donated": MessageLookupByLibrary.simpleMessage(
+            "100% of the amount will be donated to @movimentodesperte")
       };
 }

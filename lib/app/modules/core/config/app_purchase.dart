@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/product_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
+import 'package:dremfoo/app/modules/core/domain/usecases/contract/ipurchase_user_case.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -14,6 +16,9 @@ part 'app_purchase.g.dart';
 class AppPurchase = _AppPurchaseBase with _$AppPurchase;
 
 abstract class _AppPurchaseBase with Store {
+
+  IPurchaseUserCase _purchaseUserCase;
+  _AppPurchaseBase(this._purchaseUserCase);
 
   late StreamSubscription<List<PurchaseDetails>> _subscription;
 
@@ -46,11 +51,10 @@ abstract class _AppPurchaseBase with Store {
     }, onDone: () {
       isEnableSubscription = false;
       _subscription.cancel();
-      print("-----DONE----");
     }, onError: (error) {
       isEnableSubscription = false;
       isError = true;
-      print("------- On Error: $error");
+      CrashlyticsUtil.logErro(Exception("Erro no listener Purchase : $error"), null);
     });
   }
 
@@ -68,20 +72,18 @@ abstract class _AppPurchaseBase with Store {
 
         case PurchaseStatus.pending:
           isEnableSubscription = false;
-          print("_showPendingUI();");
           break;
 
         case PurchaseStatus.error:
           isEnableSubscription = false;
           isError = true;
-          print("_handleError(${purchaseDetails.error!});");
+          CrashlyticsUtil.logErro(Exception("Erro no PurchaseStatus : ${purchaseDetails.error}"), null);
           break;
 
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
           isEnableSubscription = true;
           isError = false;
-          print("**********_deliverProduct(${purchaseDetails.status});");
           break;
 
         case PurchaseStatus.canceled:
@@ -93,26 +95,29 @@ abstract class _AppPurchaseBase with Store {
 
   Future<ResponseApi<List<ProductDetails>>> findProductsForSale() async {
 
-    Set<String> _products = <String>{
-      "br.com.dias.dremfoo.mensal.assinatura.completo",
-      "br.com.dias.dremfoo.anual.assinatura.completo"
-    };
-    ProductDetailsResponse _response = await InAppPurchase.instance.queryProductDetails(_products);
-    if(_response.notFoundIDs.isNotEmpty){
-      RevoExceptions exceptions = RevoExceptions.msgToUser(msg: _response.error.toString(),);
-      CrashlyticsUtil.logErro(exceptions, exceptions.stack);
-      return ResponseApi.error(messageAlert: MessageAlert.create("Erro na Assinatura", "Não foram encontrados planos para assinatura", TypeAlert.ERROR));
+    Set<String> _products = <String>{};
+
+    ResponseApi<List<ProductPurchase>> responsePurchase = await _purchaseUserCase.findAllProductPurchase();
+    if(responsePurchase.ok){
+
+      List<ProductPurchase> listPurchaseProducts = responsePurchase.result!;
+
+      listPurchaseProducts.forEach((purchase) {
+        _products.add(purchase.uid!);
+      });
+
+      ProductDetailsResponse _response = await InAppPurchase.instance.queryProductDetails(_products);
+      if(_response.notFoundIDs.isNotEmpty){
+        RevoExceptions exceptions = RevoExceptions.msgToUser(msg: _response.error.toString(),);
+        CrashlyticsUtil.logErro(exceptions, exceptions.stack);
+        return ResponseApi.error(messageAlert: MessageAlert.create("Erro na Assinatura", "Não foram encontrados planos para assinatura", TypeAlert.ERROR));
+      }
+
+      List<ProductDetails> products = _response.productDetails;
+      return ResponseApi.ok(result: products);
     }
 
-    List<ProductDetails> products = _response.productDetails;
-    return ResponseApi.ok(result: products);
-
-    // AppPurchase _appPurchase = Modular.get<AppPurchase>();
-    // if(!_appPurchase.isEnableSubscription){
-    //   // _buyProduct(products[0]);
-    // }
-
-
+    return ResponseApi.error(messageAlert: MessageAlert.create("Erro na Assinatura", "Não foram encontrados produtos para a assinatura.", TypeAlert.ERROR));
   }
 
   Future<void> restorePurchase() async {

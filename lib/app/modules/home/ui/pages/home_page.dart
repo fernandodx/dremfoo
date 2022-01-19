@@ -1,4 +1,3 @@
-
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
@@ -30,7 +29,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends ModularState<HomePage, HomeStore> {
-
   AppPurchase _appPurchase = Modular.get<AppPurchase>();
 
   @override
@@ -39,40 +37,35 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
 
     reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
       if (msgErro != null) {
-        alertBottomSheet(context,
-            msg: msgErro.msg,
-            title: msgErro.title,
-            type: msgErro.type
-        );
+        alertBottomSheet(context, msg: msgErro.msg, title: msgErro.title, type: msgErro.type);
       }
     });
 
     reaction<bool>((_) => _appPurchase.isError, (isErro) {
       if (isErro) {
         alertBottomSheet(context,
-            msg: "Tivemos um erro na compra da sua assinatura, verifique a google play.",
-            title: "Erro na assinatura do Revo",
-            type: TypeAlert.ERROR
-        );
+            msg: Translate.i().get.msg_erro_purchase,
+            title: Translate.i().get.title_erro_purchase,
+            type: TypeAlert.ERROR);
       }
     });
 
     reaction<bool>((_) => _appPurchase.isPending, (isPending) {
       if (isPending) {
         alertBottomSheet(context,
-            msg: "O pgamento da sua assinatura esta pendente, verifique a google play.",
-            title: "Pagamento pendente na assinatura do Revo",
-            type: TypeAlert.ERROR
-        );
+            msg: Translate.i().get.msg_erro_pending_purchase,
+            title: Translate.i().get.label_erro_pending_purchase,
+            type: TypeAlert.ERROR);
       }
     });
 
     store.fetch();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    const withSpaceButton = 40;
+
     return Observer(builder: (context) {
       return Scaffold(
         appBar: AppbarRevoWidget(
@@ -87,53 +80,63 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ChipButtonWidget(
-                        name: Translate.i().get.label_archive,
-                        size: 80,
-                        icon: FontAwesomeIcons.folderOpen,
-                        onTap: () {
-                          store.navigateArchivePage(context);
-                        },
-                      ),
-                      ChipButtonWidget(
-                        name: Translate.i().get.label_perfomed,
-                        size: 80,
-                        icon: FontAwesomeIcons.clipboardCheck,
-                        onTap: () {
-                          store.navigateDreamsCompletedPage(context);
-                        },
-                      ),
-                    ]),
+                Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ChipButtonWidget(
+                            name: Translate.i().get.label_archive,
+                            size: (MediaQuery.of(context).size.width / 4) - withSpaceButton,
+                            icon: FontAwesomeIcons.folderOpen,
+                            onTap: () {
+                              store.navigateArchivePage(context);
+                            },
+                          ),
+                          ChipButtonWidget(
+                            name: Translate.i().get.label_perfomed,
+                            size: (MediaQuery.of(context).size.width / 4) - withSpaceButton,
+                            icon: FontAwesomeIcons.clipboardCheck,
+                            onTap: () {
+                              store.navigateDreamsCompletedPage(context);
+                            },
+                          ),
+                        ]),
+                    SpaceWidget(),
+                    Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ChipButtonWidget(
+                            name: Translate.i().get.label_free_content,
+                            size: (MediaQuery.of(context).size.width / 4) - withSpaceButton,
+                            icon: FontAwesomeIcons.video,
+                            onTap: () {
+                              store.navigatePageFreeVideos(context);
+                            },
+                          ),
+                          ChipButtonWidget(
+                            name: Translate.i().get.label_social_network,
+                            size: (MediaQuery.of(context).size.width / 4) - withSpaceButton,
+                            icon: FontAwesomeIcons.heart,
+                            onTap: () {
+                              store.navigateSocialNetworkPage(context);
+                            },
+                          ),
+                        ]),
+                  ],
+                )),
                 SpaceWidget(),
-                Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ChipButtonWidget(
-                        name: Translate.i().get.label_free_content,
-                        size: 80,
-                        icon: FontAwesomeIcons.video,
-                        onTap: () {
-                          store.navigatePageFreeVideos(context);
-                        },
-                      ),
-                      ChipButtonWidget(
-                        name: Translate.i().get.label_social_network,
-                        size: 80,
-                        icon: FontAwesomeIcons.heart,
-                        onTap: () {
-                          store.navigateSocialNetworkPage(context);
-                        },
-                      ),
-                    ]),
-                SpaceWidget(),
-                Container(
+                Expanded(
+                    flex: 4,
+                    child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                       color: Theme.of(context).backgroundColor.withAlpha(180),
@@ -141,7 +144,8 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                           topLeft: Radius.circular(40), topRight: Radius.circular(40))),
                   width: double.maxFinite,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -175,7 +179,9 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                             return OutlineButtonWithImageWidget(
                                 icon: FontAwesomeIcons.checkCircle,
                                 title: Translate.i().get.last_acess,
-                                subTitle: store.lastDateAcess != null ? "${store.lastDateAcess?.format()}" : "");
+                                subTitle: store.lastDateAcess != null
+                                    ? "${store.lastDateAcess?.format()}"
+                                    : "");
                           }),
                         ],
                       ),
@@ -189,16 +195,15 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                       ),
                       SpaceWidget(),
                       Observer(builder: (context) {
-
                         Widget ad = LoadingWidget("");
 
-                        // if(store.bannerAd != null && _appPurchase.isShowAd) {
-                        if(store.bannerAd != null){
-                          ad =  AdWidget(ad: store.bannerAd!,);
+                        if (store.bannerAd != null && _appPurchase.isShowAd) {
+                          ad = AdWidget(
+                            ad: store.bannerAd!,
+                          );
                         }
 
                         return Visibility(
-                            // visible: AppPurchase.getInstance().isShowAd && RemoteConfigUtil().isEnableAd() && store.isBannerAdReady,
                             visible: store.isBannerAdReady && _appPurchase.isShowAd,
                             child: Container(
                               alignment: Alignment.center,
@@ -209,7 +214,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                       })
                     ],
                   ),
-                )
+                ))
               ],
             )),
       );

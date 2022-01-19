@@ -249,7 +249,6 @@ abstract class _DetailDreamStoreBase with Store {
       isOpenReview = isShowReview;
 
       if(_appPurchase.isShowAd
-          && RemoteConfigUtil().isEnableAd()
           && isLoadBannerAfterConclusionGoal
           && !isShowReview){
          bannerAfterConclusionGoal?.show();

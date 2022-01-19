@@ -1,25 +1,19 @@
 import 'dart:async';
 
-import 'package:dremfoo/app/model/level_revo.dart';
 import 'package:dremfoo/app/model/video.dart';
 import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
-import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
-import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/user_focus.dart';
-import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
+import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/contract/ihome_usecase.dart';
+import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/notification_util.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home_store.g.dart';

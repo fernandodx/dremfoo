@@ -18,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mobx/mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SubscriptionPlanPage extends StatefulWidget {
   const SubscriptionPlanPage({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
       return Container(
         color: Colors.black38,
         alignment: Alignment.center,
-        child: LoadingWidget("Carregando planos"),
+        child: LoadingWidget(Translate.i().get.label_loading_plans),
       );
     });
 
@@ -59,20 +60,18 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
     reaction<bool>((_) => _appPurchase.isError, (isErro) {
       if (isErro) {
         alertBottomSheet(context,
-            msg: "Tivemos um erro na compra da sua assinatura, verifique a google play.",
-            title: "Erro na assinatura do Revo",
-            type: TypeAlert.ERROR
-        );
+            msg: Translate.i().get.msg_erro_purchase,
+            title: Translate.i().get.title_erro_purchase,
+            type: TypeAlert.ERROR);
       }
     });
 
     reaction<bool>((_) => _appPurchase.isPending, (isPending) {
       if (isPending) {
         alertBottomSheet(context,
-            msg: "O pgamento da sua assinatura esta pendente, verifique a google play.",
-            title: "Pagamento pendente na assinatura do Revo",
-            type: TypeAlert.ERROR
-        );
+            msg: Translate.i().get.msg_erro_pending_purchase,
+            title: Translate.i().get.label_erro_pending_purchase,
+            type: TypeAlert.ERROR);
       }
     });
 
@@ -83,7 +82,7 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextUtil.textAppbar("Acesso Premium"),
+        title: TextUtil.textAppbar(Translate.i().get.label_premium_access),
       ),
       body: Container(
         child: Column(
@@ -131,20 +130,21 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                 child: ListView(
                   children: [
                     Text(
-                      "Assinatura Revo - Metas com foco",
+                      Translate.i().get.label_description_subscription,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                             color: Theme.of(context).hintColor,
                           ),
                     ),
                     Divider(),
-                    Container(
-                      margin: EdgeInsets.only(left: 16, right: 16),
-                      child: TextUtil.textSubTitle(
-                          "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas báscicas para o Movimento Desperte.",
-                          //https://www.instagram.com/movimentodesperte/
-                          align: TextAlign.justify,
-                      ),
+                    ListTile(
+                      onTap: () => launch("https://www.instagram.com/movimentodesperte"),
+                      leading: FaIcon(FontAwesomeIcons.instagram),
+                      title: TextUtil.textTitulo(Translate.i().get.title_subscription_donated),
+                      subtitle: TextUtil.textSubTitle(Translate.i().get.msg_purchase_2022, align: TextAlign.justify),
+                      trailing: Icon(Icons.chevron_right),
+                      textColor: Theme.of(context).textTheme.subtitle1?.color,
+
                     ),
                     SizedBox(
                       height: 16,
@@ -166,9 +166,9 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                           ],
                         ),
                       ),
-                      title: TextUtil.textTitulo("Sem propagandas"),
+                      title: TextUtil.textTitulo(Translate.i().get.label_no_ad),
                       subtitle:
-                          TextUtil.textSubTitle("Navegue tranquilo pelo app sem publicidade."),
+                          TextUtil.textSubTitle(Translate.i().get.label_no_ad_description),
                         textColor: Theme.of(context).textTheme.subtitle1?.color,
                     ),
                     ListTile(
@@ -188,9 +188,9 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                           ],
                         ),
                       ),
-                      title: TextUtil.textTitulo("Acesso as novas funcionalidades"),
-                      subtitle: TextUtil.textDefault(
-                        "Não perca a chance de acessar as melhores funções que estão por vim.",
+                      title: TextUtil.textTitulo(Translate.i().get.label_access_new_features),
+                      subtitle: TextUtil.textSubTitle(
+                        Translate.i().get.label_no_miss_features,
                       ),
                         textColor: Theme.of(context).textTheme.subtitle1?.color,
                     ),
@@ -263,7 +263,7 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
       }
 
       list.add(Container(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
         child: ChipButtonWidget(
             name: labelButtom,
             size: 250,

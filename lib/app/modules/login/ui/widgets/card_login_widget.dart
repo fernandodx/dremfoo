@@ -24,7 +24,7 @@ class CardLoginWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       elevation: 10.0,
       child: Container(
-        margin: EdgeInsets.all(16),
+        margin: EdgeInsets.all(12),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -1589,6 +1589,136 @@ class S {
       args: [],
     );
   }
+
+  /// `An error purchasing your subscription to google play.`
+  String get msg_erro_purchase {
+    return Intl.message(
+      'An error purchasing your subscription to google play.',
+      name: 'msg_erro_purchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revo subscription error`
+  String get title_erro_purchase {
+    return Intl.message(
+      'Revo subscription error',
+      name: 'title_erro_purchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment for your subscription is pending, check google play.`
+  String get msg_erro_pending_purchase {
+    return Intl.message(
+      'Payment for your subscription is pending, check google play.',
+      name: 'msg_erro_pending_purchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment pending on Revo subscription`
+  String get label_erro_pending_purchase {
+    return Intl.message(
+      'Payment pending on Revo subscription',
+      name: 'label_erro_pending_purchase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading plans`
+  String get label_loading_plans {
+    return Intl.message(
+      'Loading plans',
+      name: 'label_loading_plans',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Premium Access`
+  String get label_premium_access {
+    return Intl.message(
+      'Premium Access',
+      name: 'label_premium_access',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revo Subscription - Focused Goals`
+  String get label_description_subscription {
+    return Intl.message(
+      'Revo Subscription - Focused Goals',
+      name: 'label_description_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets.`
+  String get msg_purchase_2022 {
+    return Intl.message(
+      'In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets.',
+      name: 'msg_purchase_2022',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No advertisements`
+  String get label_no_ad {
+    return Intl.message(
+      'No advertisements',
+      name: 'label_no_ad',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Browse through the app without advertising.`
+  String get label_no_ad_description {
+    return Intl.message(
+      'Browse through the app without advertising.',
+      name: 'label_no_ad_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Access to new features`
+  String get label_access_new_features {
+    return Intl.message(
+      'Access to new features',
+      name: 'label_access_new_features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't miss your chance to access the best features to come.`
+  String get label_no_miss_features {
+    return Intl.message(
+      'Don\'t miss your chance to access the best features to come.',
+      name: 'label_no_miss_features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `100% of the amount will be donated to @movimentodesperte`
+  String get title_subscription_donated {
+    return Intl.message(
+      '100% of the amount will be donated to @movimentodesperte',
+      name: 'title_subscription_donated',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

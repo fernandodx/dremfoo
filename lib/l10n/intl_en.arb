@@ -153,6 +153,18 @@
   "msg_is_like_app" : "Are you enjoying Revo - Focused Goals?",
   "label_assessment" : "Assessment",
   "label_no" : "No",
-  "label_acess_premium": "Premium"
-
+  "label_acess_premium": "Premium",
+  "msg_erro_purchase" : "An error purchasing your subscription to google play.",
+  "title_erro_purchase" : "Revo subscription error",
+  "msg_erro_pending_purchase" : "Payment for your subscription is pending, check google play.",
+  "label_erro_pending_purchase" : "Payment pending on Revo subscription",
+  "label_loading_plans" : "Loading plans",
+  "label_premium_access" : "Premium Access",
+  "label_description_subscription" : "Revo Subscription - Focused Goals",
+  "msg_purchase_2022" : "In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets.",
+  "label_no_ad" : "No advertisements",
+  "label_no_ad_description" : "Browse through the app without advertising.",
+  "label_access_new_features" : "Access to new features",
+  "label_no_miss_features" : "Don't miss your chance to access the best features to come.",
+  "title_subscription_donated" : "100% of the amount will be donated to @movimentodesperte"
 }

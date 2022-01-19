@@ -56,6 +56,7 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
       body: Form(
         key: store.formKey,
         child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             BackgroundWidget(),
             SingleChildScrollView(
@@ -94,7 +95,7 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
 
   Container containerBody(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 16),
+      margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 16),
       child: CardLoginWidget(),
     );
   }
