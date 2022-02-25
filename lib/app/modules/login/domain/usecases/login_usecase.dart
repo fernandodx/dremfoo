@@ -23,14 +23,13 @@ class LoginUseCase implements ILoginCase {
   ISharedPrefsRepository _sharedPrefsRepository;
   LoginUseCase(this._loginRepository, this._userRepository, this._sharedPrefsRepository);
 
-  var _userRevo = Modular.get<UserRevo>();
-
   @override
   Future<ResponseApi<User>> loginWithEmailAndPassword(UserRevo userRevo) async {
 
     try {
       var user = await _loginRepository.signInWithEmailAndPassword(userRevo.email!, userRevo.password!);
       await _saveUserLoging(user.uid);
+      var _userRevo = Modular.get<UserRevo>();
       _saveUser(_userRevo);
       saveLastAcessUser();
 
@@ -54,6 +53,7 @@ class LoginUseCase implements ILoginCase {
     try {
       var user = await _loginRepository.signInWithFacebook();
       await _saveUserLoging(user.uid);
+      var _userRevo = Modular.get<UserRevo>();
       _saveUser(_userRevo);
       saveLastAcessUser();
 
@@ -76,6 +76,7 @@ class LoginUseCase implements ILoginCase {
     try {
       var user = await _loginRepository.signInWithGoogle();
       await _saveUserLoging(user.uid);
+      var _userRevo = Modular.get<UserRevo>();
       _saveUser(_userRevo);
       saveLastAcessUser();
 
@@ -134,7 +135,7 @@ class LoginUseCase implements ILoginCase {
   @override
   Future<ResponseApi> saveLastAcessUser() async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.dateLastAcess != null
           && _userRevo.dateLastAcess!.toDate().isSameDate(DateTime.now())){
         return ResponseApi.ok();
@@ -179,7 +180,7 @@ class LoginUseCase implements ILoginCase {
   @override
   Future<ResponseApi> logOut() async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       await _sharedPrefsRepository.removePref("USER_LOG_UID");
       await _loginRepository.logOut();
       _userRevo = new UserRevo();

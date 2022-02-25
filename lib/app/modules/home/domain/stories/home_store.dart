@@ -5,10 +5,14 @@ import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/ad_util.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/period_report_dto.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/status_dream_week.dart';
+import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/i_report_dream_case.dart';
 import 'package:dremfoo/app/modules/home/domain/usecases/contract/ihome_usecase.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
+import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/utils/notification_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,8 +28,9 @@ abstract class _HomeStoreBase with Store {
   IHomeUsecase _homeUsecase;
   IRegisterUserCase _registerUserCase;
   ILoginCase _loginCase;
+  IReportDreamCase _reportDreamCase;
 
-  _HomeStoreBase(this._homeUsecase, this._registerUserCase, this._loginCase);
+  _HomeStoreBase(this._homeUsecase, this._registerUserCase, this._loginCase, this._reportDreamCase);
 
   @observable
   MessageAlert? msgAlert;
@@ -47,7 +52,7 @@ abstract class _HomeStoreBase with Store {
 
   BannerAd? bannerAd;
 
-  Future<void> fetch() async {
+  Future<void> fetch(BuildContext context) async {
     NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
     await _findCurrentUser();
     ResponseApi<UserRevo> responseUserLevel = await _registerUserCase.checkLevelFocusUser();
@@ -60,11 +65,8 @@ abstract class _HomeStoreBase with Store {
     _loadRankUser();
     _loadVideo();
     _loadBanner();
-
-    AppPurchase _appPurchase = Modular.get<AppPurchase>();
-    _appPurchase.findProductsForSale();
+    _checkReportGoals(context);
   }
-
 
   void _loadBanner() {
     bannerAd = BannerAd(
@@ -84,6 +86,49 @@ abstract class _HomeStoreBase with Store {
     );
 
     bannerAd!.load();
+  }
+
+  Future<void> _checkReportGoals(BuildContext context) async {
+    bool isReportWeek = await _checkReportGoalsWeek(context);
+    if(!isReportWeek){
+      _checkReportGoalsMonth(context);
+    }
+  }
+
+  Future<bool> _checkReportGoalsMonth(BuildContext context) async {
+
+    DateTime now = DateTime.now();
+    int year = now.year;
+    int lastMonth = now.month - 1;
+
+    if (lastMonth == 0) {
+      lastMonth = 12;
+      year = year - 1;
+    }
+
+    ResponseApi<List<StatusDreamPeriod>> responseApiStatusMonth =
+        await _reportDreamCase.findStatusDreamWithMonth(lastMonth, year);
+    if (responseApiStatusMonth.ok && responseApiStatusMonth.result?.isEmpty == true) {
+      navigatePageReportDream(context,
+          numberPeriod: lastMonth, periodStatus: PeriodStatusDream.MONTHLY, year: year);
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> _checkReportGoalsWeek(BuildContext context) async {
+
+    DateTime now = DateTime.now();
+    int lastWeekCheckGoals = DateUtil().getLastWeek(now.month, now.day, now.year);
+
+    ResponseApi<List<StatusDreamPeriod>> responseApiStatus =
+    await _reportDreamCase.findStatusDreamWithWeek(lastWeekCheckGoals, now.year);
+    if (responseApiStatus.ok && responseApiStatus.result?.isEmpty == true) {
+      navigatePageReportDream(context,
+          numberPeriod: lastWeekCheckGoals, periodStatus: PeriodStatusDream.WEEKLY, year: now.year);
+      return true;
+    }
+    return false;
   }
 
   @action
@@ -147,5 +192,16 @@ abstract class _HomeStoreBase with Store {
 
   void navigatePageFreeVideos(BuildContext context) {
     Navigator.pushNamed(context, "/freeVideos");
+  }
+
+  void navigatePageReportDream(BuildContext context,
+      {required int numberPeriod,
+      required PeriodStatusDream periodStatus,
+      required int year}) {
+    Navigator.pushNamed(context, "/dream/reportDreamWeek",
+        arguments: PeriodReportDto(
+            numPeriod: numberPeriod,
+            periodStatus: periodStatus,
+            year: year));
   }
 }

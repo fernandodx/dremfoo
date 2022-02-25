@@ -9,8 +9,8 @@ class SpaceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(isSpaceRow){
-      return SizedBox(width: 16);
+      return SizedBox(width: 12);
     }
-    return SizedBox(height: 16);
+    return SizedBox(height: 12);
   }
 }

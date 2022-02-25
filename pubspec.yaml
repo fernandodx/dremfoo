@@ -67,7 +67,7 @@ dependencies:
   flutter_mobx: ^2.0.2
   mobx: ^2.0.4
 
-  flutter_modular: ^3.4.1+1
+  flutter_modular: ^4.4.0
   slidy: ^3.2.2+2
 
   intl: ^0.17.0
@@ -88,7 +88,7 @@ dev_dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_modular_test:
+#  flutter_modular_test:
 
 
 

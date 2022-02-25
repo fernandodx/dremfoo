@@ -74,7 +74,6 @@ abstract class _DetailDreamStoreBase with Store {
    double percentStep = 0;
    Timestamp? dateUpdate;
 
-   var user =  Modular.get<UserRevo>();
 
    @action
    Future<ResponseApi<List<DailyGoal>>> _findDailyGoal(Dream dream) async {
@@ -248,14 +247,14 @@ abstract class _DetailDreamStoreBase with Store {
 
       isOpenReview = isShowReview;
 
-      if(_appPurchase.isShowAd
+      if(RemoteConfigUtil().isEnablePurchase()
+          && _appPurchase.isShowAd
           && isLoadBannerAfterConclusionGoal
           && !isShowReview){
          bannerAfterConclusionGoal?.show();
       }else if(!isShowReview){
          isDismissBanner = true;
       }
-
    }
 
    void _loadBannerAfterConclusionGoal() {

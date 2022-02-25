@@ -17,12 +17,10 @@ class DreamRespository extends IDreamRepository {
   IDreamDatasource _datasource;
   DreamRespository(this._datasource);
 
-  var _userRevo = Modular.get<UserRevo>();
-
   @override
   Future<List<Dream>> findAllDreamForUser() async {
    try{
-
+     var _userRevo = Modular.get<UserRevo>();
      if(_userRevo.uid != null){
       return _datasource.findAllDreamForUser(_userRevo.uid!);
      }else{
@@ -42,7 +40,7 @@ class DreamRespository extends IDreamRepository {
   @override
   Future<List<DailyGoal>> findAllDailyGoalForDream(String uidDream) {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         return _datasource.findAllDailyGoalForDream(_userRevo.uid!, uidDream);
       }else{
@@ -61,7 +59,7 @@ class DreamRespository extends IDreamRepository {
   @override
   Future<List<StepDream>> findAllStepsForDream(String uidDream) {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         return _datasource.findAllStepsForDream(_userRevo.uid!, uidDream);
       }else{
@@ -151,7 +149,7 @@ class DreamRespository extends IDreamRepository {
   Future<Dream> saveDream(Dream dream) async {
     try{
       dream.dateRegister = Timestamp.now();
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         AnalyticsUtil.sendAnalyticsEvent(EventRevo.newDream);
         return _datasource.saveDream(dream, _userRevo.uid!);
@@ -190,7 +188,7 @@ class DreamRespository extends IDreamRepository {
 
   Future<List<Dream>> findAllDreamsArchiveCurrentUser() async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         return _datasource.findAllDreamsArchive(_userRevo.uid!);
       }else{
@@ -230,6 +228,7 @@ class DreamRespository extends IDreamRepository {
   @override
   Future<List<Dream>> findAllDreamsCompletedCurrentUser() async {
     try{
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         return _datasource.findAllDreamsCompleted(_userRevo.uid!);
       }else{

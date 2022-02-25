@@ -21,14 +21,13 @@ class HomeUseCase implements IHomeUsecase {
   ISharedPrefsRepository _sharedPrefsRepository;
   HomeUseCase(this._userRepository, this._homeRepository, this._sharedPrefsRepository);
 
-  var _userRevo =  Modular.get<UserRevo>();
-
   @override
   Future<ResponseApi<UserRevo>> findCurrentUser() async {
     try{
 
       String uid = await _sharedPrefsRepository.getString("USER_LOG_UID");
       if(uid.isNotEmpty){
+        var _userRevo = Modular.get<UserRevo>();
         _userRevo.uid = uid;
       }
 

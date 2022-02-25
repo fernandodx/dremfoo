@@ -15,7 +15,7 @@ class LoginRepository implements ILoginRepository {
   final ILoginDatasource _loginDatasource;
   LoginRepository(this._loginDatasource);
 
-  var _userRevo =  Modular.get<UserRevo>();
+
   var _analytics = Modular.get<RevoAnalytics>();
 
 
@@ -59,7 +59,7 @@ class LoginRepository implements ILoginRepository {
   @override
   Future<User> signInWithFacebook() async {
     try{
-
+      var _userRevo =  Modular.get<UserRevo>();
       var msgError = "";
       LoginResult result = await _loginDatasource.signInWithFacebook();
       switch(result.status){
@@ -106,6 +106,7 @@ class LoginRepository implements ILoginRepository {
   @override
   Future<User> signInWithGoogle() async {
     try {
+      var _userRevo =  Modular.get<UserRevo>();
       AuthCredential auth = await _loginDatasource.signInWithGoogle();
       var user = await _loginDatasource.signInWithCredential(auth);
       await _userRevo.updateDataUserFirebase(user);
@@ -129,7 +130,7 @@ class LoginRepository implements ILoginRepository {
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     try{
-
+      var _userRevo =  Modular.get<UserRevo>();
       var user = await _loginDatasource.signInWithEmailAndPassword(email, password);
       await _userRevo.updateDataUserFirebase(user);
       return _handlerUser(_userRevo, MethodLogin.email);

@@ -26,7 +26,7 @@ class RegisterUserRepository extends IRegisterUserRepository {
   final IUserDataSource _userDataSource;
   RegisterUserRepository(this._loginDatasource, this._uploadFilesDataSource, this._userDataSource);
 
-  var _userRevo =  Modular.get<UserRevo>();
+
   var _analytics = Modular.get<RevoAnalytics>();
 
   @override
@@ -36,7 +36,7 @@ class RegisterUserRepository extends IRegisterUserRepository {
       if(user != null){
         user.updateDisplayName(userRevo.name);
       }
-
+      var _userRevo =  Modular.get<UserRevo>();
       await _userRevo.updateDataUserFirebase(user);
 
       if(user != null){
@@ -194,6 +194,7 @@ class RegisterUserRepository extends IRegisterUserRepository {
   @override
   Future<UserRevo> findCurrentUser() async {
     try {
+      var _userRevo =  Modular.get<UserRevo>();
        if(_userRevo.uid != null){
          UserRevo userRevo = await _userDataSource.findUserWithUid(_userRevo.uid!);
          _userRevo.copy(userRevo);
@@ -214,6 +215,7 @@ class RegisterUserRepository extends IRegisterUserRepository {
   @override
   Future<DateTime> findLastDayAcessForUser(bool excludeToday) async {
     try {
+      var _userRevo =  Modular.get<UserRevo>();
       if(_userRevo.uid != null){
         return _userDataSource.findLastDayAcessForUser(_userRevo.uid!, excludeToday);
       }else {

@@ -25,8 +25,12 @@ abstract class _LoginStoreBase with Store {
   MessageAlert? msgAlert;
 
   final formKey = GlobalKey<FormState>();
-  UserRevo user  = Modular.get<UserRevo>();
+  late UserRevo user;
   var textEmailController = TextEditingController();
+
+  void featch() {
+    user = Modular.get<UserRevo>();
+  }
 
   void rememberPassword(BuildContext context) async {
     isLoading = true;

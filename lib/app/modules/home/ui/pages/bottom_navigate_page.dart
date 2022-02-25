@@ -1,5 +1,7 @@
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,7 +22,8 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
   void initState() {
     super.initState();
 
-    Modular.to.navigate('/home/dashboard');
+    // Modular.to.navigate('/home/dashboard');
+
     // Modular.to.navigate('/home/dream');
     // Navigator.pushNamed(context, "/dream");
   }
@@ -39,28 +42,7 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
           bottomNavigationBar: Theme(
             data: Theme.of(context).copyWith(canvasColor: Theme.of(context).backgroundColor),
             child: BottomNavigationBar(
-              items: [
-                BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.home),
-                  label: Translate.i().get.label_home,
-                ),
-                BottomNavigationBarItem(
-                  icon: FaIcon(FontAwesomeIcons.cloud),
-                  label: Translate.i().get.label_dreams,
-                ),
-                // BottomNavigationBarItem(
-                //     icon: FaIcon(FontAwesomeIcons.chartLine),
-                //     label: Translate.i().get.label_statistics),
-                // BottomNavigationBarItem(
-                //     icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
-                //     label: Translate.i().get.label_challenges),
-                BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.trophy),
-                    label: Translate.i().get.label_rank),
-                BottomNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.award),
-                    label: Translate.i().get.label_acess_premium),
-              ],
+              items: getListItemBottom(),
               currentIndex: store.selectedIndex,
               onTap: (index) {
                 store.navigatePageBottomNavigate(index);
@@ -71,4 +53,34 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
       },
     );
   }
+
+  List<BottomNavigationBarItem> getListItemBottom() {
+
+    List<BottomNavigationBarItem> list =[];
+
+    list.add(BottomNavigationBarItem(
+      icon: FaIcon(FontAwesomeIcons.home),
+      label: Translate.i().get.label_home,
+    ));
+
+    list.add(BottomNavigationBarItem(
+      icon: FaIcon(FontAwesomeIcons.cloud),
+      label: Translate.i().get.label_dreams,
+    ));
+
+    list.add(BottomNavigationBarItem(
+        icon: FaIcon(FontAwesomeIcons.trophy),
+        label: Translate.i().get.label_rank));
+
+    if(RemoteConfigUtil().isEnablePurchase()){
+      list.add(BottomNavigationBarItem(
+          icon: FaIcon(FontAwesomeIcons.award),
+          label: Translate.i().get.label_acess_premium));
+    }
+
+    return list;
+
+  }
+
+
 }

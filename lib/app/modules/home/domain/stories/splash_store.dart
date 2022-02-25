@@ -34,7 +34,8 @@ abstract class _SplashStoreBase with Store {
     checkTheme(context);
     ResponseApi<String> responseApi = await _loginCase.checkUserLoging();
     if(responseApi.ok){
-      Modular.to.navigate("/home",);
+      // Modular.to.navigate("/home",);
+      Modular.to.navigate("/home/dashboard",);
     }else{
       //Navegar para tela de login
       Modular.to.navigate("/userNotFound",);

@@ -29,11 +29,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends ModularState<HomePage, HomeStore> {
-  AppPurchase _appPurchase = Modular.get<AppPurchase>();
+  late AppPurchase _appPurchase;
 
   @override
   void initState() {
     super.initState();
+
+    _appPurchase = Modular.get<AppPurchase>();
 
     reaction<MessageAlert?>((_) => store.msgAlert, (msgErro) {
       if (msgErro != null) {
@@ -59,12 +61,12 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
       }
     });
 
-    store.fetch();
+    store.fetch(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    const withSpaceButton = 40;
+    const withSpaceButton = 30;
 
     return Observer(builder: (context) {
       return Scaffold(
@@ -135,7 +137,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                 )),
                 SpaceWidget(),
                 Expanded(
-                    flex: 4,
+                    flex: 6,
                     child: Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -145,7 +147,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                   width: double.maxFinite,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -161,7 +163,7 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                                 icon: FontAwesomeIcons.fire,
                                 title: Translate.i().get.label_focus,
                                 subTitle:
-                                    "${store.currentUser?.focus?.countDaysFocus} ${Translate.i().get.label_days}");
+                                    "${store.currentUser?.focus?.countDaysFocus??""} ${Translate.i().get.label_days}");
                           }),
                         ],
                       ),
@@ -197,14 +199,14 @@ class HomePageState extends ModularState<HomePage, HomeStore> {
                       Observer(builder: (context) {
                         Widget ad = LoadingWidget("");
 
-                        if (store.bannerAd != null && _appPurchase.isShowAd) {
+                        if (store.bannerAd != null) {
                           ad = AdWidget(
                             ad: store.bannerAd!,
                           );
                         }
 
                         return Visibility(
-                            visible: store.isBannerAdReady && _appPurchase.isShowAd,
+                            visible: RemoteConfigUtil().isEnablePurchase() &&  store.isBannerAdReady && _appPurchase.isShowAd,
                             child: Container(
                               alignment: Alignment.center,
                               width: double.maxFinite,

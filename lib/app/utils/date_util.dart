@@ -172,9 +172,13 @@ class DateUtil {
 
   int getWeek(int monthNum, int dayNum, int year)
   {
-    return ((daysPastInYear(monthNum, dayNum, year) / 7) + 1) as int;
+    return ((daysPastInYear(monthNum, dayNum, year) / 7).round() + 1);
   }
 
+  int getLastWeek(int monthNum, int dayNum, int year)
+  {
+    return (daysPastInYear(monthNum, dayNum, year) / 7).round();
+  }
 
   leapYear(int year)
   {

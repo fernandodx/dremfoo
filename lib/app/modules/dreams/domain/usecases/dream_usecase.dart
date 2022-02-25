@@ -29,8 +29,6 @@ class DreamUseCase extends IDreamCase {
   IUploadImageRepository _imageRepository;
   DreamUseCase(this._repository, this._imageRepository);
 
-  var _userRevo = Modular.get<UserRevo>();
-
   @override
   Future<ResponseApi<List<Dream>>> findDreamsForUser() async {
 
@@ -150,13 +148,13 @@ class DreamUseCase extends IDreamCase {
   }
 
   @override
-  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date) async {
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date, {bool isIgnoreSunday = false}) async {
     try{
 
       DateTime firstDay = date.subtract(Duration(days: date.weekday));
       DateTime endDay = firstDay.add(Duration(days: 7));
 
-      if(date.weekday == DateTime.sunday) {
+      if(!isIgnoreSunday && date.weekday == DateTime.sunday) {
         firstDay = date;
         endDay = date;
       }
@@ -179,6 +177,25 @@ class DreamUseCase extends IDreamCase {
     try{
       DateTime firstDay = DateTime(date.year, 1,1); //01/01/2021
       DateTime endDay = DateTime(date.year, 12,31); //31/01/2021
+
+      List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
+      return ResponseApi.ok(result: listHist);
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentMonth(Dream dream, int month , int year) async {
+    try{
+      DateTime firstDay = DateTime(year, month,1);
+      DateTime endDay = DateTime(year, month,31);
 
       List<DailyGoal> listHist = await _repository.findIntervalHistoryDailyGoal(dream, Utils.resetStartDay(firstDay), Utils.resetEndDay(endDay));
       return ResponseApi.ok(result: listHist);
@@ -406,6 +423,7 @@ class DreamUseCase extends IDreamCase {
       dream.percentStep = percentStep;
       dream.percentToday = percentToday;
 
+      var _userRevo = Modular.get<UserRevo>();
       _userRevo.focus?.dateLastFocus = Timestamp.now();
 
       var response = await updatePercentsGoalsDream(dream);
@@ -441,6 +459,7 @@ class DreamUseCase extends IDreamCase {
 
   @override
   bool checkPercentIsToday() {
+    var _userRevo = Modular.get<UserRevo>();
     if(_userRevo.focus?.dateLastFocus != null
         && !_userRevo.focus!.dateLastFocus!.toDate().isSameDate(DateTime.now())){
       return false;
@@ -468,6 +487,8 @@ class DreamUseCase extends IDreamCase {
     }
     return percentToday;
   }
+
+
 
 
 

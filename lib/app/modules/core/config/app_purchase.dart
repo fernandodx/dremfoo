@@ -20,7 +20,7 @@ abstract class _AppPurchaseBase with Store {
   IPurchaseUserCase _purchaseUserCase;
   _AppPurchaseBase(this._purchaseUserCase);
 
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
+  late StreamSubscription<List<PurchaseDetails>> subscription;
 
   @observable
   bool isEnableSubscription = false;
@@ -40,22 +40,24 @@ abstract class _AppPurchaseBase with Store {
     }
   }
 
-  Future<void> initListenerPurchase() async {
+  Future<StreamSubscription> initListenerPurchase() async {
 
     final Stream<List<PurchaseDetails>> _purchaseUpdate = InAppPurchase.instance.purchaseStream;
 
-    _subscription = _purchaseUpdate.listen((purchaseDetailsList) {
+    subscription = await _purchaseUpdate.listen((purchaseDetailsList) {
 
       _listenerToPurchaseUpdade(purchaseDetailsList);
 
     }, onDone: () {
       isEnableSubscription = false;
-      _subscription.cancel();
+      subscription.cancel();
     }, onError: (error) {
       isEnableSubscription = false;
       isError = true;
       CrashlyticsUtil.logErro(Exception("Erro no listener Purchase : $error"), null);
     });
+
+    return subscription;
   }
 
   void _listenerToPurchaseUpdade(List<PurchaseDetails> listDetailPurchase) {
@@ -102,9 +104,15 @@ abstract class _AppPurchaseBase with Store {
 
       List<ProductPurchase> listPurchaseProducts = responsePurchase.result!;
 
-      listPurchaseProducts.forEach((purchase) {
-        _products.add(purchase.uid!);
-      });
+      if(listPurchaseProducts.isEmpty){
+        RevoExceptions exceptions = RevoExceptions.msgToUser(msg: "listPurchaseProducts vazia",);
+        CrashlyticsUtil.logErro(exceptions, exceptions.stack);
+        return ResponseApi.error(messageAlert: MessageAlert.create("Erro na Assinatura", "Nenhum produto de assinatura encontrado.", TypeAlert.ERROR));
+      }
+
+      for(ProductPurchase product in listPurchaseProducts) {
+        _products.add(product.uid!);
+      }
 
       ProductDetailsResponse _response = await InAppPurchase.instance.queryProductDetails(_products);
       if(_response.notFoundIDs.isNotEmpty){
@@ -117,11 +125,11 @@ abstract class _AppPurchaseBase with Store {
       return ResponseApi.ok(result: products);
     }
 
-    return ResponseApi.error(messageAlert: MessageAlert.create("Erro na Assinatura", "Não foram encontrados produtos para a assinatura.", TypeAlert.ERROR));
+    return ResponseApi.error(messageAlert: responsePurchase.messageAlert,);
   }
 
   Future<void> restorePurchase() async {
-    await InAppPurchase.instance.restorePurchases();
+    InAppPurchase.instance.restorePurchases();
   }
 
   Future<bool> buyProduct(ProductDetails product) async {
@@ -138,13 +146,9 @@ abstract class _AppPurchaseBase with Store {
     return false;
   }
 
-  Future<bool> _verifyPurchaseAvailable() async {
+  Future<bool> verifyPurchaseAvailable() async {
     final bool available = await InAppPurchase.instance.isAvailable();
-    if (!available) {
-      // The store cannot be reached or accessed. Update the UI accordingly.
-      return false;
-    }
-    return true;
+    return available;
   }
 
 

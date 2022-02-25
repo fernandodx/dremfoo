@@ -25,7 +25,7 @@ class ChipButtonWidget extends StatelessWidget {
      child: Chip(
        onDeleted: onTap,
        deleteIcon: Icon(Icons.navigate_next,  color: Colors.black38,),
-       labelPadding: EdgeInsets.only(top: 12, bottom: 12, left: 4, right: 0),
+       labelPadding: EdgeInsets.only(top: 10, bottom: 10, left: 4, right: 0),
        label:  Container(
            width: size,
            child: TextUtil.textChipMenu(name, maxLines: 1, fontSize: fontSize)),

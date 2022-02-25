@@ -7,9 +7,13 @@ import 'package:dremfoo/app/modules/dreams/domain/stories/detail_dream_store.dar
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_completed_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/dream_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
+import 'package:dremfoo/app/modules/dreams/domain/stories/report_dream_week_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/dream_usecase.dart';
+import 'package:dremfoo/app/modules/dreams/domain/usecases/report_dream_usecase.dart';
 import 'package:dremfoo/app/modules/dreams/infra/datasources/dream_firebase_datasource.dart';
+import 'package:dremfoo/app/modules/dreams/infra/datasources/report_dream_datasource.dart';
 import 'package:dremfoo/app/modules/dreams/infra/repositories/dream_repository.dart';
+import 'package:dremfoo/app/modules/dreams/infra/repositories/report_dream_repository.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/archive_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/choice_type_dream_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/detail_dream_page.dart';
@@ -17,6 +21,7 @@ import 'package:dremfoo/app/modules/dreams/ui/pages/dream_completed_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/dreams_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_wait_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_with_focus_page.dart';
+import 'package:dremfoo/app/modules/dreams/ui/pages/report_dream_page.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/register_user_case.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -30,10 +35,13 @@ class DreamsModule extends Module {
   final List<Bind> binds = [
 
     Bind.lazySingleton((i) => DreamFirebaseDatasource()),
+    Bind.lazySingleton((i) => ReportDreamDataSource(), export: true),
 
     Bind.lazySingleton((i) => DreamRespository(i.get<DreamFirebaseDatasource>())),
+    Bind.lazySingleton((i) => ReportDreamRepository(i.get<ReportDreamDataSource>()), export: true),
 
     Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>())),
+    Bind.lazySingleton((i) => ReportDreamUseCase(i.get<ReportDreamRepository>()), export: true),
 
     Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>(), i.get<SeoUserCase>())),
     Bind.lazySingleton((i) => RegisterDreamWithFocusStore(i.get<DreamUseCase>())),
@@ -41,6 +49,7 @@ class DreamsModule extends Module {
     Bind.lazySingleton((i) => DreamStore(i.get<DreamUseCase>())),
     Bind.lazySingleton((i) => ArchiveStore(i.get<DreamUseCase>())),
     Bind.lazySingleton((i) => DreamCompletedStore(i.get<DreamUseCase>())),
+    Bind.lazySingleton((i) => ReportDreamWeekStore(i.get<ReportDreamUseCase>(), i.get<DreamUseCase>())),
 
   ];
 
@@ -53,5 +62,6 @@ class DreamsModule extends Module {
     ChildRoute("/newDreamWithFocus", child: (_, args) => RegisterDreamWithFocusPage(args.data)),
     ChildRoute("/archive", child: (_, args) => ArchivePage()),
     ChildRoute("/dreamsCompleted", child: (_, args) => DreamCompletedPage()),
+    ChildRoute("/reportDreamWeek", child: (_, args) => ReportDreamPage(period: args.data,)),
   ];
 }

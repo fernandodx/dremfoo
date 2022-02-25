@@ -47,6 +47,8 @@ class LoginPageState extends ModularState<LoginPage, LoginStore> {
       }
     });
 
+    store.featch();
+
   }
 
   @override

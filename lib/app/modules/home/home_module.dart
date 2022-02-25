@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/modules/dreams/domain/usecases/report_dream_usecase.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/free_videos_store.dart';
 import 'package:dremfoo/app/modules/core/core_module.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/shared_prefs_repository.dart';
@@ -30,7 +31,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends Module {
   @override
-  final List<Module> imports = [CoreModule(), DreamsModule(), LoginModule()];
+  final List<Module> imports = [CoreModule(), DreamsModule(), LoginModule(),];
 
   @override
   final List<Bind> binds = [
@@ -43,7 +44,7 @@ class HomeModule extends Module {
     Bind.lazySingleton((i) => BottomNavigateStore()),
     Bind.lazySingleton(
         (i) => SplashStore(i.get<LoginUseCase>(), i.get<RegisterUserCase>())),
-    Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>(), i.get<RegisterUserCase>(), i.get<ILoginCase>())),
+    Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>(), i.get<RegisterUserCase>(), i.get<LoginUseCase>(), i.get<ReportDreamUseCase>())),
     Bind.lazySingleton((i) => SocialNetworkStore()),
     Bind.lazySingleton((i) => SubscriptionPlanStore()),
   ];

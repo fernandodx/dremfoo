@@ -27,8 +27,6 @@ class RegisterUserCase extends IRegisterUserCase {
   ISharedPrefsRepository _sharedPrefsRepository;
   RegisterUserCase(this._userRepository, this._sharedPrefsRepository);
 
-  var _userRevo = Modular.get<UserRevo>();
-
   @override
   Future<ResponseApi<User>> createUserWithEmailAndPassword(BuildContext context, UserRevo userRevo, {File? photo}) async {
 
@@ -135,7 +133,7 @@ class RegisterUserCase extends IRegisterUserCase {
   @override
   Future<ResponseApi> updatePhotoUser(File picture) async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       String urlPhoto = await _userRepository.uploadFileAcountUser(_userRevo.uid, picture, "user_photo");
       await _userRepository.updatePhotoUser(_userRevo.uid, urlPhoto);
       return ResponseApi.ok();
@@ -154,7 +152,7 @@ class RegisterUserCase extends IRegisterUserCase {
   @override
   Future<ResponseApi<String>> uploadPhotoAcountUser(String fireBaseUserUid, File file) async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       String urlPhoto = await _userRepository.uploadFileAcountUser(_userRevo.uid, file, "user_photo");
       _userRevo.urlPicture = urlPhoto;
       _userRevo.userFirebase?.updatePhotoURL(urlPhoto);
@@ -212,6 +210,7 @@ class RegisterUserCase extends IRegisterUserCase {
       level.countDaysFocus = 1;
       userFocus.level = level;
     }
+    var _userRevo = Modular.get<UserRevo>();
     UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
     return userFocusUpdate;
   }
@@ -232,7 +231,7 @@ class RegisterUserCase extends IRegisterUserCase {
       level.countDaysFocus = newCountDayFocus;
       userFocus.level = level;
     }
-
+    var _userRevo = Modular.get<UserRevo>();
     UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, userFocus);
     return userFocusUpdate;
   }
@@ -249,6 +248,7 @@ class RegisterUserCase extends IRegisterUserCase {
       level.countDaysFocus = 1;
       focus.level = level;
     }
+    var _userRevo = Modular.get<UserRevo>();
     UserFocus userFocusUpdate = await _userRepository.updateFocusUser(_userRevo.uid, focus);
     return userFocusUpdate;
   }
@@ -268,6 +268,7 @@ class RegisterUserCase extends IRegisterUserCase {
   @override
   Future<ResponseApi<UserRevo>> checkLevelFocusUser() async {
     try{
+      var _userRevo = Modular.get<UserRevo>();
       UserFocus? userFocus = await _userRepository.findFocusUser(_userRevo.uid);
 
       if(userFocus != null && userFocus.level == null) {
@@ -293,7 +294,7 @@ class RegisterUserCase extends IRegisterUserCase {
   @override
   Future<ResponseApi<UserFocus>> updateContinuosFocus() async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       UserFocus? userFocus = await _userRepository.findFocusUser(_userRevo.uid);
       bool isFocusOk = await _checkContinuosFocus(userFocus);
       if(isFocusOk){
@@ -318,7 +319,7 @@ class RegisterUserCase extends IRegisterUserCase {
   @override
   Future<ResponseApi<void>> updateCountAcess() async {
     try{
-
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.countDaysAcess != null){
         _userRevo.countDaysAcess = _userRevo.countDaysAcess! + 1;
       }else{
@@ -345,6 +346,7 @@ class RegisterUserCase extends IRegisterUserCase {
 
   Future<void> _saveLastAcessUser() async {
     try{
+      var _userRevo = Modular.get<UserRevo>();
       if(_userRevo.uid != null){
          _userRepository.saveLastAcessUser(_userRevo.uid!, Timestamp.now());
       }

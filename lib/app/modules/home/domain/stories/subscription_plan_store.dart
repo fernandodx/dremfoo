@@ -1,6 +1,7 @@
 import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mobx/mobx.dart';
@@ -20,21 +21,27 @@ abstract class _SubscriptionPlanStoreBase with Store {
   @observable
   List<ProductDetails> listProductForSale = ObservableList.of([]);
 
+  @action
   Future<void> featch() async {
 
     AppPurchase _appPurchase = Modular.get<AppPurchase>();
 
-    if(!_appPurchase.isEnableSubscription){
-      isLoading = true;
-
-      ResponseApi<List<ProductDetails>> responseApiProduct = await _appPurchase.findProductsForSale();
-      msgAlert = responseApiProduct.messageAlert;
-      if(responseApiProduct.ok){
-        listProductForSale = ObservableList.of(responseApiProduct.result!);
-      }
-
-      isLoading = false;
+    bool isAvaiable =  await _appPurchase.verifyPurchaseAvailable();
+    if(!isAvaiable) {
+      msgAlert = MessageAlert.create("Erro na loja", "Ops! A Store esta indisponível no momento.", TypeAlert.ALERT);
     }
+
+    isLoading = true;
+    ResponseApi<List<ProductDetails>> responseApiProduct = await _appPurchase.findProductsForSale();
+    msgAlert = responseApiProduct.messageAlert;
+    if(responseApiProduct.ok){
+      listProductForSale = ObservableList.of(responseApiProduct.result!);
+      if(listProductForSale.isEmpty){
+        msgAlert = MessageAlert.create("Ops!", "Não há nenhuma assinatura disponivel no momento", TypeAlert.ALERT);
+      }
+    }
+
+    isLoading = false;
 
   }
 

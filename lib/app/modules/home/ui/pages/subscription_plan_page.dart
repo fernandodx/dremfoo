@@ -29,11 +29,13 @@ class SubscriptionPlanPage extends StatefulWidget {
 
 class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, SubscriptionPlanStore> {
 
-  AppPurchase _appPurchase = Modular.get<AppPurchase>();
+  late AppPurchase _appPurchase;
 
   @override
   void initState() {
     super.initState();
+
+    _appPurchase = Modular.get<AppPurchase>();
 
     var overlayLoading = OverlayEntry(builder: (context) {
       return Container(
@@ -79,11 +81,18 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
   }
 
   @override
+  void dispose() {
+    _appPurchase.subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: TextUtil.textAppbar(Translate.i().get.label_premium_access),
       ),
+      bottomSheet: Observer(builder: (context) => purchasePlanOrThanks(store.listProductForSale)),
       body: Container(
         child: Column(
           children: [
@@ -197,8 +206,6 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                     SizedBox(
                       height: 16,
                     ),
-                    Observer(builder: (context) => purchasePlanOrThanks()),
-
                   ],
                 )),
           ],
@@ -207,74 +214,81 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
     );
   }
 
-  Widget purchasePlanOrThanks() {
+  Widget purchasePlanOrThanks(List<ProductDetails>? listProductPurchase) {
     if(_appPurchase.isEnableSubscription){
       return containerThanksPurchase();
     }else{
-      return buttonsPurchaseRevo();
+      return buttonsPurchaseRevo(listProductPurchase);
     }
   }
 
   Widget containerThanksPurchase(){
    return Container(
-      margin: EdgeInsets.all(12),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(width: 2, color: Theme.of(context).canvasColor),
-      ),
-      child: ListTile(
-        leading: FaIcon(FontAwesomeIcons.check, color: Theme.of(context).canvasColor, size: 40,),
-        title: TextUtil.textTitulo("Assinatura Ativa"),
-        subtitle: TextUtil.textDefault("Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas.",),
-        textColor: Theme.of(context).textTheme.subtitle1?.color,
-      ),
-    );
-  }
-
-  Widget buttonsPurchaseRevo() {
-    return Expanded(
-      flex: 3,
-      child: Observer(
-        builder: (context) => Column(
-          children: creatButtonsPlanPurchase(
-              listProduct: store.listProductForSale,
-              productSelected: (product) {
-                store.buyProductSelected(product);
-              }
-          ),
+     color: Theme.of(context).scaffoldBackgroundColor,
+     child: Container(
+        margin: EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(width: 2, color: Theme.of(context).canvasColor),
+        ),
+        child: ListTile(
+          leading: FaIcon(FontAwesomeIcons.check, color: Theme.of(context).canvasColor, size: 40,),
+          title: TextUtil.textTitulo("Assinatura Ativa"),
+          subtitle: TextUtil.textDefault("Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas.",),
+          textColor: Theme.of(context).textTheme.subtitle1?.color,
         ),
       ),
+   );
+  }
+
+  Widget buttonsPurchaseRevo(List<ProductDetails>? listProductPurchase) {
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: EdgeInsets.only(top: 16),
+      child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: creatButtonsPlanPurchase(
+                listProduct: listProductPurchase,
+                productSelected: (product) {
+                  store.buyProductSelected(product);
+                }
+            ),
+          ),
     );
   }
 
   List<Widget> creatButtonsPlanPurchase({
-    required List<ProductDetails> listProduct,
+    required List<ProductDetails>? listProduct,
     required Function(ProductDetails) productSelected}) {
     List<Widget> list = [];
 
-    listProduct.forEach((product) {
+    if(listProduct != null) {
 
-      var labelButtom = "";
-      if(product.id.toLowerCase().contains("mensal")){
-        labelButtom = "Assinatura Mensal • ${product.price} por mês";
-      } else if(product.id.toLowerCase().contains("anual")){
-        labelButtom = "Assinatura Anual • ${product.price} por ano";
+      for(ProductDetails product in listProduct) {
+        var labelButtom = "";
+        if (product.id.toLowerCase().contains("mensal")) {
+          labelButtom = "Assinatura Mensal • ${product.price} por mês";
+        } else if (product.id.toLowerCase().contains("anual")) {
+          labelButtom = "Assinatura Anual • ${product.price} por ano";
+        }
+
+        list.add(Container(
+          margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+          child: ChipButtonWidget(
+              name: labelButtom,
+              size: 250,
+              fontSize: 14,
+              icon: FontAwesomeIcons.creditCard,
+              onTap: () {
+                productSelected.call(product);
+              }),
+        ));
       }
 
-      list.add(Container(
-        margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
-        child: ChipButtonWidget(
-            name: labelButtom,
-            size: 250,
-            fontSize: 14,
-            icon: FontAwesomeIcons.creditCard,
-            onTap: () {
-              productSelected.call(product);
-            }),
-      ));
-    });
-
+    }else{
+      list.add(Container(child: Center(),));
+    }
     return list;
   }
 }

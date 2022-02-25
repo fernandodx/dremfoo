@@ -15,22 +15,23 @@ class RemoteConfigUtil {
   static const enableMediaSite = "enableMediaSite";
   static const enableMediaContato = "enableMediaContato";
   static const enableAd = "enableAd";
+  static const enablePurchase = "enablePurchase";
 
   static late RemoteConfig _instance;
 
   static Future<void> init() async {
     _instance = await RemoteConfig.instance;
 
-    try{
-
-      await _instance.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: Duration(seconds: 5),
-        minimumFetchInterval: Duration(days: 1),
-      ));
-
-      await _instance.fetch();
-
-    }catch(error){
+    // try{
+    //
+    //   await _instance.setConfigSettings(RemoteConfigSettings(
+    //     fetchTimeout: Duration(seconds: 5),
+    //     minimumFetchInterval: Duration(seconds: 60),
+    //   ));
+    //
+    //   await _instance.fetch();
+    //
+    // }catch(error){
 
       await _instance.setDefaults({
         enableMenuVideoRevo: true,
@@ -43,10 +44,11 @@ class RemoteConfigUtil {
         enableMediaSite: true,
         enableMediaContato: true,
         enableMenuDreamCompleted: true,
-        enableAd: true
+        enableAd: true,
+        enablePurchase: true
       });
 
-    }
+    // }
 
     await _instance.activate();
   }
@@ -81,5 +83,7 @@ class RemoteConfigUtil {
   bool isEnableMediaContato() => _instance.getBool(enableMediaContato);
 
   bool isEnableAd() => _instance.getBool(enableAd);
+
+  bool isEnablePurchase() => _instance.getBool(enablePurchase);
 
 }

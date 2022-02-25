@@ -18,9 +18,11 @@ abstract class IDreamCase {
 
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentDate(Dream dream, DateTime date);
 
-  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date);
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentWeek(Dream dream, DateTime date, {bool isIgnoreSunday = false});
 
   Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentYearlyMonth(Dream dream, DateTime date);
+
+  Future<ResponseApi<List<DailyGoal>>> findHistoryDailyGoalCurrentMonth(Dream dream, int month , int year);
 
   Future<ResponseApi<String>> loadImageDreamGallery();
 

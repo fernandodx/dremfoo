@@ -45,15 +45,22 @@ class ReceivedNotification {
 late StreamSubscription<List<PurchaseDetails>> _subscription;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await RemoteConfigUtil.init();
-  CrashlyticsUtil.init();
-  _initGoogleMobileAds();
-  AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
-  initConfigNotification();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(ModularApp(module: AppModule(), child: AppWidget()));
+  try{
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp().catchError((error, stack) => CrashlyticsUtil.logErro(error, stack));
+    await RemoteConfigUtil.init().catchError((error, stack) => CrashlyticsUtil.logErro(error, stack));
+    AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
+    initConfigNotification();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    if(RemoteConfigUtil().isEnablePurchase()){
+      _initGoogleMobileAds();
+    }
+
+    runApp(ModularApp(module: AppModule(), child: AppWidget()));
+  }catch(error, stack) {
+    CrashlyticsUtil.logErro(error, stack);
+  }
 }
 
 
