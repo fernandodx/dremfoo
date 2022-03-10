@@ -60,7 +60,7 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              title: TextUtil.textAppbar(widget.period.periodStatus == PeriodStatusDream.MONTHLY ? "Relatório Mensal" : "Relatório Semanal"),
+              title: TextUtil.textAppbar(widget.period.periodStatus == PeriodStatusDream.MONTHLY ? Translate.i().get.label_monthly_report : Translate.i().get.label_weekly_report),
               expandedHeight: 110,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
@@ -121,7 +121,7 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
                       pageController: store.pageViewController,
                       listStatusPeriod: store.listStatusDreamPeriod,
                       numberPeriod: widget.period.numPeriod,
-                      descriptionNumber: widget.period.periodStatus == PeriodStatusDream.MONTHLY ? "Mês" : "Semana",
+                      descriptionNumber: widget.period.periodStatus == PeriodStatusDream.MONTHLY ? Translate.i().get.label_month : Translate.i().get.label_week,
                       callbackAnimation: (anim) {
                         if (anim != null && anim.isNotEmpty && anim == 'appear') {
                           store.setNameAnimation(anim);

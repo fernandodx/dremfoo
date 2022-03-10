@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
-import 'package:dremfoo/app/modules/core/ui/widgets/button_outlined_revo_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/loading_widget.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/subscription_plan_store.dart';
 import 'package:dremfoo/app/modules/home/ui/widgets/chip_button_widget.dart';
@@ -15,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -100,7 +97,7 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(12),
                   child: Column(
                     children: [
                       ClipOval(
@@ -109,15 +106,15 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                             "logo_compra_app.png",
                           ),
                           fit: BoxFit.cover,
-                          width: 110,
-                          height: 110,
+                          width: 80,
+                          height: 80,
                         ),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                    margin: EdgeInsets.all(16),
+                    margin: EdgeInsets.all(12),
                     child: Column(
                       children: [
                         ClipOval(
@@ -126,8 +123,8 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
                               "logo_compra_pagamento.png",
                             ),
                             fit: BoxFit.cover,
-                            width: 110,
-                            height: 110,
+                            width: 80,
+                            height: 80,
                           ),
                         ),
                       ],
@@ -234,8 +231,8 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
         ),
         child: ListTile(
           leading: FaIcon(FontAwesomeIcons.check, color: Theme.of(context).canvasColor, size: 40,),
-          title: TextUtil.textTitulo("Assinatura Ativa"),
-          subtitle: TextUtil.textDefault("Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas.",),
+          title: TextUtil.textTitulo(Translate.i().get.label_active_subscription),
+          subtitle: TextUtil.textDefault(Translate.i().get.label_msg_thank_you_subscription,),
           textColor: Theme.of(context).textTheme.subtitle1?.color,
         ),
       ),
@@ -268,9 +265,9 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
       for(ProductDetails product in listProduct) {
         var labelButtom = "";
         if (product.id.toLowerCase().contains("mensal")) {
-          labelButtom = "Assinatura Mensal • ${product.price} por mês";
+          labelButtom = "${Translate.i().get.label_monthly_subscription} • ${product.price} ${Translate.i().get.label_a_month}";
         } else if (product.id.toLowerCase().contains("anual")) {
-          labelButtom = "Assinatura Anual • ${product.price} por ano";
+          labelButtom = "${Translate.i().get.label_annual_subscription} • ${product.price} ${Translate.i().get.label_a_year}";
         }
 
         list.add(Container(
@@ -285,6 +282,19 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
               }),
         ));
       }
+
+      list.add(Container(
+        margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
+        child: ChipButtonWidget(
+            name: "Restaurar compra anterior",
+            size: 250,
+            fontSize: 14,
+            icon: FontAwesomeIcons.history,
+            onTap: () {
+              store.restorePurchase();
+            }),
+      ));
+
 
     }else{
       list.add(Container(child: Center(),));

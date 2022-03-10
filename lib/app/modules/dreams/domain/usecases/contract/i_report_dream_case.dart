@@ -11,4 +11,8 @@ abstract class IReportDreamCase {
 
   Future<ResponseApi<void>> saveStatusDreamWithMonth(StatusDreamPeriod period);
 
+  Future<ResponseApi<List<StatusDreamPeriod>>> findAllStatusDreamWeek();
+
+  Future<ResponseApi<List<StatusDreamPeriod>>> findAllStatusDreamMonth();
+
 }

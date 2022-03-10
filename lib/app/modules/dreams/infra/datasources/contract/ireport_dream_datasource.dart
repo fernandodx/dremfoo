@@ -10,4 +10,8 @@ abstract class IReportDreamDataSource {
 
   Future<void> saveStatusDreamWithMonth(String userUid, StatusDreamPeriod statusPeriod);
 
+  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek(String userUid);
+
+  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth(String userUid);
+
 }

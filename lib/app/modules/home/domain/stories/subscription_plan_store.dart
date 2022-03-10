@@ -1,6 +1,6 @@
-import 'package:dremfoo/app/model/response_api.dart';
 import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
+import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -48,6 +48,11 @@ abstract class _SubscriptionPlanStoreBase with Store {
   Future<bool> buyProductSelected(ProductDetails product) async {
     AppPurchase _appPurchase = Modular.get<AppPurchase>();
     return _appPurchase.buyProduct(product);
+  }
+
+  Future<void> restorePurchase() async {
+    AppPurchase _appPurchase = Modular.get<AppPurchase>();
+    return _appPurchase.restorePurchase();
   }
 
 }

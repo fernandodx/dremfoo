@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
-import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/period_report_dto.dart';
@@ -14,11 +13,8 @@ import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/i_report_dre
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
-import 'package:dremfoo/app/utils/text_util.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
 part 'report_dream_week_store.g.dart';

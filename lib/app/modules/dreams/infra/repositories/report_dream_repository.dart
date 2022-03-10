@@ -93,6 +93,46 @@ class ReportDreamRepository implements IReportDreamRepository {
     }
   }
 
+  @override
+  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth() {
+    try{
+      var _userRevo = Modular.get<UserRevo>();
+
+      if(_userRevo.uid != null){
+        return _dataSource.findAllStatusDreamWeek(_userRevo.uid!);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek() {
+    try{
+      var _userRevo = Modular.get<UserRevo>();
+
+      if(_userRevo.uid != null){
+        return _dataSource.findAllStatusDreamWeek(_userRevo.uid!);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
 
 
 

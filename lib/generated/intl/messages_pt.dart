@@ -22,10 +22,16 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "label_a_month": MessageLookupByLibrary.simpleMessage("por mês"),
+        "label_a_year": MessageLookupByLibrary.simpleMessage("por ano"),
         "label_access_new_features": MessageLookupByLibrary.simpleMessage(
             "Acesso às novas funcionalidades"),
         "label_acess_premium": MessageLookupByLibrary.simpleMessage("Premium"),
+        "label_active_subscription":
+            MessageLookupByLibrary.simpleMessage("Assinatura Ativa"),
         "label_add": MessageLookupByLibrary.simpleMessage("Adicionar"),
+        "label_annual_subscription":
+            MessageLookupByLibrary.simpleMessage("Assinatura anual"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Arquivo"),
         "label_archived_dreams":
             MessageLookupByLibrary.simpleMessage("Sonhos arquivados"),
@@ -74,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_enter": MessageLookupByLibrary.simpleMessage("Entrar"),
         "label_erro_pending_purchase": MessageLookupByLibrary.simpleMessage(
             "Pagamento pendente na assinatura do Revo"),
+        "label_error_subscription":
+            MessageLookupByLibrary.simpleMessage("Erro na assinatura"),
         "label_exit": MessageLookupByLibrary.simpleMessage("Sair"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinário"),
@@ -112,9 +120,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "Acompanhamento diário das metas"),
         "label_monitor_goal_month": MessageLookupByLibrary.simpleMessage(
             "Acompanhamento mensal das metas"),
+        "label_month": MessageLookupByLibrary.simpleMessage("Mês"),
         "label_monthly": MessageLookupByLibrary.simpleMessage("Mensal"),
         "label_monthly_goal":
             MessageLookupByLibrary.simpleMessage("Meta mensal"),
+        "label_monthly_report":
+            MessageLookupByLibrary.simpleMessage("Relatório mensal"),
+        "label_monthly_subscription":
+            MessageLookupByLibrary.simpleMessage("Assinatural mensal"),
+        "label_msg_thank_you_subscription": MessageLookupByLibrary.simpleMessage(
+            "Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas."),
         "label_name": MessageLookupByLibrary.simpleMessage("Nome"),
         "label_new_dream": MessageLookupByLibrary.simpleMessage("Novo Sonho"),
         "label_next": MessageLookupByLibrary.simpleMessage("Próximo"),
@@ -122,6 +137,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_no_ad": MessageLookupByLibrary.simpleMessage("Sem propagandas"),
         "label_no_ad_description": MessageLookupByLibrary.simpleMessage(
             "Navegue tranquilo pelo app sem publicidade."),
+        "label_no_found_plans": MessageLookupByLibrary.simpleMessage(
+            "Não foram encontrados planos para assinatura"),
+        "label_no_found_subscription": MessageLookupByLibrary.simpleMessage(
+            "Nenhum produto de assinatura encontrado."),
         "label_no_miss_features": MessageLookupByLibrary.simpleMessage(
             "Não perca a chance de acessar as melhores funções que estão por vir."),
         "label_not_rigister":
@@ -171,6 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("REVO - Metas com foco"),
         "label_to_file": MessageLookupByLibrary.simpleMessage("Arquivar"),
         "label_today": MessageLookupByLibrary.simpleMessage("Hoje"),
+        "label_week": MessageLookupByLibrary.simpleMessage("Semana"),
         "label_week_day_fri": MessageLookupByLibrary.simpleMessage("SEX"),
         "label_week_day_mon": MessageLookupByLibrary.simpleMessage("SEG"),
         "label_week_day_sat": MessageLookupByLibrary.simpleMessage("SAB"),
@@ -181,6 +201,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_weekly": MessageLookupByLibrary.simpleMessage("Semanal"),
         "label_weekly_goal":
             MessageLookupByLibrary.simpleMessage("Meta semanal"),
+        "label_weekly_report":
+            MessageLookupByLibrary.simpleMessage("Relatório semanal"),
         "label_weekly_reward":
             MessageLookupByLibrary.simpleMessage("Recompensa semanal"),
         "label_whats_your_dream":
@@ -273,7 +295,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
             "Hora de adicionar seu primeiro sonho!"),
         "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
-            "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas báscicas."),
+            "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas básicas."),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Você realizou seu sonho?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(

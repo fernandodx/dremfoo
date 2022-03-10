@@ -86,4 +86,40 @@ class ReportDreamUseCase implements IReportDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  @override
+  Future<ResponseApi<List<StatusDreamPeriod>>> findAllStatusDreamMonth() async {
+    try{
+
+      List<StatusDreamPeriod> listStatusPeriod = await _repository.findAllStatusDreamMonth();
+      return ResponseApi.ok(result: listStatusPeriod);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+  @override
+  Future<ResponseApi<List<StatusDreamPeriod>>> findAllStatusDreamWeek() async {
+    try{
+
+      List<StatusDreamPeriod> listStatusPeriod = await _repository.findAllStatusDreamWeek();
+      return ResponseApi.ok(result: listStatusPeriod);
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
 }

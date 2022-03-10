@@ -166,5 +166,19 @@
   "label_no_ad_description" : "Browse through the app without advertising.",
   "label_access_new_features" : "Access to new features",
   "label_no_miss_features" : "Don't miss your chance to access the best features to come.",
-  "title_subscription_donated" : "100% of the amount will be donated to @movimentodesperte"
+  "title_subscription_donated" : "100% of the amount will be donated to @movimentodesperte",
+  "label_month" : "Month",
+  "label_week" : "Week",
+  "label_annual_subscription" : "Annual Subscription",
+  "label_monthly_subscription" : "Monthly Signature",
+  "label_monthly_report" : "Monthly report",
+  "label_weekly_report" : "Weekly report",
+  "label_a_month" : "a month",
+  "label_a_year" : "a year",
+  "label_active_subscription" : "Active Subscription",
+  "label_msg_thank_you_subscription" : "Thank you very much! You help us maintain the app and make donations of basic food baskets.",
+  "label_error_subscription" : "Signature Error",
+  "label_no_found_subscription" : "No subscription products found",
+  "label_no_found_plans" : "No subscription plans found"
+
 }

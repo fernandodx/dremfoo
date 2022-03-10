@@ -39,7 +39,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
 
   Future<void> initPurchaseListener() async {
     await appPurchase.initListenerPurchase();
-    appPurchase.restorePurchase();
+    appPurchase.initPurchased();
   }
 
   void changeTheme() {

@@ -1719,6 +1719,136 @@ class S {
       args: [],
     );
   }
+
+  /// `Month`
+  String get label_month {
+    return Intl.message(
+      'Month',
+      name: 'label_month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Week`
+  String get label_week {
+    return Intl.message(
+      'Week',
+      name: 'label_week',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Annual Subscription`
+  String get label_annual_subscription {
+    return Intl.message(
+      'Annual Subscription',
+      name: 'label_annual_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly Signature`
+  String get label_monthly_subscription {
+    return Intl.message(
+      'Monthly Signature',
+      name: 'label_monthly_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly report`
+  String get label_monthly_report {
+    return Intl.message(
+      'Monthly report',
+      name: 'label_monthly_report',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly report`
+  String get label_weekly_report {
+    return Intl.message(
+      'Weekly report',
+      name: 'label_weekly_report',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `a month`
+  String get label_a_month {
+    return Intl.message(
+      'a month',
+      name: 'label_a_month',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `a year`
+  String get label_a_year {
+    return Intl.message(
+      'a year',
+      name: 'label_a_year',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active Subscription`
+  String get label_active_subscription {
+    return Intl.message(
+      'Active Subscription',
+      name: 'label_active_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thank you very much! You help us maintain the app and make donations of basic food baskets.`
+  String get label_msg_thank_you_subscription {
+    return Intl.message(
+      'Thank you very much! You help us maintain the app and make donations of basic food baskets.',
+      name: 'label_msg_thank_you_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signature Error`
+  String get label_error_subscription {
+    return Intl.message(
+      'Signature Error',
+      name: 'label_error_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subscription products found`
+  String get label_no_found_subscription {
+    return Intl.message(
+      'No subscription products found',
+      name: 'label_no_found_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No subscription plans found`
+  String get label_no_found_plans {
+    return Intl.message(
+      'No subscription plans found',
+      name: 'label_no_found_plans',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

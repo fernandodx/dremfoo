@@ -11,4 +11,8 @@ abstract class IReportDreamRepository {
 
   Future<void> saveStatusDreamWithMonth(StatusDreamPeriod period);
 
+  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek();
+
+  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth();
+
 }

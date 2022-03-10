@@ -6,6 +6,7 @@ class StatusDreamPeriod {
   String? uid;
   Dream? dream;
   bool? isChecked;
+  bool? isExpanded;
   String? descriptionAction;
   TypeStatusDream? typeStatusDream;
   double? difficulty;

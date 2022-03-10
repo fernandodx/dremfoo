@@ -1,4 +1,6 @@
 import 'package:dremfoo/app/modules/dreams/domain/usecases/report_dream_usecase.dart';
+import 'package:dremfoo/app/modules/dreams/infra/datasources/report_dream_datasource.dart';
+import 'package:dremfoo/app/modules/dreams/infra/repositories/report_dream_repository.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/free_videos_store.dart';
 import 'package:dremfoo/app/modules/core/core_module.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/shared_prefs_repository.dart';
@@ -6,6 +8,7 @@ import 'package:dremfoo/app/modules/dreams/dreams_module.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/dreams_page.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/bottom_navigate_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/home_store.dart';
+import 'package:dremfoo/app/modules/home/domain/stories/list_alert_report_goal_dream_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/rank_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/social_network_store.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/splash_store.dart';
@@ -16,6 +19,7 @@ import 'package:dremfoo/app/modules/home/infra/repositories/home_repository.dart
 import 'package:dremfoo/app/modules/home/ui/pages/bottom_navigate_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/free_videos_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/home_page.dart';
+import 'package:dremfoo/app/modules/home/ui/pages/list_alert_report_goal_dream_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/rank_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/social_network_page.dart';
 import 'package:dremfoo/app/modules/home/ui/pages/splash_page.dart';
@@ -35,18 +39,25 @@ class HomeModule extends Module {
 
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => FreeVideosStore(i.get<HomeUseCase>())),
     Bind.lazySingleton((i) => HomeDataSource()),
+    Bind.lazySingleton((i) => ReportDreamDataSource()),
+
     Bind.lazySingleton((i) => HomeRepository(i.get<HomeDataSource>())),
+    Bind.lazySingleton((i) => ReportDreamRepository(i.get<ReportDreamDataSource>())),
+
     Bind.lazySingleton((i) => HomeUseCase(i.get<RegisterUserRepository>(),
         i.get<HomeRepository>(), i.get<SharedPrefsRepository>())),
+    Bind.lazySingleton((i) => ReportDreamUseCase(i.get<ReportDreamRepository>())),
+
     Bind.lazySingleton((i) => RankStore(i.get<HomeUseCase>())),
     Bind.lazySingleton((i) => BottomNavigateStore()),
-    Bind.lazySingleton(
-        (i) => SplashStore(i.get<LoginUseCase>(), i.get<RegisterUserCase>())),
+    Bind.lazySingleton((i) => SplashStore(i.get<LoginUseCase>(), i.get<RegisterUserCase>())),
     Bind.lazySingleton((i) => HomeStore(i.get<HomeUseCase>(), i.get<RegisterUserCase>(), i.get<LoginUseCase>(), i.get<ReportDreamUseCase>())),
     Bind.lazySingleton((i) => SocialNetworkStore()),
     Bind.lazySingleton((i) => SubscriptionPlanStore()),
+    Bind.lazySingleton((i) => FreeVideosStore(i.get<HomeUseCase>())),
+    Bind.lazySingleton((i) => ListAlertReportGoalDreamStore(i.get<ReportDreamUseCase>())),
+
   ];
 
   @override
@@ -69,5 +80,6 @@ class HomeModule extends Module {
             )),
     ChildRoute("/socialNetwork", child: (_, arg) => SocialNetworkPage()),
     ChildRoute("/freeVideos", child: (_, arg) => FreeVideosPage()),
+    ChildRoute("/notificationListGoals", child: (_, arg) => ListAlertReportGoalDreamPage()),
   ];
 }

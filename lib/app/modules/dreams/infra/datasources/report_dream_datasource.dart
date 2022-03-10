@@ -6,6 +6,36 @@ import 'package:dremfoo/app/modules/dreams/infra/datasources/contract/ireport_dr
 class ReportDreamDataSource extends BaseDataSource implements IReportDreamDataSource {
 
   @override
+  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth(String userUid) async {
+    DocumentReference refUsers = getRefCurrentUser(userUid);
+    QuerySnapshot querySnapshot = await refUsers
+        .collection("statusRewardOrInflection")
+        .doc("MONTHS")
+        .collection("statusPeriod")
+        .where("periodStatusDream", isEqualTo: "MONTHLY")
+        .orderBy("number", descending: true)
+        .get()
+        .catchError(handlerError);
+
+    return StatusDreamPeriod.fromListDocumentSnapshot(querySnapshot.docs);
+  }
+
+  @override
+  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek(String userUid) async {
+    DocumentReference refUsers = getRefCurrentUser(userUid);
+    QuerySnapshot querySnapshot = await refUsers
+        .collection("statusRewardOrInflection")
+        .doc("WEEKS")
+        .collection("statusPeriod")
+        .where("periodStatusDream", isEqualTo: "WEEKLY")
+        .orderBy("number", descending: true)
+        .get()
+        .catchError(handlerError);
+
+    return StatusDreamPeriod.fromListDocumentSnapshot(querySnapshot.docs);
+  }
+
+  @override
   Future<List<StatusDreamPeriod>> findStatusDreamWithWeek(String userUid, int numberWeek, int year) async {
     DocumentReference refUsers = getRefCurrentUser(userUid);
     QuerySnapshot querySnapshot = await refUsers
