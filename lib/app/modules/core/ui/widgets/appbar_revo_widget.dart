@@ -26,14 +26,15 @@ class AppbarRevoWidget {
     return AppBar(
       title: TextUtil.textAppbar(title),
       actions: [
-        // Container(
-        //   margin: EdgeInsets.only(right: 30),
-        //   alignment: Alignment.center,
-        //   child: InkWell(
-        //     child: FaIcon(FontAwesomeIcons.solidBell, size: 22,),
-        //     onTap: () => _listReportGoalDream.open(context),
-        //   ),
-        // ),
+        Container(
+          width: 40,
+          margin: EdgeInsets.only(right: 20),
+          alignment: Alignment.center,
+          child: InkWell(
+            child: FaIcon(FontAwesomeIcons.solidBell, size: 22,),
+            onTap: () => _listReportGoalDream.open(context),
+          ),
+        ),
         Container(
           margin: EdgeInsets.only(right: 20),
           child: InkWell(

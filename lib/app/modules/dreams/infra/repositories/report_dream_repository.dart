@@ -13,13 +13,13 @@ class ReportDreamRepository implements IReportDreamRepository {
   ReportDreamRepository(this._dataSource);
 
   @override
-  Future<List<StatusDreamPeriod>> findStatusDreamWithWeek(int numberWeek, int year) {
+  Future<List<StatusDreamPeriod>> findStatusDreamWithWeek(int numberWeek, int year) async {
 
     try{
       var _userRevo = Modular.get<UserRevo>();
 
       if(_userRevo.uid != null){
-        return _dataSource.findStatusDreamWithWeek(_userRevo.uid!, numberWeek, year);
+        return await _dataSource.findStatusDreamWithWeek(_userRevo.uid!, numberWeek, year);
       }else{
         RevoExceptions _revoExceptions = new RevoExceptions
             .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
@@ -34,12 +34,12 @@ class ReportDreamRepository implements IReportDreamRepository {
   }
 
   @override
-  Future<List<StatusDreamPeriod>> findStatusDreamWithMonth(int numberMonth, int year) {
+  Future<List<StatusDreamPeriod>> findStatusDreamWithMonth(int numberMonth, int year) async  {
     try{
       var _userRevo = Modular.get<UserRevo>();
 
       if(_userRevo.uid != null){
-        return _dataSource.findStatusDreamWithMonth(_userRevo.uid!, numberMonth, year);
+        return await _dataSource.findStatusDreamWithMonth(_userRevo.uid!, numberMonth, year);
       }else{
         RevoExceptions _revoExceptions = new RevoExceptions
             .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
@@ -94,12 +94,12 @@ class ReportDreamRepository implements IReportDreamRepository {
   }
 
   @override
-  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth() {
+  Future<List<StatusDreamPeriod>> findAllStatusDreamMonth() async  {
     try{
       var _userRevo = Modular.get<UserRevo>();
 
       if(_userRevo.uid != null){
-        return _dataSource.findAllStatusDreamWeek(_userRevo.uid!);
+        return await _dataSource.findAllStatusDreamMonth(_userRevo.uid!);
       }else{
         RevoExceptions _revoExceptions = new RevoExceptions
             .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
@@ -114,15 +114,34 @@ class ReportDreamRepository implements IReportDreamRepository {
   }
 
   @override
-  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek() {
+  Future<List<StatusDreamPeriod>> findAllStatusDreamWeek() async {
     try{
       var _userRevo = Modular.get<UserRevo>();
 
       if(_userRevo.uid != null){
-        return _dataSource.findAllStatusDreamWeek(_userRevo.uid!);
+        return await _dataSource.findAllStatusDreamWeek(_userRevo.uid!);
       }else{
         RevoExceptions _revoExceptions = new RevoExceptions
             .msgToUser(error: Exception("userRevo.uid == null"), msg: "Login não encontrado!");
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+    } catch(error, stack) {
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(stack: stack, error: Exception(error), msg: "Ops! Aconteceu um erro inesperado.");
+    }
+  }
+
+  @override
+  Future<void> updateStatusDreamPeriod(StatusDreamPeriod status) {
+    try{
+
+      if(status.reference != null){
+        return _dataSource.updateStatusDreamPeriod(status);
+      }else{
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception("StatusDreamPeriod.reference == null"), msg: "Referencia não encontrada!");
         CrashlyticsUtil.logError(_revoExceptions);
         throw _revoExceptions;
       }

@@ -1,4 +1,3 @@
-import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/status_dream_week.dart';
 
 abstract class IReportDreamRepository {
@@ -14,5 +13,7 @@ abstract class IReportDreamRepository {
   Future<List<StatusDreamPeriod>> findAllStatusDreamWeek();
 
   Future<List<StatusDreamPeriod>> findAllStatusDreamMonth();
+
+  Future<void> updateStatusDreamPeriod(StatusDreamPeriod status);
 
 }

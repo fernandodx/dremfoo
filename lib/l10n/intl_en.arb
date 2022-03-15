@@ -179,6 +179,8 @@
   "label_msg_thank_you_subscription" : "Thank you very much! You help us maintain the app and make donations of basic food baskets.",
   "label_error_subscription" : "Signature Error",
   "label_no_found_subscription" : "No subscription products found",
-  "label_no_found_plans" : "No subscription plans found"
+  "label_no_found_plans" : "No subscription plans found",
+  "msg_not_found_report_status": "There are no weekly actions or actions of the selected type yet. Wait a week using Revo to generate the report.",
+  "label_year": "Year"
 
 }

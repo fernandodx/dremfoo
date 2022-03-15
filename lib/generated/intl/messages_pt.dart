@@ -207,6 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Recompensa semanal"),
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("Qual o seu sonho?"),
+        "label_year": MessageLookupByLibrary.simpleMessage("Ano"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Sim"),
         "label_your_month": MessageLookupByLibrary.simpleMessage("Seus meses"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Sua semana"),
@@ -294,6 +295,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Ainda nenhum sonho foi realizado, mas tenho certeza que em breve vai ter."),
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
             "Hora de adicionar seu primeiro sonho!"),
+        "msg_not_found_report_status": MessageLookupByLibrary.simpleMessage(
+            "Não existe ainda ações semanais ou do tipo selecionado. Espere uma semana utilizando Revo para a geração do relatório."),
         "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
             "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas básicas."),
         "msg_question_dream_realized":

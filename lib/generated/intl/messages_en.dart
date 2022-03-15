@@ -206,6 +206,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly reward"),
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("What is your dream?"),
+        "label_year": MessageLookupByLibrary.simpleMessage("Year"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "label_your_month": MessageLookupByLibrary.simpleMessage("Your months"),
         "label_your_week": MessageLookupByLibrary.simpleMessage("Your week"),
@@ -296,6 +297,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No dream has been realized yet, but I\'m sure it will soon."),
         "msg_not_found_dream": MessageLookupByLibrary.simpleMessage(
             "Time to add your first dream!"),
+        "msg_not_found_report_status": MessageLookupByLibrary.simpleMessage(
+            "There are no weekly actions or actions of the selected type yet. Wait a week using Revo to generate the report."),
         "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
             "In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets."),
         "msg_question_dream_realized":

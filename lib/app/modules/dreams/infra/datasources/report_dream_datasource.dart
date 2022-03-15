@@ -87,4 +87,9 @@ class ReportDreamDataSource extends BaseDataSource implements IReportDreamDataSo
     return StatusDreamPeriod.fromListDocumentSnapshot(querySnapshot.docs);
   }
 
+  @override
+  Future<void> updateStatusDreamPeriod(StatusDreamPeriod status) async {
+    return status.reference?.update(status.toMap()).catchError(handlerError);
+  }
+
 }

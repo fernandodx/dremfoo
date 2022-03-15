@@ -14,4 +14,6 @@ abstract class IReportDreamDataSource {
 
   Future<List<StatusDreamPeriod>> findAllStatusDreamMonth(String userUid);
 
+  Future<void> updateStatusDreamPeriod(StatusDreamPeriod status);
+
 }

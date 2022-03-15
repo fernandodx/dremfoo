@@ -178,5 +178,7 @@
   "label_msg_thank_you_subscription" : "Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas.",
   "label_error_subscription" : "Erro na assinatura",
   "label_no_found_subscription" : "Nenhum produto de assinatura encontrado.",
-  "label_no_found_plans" : "Não foram encontrados planos para assinatura"
+  "label_no_found_plans" : "Não foram encontrados planos para assinatura",
+  "msg_not_found_report_status": "Não existe ainda ações semanais ou do tipo selecionado. Espere uma semana utilizando Revo para a geração do relatório.",
+  "label_year": "Ano"
 }

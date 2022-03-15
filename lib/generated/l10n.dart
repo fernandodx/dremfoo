@@ -1849,6 +1849,26 @@ class S {
       args: [],
     );
   }
+
+  /// `There are no weekly actions or actions of the selected type yet. Wait a week using Revo to generate the report.`
+  String get msg_not_found_report_status {
+    return Intl.message(
+      'There are no weekly actions or actions of the selected type yet. Wait a week using Revo to generate the report.',
+      name: 'msg_not_found_report_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Year`
+  String get label_year {
+    return Intl.message(
+      'Year',
+      name: 'label_year',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

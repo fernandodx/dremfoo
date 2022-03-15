@@ -5,6 +5,8 @@
 import 'package:date_format/date_format.dart';
 import 'package:dremfoo/app/resources/PortuguesLocale.dart';
 
+
+
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";

@@ -122,4 +122,22 @@ class ReportDreamUseCase implements IReportDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  @override
+  Future<ResponseApi<void>> updateStatusDreamPeriod(StatusDreamPeriod status) async {
+    try{
+
+      await _repository.updateStatusDreamPeriod(status);
+      return ResponseApi.ok();
+
+    } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
 }
