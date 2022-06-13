@@ -5,7 +5,10 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/status_dream_week.dar
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/i_report_dream_case.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../login/domain/stories/register_user_store.dart';
 
 part 'list_alert_report_goal_dream_store.g.dart';
 
@@ -73,6 +76,9 @@ abstract class _ListAlertReportGoalDreamStoreBase with Store {
   Future<void> featch() async {
 
     _findAllReportGoalsWeek();
+
+    RegisterUserStore _registerUserStore = Modular.get<RegisterUserStore>();
+    _registerUserStore.updateDotNewNotificationReportDream(false);
 
   }
 

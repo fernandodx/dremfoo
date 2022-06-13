@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/modules/core/config/app_purchase.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
@@ -6,6 +7,7 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -30,6 +32,8 @@ abstract class _DreamStoreBase with Store {
 
   @observable
   bool isloadingDailyStep = false;
+
+  late AppPurchase appPurchase;
 
 
   @action
@@ -73,10 +77,17 @@ abstract class _DreamStoreBase with Store {
   }
 
   Future<ResponseApi<List<Dream>>> fetch() async {
-    print("FEATCH - INICIOU");
+    appPurchase = Modular.get<AppPurchase>();
     var response = await _findDreams();
-    print("FEATCH - Finalizou");
+    if(RemoteConfigUtil().isEnablePurchase()){
+      await initPurchaseListener(appPurchase);
+    }
     return response;
+  }
+
+  Future<void> initPurchaseListener(AppPurchase _appPurchase) async {
+    await _appPurchase.initListenerPurchase();
+    await _appPurchase.initPurchased();
   }
 
   Future<ResponseApi<List<DailyGoal>>> _loadHistoryWeekDailyGoal(Dream dream) async {

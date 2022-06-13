@@ -14,7 +14,7 @@ description: Construindo sonhos
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -25,27 +25,27 @@ dependencies:
   http: ^0.13.3
   connectivity: ^3.0.6 #verificar conexão com internet - no web
   shared_preferences: ^2.0.7
-  cached_network_image: ^3.1.0
-  provider: ^5.0.0
-  sign_button: ^2.0.0
-  bloc_pattern: ^3.0.0
-  flare_flutter: ^3.0.1 # animações
+  cached_network_image: ^3.2.1
+  provider: ^6.0.3
+  sign_button: ^2.0.2
+#  bloc_pattern: ^3.0.0
+  flare_flutter: ^3.0.2 # animações
   flutter_native_image: ^0.0.6+1
-  fl_chart: ^0.40.0
-  date_format: ^2.0.2
+  fl_chart: ^0.51.0
+  date_format: ^2.0.6
   email_launcher: ^1.1.1
   flutter_share: ^2.0.0
 #  share_files_and_screenshot_widgets_plus: ^1.0.3 //Descomentar depois de migrar para null safe
 #  share: ^2.0.4 //Descomentar depois de migrar para null safe
-  flutter_local_notifications: ^5.0.0+4
-  path_provider: ^2.0.4
-  smooth_page_indicator: ^0.3.0-nullsafety.0
+  flutter_local_notifications: ^9.6.0
+  path_provider: ^2.0.10
+  smooth_page_indicator: ^1.0.0+2
   url_launcher: ^6.0.10
   flutter_native_timezone: ^2.0.0
   pixabay_picker: ^1.0.6
-  youtube_player_flutter: ^8.0.0
-  percent_indicator: ^3.0.1
-  font_awesome_flutter: ^9.1.0
+  youtube_player_flutter: ^8.1.0
+  percent_indicator: ^3.4.0
+  font_awesome_flutter: ^10.1.0
 
   #Exigem configuração no Android ou IOS
   image_picker: ^0.8.4+1
@@ -67,7 +67,7 @@ dependencies:
   flutter_mobx: ^2.0.2
   mobx: ^2.0.4
 
-  flutter_modular: ^4.4.0
+  flutter_modular: ^5.0.3
   slidy: ^3.2.2+2
 
   intl: ^0.17.0

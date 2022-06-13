@@ -25,25 +25,15 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
 
     try {
       controller = AppController.getInstance();
-      appPurchase = Modular.get<AppPurchase>();
-
       changeTheme();
-      if(RemoteConfigUtil().isEnablePurchase()){
-        initPurchaseListener();
-      }
     } catch(error, stack) {
       CrashlyticsUtil.logErro(error, stack);
     }
 
   }
 
-  Future<void> initPurchaseListener() async {
-    await appPurchase.initListenerPurchase();
-    appPurchase.initPurchased();
-  }
-
   void changeTheme() {
-    var window = WidgetsBinding.instance!.window;
+    var window = WidgetsBinding.instance.window;
     var brightness = window.platformBrightness;
     bool isDarktheme = brightness == Brightness.dark;
     controller.changeTheme(isDarktheme, context);
@@ -62,12 +52,14 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
     return ValueListenableBuilder(
         valueListenable: controller.notifierTheme,
         builder: (BuildContext context, ThemeData theme, Widget? child) {
-          return MaterialApp(
+          return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             theme: controller.notifierTheme.value,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-          ).modular();
+            routeInformationParser: Modular.routeInformationParser,
+            routerDelegate: Modular.routerDelegate,
+          );
         });
   }
 

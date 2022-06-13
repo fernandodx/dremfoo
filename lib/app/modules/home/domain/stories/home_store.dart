@@ -14,6 +14,7 @@ import 'package:dremfoo/app/modules/login/domain/usecases/contract/ilogin_case.d
 import 'package:dremfoo/app/modules/login/domain/usecases/contract/iregister_user_case.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/utils/notification_util.dart';
+import 'package:dremfoo/app/utils/remoteconfig_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -52,7 +53,12 @@ abstract class _HomeStoreBase with Store {
 
   BannerAd? bannerAd;
 
+  late AppPurchase appPurchase;
+
   Future<void> fetch(BuildContext context) async {
+
+    appPurchase = Modular.get<AppPurchase>();
+
     NotificationUtil.deleteNotificationChannel(NotificationUtil.CHANNEL_NOTIFICATION_DAILY);
     await _findCurrentUser();
     ResponseApi<UserRevo> responseUserLevel = await _registerUserCase.checkLevelFocusUser();
@@ -61,11 +67,20 @@ abstract class _HomeStoreBase with Store {
     }
     await _registerUserCase.updateCountAcess();
     await _loginCase.saveLastAcessUser();
+    if(RemoteConfigUtil().isEnablePurchase()){
+      await initPurchaseListener(appPurchase);
+    }
     _findLastDayAcess();
     _loadRankUser();
     _loadVideo();
     _loadBanner();
     _checkReportGoals(context);
+
+  }
+
+  Future<void> initPurchaseListener(AppPurchase _appPurchase) async {
+    await _appPurchase.initListenerPurchase();
+    await _appPurchase.initPurchased();
   }
 
   void _loadBanner() {
@@ -118,16 +133,16 @@ abstract class _HomeStoreBase with Store {
 
   Future<bool> _checkReportGoalsWeek(BuildContext context) async {
 
-    DateTime now = DateTime.now();
-    int lastWeekCheckGoals = DateUtil().getLastWeek(now.month, now.day, now.year);
+     DateTime now = DateTime.now();
+     int lastWeekCheckGoals = DateUtil().getLastWeek(now.month, now.day, now.year);
 
     ResponseApi<List<StatusDreamPeriod>> responseApiStatus =
     await _reportDreamCase.findStatusDreamWithWeek(lastWeekCheckGoals, now.year);
-    if (responseApiStatus.ok && responseApiStatus.result?.isEmpty == true) {
+     if (responseApiStatus.ok && responseApiStatus.result?.isEmpty == true) {
       navigatePageReportDream(context,
           numberPeriod: lastWeekCheckGoals, periodStatus: PeriodStatusDream.WEEKLY, year: now.year);
       return true;
-    }
+     }
     return false;
   }
 

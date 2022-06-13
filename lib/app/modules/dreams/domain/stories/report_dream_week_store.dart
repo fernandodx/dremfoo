@@ -11,10 +11,12 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/status_dream_week.dar
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/i_report_dream_case.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.dart';
+import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
 import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 part 'report_dream_week_store.g.dart';
@@ -50,6 +52,7 @@ abstract class _ReportDreamWeekStoreBase with Store {
     if (responseApi.ok) {
       List<Dream> listDreamResult = responseApi.result!;
       List<StatusDreamPeriod> listStatusPeriod = [];
+      RegisterUserStore _registerUserStore = Modular.get<RegisterUserStore>();
 
       for (Dream dream in listDreamResult) {
 
@@ -62,10 +65,11 @@ abstract class _ReportDreamWeekStoreBase with Store {
         StatusDreamPeriod period = await createStatusDreamPeriod(dream, dto);
         listStatusPeriod.add(period);
 
+        _registerUserStore.updateDotNewNotificationReportDream(true);
         if(dto.periodStatus == PeriodStatusDream.WEEKLY) {
           _reportDreamCase.saveStatusDreamWithWeek(period);
         }else{
-          _reportDreamCase.saveStatusDreamWithMonth(period);
+           _reportDreamCase.saveStatusDreamWithMonth(period);
         }
       }
       
@@ -89,7 +93,7 @@ abstract class _ReportDreamWeekStoreBase with Store {
       percentCompleted = await _calculatePercentCompletedMonth(dto.numPeriod, dto.year, dream);
     }
 
-    if(percentCompleted >= difficulty){
+    if((percentCompleted * 100) >= difficulty){
       isGoalOk = true;
       typeStatus = TypeStatusDream.REWARD;
     }

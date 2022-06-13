@@ -60,14 +60,14 @@ class ChartWeekWidget extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.only(left: 16, right: 8, top: 25, bottom: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      TextUtil.textChipLight(title, fontSize: 16),
-                      TextUtil.textChipLight(subTitle, fontSize: 12),
+                      TextUtil.textChipLight(title, fontSize: 14),
+                      TextUtil.textChipLight(subTitle, fontSize: 10),
                       SpaceWidget(),
                       SpaceWidget(),
                       Expanded(
@@ -164,6 +164,117 @@ class ChartWeekWidget extends StatelessWidget {
     return listBarChart;
   }
 
+  static AxisTitles getBottomTitleChartWeeek() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 16,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            Widget text;
+            switch (value.toInt()) {
+              case 0:
+                text = Text(Translate.i().get.label_week_day_sun, style: style);
+                break;
+              case 1:
+                text = Text(Translate.i().get.label_week_day_mon, style: style);
+                break;
+              case 2:
+                text = Text(Translate.i().get.label_week_day_tue, style: style);
+                break;
+              case 3:
+                text = Text(Translate.i().get.label_week_day_wed, style: style);
+                break;
+              case 4:
+                text = Text(Translate.i().get.label_week_day_thu, style: style);
+                break;
+              case 5:
+                text = Text(Translate.i().get.label_week_day_fri, style: style);
+                break;
+              case 6:
+                text = Text(Translate.i().get.label_week_day_sat, style: style);
+                break;
+              default:
+                text = const Text('', style: style);
+                break;
+            }
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 16,
+              child: text,
+            );
+          }
+      ),
+    );
+  }
+
+  static AxisTitles getBottomTitleChartMonth() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 16,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            Widget text;
+            switch (value.toInt()) {
+              case 1:
+                text = const Text("01", style: style);
+                break;
+              case 2:
+                text = const Text("02", style: style);
+                break;
+              case 3:
+                text = const Text("03", style: style);
+                break;
+              case 4:
+                text = const Text("04", style: style);
+                break;
+              case 5:
+                text = const Text("05", style: style);
+                break;
+              case 6:
+                text = const Text("06", style: style);
+                break;
+              case 7:
+                text = const Text("07", style: style);
+                break;
+              case 8:
+                text = const Text("08", style: style);
+                break;
+              case 9:
+                text = const Text("09", style: style);
+                break;
+              case 10:
+                text = const Text("10", style: style);
+                break;
+              case 11:
+                text = const Text("11", style: style);
+                break;
+              case 12:
+                text = const Text("12", style: style);
+                break;
+              default:
+                text = const Text('', style: style);
+                break;
+            }
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 16,
+              child: text,
+            );
+          }
+      ),
+    );
+  }
+
   BarChartData mainBarWeekData(BuildContext context) {
     return BarChartData(
       barTouchData: BarTouchData(
@@ -171,36 +282,17 @@ class ChartWeekWidget extends StatelessWidget {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          margin: 8,
-          getTitles: (double value) {
-            switch (value.toInt()) {
-              case 0:
-                return Translate.i().get.label_week_day_sun;
-              case 1:
-                return Translate.i().get.label_week_day_mon;
-              case 2:
-                return Translate.i().get.label_week_day_tue;
-              case 3:
-                return Translate.i().get.label_week_day_wed;
-              case 4:
-                return Translate.i().get.label_week_day_thu;
-              case 5:
-                return Translate.i().get.label_week_day_fri;
-              case 6:
-                return Translate.i().get.label_week_day_sat;
-              default:
-                return '';
-            }
-          },
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false)
         ),
-        leftTitles: SideTitles(
-          showTitles: false,
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false)
+        ),
+        bottomTitles: getBottomTitleChartWeeek(),
+        leftTitles: AxisTitles(
+          sideTitles:  SideTitles(
+            showTitles: false,
+          )
         ),
       ),
       borderData: FlBorderData(
@@ -218,46 +310,17 @@ class ChartWeekWidget extends StatelessWidget {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-          margin: 10,
-          getTitles: (double value) {
-            switch (value.toInt()) {
-              case 1:
-                return '01';
-              case 2:
-                return '02';
-              case 3:
-                return '03';
-              case 4:
-                return '03';
-              case 5:
-                return '05';
-              case 6:
-                return '06';
-              case 7:
-                return '07';
-              case 8:
-                return '08';
-              case 9:
-                return '09';
-              case 10:
-                return '10';
-              case 11:
-                return '11';
-              case 12:
-                return '12';
-              default:
-                return '';
-            }
-          },
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false)
         ),
-        leftTitles: SideTitles(
-          showTitles: false,
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false)
+        ),
+        bottomTitles: getBottomTitleChartMonth(),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          )
         ),
       ),
       borderData: FlBorderData(
@@ -294,8 +357,8 @@ class ChartWeekWidget extends StatelessWidget {
       x: numberColum,
       barRods: [
         BarChartRodData(
-          y: 1,
-          colors: [barColor],
+          toY: 1,
+          color: barColor,
           width: width,
           borderSide: BorderSide(color: Colors.white, width: 0),
           rodStackItems: listChart,
@@ -330,8 +393,8 @@ class ChartWeekWidget extends StatelessWidget {
       x: numberColum,
       barRods: [
         BarChartRodData(
-          y: 1,
-          colors: [barColor],
+          toY: 1,
+          color: barColor,
           width: width,
           borderSide: BorderSide(color: Colors.white, width: 0),
           rodStackItems: listChart,

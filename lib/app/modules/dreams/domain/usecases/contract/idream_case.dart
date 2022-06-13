@@ -49,4 +49,6 @@ abstract class IDreamCase {
   bool checkPercentIsToday();
 
 
+
+
 }

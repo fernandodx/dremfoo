@@ -1,4 +1,5 @@
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +19,11 @@ class ContentReportChipStepWidget extends StatelessWidget {
           Chip chip = Chip(
             avatar: CircleAvatar(
               backgroundColor: Theme.of(context).canvasColor,
-              child: TextUtil.textDefault(
+              child: TextUtil.textChip(
                 "${stepDream.position}˚",
               ),
             ),
-            label: TextUtil.textDefault(
+            label: TextUtil.textChip(
               stepDream.step!,
             ),
             backgroundColor: Theme.of(context).primaryColor,
@@ -36,7 +37,7 @@ class ContentReportChipStepWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextUtil.textTitulo("Etapas finalizadas"),
+            TextUtil.textTitulo(Translate.i().get.label_completed_steps),
             SizedBox(
               height: 8,
             ),

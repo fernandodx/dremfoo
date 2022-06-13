@@ -66,6 +66,101 @@ class ChartGoals {
     );
   }
 
+
+  static AxisTitles getBottomTitleChart() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 16,
+        getTitlesWidget: (double value, TitleMeta meta) {
+          const style = TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          );
+          Widget text;
+          switch (value.toInt()) {
+            case 1:
+              text = const Text('D', style: style);
+              break;
+            case 2:
+              text = const Text('S', style: style);
+              break;
+            case 3:
+              text = const Text('T', style: style);
+              break;
+            case 4:
+              text = const Text('Q', style: style);
+              break;
+            case 5:
+              text = const Text('Q', style: style);
+              break;
+            case 6:
+              text = const Text('S', style: style);
+              break;
+            case 7:
+              text = const Text('S', style: style);
+              break;
+            default:
+              text = const Text('', style: style);
+              break;
+          }
+          return SideTitleWidget(
+            axisSide: meta.axisSide,
+            space: 16,
+            child: text,
+          );
+        }
+      ),
+    );
+  }
+
+  static AxisTitles getLeftTitleChart() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 16,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            Widget text;
+            switch (value.toInt()) {
+              case 0:
+                text = const Text('0%', style: style);
+                break;
+              case 20:
+                text = const Text('20%', style: style);
+                break;
+              case 40:
+                text = const Text('40%', style: style);
+                break;
+              case 60:
+                text = const Text('60%', style: style);
+                break;
+              case 80:
+                text = const Text('80%', style: style);
+                break;
+              case 100:
+                text = const Text('100%', style: style);
+                break;
+              default:
+                text = const Text('', style: style);
+                break;
+            }
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 16,
+              child: text,
+            );
+          }
+      ),
+    );
+  }
+
+
   static LineChartData _createLineChart(List<List<ChartGoals>> listDataChart) {
     return LineChartData(
       lineTouchData: LineTouchData(
@@ -78,52 +173,8 @@ class ChartGoals {
         show: false,
       ),
       titlesData: FlTitlesData(
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 16,
-          margin: 7,
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 1:
-                return 'D';
-              case 2:
-                return 'S';
-              case 3:
-                return 'T';
-              case 4:
-                return 'Q';
-              case 5:
-                return 'Q';
-              case 6:
-                return 'S';
-              case 7:
-                return 'S';
-            }
-            return '';
-          },
-        ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return '0%';
-              case 20:
-                return '20%';
-              case 40:
-                return '40%';
-              case 60:
-                return '60%';
-              case 80:
-                return '80%';
-              case 100:
-                return '100%';
-            }
-            return '';
-          },
-          margin: 8,
-          reservedSize: 30,
-        ),
+        bottomTitles: getBottomTitleChart(),
+        leftTitles: getLeftTitleChart(),
       ),
       borderData: FlBorderData(
         show: true,
@@ -167,9 +218,7 @@ class ChartGoals {
       final LineChartBarData lineChart = LineChartBarData(
         spots: listDataSpots,
         isCurved: true,
-        colors: [
-          color!,
-        ],
+        color: color,
         barWidth: 3,
         isStrokeCapRound: true,
         dotData: FlDotData(
@@ -199,9 +248,7 @@ class ChartGoals {
       spots: listDataSpotsGoal,
       isCurved: false,
       dashArray: [5, 5],
-      colors: [
-        color!,
-      ],
+      color: color,
       barWidth: 1,
       isStrokeCapRound: true,
       dotData: FlDotData(
@@ -227,8 +274,8 @@ class ChartGoals {
       int x = goalsDream.step.toInt();
 
       barRods.add(BarChartRodData(
-        y: goalsDream.percentStepCompleted,
-        colors: [leftBarColor],
+        toY: goalsDream.percentStepCompleted,
+        color: leftBarColor,
         width: width,
       ));
 
@@ -250,8 +297,8 @@ class ChartGoals {
         }
 
         barRods!.add(BarChartRodData(
-          y: goals[mouth].percentStepCompleted,
-          colors: [goals[mouth].color],//Cor da barra mês
+          toY: goals[mouth].percentStepCompleted,
+          color: goals[mouth].color,
           width: width,
         ));
 
@@ -281,8 +328,8 @@ class ChartGoals {
 
     return BarChartGroupData(barsSpace: 4, x: x, barRods: [
       BarChartRodData(
-        y: y1,
-        colors: [leftBarColor],
+        toY: y1,
+        color: leftBarColor,
         width: width,
       ),
 //      BarChartRodData(
@@ -291,6 +338,114 @@ class ChartGoals {
 //        width: width,
 //      ),
     ]);
+  }
+
+  static AxisTitles getBottomTitleChartMonth() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 16,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            Widget text;
+            switch (value.toInt()) {
+              case 1:
+                text = const Text('1', style: style);
+                break;
+              case 2:
+                text = const Text('2', style: style);
+                break;
+              case 3:
+                text = const Text('3', style: style);
+                break;
+              case 4:
+                text = const Text('4', style: style);
+                break;
+              case 5:
+                text = const Text('5', style: style);
+                break;
+              case 6:
+                text = const Text('6', style: style);
+                break;
+              case 7:
+                text = const Text('7', style: style);
+                break;
+              case 8:
+                text = const Text('8', style: style);
+                break;
+              case 9:
+                text = const Text('9', style: style);
+                break;
+              case 10:
+                text = const Text('10', style: style);
+                break;
+              case 11:
+                text = const Text('11', style: style);
+                break;
+              case 12:
+                text = const Text('12', style: style);
+                break;
+              default:
+                text = const Text('', style: style);
+                break;
+            }
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 16,
+              child: text,
+            );
+          }
+      ),
+    );
+  }
+
+  static AxisTitles getLeftTitleChartMonth() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 16,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            Widget text;
+            switch (value.toInt()) {
+              case 0:
+                text = const Text('0%', style: style);
+                break;
+              case 20:
+                text = const Text('20%', style: style);
+                break;
+              case 40:
+                text = const Text('40%', style: style);
+                break;
+              case 60:
+                text = const Text('60%', style: style);
+                break;
+              case 80:
+                text = const Text('80%', style: style);
+                break;
+              case 100:
+                text = const Text('100%', style: style);
+                break;
+              default:
+                text = const Text('', style: style);
+                break;
+            }
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 16,
+              child: text,
+            );
+          }
+      ),
+    );
   }
 
   static Widget createBarChartMouth(List<ChartGoals> listChartGoals) {
@@ -346,71 +501,32 @@ class ChartGoals {
                       minY: 0,
                       titlesData: FlTitlesData(
                         show: true,
-                        bottomTitles: SideTitles(
-                          showTitles: true,
-                          margin: 8,
-                          getTitles: (double value) {
-                            switch (value.toInt()) {
-                              case 1:
-                                return '1';
-                              case 2:
-                                return '2';
-                              case 3:
-                                return '3';
-                              case 4:
-                                return '4';
-                              case 5:
-                                return '5';
-                              case 6:
-                                return '6';
-                              case 7:
-                                return '7';
-                              case 8:
-                                return '8';
-                              case 9:
-                                return '9';
-                              case 10:
-                                return '10';
-                              case 11:
-                                return '11';
-                              case 12:
-                                return '12';
-                              default:
-                                return '';
-                            }
-                          },
-                        ),
-                        rightTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) {
-                              if (listGoalMonth.contains(value.toInt())) {
-                                return "🥳";
+                        bottomTitles: getBottomTitleChartMonth(),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget:  (double value, TitleMeta meta) {
+                                const style = TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                );
+                                Widget text;
+
+                                if (listGoalMonth.contains(value.toInt())) {
+                                  text = const Text("🥳", style: style);
+                                }else{
+                                  text = const Text("", style: style);
+                                }
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  space: 16,
+                                  child: text,
+                                );
                               }
-                              return "";
-                            }),
-                        leftTitles: SideTitles(
-                          showTitles: true,
-                          margin: 32,
-                          reservedSize: 16,
-                          getTitles: (value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return '0%';
-                              case 20:
-                                return '20%';
-                              case 40:
-                                return '40%';
-                              case 60:
-                                return '60%';
-                              case 80:
-                                return '80%';
-                              case 100:
-                                return '100%';
-                              default:
-                                return '';
-                            }
-                          },
+                            ),
                         ),
+                        leftTitles: getLeftTitleChartMonth(),
                       ),
                       borderData: FlBorderData(
                         show: false,
@@ -512,71 +628,32 @@ class ChartGoals {
                       minY: 0,
                       titlesData: FlTitlesData(
                         show: true,
-                        rightTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (double value) {
-                              if (listGoalMonth.contains(value.toInt())) {
-                                return "🥳";
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget:  (double value, TitleMeta meta) {
+                                const style = TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                );
+                                Widget text;
+
+                                if (listGoalMonth.contains(value.toInt())) {
+                                  text = const Text("🥳", style: style);
+                                }else{
+                                  text = const Text("", style: style);
+                                }
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  space: 16,
+                                  child: text,
+                                );
                               }
-                              return "";
-                            }),
-                        bottomTitles: SideTitles(
-                          showTitles: true,
-                          margin: 8,
-                          getTitles: (double value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return '1';
-                              case 1:
-                                return '2';
-                              case 2:
-                                return '3';
-                              case 3:
-                                return '4';
-                              case 4:
-                                return '5';
-                              case 5:
-                                return '6';
-                              case 6:
-                                return '7';
-                              case 7:
-                                return '8';
-                              case 8:
-                                return '9';
-                              case 9:
-                                return '10';
-                              case 10:
-                                return '11';
-                              case 11:
-                                return '12';
-                              default:
-                                return '';
-                            }
-                          },
+                          ),
                         ),
-                        leftTitles: SideTitles(
-                          showTitles: true,
-                          margin: 16,
-                          reservedSize: 16,
-                          getTitles: (value) {
-                            switch (value.toInt()) {
-                              case 0:
-                                return '0%';
-                              case 20:
-                                return '20%';
-                              case 40:
-                                return '40%';
-                              case 60:
-                                return '60%';
-                              case 80:
-                                return '80%';
-                              case 100:
-                                return '100%';
-                              default:
-                                return '';
-                            }
-                          },
-                        ),
+                        bottomTitles: getBottomTitleChartMonth(),
+                        leftTitles: getLeftTitleChartMonth(),
                       ),
                       borderData: FlBorderData(
                         show: false,

@@ -1,5 +1,6 @@
 import 'package:dremfoo/app/modules/core/core_module.dart';
 import 'package:dremfoo/app/modules/core/domain/usecases/SeoUserCase.dart';
+import 'package:dremfoo/app/modules/core/infra/repositories/shared_prefs_repository.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/upload_image_repository.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/archive_store.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/choice_type_dream_store.dart';
@@ -23,6 +24,7 @@ import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_wait_page.dar
 import 'package:dremfoo/app/modules/dreams/ui/pages/register_dream_with_focus_page.dart';
 import 'package:dremfoo/app/modules/dreams/ui/pages/report_dream_page.dart';
 import 'package:dremfoo/app/modules/login/domain/usecases/register_user_case.dart';
+import 'package:dremfoo/app/modules/login/infra/repositories/RegisterUserRepository.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class DreamsModule extends Module {
@@ -40,7 +42,7 @@ class DreamsModule extends Module {
     Bind.lazySingleton((i) => DreamRespository(i.get<DreamFirebaseDatasource>())),
     Bind.lazySingleton((i) => ReportDreamRepository(i.get<ReportDreamDataSource>()), export: true),
 
-    Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>())),
+    Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>(), i.get<SharedPrefsRepository>(), i.get<RegisterUserRepository>())),
     Bind.lazySingleton((i) => ReportDreamUseCase(i.get<ReportDreamRepository>()), export: true),
 
     Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>(), i.get<SeoUserCase>())),

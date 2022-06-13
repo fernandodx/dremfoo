@@ -45,7 +45,7 @@ class BodyItemDreamWidget extends StatelessWidget {
   Widget getBodyDreamWithFocus() {
 
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16),
+      margin: EdgeInsets.only(left: 8, right: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

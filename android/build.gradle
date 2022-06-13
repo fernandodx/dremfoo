@@ -2,6 +2,7 @@ buildscript {
     ext.kotlin_version = '1.4.32'
     ext.firebase_version = '20.2.4'
     ext.billing_version = '3.0.3'
+    ext.multidex_version = "2.0.1"
     repositories {
         google()
         jcenter()

@@ -1,9 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/alarm_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
@@ -219,6 +221,50 @@ abstract class _RegisterDreamWaitStoreBase with Store {
     currentStep = numberStep;
   }
 
+  @action
+  void updateTimeAlarm(TimeOfDay time){
+    var dreamUpdateAlarm = Dream.copy(dream);
+    AlarmDream alarm = dreamUpdateAlarm.alarm?? AlarmDream();
+    var now = DateTime.now();
+    DateTime dateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    alarm.time = Timestamp.fromDate(dateTime);
+    dreamUpdateAlarm.alarm = alarm;
+    dream = dreamUpdateAlarm;
+  }
+
+  @action
+  void updateEnableWeekDayAlarm(int weekDay, bool isEnable) {
+    var tmp = Dream.copy(dream);
+    AlarmDream alarm = tmp.alarm?? AlarmDream();
+    switch(weekDay){
+      case DateTime.sunday: alarm.isSunday = isEnable;
+        break;
+      case DateTime.monday: alarm.isMonday = isEnable;
+      break;
+      case DateTime.tuesday: alarm.isTuesday = isEnable;
+      break;
+      case DateTime.wednesday: alarm.isWednesday = isEnable;
+      break;
+      case DateTime.thursday: alarm.isThursday = isEnable;
+      break;
+      case DateTime.friday: alarm.isFriday = isEnable;
+      break;
+      case DateTime.saturday: alarm.isSaturdays = isEnable;
+      break;
+    }
+    tmp.alarm = alarm;
+    dream = tmp;
+  }
+
+  @action
+  void updateEnableNotification(bool isEnable) {
+    var tmp = Dream.copy(dream);
+    AlarmDream alarm = tmp.alarm?? AlarmDream();
+    alarm.isActive = isEnable;
+    tmp.alarm = alarm;
+    dream = tmp;
+  }
+
   Future<void> _saveDream(BuildContext context) async {
     ResponseApi<Dream> responseApi = await _dreamCase.saveDream(dream);
     msgAlert = responseApi.messageAlert;
@@ -292,6 +338,13 @@ abstract class _RegisterDreamWaitStoreBase with Store {
       if (dream.inflection == null || dream.inflection?.isEmpty == true) {
         stepErrors.add(StepsEnum.INFLECTION.index);
         msg += "${Translate.i().get.msg_inflection_point_required}\n";
+      }
+    }
+
+    if(dream.alarm?.isActive == true){
+      if(dream.alarm?.time == null){
+        stepErrors.add(StepsEnum.ALARM.index);
+        msg += "${Translate.i().get.msg_error_time_not_found_alarm}\n";
       }
     }
 

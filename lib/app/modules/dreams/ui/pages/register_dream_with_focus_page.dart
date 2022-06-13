@@ -4,6 +4,7 @@ import 'package:dremfoo/app/modules/core/ui/widgets/button_appbar_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/dtos/dream_page_dto.dart';
 import 'package:dremfoo/app/modules/dreams/domain/stories/register_dream_with_focus_store.dart';
+import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_alarm_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_daily_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_goal_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/content_step_inflection_dream_widget.dart';
@@ -126,6 +127,7 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
         stepGoalDaily(),
         stepRewardDream(),
         stepInflectionDream(),
+        stepAlarmDream(),
         stepConfigDream(),
       ];
     }
@@ -152,6 +154,28 @@ class RegisterDreamWithFocusPageState extends ModularState<RegisterDreamWithFocu
           onChangeValueGoalWeek: (valueGoalWeek) {
             store.changeGoalWeekDream(valueGoalWeek);
           },
+        ),
+      ),
+    );
+  }
+
+  Step stepAlarmDream() {
+    return Step(
+      isActive: store.checkStepActive(StepsEnum.ALARM),
+      state: store.getStateStep(StepsEnum.ALARM),
+      title: TextUtil.textTitulo(Translate.i().get.label_step_alarm),
+      content: Observer(
+        builder: (context) => ContentStepAlarmDreamWidget(
+          expansionInfo: expansionPanelListInfo(StepsEnum.ALARM.index, Translate.i().get.label_step_alarm),
+          alarmDream: store.dream.alarm,
+          onTimeSelected: (timeOfDay) {
+            store.updateTimeAlarm(timeOfDay);
+          },
+          onChangeEnableNotification: (isEnable) {
+            store.updateEnableNotification(isEnable);
+          }, onChangeWeekDayEnable: (weekDay , isEnable ) {
+            store.updateEnableWeekDayAlarm(weekDay, isEnable);
+        },
         ),
       ),
     );

@@ -5,19 +5,25 @@ import 'package:dremfoo/app/modules/core/infra/repositories/puchase_repository.d
 import 'package:dremfoo/app/modules/home/home_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'modules/core/core_module.dart';
+
 class AppModule extends Module {
+
+  @override
+  final List<Module> imports = [CoreModule()];
+
   @override
   final List<Bind> binds = [
 
-    Bind.lazySingleton((i) => PurchaseDatasource(), export: true),
-    Bind.lazySingleton((i) => PurchaseRepository(i.get<PurchaseDatasource>()), export: true),
-    Bind.lazySingleton((i) => PurchaseUserCase(i.get<PurchaseRepository>()), export: true),
-    Bind.lazySingleton((i) => AppPurchase(i.get<PurchaseUserCase>()), export: true),
+    // Bind.lazySingleton((i) => PurchaseDatasource(), export: true,),
+    // Bind.lazySingleton((i) => PurchaseRepository(i.get<PurchaseDatasource>()), export: true),
+    // Bind.lazySingleton((i) => PurchaseUserCase(i.get<PurchaseRepository>()), export: true),
+    // Bind.lazySingleton((i) => AppPurchase(i.get<PurchaseUserCase>()), export: true, onDispose:(value) => print("MORIIIIIIIIIIR $value") ),
   ];
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute(Modular.initialRoute, module: HomeModule()),
+    ModuleRoute(Modular.initialRoute, module: HomeModule(),),
     // ModuleRoute(MODULE_HOME, module: HomeModule()),
     // ModuleRoute(MODULE_DREAM, module: DreamsModule()),
 

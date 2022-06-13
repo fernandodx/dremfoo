@@ -31,7 +31,22 @@ class AppbarRevoWidget {
           margin: EdgeInsets.only(right: 20),
           alignment: Alignment.center,
           child: InkWell(
-            child: FaIcon(FontAwesomeIcons.solidBell, size: 22,),
+            child: Stack(
+              children: [
+                FaIcon(
+                  FontAwesomeIcons.solidBell,
+                  size: 22,
+                ),
+                Observer(
+                    builder: (context) => Visibility(
+                        visible: _registerUserStore.isNewNotificationReportDream,
+                        child: FaIcon(
+                          Icons.circle,
+                          size: 12,
+                          color: Theme.of(context).canvasColor,
+                        ))),
+              ],
+            ),
             onTap: () => _listReportGoalDream.open(context),
           ),
         ),
@@ -47,13 +62,10 @@ class AppbarRevoWidget {
             },
             borderRadius: BorderRadius.all(Radius.circular(50)),
             child: Observer(
-              builder: (context) =>
-                  CircleAvatarUserRevoWidget(
-                    urlImage: userRevo?.urlPicture,
-                    image: _registerUserStore.imageUser != null
-                        ? _registerUserStore.imageUser
-                        : null,
-                  ),
+              builder: (context) => CircleAvatarUserRevoWidget(
+                urlImage: userRevo?.urlPicture,
+                image: _registerUserStore.imageUser != null ? _registerUserStore.imageUser : null,
+              ),
             ),
           ),
         ),

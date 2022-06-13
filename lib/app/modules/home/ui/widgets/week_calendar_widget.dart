@@ -12,7 +12,7 @@ class WeekCalendarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: getDaysOfWeekRow(context),
     );
   }
@@ -71,7 +71,7 @@ class WeekCalendarWidget extends StatelessWidget {
             ],
           ),
         ),
-        padding: EdgeInsets.all(6),
+        padding: EdgeInsets.only(top: 4),
         decoration: isSelected ? borderSelected : borderNormal,
       );
 

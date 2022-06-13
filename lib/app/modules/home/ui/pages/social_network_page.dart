@@ -95,7 +95,7 @@ class SocialNetworkPageState extends ModularState<SocialNetworkPage, SocialNetwo
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           InkWell(
-              onTap: () => launch("https://www.instagram.com/revometas/"),
+              onTap: () => launchUrl(Uri.parse("https://www.instagram.com/revometas/")),
               child: FaIcon(FontAwesomeIcons.instagram, size: 35, color: Theme.of(context).canvasColor,),
           ),
           TextUtil.textDefault(Translate.i().get.label_instagram)
@@ -145,8 +145,8 @@ class SocialNetworkPageState extends ModularState<SocialNetworkPage, SocialNetwo
           Container(
             margin: EdgeInsets.only(bottom: 9, top: 9),
             child: InkWell(
-              onTap: () => launch(
-                  "https://play.google.com/store/apps/dev?id=7876738907056259315"),
+              onTap: () => launchUrl(
+                  Uri.parse("https://play.google.com/store/apps/dev?id=7876738907056259315")),
               child: FaIcon(
                 FontAwesomeIcons.chrome, size: 35, color: Theme.of(context).canvasColor,
               ),

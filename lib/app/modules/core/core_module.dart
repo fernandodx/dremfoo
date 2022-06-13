@@ -10,14 +10,24 @@ import 'package:dremfoo/app/modules/dreams/domain/entities/dream.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'domain/usecases/purchase_user_case.dart';
+import 'infra/datasources/purchase_datasource.dart';
+import 'infra/repositories/puchase_repository.dart';
+
 class CoreModule extends Module {
 
   @override
   final List<Bind> binds = [
 
+    Bind.lazySingleton((i) => PurchaseDatasource(), export: true,),
+    Bind.lazySingleton((i) => PurchaseRepository(i.get<PurchaseDatasource>()), export: true),
+    Bind.lazySingleton((i) => PurchaseUserCase(i.get<PurchaseRepository>()), export: true),
+    Bind.singleton((i) => AppPurchase(i.get<PurchaseUserCase>()), export: true),
+
+
     Bind.instance<String>("KEY", export: true),
     Bind.lazySingleton((i) => RevoAnalytics(), export: true),
-    Bind.lazySingleton((i) => UserRevo(), export: true),
+    Bind.singleton((i) => UserRevo(), export: true,),
     Bind.lazySingleton((i) => Dream(), export: true),
 
     Bind.lazySingleton((i) => UploadImagePickerDataSource(), export: true),

@@ -8,6 +8,7 @@ import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/analytics_util.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/revo_analytics.dart';
 import 'package:dremfoo/app/modules/core/domain/utils/utils.dart';
+import 'package:dremfoo/app/modules/core/infra/repositories/contract/ishared_prefs_repository.dart';
 import 'package:dremfoo/app/modules/core/infra/repositories/contract/iupload_image_repository.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
@@ -17,27 +18,58 @@ import 'package:dremfoo/app/modules/dreams/domain/usecases/contract/idream_case.
 import 'package:dremfoo/app/modules/dreams/infra/repositories/contract/idream_repository.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
+import 'package:dremfoo/app/modules/login/infra/repositories/contract/iregister_user_repository.dart';
+import 'package:dremfoo/app/resources/constants.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:dremfoo/app/api/extensions/util_extensions.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
+import 'package:dremfoo/app/utils/notification_util.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class DreamUseCase extends IDreamCase {
 
   IDreamRepository _repository;
+  ISharedPrefsRepository _sharedPrefsRepository;
   IUploadImageRepository _imageRepository;
-  DreamUseCase(this._repository, this._imageRepository);
+  IRegisterUserRepository _userRepository;
+  DreamUseCase(this._repository, this._imageRepository, this._sharedPrefsRepository, this._userRepository);
 
   @override
   Future<ResponseApi<List<Dream>>> findDreamsForUser() async {
 
     try{
-
+      await findCurrentUser();
       List<Dream> listDream = await _repository.findAllDreamForUser();
       return ResponseApi.ok(result: listDream);
 
     } on RevoExceptions catch(error){
+      var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
+      return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+    }
+
+    var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
+    return ResponseApi.error(messageAlert: alert);
+  }
+
+
+  @override
+  Future<ResponseApi<UserRevo>> findCurrentUser() async {
+    try{
+
+      String uid = await _sharedPrefsRepository.getString("USER_LOG_UID");
+      if(uid.isNotEmpty){
+        var _userRevo = Modular.get<UserRevo>();
+        _userRevo.uid = uid;
+      }
+
+      var user = await _userRepository.findCurrentUser();
+      return ResponseApi.ok(result: user);
+
+    }on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
       return ResponseApi.error(stackMessage: error.stack.toString(), messageAlert: alert);
     } catch(error, stack){
@@ -256,6 +288,7 @@ class DreamUseCase extends IDreamCase {
     try{
 
       _validateDream(dream);
+      await _saveUpdadeNotifyAlarm(dream);
 
       var dreamSave = await _repository.saveDream(dream);
       return ResponseApi.ok(result: dreamSave);
@@ -271,6 +304,80 @@ class DreamUseCase extends IDreamCase {
     return ResponseApi.error(messageAlert: alert);
   }
 
+  Future<void> _saveUpdadeNotifyAlarm(Dream dream) async {
+    var now = DateTime.now();
+    var dateAlarm = dream.alarm?.time?.toDate() ?? now;
+
+    for(int weekID = 1; weekID <= 7; weekID++){
+      await NotificationUtil.cancelNotification(weekID*99);
+    }
+
+    if(dream.alarm?.isActive == false){
+      return;
+    }
+
+    for(int weekID = 1; weekID <= 7; weekID++){
+
+      switch(weekID) {
+        case DateTime.sunday:
+          var isActive = dream.alarm?.isSunday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.monday:
+          var isActive = dream.alarm?.isMonday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.tuesday:
+          var isActive = dream.alarm?.isTuesday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.wednesday:
+          var isActive = dream.alarm?.isWednesday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.thursday:
+          var isActive = dream.alarm?.isThursday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.friday:
+          var isActive = dream.alarm?.isFriday??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+        case DateTime.saturday:
+          var isActive = dream.alarm?.isSaturdays??false;
+          await _processNotifyDream(isActive, now, weekID, dateAlarm, dream);
+          break;
+      }
+    }
+  }
+
+  Future<void> _processNotifyDream(bool isActive, DateTime now, int weekID, DateTime dateAlarm, Dream dream) async {
+    if(isActive){
+      await notifyWeekIDDream(now, weekID, dateAlarm, dream);
+    }else{
+      NotificationUtil.cancelNotification(weekID);
+    }
+  }
+
+  Future<void> notifyWeekIDDream(DateTime now, int weekID, DateTime dateAlarm, Dream dream) async {
+    int weekday =  now.weekday;
+    int diff = weekday - weekID;
+    if(diff > 0){
+      dateAlarm = now.subtract(Duration(days: diff));
+    }if(diff < 0){
+      dateAlarm = now.add(Duration(days: diff * -1));
+    }
+    await NotificationUtil.showDailyAtDateTime(
+         weekID*99,
+        "Seu sonho ${dream.dreamPropose}, esta te esperando!",
+        "${dream.descriptionPropose}",
+        dateAlarm,
+        NotificationUtil.ID_NOTIFICATION_DAILY,
+        NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+        NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY,
+        matchTime: DateTimeComponents.dayOfWeekAndTime);
+  }
+
   void _validateDream(Dream dream) {
     StringBuffer msgError = StringBuffer();
 
@@ -281,6 +388,12 @@ class DreamUseCase extends IDreamCase {
       if(dream.dailyGoals == null || dream.dailyGoals!.isEmpty){
         msgError.writeln("As metas diárias são obrigatórios");
       }
+      if(dream.alarm?.isActive == true){
+        if(dream.alarm?.time == null){
+          msgError.writeln("É necessário definir um horário no alarme");
+        }
+      }
+
       if(msgError.isNotEmpty){
         throw RevoExceptions.msgToUser(msg: msgError.toString());
       }
@@ -293,9 +406,26 @@ class DreamUseCase extends IDreamCase {
 
       //TODO fazer metodo unico
       _validateDream(dream);
+      await _saveUpdadeNotifyAlarm(dream);
 
       var dreamUpdate = await _repository.updateDream(dream);
       return ResponseApi.ok(result: dreamUpdate);
+
+      // await NotificationUtil.cancelNotification(1001);
+      //
+      // DateTime time = DateTime.now();
+      // time = time.add(Duration(seconds: 60));
+      //
+      // //teste
+      // await NotificationUtil.showDailyAtDateTime(
+      //     1001,
+      //     "Chegou TESTE! Seu sonho ${dream.dreamPropose} esta te esperando.",
+      //     "${dream.descriptionPropose}",
+      //     time,
+      //     NotificationUtil.ID_NOTIFICATION_DAILY,
+      //     NotificationUtil.CHANNEL_NOTIFICATION_DAILY,
+      //     NotificationUtil.DESCRIPTION_NOTIFICATION_DAILY,
+      //     matchTime: DateTimeComponents.dayOfWeekAndTime);
 
     } on RevoExceptions catch(error){
       var alert = MessageAlert.create(Translate.i().get.title_msg_error, error.msg, TypeAlert.ERROR);
@@ -344,6 +474,7 @@ class DreamUseCase extends IDreamCase {
   Future<ResponseApi<List<Dream>>> findAllDreamsArchive() async {
     try{
 
+      await findCurrentUser();
       List<Dream> listeDream = await _repository.findAllDreamsArchiveCurrentUser();
       return ResponseApi.ok(result: listeDream);
 
@@ -378,6 +509,7 @@ class DreamUseCase extends IDreamCase {
   Future<ResponseApi<List<Dream>>> findAllDreamsCompletedCurrentUser() async {
     try{
 
+      await findCurrentUser();
       List<Dream> listeDream = await _repository.findAllDreamsCompletedCurrentUser();
       return ResponseApi.ok(result: listeDream);
 

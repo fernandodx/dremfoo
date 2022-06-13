@@ -28,9 +28,14 @@ class DateUtil {
 
 
 
-  day(int length)
+  day(int length, {String locale = "pt-BR"})
   {
     List<String> day = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday","Thursday", "Friday"];
+    List<String> dayPt = ["Sábado", "Domingo", "Segunda", "Terça", "Quarta","Quinta", "Sexta"];
+
+    if(locale == "pt-BR"){
+      day = dayPt;
+    }
 
     int count = 0;
     String? resultDay = null;

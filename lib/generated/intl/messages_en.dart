@@ -30,6 +30,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_active_subscription":
             MessageLookupByLibrary.simpleMessage("Active Subscription"),
         "label_add": MessageLookupByLibrary.simpleMessage("Add"),
+        "label_already_passed":
+            MessageLookupByLibrary.simpleMessage("Already passed"),
         "label_annual_subscription":
             MessageLookupByLibrary.simpleMessage("Annual Subscription"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Archive"),
@@ -48,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Choose different reward for the week."),
         "label_choose_image_dream": MessageLookupByLibrary.simpleMessage(
             "Choose an image to represent the dream."),
+        "label_completed_steps":
+            MessageLookupByLibrary.simpleMessage("Completed Steps"),
         "label_confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm email"),
         "label_contact": MessageLookupByLibrary.simpleMessage("Contact"),
@@ -58,6 +62,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Daily goals"),
         "label_dark_theme": MessageLookupByLibrary.simpleMessage("Dark theme"),
         "label_days": MessageLookupByLibrary.simpleMessage("Days"),
+        "label_days_focusing":
+            MessageLookupByLibrary.simpleMessage("days focusing on your dream"),
+        "label_days_of_week":
+            MessageLookupByLibrary.simpleMessage("Days of the week"),
         "label_description_dream":
             MessageLookupByLibrary.simpleMessage("Dream description"),
         "label_description_subscription": MessageLookupByLibrary.simpleMessage(
@@ -68,6 +76,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Dream choice"),
         "label_dream_hold":
             MessageLookupByLibrary.simpleMessage("Dream on hold"),
+        "label_dream_notification":
+            MessageLookupByLibrary.simpleMessage("Dream Notifications"),
+        "label_dream_progress":
+            MessageLookupByLibrary.simpleMessage("Dream in progress"),
         "label_dream_realized":
             MessageLookupByLibrary.simpleMessage("Realized dream"),
         "label_dream_with_focus":
@@ -92,14 +104,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot the password"),
         "label_free_content":
             MessageLookupByLibrary.simpleMessage("Free content"),
+        "label_friday": MessageLookupByLibrary.simpleMessage("Friday"),
+        "label_fulfilled": MessageLookupByLibrary.simpleMessage("fulfilled"),
         "label_goal": MessageLookupByLibrary.simpleMessage("Goal"),
         "label_hist_daily_goal":
             MessageLookupByLibrary.simpleMessage("History of daily goals"),
         "label_home": MessageLookupByLibrary.simpleMessage("Home"),
+        "label_hour": MessageLookupByLibrary.simpleMessage("Hour"),
         "label_inflection_point":
             MessageLookupByLibrary.simpleMessage("Inflection point"),
         "label_inflection_point_weekly":
             MessageLookupByLibrary.simpleMessage("Inflection point for week"),
+        "label_inflection_points":
+            MessageLookupByLibrary.simpleMessage("Inflection Points"),
         "label_information":
             MessageLookupByLibrary.simpleMessage("Information"),
         "label_instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
@@ -115,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_min_character_password": MessageLookupByLibrary.simpleMessage(
             "Your password must be at least 8 digits long"),
         "label_moderate": MessageLookupByLibrary.simpleMessage("Moderate"),
+        "label_monday": MessageLookupByLibrary.simpleMessage("Monday"),
         "label_monitor_goal_daily":
             MessageLookupByLibrary.simpleMessage("Daily monitoring of goals"),
         "label_monitor_goal_month":
@@ -145,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t miss your chance to access the best features to come."),
         "label_not_rigister":
             MessageLookupByLibrary.simpleMessage("No account"),
+        "label_notify_goals":
+            MessageLookupByLibrary.simpleMessage("Notify me of my goals"),
         "label_on_hold": MessageLookupByLibrary.simpleMessage("On hold"),
         "label_or": MessageLookupByLibrary.simpleMessage("OR"),
         "label_out_average":
@@ -167,6 +187,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password is required"),
         "label_restore": MessageLookupByLibrary.simpleMessage("To Restore"),
         "label_reward": MessageLookupByLibrary.simpleMessage("Reward"),
+        "label_rewards": MessageLookupByLibrary.simpleMessage("Rewards"),
+        "label_saturday": MessageLookupByLibrary.simpleMessage("Saturday"),
         "label_search_gallery":
             MessageLookupByLibrary.simpleMessage("Search the gallery"),
         "label_search_internet":
@@ -182,13 +204,20 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hi Fernando, "),
         "label_statistics": MessageLookupByLibrary.simpleMessage("Statistics"),
         "label_step": MessageLookupByLibrary.simpleMessage("Step"),
+        "label_step_alarm": MessageLookupByLibrary.simpleMessage("Alarm"),
         "label_step_to_conquer":
             MessageLookupByLibrary.simpleMessage("Steps to conquer"),
         "label_steps": MessageLookupByLibrary.simpleMessage("Steps"),
+        "label_sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
+        "label_thursday": MessageLookupByLibrary.simpleMessage("Thursday"),
         "label_title_app":
             MessageLookupByLibrary.simpleMessage("REVO - Focused goals"),
         "label_to_file": MessageLookupByLibrary.simpleMessage("To file"),
         "label_today": MessageLookupByLibrary.simpleMessage("Today"),
+        "label_tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
+        "label_unfulfilled":
+            MessageLookupByLibrary.simpleMessage("unfulfilled"),
+        "label_wednesday": MessageLookupByLibrary.simpleMessage("Wednesday"),
         "label_week": MessageLookupByLibrary.simpleMessage("Week"),
         "label_week_day_fri": MessageLookupByLibrary.simpleMessage("FRI"),
         "label_week_day_mon": MessageLookupByLibrary.simpleMessage("MON"),
@@ -260,6 +289,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "msg_error_sign_in_fb_in_progress":
             MessageLookupByLibrary.simpleMessage(
                 "Unable to finalize login, please try again later."),
+        "msg_error_time_not_found_alarm": MessageLookupByLibrary.simpleMessage(
+            "You need to set an alarm time"),
         "msg_error_unexpected": MessageLookupByLibrary.simpleMessage(
             "An unexpected error occurred"),
         "msg_error_user_block":

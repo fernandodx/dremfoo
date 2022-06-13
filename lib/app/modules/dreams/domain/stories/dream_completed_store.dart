@@ -28,7 +28,9 @@ abstract class _DreamCompletedStoreBase with Store {
 
   @action
   Future<void> _findAllDreamCompleted() async {
+    isLoading = true;
     ResponseApi<List<Dream>> responseApiDream = await _dreamCase.findAllDreamsCompletedCurrentUser();
+    isLoading = false;
     msgAlert = responseApiDream.messageAlert;
     if(responseApiDream.ok){
       List<Dream> listDream = responseApiDream.result!;

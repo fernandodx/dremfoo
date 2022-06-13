@@ -31,7 +31,7 @@ abstract class _RegisterUserStoreBase with Store {
   final nameTextEditingController = TextEditingController();
   final emailTextEditingController = TextEditingController();
 
-  var user =  Modular.get<UserRevo>();
+  late var user;
   var appController = AppController.getInstance();
 
   @observable
@@ -52,8 +52,12 @@ abstract class _RegisterUserStoreBase with Store {
   @observable
   bool isThemeDark = false;
 
+  @observable
+  bool isNewNotificationReportDream = false;
+
   @action
   void featch(UserRevo? userRevo) {
+   user =  Modular.get<UserRevo>();
     if(userRevo != null) {
       isEdited = true;
       nameTextEditingController.text = userRevo.name??"";
@@ -111,6 +115,11 @@ abstract class _RegisterUserStoreBase with Store {
       isThemeDark = responseApi.result!;
       appController.changeTheme(isThemeDark, context);
     }
+  }
+
+  @action
+  void updateDotNewNotificationReportDream(bool isNotification){
+    this.isNewNotificationReportDream = isNotification;
   }
 
   Future<bool> isThemeDarkUser() async {

@@ -22,16 +22,16 @@ class RemoteConfigUtil {
   static Future<void> init() async {
     _instance = await RemoteConfig.instance;
 
-    // try{
-    //
-    //   await _instance.setConfigSettings(RemoteConfigSettings(
-    //     fetchTimeout: Duration(seconds: 5),
-    //     minimumFetchInterval: Duration(seconds: 60),
-    //   ));
-    //
-    //   await _instance.fetch();
-    //
-    // }catch(error){
+    try{
+
+      await _instance.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: Duration(seconds: 10),
+        minimumFetchInterval: Duration(seconds: 60),
+      ));
+
+      // await _instance.fetch();
+
+    }catch(error){
 
       await _instance.setDefaults({
         enableMenuVideoRevo: true,
@@ -48,9 +48,9 @@ class RemoteConfigUtil {
         enablePurchase: true
       });
 
-    // }
+    }
 
-    await _instance.activate();
+    await _instance.fetchAndActivate();
   }
 
   bool isEnableMenuVideoRevo() {

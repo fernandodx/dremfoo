@@ -4,11 +4,8 @@ import 'package:dremfoo/app/modules/core/ui/widgets/alert_bottom_sheet.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/no_items_found_widget.dart';
 import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/status_dream_week.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/animation_report_dream_widget.dart';
 import 'package:dremfoo/app/modules/dreams/ui/widgets/cicular_progress_revo_widget.dart';
-import 'package:dremfoo/app/modules/dreams/ui/widgets/expasion_panel_list_info_widget.dart';
 import 'package:dremfoo/app/modules/home/domain/stories/list_alert_report_goal_dream_store.dart';
-import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +59,7 @@ class _ListAlertReportGoalDreamPageState
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: TextUtil.textAppbar("Notificações dos Sonhos"),
+            title: TextUtil.textAppbar(Translate.i().get.label_dream_notification),
             bottom: TabBar(
               indicatorColor: Theme.of(context).canvasColor,
               labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -71,17 +68,17 @@ class _ListAlertReportGoalDreamPageState
                   icon: FaIcon(
                     Icons.build,
                     size: 18,
-                    color: Theme.of(context).canvasColor,
+                    color: Theme.of(context).primaryColorLight,
                   ),
-                  text: "Pontos Inflexão",
+                  text: Translate.i().get.label_inflection_points,
                 ),
                 Tab(
                   icon: FaIcon(
                     FontAwesomeIcons.trophy,
                     size: 18,
-                    color: Theme.of(context).canvasColor,
+                    color: Theme.of(context).primaryColorLight,
                   ),
-                  text: "Recompensas",
+                  text: Translate.i().get.label_rewards,
                 )
               ],
             ),
@@ -180,7 +177,7 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                       child: FaIcon(
                         Icons.build,
                         size: 18,
-                        color: Theme.of(context).canvasColor,
+                        color: Theme.of(context).primaryColorLight,
                       ),
                       radius: 16,
                     ),
@@ -203,11 +200,12 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                         CicularProgressRevoWidget(
                             isHalf: true,
                             radius: 55,
+                            colorText: Theme.of(context).canvasColor,
                             titleCenter: status.difficulty!.formatIntPercent,
                             value: status.difficulty! / 100),
                         Container(
                             margin: EdgeInsets.only(top: 35, left: 12),
-                            child: TextUtil.textChipLight(Translate.i().get.label_goal)),
+                            child: TextUtil.textDefault(Translate.i().get.label_goal)),
                       ],
                     ),
                     SpaceWidget(
@@ -215,6 +213,7 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                     ),
                     CicularProgressRevoWidget(
                         radius: 55,
+                        colorText: Theme.of(context).canvasColor,
                         titleCenter: status.percentCompleted!.toIntPercent,
                         value: status.percentCompleted!),
                   ],

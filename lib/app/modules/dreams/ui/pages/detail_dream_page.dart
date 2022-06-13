@@ -129,7 +129,7 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             title: TextUtil.textAppbar(widget.dreamSelected.dreamPropose??""),
             bottom: PreferredSize(
               child: Container(
-                margin: EdgeInsets.only(top: 0, left: 16, right: 16, bottom: 4),
+                margin: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 4),
                 child: Observer(
                   builder: (context) => WeekCalendarWidget(
                     dateTimeSelectec: store.currentDate,
@@ -208,7 +208,7 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
             ChipButtonWidget(
               name: Translate.i().get.label_dream_realized,
               icon: FontAwesomeIcons.check,
-              size: 81,
+              size: 70,
               onTap: () {
                 alertBottomSheet(context,
                     msg: Translate.i().get.msg_question_dream_realized,
@@ -220,7 +220,7 @@ class DetailDreamPageState extends ModularState<DetailDreamPage, DetailDreamStor
               },),
             ChipButtonWidget(
                 name: Translate.i().get.label_file_dream,
-                size: 81,
+                size: 70,
                 icon: FontAwesomeIcons.archive,
                 onTap: () {
                   alertBottomSheet(context,

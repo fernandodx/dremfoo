@@ -15,6 +15,7 @@ class Constants {
   static const ENVIRONMENT_NOW = RELEASE;
   static const ID_NOTIFICATION_INIT = 1;
   static const ID_NOTIFICATION_FINISH = 2;
+  static const ID_NOTIFICATION_WEEKLY = 3;
 
 
 

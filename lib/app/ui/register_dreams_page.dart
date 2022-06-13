@@ -949,4 +949,4 @@ class _RegisterDreamPageState extends State<RegisterDreamPage> {
   }
 }
 
-enum StepsEnum { DREAM, STEPS, DAILY_GOALS, REWARD, INFLECTION, CONFIG }
+enum StepsEnum { DREAM, STEPS, DAILY_GOALS, REWARD, INFLECTION, ALARM, CONFIG }

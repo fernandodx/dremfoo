@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:dremfoo/app/utils/text_util.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class ContentCountDayDreamCompletedWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextUtil.textDefault(
-            "Já se passaram ",
+            "${Translate.i().get.label_already_passed} ",
             fontSize: 14,
           ),
           TextUtil.textDefault(
@@ -30,7 +31,7 @@ class ContentCountDayDreamCompletedWidget extends StatelessWidget {
             fontSize: 16,
           ),
           TextUtil.textDefault(
-            " dias com foco no seu sonho ;)",
+            " ${Translate.i().get.label_days_focusing} ;)",
             fontSize: 14,
           ),
         ],

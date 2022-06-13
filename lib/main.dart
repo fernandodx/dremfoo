@@ -50,7 +50,7 @@ void main() async {
     await Firebase.initializeApp().catchError((error, stack) => CrashlyticsUtil.logErro(error, stack));
     await RemoteConfigUtil.init().catchError((error, stack) => CrashlyticsUtil.logErro(error, stack));
     AnalyticsUtil.sendAnalyticsEvent(EventRevo.openApp);
-    initConfigNotification();
+    await initConfigNotification();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     if(RemoteConfigUtil().isEnablePurchase()){
@@ -96,7 +96,7 @@ Future initConfigNotification() async {
   var initializationSettings = InitializationSettings(
       android : initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  return await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     print("selectNotificationSubject : ${payload}");
     if (payload != null) {

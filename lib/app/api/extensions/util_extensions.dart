@@ -52,5 +52,13 @@ extension DateOnlyCompare on DateTime {
   String formatExtension() {
     return formatDate(this, [dd, ' de ', MM, ' de ', yyyy], locale: PortuguesLocale());
   }
+}
 
+extension NumberIntExtensions on int {
+  String zeroLeft() {
+    if(this <= 9){
+      return "0$this";
+    }
+    return "$this";
+  }
 }

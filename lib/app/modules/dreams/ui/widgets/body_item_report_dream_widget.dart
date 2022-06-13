@@ -49,114 +49,115 @@ class BodyItemReportDreamWidget extends StatelessWidget {
       pathAnimation = "sad.flr";
     }
 
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
-        child: ListView(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: <Widget>[
-                  Utils.string64ToImage(imgBase64,
-                      fit: BoxFit.cover, width: double.infinity, height: 120),
-                  Container(
-                    decoration: AppColors.backgroundBoxDecorationImg(),
-                    child: TextUtil.textAppbar("Sonho em progresso"),
-                    width: double.infinity,
-                    height: 80,
-                    padding: EdgeInsets.all(8),
-                    alignment: Alignment.bottomRight,
+    return Container(
+      padding: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
+      child: Wrap(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: <Widget>[
+                Utils.string64ToImage(imgBase64,
+                    fit: BoxFit.cover, width: double.infinity, height: 120),
+                Container(
+                  decoration: AppColors.backgroundBoxDecorationImg(),
+                  child: TextUtil.textAppbar(Translate.i().get.label_dream_progress),
+                  width: double.infinity,
+                  height: 80,
+                  padding: EdgeInsets.all(8),
+                  alignment: Alignment.bottomRight,
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: 160),
+                  child: Icon(
+                    Icons.refresh,
+                    color: Theme.of(context).primaryColorLight,
                   ),
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(right: 160),
-                    child: Icon(
-                      Icons.refresh,
-                    ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 6,
+          ),
+          TextUtil.textTitulo(nameDream),
+          SizedBox(
+            height: 6,
+          ),
+          TextUtil.textDefault(descriptionDream),
+          Align(
+            alignment: Alignment.topRight,
+            child: Chip(
+              padding: EdgeInsets.all(8),
+              clipBehavior: Clip.antiAlias,
+              elevation: 4,
+              backgroundColor: Theme.of(context).primaryColorDark,
+              label: TextUtil.textChip("${period.number}˚ ${descriptionNumber}", fontSize: 14),
+              avatar: CircleAvatar(
+                backgroundColor: Theme.of(context).canvasColor,
+                child: Icon(
+                  Icons.date_range,
+                  color: Colors.white70,
+                  size: 13,
+                ),
+              ),
+            ),
+          ),
+          ContentReportChipStepWidget(listStep: listStepDream),
+          Container(
+            padding: EdgeInsets.all(18),
+            width: double.maxFinite,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Stack(
+                    children: [
+                      CicularProgressRevoWidget(
+                          isHalf: true,
+                          radius: 55,
+                          colorText: Theme.of(context).canvasColor,
+                          titleCenter:
+                          period.difficulty!.formatIntPercent,
+                          value: period.difficulty!/100),
+
+                      Container(
+                          margin: EdgeInsets.only(top: 35, left: 12),
+                          child: TextUtil.textDefault(Translate.i().get.label_goal)
+                      ),
+                    ],
                   ),
+
+                  SpaceWidget(isSpaceRow: true,),
+
+                  CicularProgressRevoWidget(
+                      radius: 55,
+                      titleCenter:
+                      period.percentCompleted!.toIntPercent,
+                      colorText: Theme.of(context).canvasColor,
+                      value: period.percentCompleted!),
+
+                  SpaceWidget(isSpaceRow: true,),
+
+                  Expanded(child: AnimationReportDreamWidget(
+                    typeStatusDream: period.typeStatusDream!,
+                    periodStatus: period.periodStatusDream!,
+                    pathAnimation: pathAnimation,
+                    nameAnimation: nameAnimation,
+                    callbackAnim: callbackAnim,
+                  )),
+
                 ],
               ),
             ),
-            SizedBox(
-              height: 6,
-            ),
-            TextUtil.textTitulo(nameDream),
-            SizedBox(
-              height: 6,
-            ),
-            TextUtil.textDefault(descriptionDream),
-            Align(
-              alignment: Alignment.topRight,
-              child: Chip(
-                padding: EdgeInsets.all(8),
-                clipBehavior: Clip.antiAlias,
-                elevation: 4,
-                backgroundColor: Theme.of(context).primaryColorDark,
-                label: TextUtil.textDefault("${period.number}˚ ${descriptionNumber}", fontSize: 14),
-                avatar: CircleAvatar(
-                  backgroundColor: Theme.of(context).canvasColor,
-                  child: Icon(
-                    Icons.date_range,
-                    color: Colors.white70,
-                    size: 13,
-                  ),
-                ),
-              ),
-            ),
-            ContentReportChipStepWidget(listStep: listStepDream),
-            Expanded(child: Container(
-              padding: EdgeInsets.all(18),
-              width: double.maxFinite,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Stack(
-                      children: [
-                        CicularProgressRevoWidget(
-                            isHalf: true,
-                            radius: 55,
-                            titleCenter:
-                            period.difficulty!.formatIntPercent,
-                            value: period.difficulty!/100),
-
-                        Container(
-                            margin: EdgeInsets.only(top: 35, left: 12),
-                            child: TextUtil.textChipLight(Translate.i().get.label_goal)
-                        ),
-                      ],
-                    ),
-
-                    SpaceWidget(isSpaceRow: true,),
-
-                    CicularProgressRevoWidget(
-                        radius: 55,
-                        titleCenter:
-                        period.percentCompleted!.toIntPercent,
-                        value: period.percentCompleted!),
-
-                    SpaceWidget(isSpaceRow: true,),
-
-                    Expanded(child: AnimationReportDreamWidget(
-                      typeStatusDream: period.typeStatusDream!,
-                      periodStatus: period.periodStatusDream!,
-                      pathAnimation: pathAnimation,
-                      nameAnimation: nameAnimation,
-                      callbackAnim: callbackAnim,
-                    )),
-
-                  ],
-                ),
-              ),
-            )),
-           Flexible(child: CardRewardOrInflectionWidget(typeStatusDream: period.typeStatusDream!, descriptionAction: period.descriptionAction??"")),
-           Flexible(child: ContentCountDayDreamCompletedWidget(dateInit: dateRegisterDream.toDate(),)),
-          ],
-        ),
+          ),
+         CardRewardOrInflectionWidget(typeStatusDream: period.typeStatusDream!, descriptionAction: period.descriptionAction??""),
+         ContentCountDayDreamCompletedWidget(dateInit: dateRegisterDream.toDate(),),
+        ],
       ),
     );
   }

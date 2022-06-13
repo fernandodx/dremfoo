@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
-import 'package:flutter/services.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:dremfoo/main.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -40,7 +37,7 @@ class NotificationUtil {
 
   static Future<void> showNotification(String? title, String? textBody, {String? paylod}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        ID_NOTIFICATION_REVO, CHANNEL_NOTIFICATION_PUSH, DESCRIPTION_NOTIFICATION_PUSH,
+        ID_NOTIFICATION_REVO, CHANNEL_NOTIFICATION_PUSH, channelDescription: DESCRIPTION_NOTIFICATION_PUSH,
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
@@ -51,53 +48,6 @@ class NotificationUtil {
 
   static Future<void> _cancelNotification() async {
     await flutterLocalNotificationsPlugin.cancel(0);
-  }
-
-  static Future<void> scheduleNotification() async {
-    var scheduledNotificationDateTime =
-    DateTime.now().add(Duration(seconds: 5));
-    var vibrationPattern = Int64List(4);
-    vibrationPattern[0] = 0;
-    vibrationPattern[1] = 1000;
-    vibrationPattern[2] = 5000;
-    vibrationPattern[3] = 2000;
-
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        ID_NOTIFICATION_REVO,
-        'your other channel name',
-        'your other channel description',
-        icon: 'secondary_icon',
-        sound: RawResourceAndroidNotificationSound('slow_spring_board'),
-        largeIcon: DrawableResourceAndroidBitmap('sample_large_icon'),
-        vibrationPattern: vibrationPattern,
-        enableLights: true,
-        color: const Color.fromARGB(255, 255, 0, 0),
-        ledColor: const Color.fromARGB(255, 255, 0, 0),
-        ledOnMs: 1000,
-        ledOffMs: 500);
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(sound: 'slow_spring_board.aiff');
-    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
-        0,
-        'scheduled title',
-        'scheduled body',
-        scheduledNotificationDateTime,
-        platformChannelSpecifics);
-  }
-
-  static Future<void> showTimeoutNotification() async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        ID_NOTIFICATION_REVO,
-        'silent channel name',
-        'silent channel description',
-        timeoutAfter: 3000,
-        styleInformation: DefaultStyleInformation(true, true));
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails(presentSound: false);
-    var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(0, 'timeout notification',
-        'Times out after 3 seconds', platformChannelSpecifics);
   }
 
   static Future<void> showBigPictureNotification() async {
@@ -115,7 +65,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'big text channel id',
         'big text channel name',
-        'big text channel description',
+        channelDescription: 'big text channel description',
         styleInformation: bigPictureStyleInformation);
     var platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -138,7 +88,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'big text channel id',
         'big text channel name',
-        'big text channel description',
+        channelDescription: 'big text channel description',
         largeIcon: FilePathAndroidBitmap(largeIconPath),
         styleInformation: bigPictureStyleInformation);
     var platformChannelSpecifics =
@@ -162,7 +112,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'media channel id',
       'media channel name',
-      'media channel description',
+      channelDescription: 'media channel description',
       largeIcon: FilePathAndroidBitmap(largeIconPath),
       styleInformation: MediaStyleInformation(),
     );
@@ -183,7 +133,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'big text channel id',
         'big text channel name',
-        'big text channel description',
+        channelDescription: 'big text channel description',
         styleInformation: bigTextStyleInformation);
     var platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -202,7 +152,7 @@ class NotificationUtil {
         summaryText: 'summary <i>text</i>',
         htmlFormatSummaryText: true);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'inbox channel id', 'inboxchannel name', 'inbox channel description',
+        'inbox channel id', 'inboxchannel name', channelDescription: 'inbox channel description',
         styleInformation: inboxStyleInformation);
     var platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -217,7 +167,7 @@ class NotificationUtil {
     var groupChannelDescription = 'grouped channel description';
     // example based on https://developer.android.com/training/notify-user/group.html
     var firstNotificationAndroidSpecifics = AndroidNotificationDetails(
-        groupChannelId, groupChannelName, groupChannelDescription,
+        groupChannelId, groupChannelName, channelDescription: groupChannelDescription,
         importance: Importance.max,
         priority: Priority.high,
         groupKey: groupKey);
@@ -226,7 +176,7 @@ class NotificationUtil {
     await flutterLocalNotificationsPlugin.show(1, 'Alex Faarborg',
         'You will not believe...', firstNotificationPlatformSpecifics);
     var secondNotificationAndroidSpecifics = AndroidNotificationDetails(
-        groupChannelId, groupChannelName, groupChannelDescription,
+        groupChannelId, groupChannelName, channelDescription: groupChannelDescription,
         importance: Importance.max,
         priority: Priority.high,
         groupKey: groupKey);
@@ -246,7 +196,7 @@ class NotificationUtil {
     var inboxStyleInformation = InboxStyleInformation(lines,
         contentTitle: '2 messages', summaryText: 'janedoe@example.com');
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        groupChannelId, groupChannelName, groupChannelDescription,
+        groupChannelId, groupChannelName, channelDescription: groupChannelDescription,
         styleInformation: inboxStyleInformation,
         groupKey: groupKey,
         setAsGroupSummary: true);
@@ -263,7 +213,11 @@ class NotificationUtil {
   }
 
   static Future<void> cancelAllNotifications() async {
-    await flutterLocalNotificationsPlugin.cancelAll();
+   return  await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  static Future<void> cancelNotification(int id) async {
+    return await flutterLocalNotificationsPlugin.cancel(id);
   }
 
 
@@ -274,27 +228,36 @@ class NotificationUtil {
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
   }
 
-  static Future<tz.TZDateTime> _nextInstanceOfTime(Time time) async {
+  static Future<tz.TZDateTime> _nextInstanceOfTime(Time time, {Duration duration = const Duration(days: 1)}) async {
     await _configureLocalTimeZone();
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
     tz.TZDateTime(tz.local, now.year, now.month, now.day, time.hour, time.minute);
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
+      scheduledDate = scheduledDate.add(duration);
     }
+    return scheduledDate;
+  }
+
+  static Future<tz.TZDateTime> _nextInstanceOfDateTime(DateTime time) async {
+    await _configureLocalTimeZone();
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+    tz.TZDateTime(tz.local, time.year, time.month, time.day, time.hour, time.minute);
     return scheduledDate;
   }
 
   static Future<void> showDailyAtTime(int id, String? title, String? body, Time time,
       String idChannel,
       String channelName,
-      String channelDescription) async {
+      String channelDescription,
+      {Duration duration = const Duration(days: 1), DateTimeComponents matchTime = DateTimeComponents.time}) async {
 
-    AndroidNotificationDetails specifics = AndroidNotificationDetails(idChannel, channelName, channelDescription);
+    AndroidNotificationDetails specifics = AndroidNotificationDetails(idChannel, channelName, channelDescription: channelDescription);
 
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: specifics);
 
-    tz.TZDateTime tzDateTime = await _nextInstanceOfTime(time);
+    tz.TZDateTime tzDateTime = await _nextInstanceOfTime(time, duration: duration);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
@@ -307,6 +270,29 @@ class NotificationUtil {
         matchDateTimeComponents: DateTimeComponents.time);
   }
 
+  static Future<void> showDailyAtDateTime(int id, String? title, String? body, DateTime dateTime,
+      String idChannel,
+      String channelName,
+      String channelDescription,
+      {DateTimeComponents matchTime = DateTimeComponents.time}) async {
+
+    AndroidNotificationDetails specifics = AndroidNotificationDetails(idChannel, channelName, channelDescription: channelDescription);
+
+    NotificationDetails platformChannelSpecifics = NotificationDetails(android: specifics);
+
+    tz.TZDateTime tzDateTime = await _nextInstanceOfDateTime(dateTime);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        tzDateTime,
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
+        matchDateTimeComponents: matchTime);
+  }
+
   static Future<void> showProgressNotification() async {
     var maxProgress = 5;
     for (var i = 0; i <= maxProgress; i++) {
@@ -314,7 +300,7 @@ class NotificationUtil {
         var androidPlatformChannelSpecifics = AndroidNotificationDetails(
             'progress channel',
             'progress channel',
-            'progress channel description',
+            channelDescription: 'progress channel description',
             channelShowBadge: false,
             importance: Importance.max,
             priority: Priority.high,
@@ -338,7 +324,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'indeterminate progress channel',
         'indeterminate progress channel',
-        'indeterminate progress channel description',
+       channelDescription:  'indeterminate progress channel description',
         channelShowBadge: false,
         importance: Importance.max,
         priority: Priority.high,
@@ -357,7 +343,7 @@ class NotificationUtil {
 
   static Future<void> _showNotificationWithIconBadge() async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'icon badge channel', 'icon badge name', 'icon badge description');
+        'icon badge channel', 'icon badge name', channelDescription: 'icon badge description');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(badgeNumber: 1);
     var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
@@ -369,7 +355,7 @@ class NotificationUtil {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       ID_NOTIFICATION_REVO,
       'your channel name',
-      'your channel description',
+      channelDescription: 'your channel description',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
@@ -390,7 +376,7 @@ class NotificationUtil {
     var bigPictureAndroidStyle =
     BigPictureStyleInformation(FilePathAndroidBitmap(bigPicturePath));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        ID_NOTIFICATION_REVO, 'your channel name', 'your channel description',
+        ID_NOTIFICATION_REVO, 'your channel name', channelDescription: 'your channel description',
         importance: Importance.high,
         priority: Priority.high,
         styleInformation: bigPictureAndroidStyle);

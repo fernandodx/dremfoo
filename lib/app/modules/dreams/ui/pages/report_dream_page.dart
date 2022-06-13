@@ -32,7 +32,7 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
       return Container(
         color: Colors.black38,
         alignment: Alignment.center,
-        child: LoadingWidget(Translate.i().get.msg_loading_dream),
+        child: LoadingWidget(""),
       );
     });
 
@@ -60,7 +60,9 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              title: TextUtil.textAppbar(widget.period.periodStatus == PeriodStatusDream.MONTHLY ? Translate.i().get.label_monthly_report : Translate.i().get.label_weekly_report),
+              title: TextUtil.textAppbar(widget.period.periodStatus == PeriodStatusDream.MONTHLY
+                  ? Translate.i().get.label_monthly_report
+                  : Translate.i().get.label_weekly_report),
               expandedHeight: 110,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
@@ -72,11 +74,13 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
                       InkWell(
                           onTap: () => store.pageViewController.previousPage(
                               duration: Duration(milliseconds: 400), curve: Curves.easeOutQuad),
-                          child: FaIcon(FontAwesomeIcons.arrowCircleLeft)),
+                          child: FaIcon(
+                            FontAwesomeIcons.arrowCircleLeft,
+                            color: Theme.of(context).primaryColorLight,
+                          )),
                       Observer(
                         builder: (context) {
-
-                          if(store.listStatusDreamPeriod.length <= 0){
+                          if (store.listStatusDreamPeriod.length <= 0) {
                             return Container();
                           }
 
@@ -86,9 +90,9 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
                               controller: store.pageViewController, // PageController
                               count: store.listStatusDreamPeriod.length,
                               effect: WormEffect(
-                                  dotColor: Theme.of(context).canvasColor,
+                                  dotColor: Theme.of(context).primaryColorDark,
                                   activeDotColor:
-                                      Theme.of(context).primaryColorDark), // your preferred effect
+                                      Theme.of(context).primaryColorLight), // your preferred effect
                             ),
                           );
                         },
@@ -96,7 +100,10 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
                       InkWell(
                           onTap: () => store.pageViewController.nextPage(
                               duration: Duration(milliseconds: 400), curve: Curves.easeOutQuad),
-                          child: FaIcon(FontAwesomeIcons.arrowCircleRight)),
+                          child: FaIcon(
+                            FontAwesomeIcons.arrowCircleRight,
+                            color: Theme.of(context).primaryColorLight,
+                          )),
                     ],
                   ),
                 ),
@@ -106,37 +113,30 @@ class _ReportDreamPageState extends ModularState<ReportDreamPage, ReportDreamWee
             ),
           ];
         },
-        body: Flex(
-          direction: Axis.vertical,
-          children: [
-            Observer(
-                builder: (context) {
+        body: Container(
+          child: Observer(builder: (context) {
+            if (store.listStatusDreamPeriod.length <= 0) {
+              return Container();
+            }
 
-                  if(store.listStatusDreamPeriod.length <= 0){
-                    return Container();
-                  }
-
-                  return Expanded(
-                    child: ReportDreamPageViewWidget(
-                      pageController: store.pageViewController,
-                      listStatusPeriod: store.listStatusDreamPeriod,
-                      numberPeriod: widget.period.numPeriod,
-                      descriptionNumber: widget.period.periodStatus == PeriodStatusDream.MONTHLY ? Translate.i().get.label_month : Translate.i().get.label_week,
-                      callbackAnimation: (anim) {
-                        if (anim != null && anim.isNotEmpty && anim == 'appear') {
-                          store.setNameAnimation(anim);
-                        }
-                      },
-                      nameAnimation: store.nameAnimation,
-                      pathAnimation: 'medal.flr',
-                    ),
-                  );
+            return ReportDreamPageViewWidget(
+              pageController: store.pageViewController,
+              listStatusPeriod: store.listStatusDreamPeriod,
+              numberPeriod: widget.period.numPeriod,
+              descriptionNumber: widget.period.periodStatus == PeriodStatusDream.MONTHLY
+                  ? Translate.i().get.label_month
+                  : Translate.i().get.label_week,
+              callbackAnimation: (anim) {
+                if (anim != null && anim.isNotEmpty && anim == 'appear') {
+                  store.setNameAnimation(anim);
                 }
-            )
-          ],
+              },
+              nameAnimation: store.nameAnimation,
+              pathAnimation: 'medal.flr',
+            );
+          }),
         ),
       ),
     );
   }
 }
-

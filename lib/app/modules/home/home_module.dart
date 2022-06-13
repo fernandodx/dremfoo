@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/app_module.dart';
 import 'package:dremfoo/app/modules/dreams/domain/usecases/report_dream_usecase.dart';
 import 'package:dremfoo/app/modules/dreams/infra/datasources/report_dream_datasource.dart';
 import 'package:dremfoo/app/modules/dreams/infra/repositories/report_dream_repository.dart';
@@ -35,7 +36,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends Module {
   @override
-  final List<Module> imports = [CoreModule(), DreamsModule(), LoginModule(),];
+  final List<Module> imports = [CoreModule(), DreamsModule(), LoginModule()];
 
   @override
   final List<Bind> binds = [

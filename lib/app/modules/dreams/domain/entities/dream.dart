@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dremfoo/app/modules/dreams/domain/entities/alarm_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/color_dream.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/daily_goal.dart';
 import 'package:dremfoo/app/modules/dreams/domain/entities/step_dream.dart';
@@ -31,6 +32,7 @@ class Dream {
   double? percentStep;
   double? percentToday;
   Timestamp? dateUpdate;
+  AlarmDream? alarm;
   DocumentReference? reference;
 
   static Dream copy(Dream data){
@@ -62,6 +64,7 @@ class Dream {
     dream.percentStep = data.percentStep;
     dream.percentToday = data.percentToday;
     dream.dateUpdate = data.dateUpdate;
+    dream.alarm = data.alarm;
     return dream;
   }
 
@@ -89,6 +92,7 @@ class Dream {
     dream.percentStep = data['percentStep'];
     dream.percentToday = data['percentToday'];
     dream.dateUpdate = data['dateUpdate'];
+    dream.alarm = AlarmDream.fromMap(data['alarm']);
     return dream;
   }
 
@@ -125,6 +129,7 @@ class Dream {
     data['percentStep'] = this.percentStep;
     data['percentToday'] = this.percentToday;
     data['dateUpdate'] = this.dateUpdate;
+    data['alarm'] = this.alarm?.toMap();
 //    data['steps'] = this.steps;
     return data;
   }

@@ -47,12 +47,12 @@ abstract class _AppPurchaseBase with Store {
     }
   }
 
-  void initPurchased() async {
+  Future<void> initPurchased() async {
     var isAvailable = await verifyPurchaseAvailable();
 
     if (!isAvailable) {
       isError = true;
-      isEnableSubscription = false;
+      setEnableSubscription(false);
       return;
     }
 
@@ -69,13 +69,13 @@ abstract class _AppPurchaseBase with Store {
       if (detailsResponse.error != null) {
         CrashlyticsUtil.logErro(Exception(detailsResponse.error?.message ?? "Erro no queryProductDetails"), null);
         isError = true;
-        isEnableSubscription = false;
+        setEnableSubscription(false);
         return;
       }
 
       if (detailsResponse.productDetails.isEmpty) {
         isError = true;
-        isEnableSubscription = false;
+        setEnableSubscription(false);
         return;
       }
 
@@ -86,12 +86,17 @@ abstract class _AppPurchaseBase with Store {
       if (responsePurchased.ok) {
         var listSubscriptionPurchased = responsePurchased.result!;
         if (listSubscriptionPurchased.isNotEmpty && listSubscriptionPurchased.first.isEnable == true) {
-          isEnableSubscription = true;
+          setEnableSubscription(true);
         } else {
-          isEnableSubscription = false;
+          setEnableSubscription(false);
         }
       }
     }
+  }
+
+  @action
+  void setEnableSubscription(bool isEnable){
+    this.isEnableSubscription = isEnable;
   }
 
   Future<StreamSubscription> initListenerPurchase() async {
