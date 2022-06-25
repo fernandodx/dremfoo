@@ -6,6 +6,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../utils/analytics_util.dart';
+
 part 'subscription_plan_store.g.dart';
 
 class SubscriptionPlanStore = _SubscriptionPlanStoreBase with _$SubscriptionPlanStore;
@@ -23,6 +25,8 @@ abstract class _SubscriptionPlanStoreBase with Store {
 
   @action
   Future<void> featch() async {
+
+    AnalyticsUtil.sendAnalyticsEvent(EventRevo.showPageSubscription);
 
     AppPurchase _appPurchase = Modular.get<AppPurchase>();
 

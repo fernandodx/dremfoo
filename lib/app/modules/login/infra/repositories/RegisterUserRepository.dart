@@ -315,4 +315,30 @@ class RegisterUserRepository extends IRegisterUserRepository {
     }
   }
 
+
+  @override
+  Future<int> findCountHitsUser(String? uidUser) {
+    try {
+      String exception = "";
+      String msg = "";
+
+      if(uidUser == null){
+        exception = "userRevo.uid == null";
+        msg = "Login não encontrado!";
+        RevoExceptions _revoExceptions = new RevoExceptions
+            .msgToUser(error: Exception(exception), msg: msg);
+        CrashlyticsUtil.logError(_revoExceptions);
+        throw _revoExceptions;
+      }
+
+      return _userDataSource.findCountHitsUser(uidUser);
+
+    } catch(error, stack){
+      CrashlyticsUtil.logErro(error, stack);
+      throw new RevoExceptions.msgToUser(error: Exception(error), msg: Translate.i().get.msg_error_generic_user_login);
+    }
+  }
+
+
+
 }

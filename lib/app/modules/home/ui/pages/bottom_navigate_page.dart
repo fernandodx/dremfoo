@@ -72,11 +72,9 @@ class BottomNavigatePageState extends ModularState<BottomNavigatePage, BottomNav
         icon: FaIcon(FontAwesomeIcons.trophy),
         label: Translate.i().get.label_rank));
 
-    if(RemoteConfigUtil().isEnablePurchase()){
-      list.add(BottomNavigationBarItem(
-          icon: FaIcon(FontAwesomeIcons.award),
-          label: Translate.i().get.label_acess_premium));
-    }
+    list.add(BottomNavigationBarItem(
+        icon: FaIcon(FontAwesomeIcons.calendarCheck),
+        label: Translate.i().get.label_daily_planning));
 
     return list;
 

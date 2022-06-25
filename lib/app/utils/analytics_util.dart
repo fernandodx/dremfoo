@@ -94,4 +94,7 @@ class EventRevo {
   static String menuMediaSocial = "menu_media_social";
   static String menuShare = "menu_share";
   static String menuExit = "menu_exit";
+  static String startTrial7daysDailyPlanning = "start_trial_7_days_daily_planning";
+  static String showPageSubscription = "show_page_subscription";
+
 }

@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "label_3_gratitude_day":
+            MessageLookupByLibrary.simpleMessage("3 Gratidões do dia"),
         "label_a_month": MessageLookupByLibrary.simpleMessage("por mês"),
         "label_a_year": MessageLookupByLibrary.simpleMessage("por ano"),
         "label_access_new_features": MessageLookupByLibrary.simpleMessage(
@@ -32,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_add": MessageLookupByLibrary.simpleMessage("Adicionar"),
         "label_already_passed":
             MessageLookupByLibrary.simpleMessage("Já se passaram"),
+        "label_analysis_that_day":
+            MessageLookupByLibrary.simpleMessage("Análise desse dia"),
         "label_annual_subscription":
             MessageLookupByLibrary.simpleMessage("Assinatura anual"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Arquivo"),
@@ -50,6 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Escolher recompensa diferente para a semana."),
         "label_choose_image_dream": MessageLookupByLibrary.simpleMessage(
             "Escolha uma imagem para representar o sonho."),
+        "label_comment": MessageLookupByLibrary.simpleMessage("Comentário"),
         "label_completed_steps":
             MessageLookupByLibrary.simpleMessage("Etapas finalizadas"),
         "label_confirm_email":
@@ -60,7 +65,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_daily_goal": MessageLookupByLibrary.simpleMessage("Meta diária"),
         "label_daily_goals":
             MessageLookupByLibrary.simpleMessage("Metas diárias"),
+        "label_daily_planning":
+            MessageLookupByLibrary.simpleMessage("Planejamento Diário"),
         "label_dark_theme": MessageLookupByLibrary.simpleMessage("Tema escuro"),
+        "label_day_prepared_saved":
+            MessageLookupByLibrary.simpleMessage("Sua preparação foi salva!"),
         "label_days": MessageLookupByLibrary.simpleMessage("Dias"),
         "label_days_focusing":
             MessageLookupByLibrary.simpleMessage("dias com foco no seu sonho"),
@@ -94,6 +103,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Pagamento pendente na assinatura do Revo"),
         "label_error_subscription":
             MessageLookupByLibrary.simpleMessage("Erro na assinatura"),
+        "label_evaluate_day":
+            MessageLookupByLibrary.simpleMessage("Avaliar o dia"),
+        "label_exclusive_feature":
+            MessageLookupByLibrary.simpleMessage("Funcionalidades exclusivas"),
         "label_exit": MessageLookupByLibrary.simpleMessage("Sair"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinário"),
@@ -101,17 +114,28 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Arquivar sonho"),
         "label_finish": MessageLookupByLibrary.simpleMessage("Finalizar"),
         "label_focus": MessageLookupByLibrary.simpleMessage("Foco"),
+        "label_focus_day": MessageLookupByLibrary.simpleMessage("Foco do Dia"),
         "label_forgot_password":
             MessageLookupByLibrary.simpleMessage("Esqueci a senha"),
         "label_free_content":
             MessageLookupByLibrary.simpleMessage("Conteúdo gratuito"),
+        "label_free_trial_7_days":
+            MessageLookupByLibrary.simpleMessage("Teste grátis por 7 dias"),
         "label_friday": MessageLookupByLibrary.simpleMessage("Sexta"),
         "label_fulfilled": MessageLookupByLibrary.simpleMessage("cumprida"),
         "label_goal": MessageLookupByLibrary.simpleMessage("Meta"),
+        "label_grateful_for":
+            MessageLookupByLibrary.simpleMessage("Sou grato(a) por"),
         "label_hist_daily_goal":
             MessageLookupByLibrary.simpleMessage("Histórico das metas diárias"),
         "label_home": MessageLookupByLibrary.simpleMessage("Home"),
         "label_hour": MessageLookupByLibrary.simpleMessage("Hora"),
+        "label_how_to_plan_day":
+            MessageLookupByLibrary.simpleMessage("Como planejar seu dia"),
+        "label_how_was_learning_level": MessageLookupByLibrary.simpleMessage(
+            "Como foi o nível de aprendizado?"),
+        "label_how_was_your_day":
+            MessageLookupByLibrary.simpleMessage("Como foi seu dia?"),
         "label_inflection_point":
             MessageLookupByLibrary.simpleMessage("Ponto de inflexão"),
         "label_inflection_point_weekly": MessageLookupByLibrary.simpleMessage(
@@ -148,6 +172,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Assinatural mensal"),
         "label_msg_thank_you_subscription": MessageLookupByLibrary.simpleMessage(
             "Muito obrigado! Você nos ajuda a manter o app e fazer doações de cestas básicas."),
+        "label_my_day": MessageLookupByLibrary.simpleMessage("Meu dia"),
+        "label_my_focus_day":
+            MessageLookupByLibrary.simpleMessage("Meu Foco no Dia"),
         "label_name": MessageLookupByLibrary.simpleMessage("Nome"),
         "label_new_dream": MessageLookupByLibrary.simpleMessage("Novo Sonho"),
         "label_next": MessageLookupByLibrary.simpleMessage("Próximo"),
@@ -175,10 +202,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_password_no_match":
             MessageLookupByLibrary.simpleMessage("Senha não confere"),
         "label_perfomed": MessageLookupByLibrary.simpleMessage("Realizados"),
+        "label_plan_day":
+            MessageLookupByLibrary.simpleMessage("Planejar o dia"),
+        "label_plan_next_day":
+            MessageLookupByLibrary.simpleMessage("Planejar o dia seguinte"),
         "label_premium_access":
             MessageLookupByLibrary.simpleMessage("Acesso Premium"),
+        "label_preparing_next_day":
+            MessageLookupByLibrary.simpleMessage("Preparando o dia seguinte"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Anterior"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Classificação"),
+        "label_rate_my_day":
+            MessageLookupByLibrary.simpleMessage("Avaliar meu dia"),
+        "label_rate_of_the_day":
+            MessageLookupByLibrary.simpleMessage("Avaliação do Dia"),
+        "label_rating_saved": MessageLookupByLibrary.simpleMessage(
+            "Avaliação salva com sucesso!"),
+        "label_remove_ad":
+            MessageLookupByLibrary.simpleMessage("Remova a publicidade"),
         "label_required_email":
             MessageLookupByLibrary.simpleMessage("E-mail é obrigatório"),
         "label_required_field":
@@ -189,12 +230,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_reward": MessageLookupByLibrary.simpleMessage("Recompensa"),
         "label_rewards": MessageLookupByLibrary.simpleMessage("Recompensas"),
         "label_saturday": MessageLookupByLibrary.simpleMessage("Sábado"),
+        "label_save": MessageLookupByLibrary.simpleMessage("Salvar"),
         "label_search_gallery":
             MessageLookupByLibrary.simpleMessage("Pesquisar na galeria"),
         "label_search_internet":
             MessageLookupByLibrary.simpleMessage("Pesquisar na internet"),
         "label_setting": MessageLookupByLibrary.simpleMessage("Configurações"),
         "label_settings": MessageLookupByLibrary.simpleMessage("Configurações"),
+        "label_should_avoid":
+            MessageLookupByLibrary.simpleMessage("Devo Evitar"),
         "label_site": MessageLookupByLibrary.simpleMessage("Site"),
         "label_social_media":
             MessageLookupByLibrary.simpleMessage("Mídias sociais"),
@@ -209,7 +253,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_step_to_conquer":
             MessageLookupByLibrary.simpleMessage("Passos para conquistar"),
         "label_steps": MessageLookupByLibrary.simpleMessage("Etapas"),
+        "label_subscribe_revo":
+            MessageLookupByLibrary.simpleMessage("Assine o app Revo"),
         "label_sunday": MessageLookupByLibrary.simpleMessage("Domingo"),
+        "label_task": MessageLookupByLibrary.simpleMessage("Tarefa"),
+        "label_task_the_day":
+            MessageLookupByLibrary.simpleMessage("Tarefas do Dia"),
+        "label_tasks_accomplish_today":
+            MessageLookupByLibrary.simpleMessage("tarefas para cumprir hoje"),
         "label_thursday": MessageLookupByLibrary.simpleMessage("Quinta"),
         "label_title_app":
             MessageLookupByLibrary.simpleMessage("REVO - Metas com foco"),
@@ -234,8 +285,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Relatório semanal"),
         "label_weekly_reward":
             MessageLookupByLibrary.simpleMessage("Recompensa semanal"),
+        "label_what_will_avoid_today":
+            MessageLookupByLibrary.simpleMessage("O que vou evitar hoje?"),
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("Qual o seu sonho?"),
+        "label_will_avoid": MessageLookupByLibrary.simpleMessage("Vou evitar"),
         "label_year": MessageLookupByLibrary.simpleMessage("Ano"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Sim"),
         "label_your_month": MessageLookupByLibrary.simpleMessage("Seus meses"),
@@ -248,6 +302,17 @@ class MessageLookup extends MessageLookupByLibrary {
             "Adicione pelo menos um passo para conquistar"),
         "msg_choice_color_required": MessageLookupByLibrary.simpleMessage(
             "Escolha uma cor de representaçã"),
+        "msg_daily_planning_amount_proposed": MessageLookupByLibrary.simpleMessage(
+            "Confie nas quantidade de tarefas propostas e agradecimentos. Eles já foram testados e vários autores de livros."),
+        "msg_daily_planning_preparing_day": MessageLookupByLibrary.simpleMessage(
+            "O preenchimento da avaliação do dia e a preparação do dia, devem sempre ser feitas no final do dia anterior."),
+        "msg_daily_planning_subscriber_only":
+            MessageLookupByLibrary.simpleMessage(
+                "Planejamento diário é uma funcionalidade só para assinantes"),
+        "msg_daily_planning_tools": MessageLookupByLibrary.simpleMessage(
+            "O planejamento díario é uma poderosa ferramenta que vai aumentar a sua produtividade, mas é necessário seguir algumas regras."),
+        "msg_day_prepared_saved": MessageLookupByLibrary.simpleMessage(
+            "No próximo dia, sua preparação já vai esta disponível, para visualizar a realizar suas tarefas agendadas."),
         "msg_dream_is_required":
             MessageLookupByLibrary.simpleMessage("Dream is required"),
         "msg_dream_not_archived":
@@ -256,12 +321,20 @@ class MessageLookup extends MessageLookupByLibrary {
             "A descrição do sonho é obrigatória"),
         "msg_email_invalid":
             MessageLookupByLibrary.simpleMessage("E-mail inválido"),
+        "msg_erro_focus_is_null": MessageLookupByLibrary.simpleMessage(
+            "O foco do dia é obrigatório, ele vai ditar a direção. É a função ou tarefa mais importante no seu dia."),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
             "Não foi possível enviar um e-mail, verique se você configurou o app de e-mail no celular."),
         "msg_erro_pending_purchase": MessageLookupByLibrary.simpleMessage(
             "O pagamento da sua assinatura esta pendente, verifique a google play."),
+        "msg_erro_prevent_is_null": MessageLookupByLibrary.simpleMessage(
+            "Algo precisa ser evitado no seu dia. Escolha algo que mata a sua produtividade ou vai prejudicar o foco no seu dia."),
         "msg_erro_purchase": MessageLookupByLibrary.simpleMessage(
             "Tivemos um erro na compra da sua assinatura, verifique a google play."),
+        "msg_erro_rate_the_day": MessageLookupByLibrary.simpleMessage(
+            "É muito importante que tenha as 3 gratidões no seu dia, se ele tiver sido difícil, tente agradecer pelas coisas pequenas."),
+        "msg_erro_tasks_is_null": MessageLookupByLibrary.simpleMessage(
+            "As 5 tarefas são a parte mais importante do seu dia. É muito importante que 5 tarefas sejam preenchidas, mas se não conseguir não vai ser obrigatório preencher todas."),
         "msg_error_already_credintial_in_use":
             MessageLookupByLibrary.simpleMessage("Login ou senha incorretos"),
         "msg_error_already_email_diff_credential":
@@ -300,14 +373,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "msg_error_user_or_password_incorrect":
             MessageLookupByLibrary.simpleMessage(
                 "O e-mail ou senha estão incorretos."),
+        "msg_experience_productivity": MessageLookupByLibrary.simpleMessage(
+            "Experimente o aumento da sua produtividade."),
         "msg_fill_email": MessageLookupByLibrary.simpleMessage(
             "Preencha o e-mail para reiniciar a sua senha."),
+        "msg_have_more_time": MessageLookupByLibrary.simpleMessage(
+            "Tenha mais tempo para fazer o que você gosta!"),
         "msg_help_dream_hold": MessageLookupByLibrary.simpleMessage(
             "Nessa seção, você ainda não precisa definir metas e/ou os passos para a conquista. Apenas definir uma prévia de seu sonho para que seu subconsciente saiba o que você quer."),
         "msg_help_dream_with_focus": MessageLookupByLibrary.simpleMessage(
             "Nesse tipo de sonho, você vai precisar definir passos em diferentes níveis, como se fossem degraus de uma escada, além de criar metas diárias que vão em direção ao seu sonho."),
         "msg_img_required": MessageLookupByLibrary.simpleMessage(
             "A imagem do sonho é obrigatória"),
+        "msg_increase_clarity": MessageLookupByLibrary.simpleMessage(
+            "Aumentar a clareza do que realmente você quer."),
         "msg_inflection_point_required": MessageLookupByLibrary.simpleMessage(
             "O ponto de inflexão é obrigatório"),
         "msg_info_settings_dream": MessageLookupByLibrary.simpleMessage(
@@ -330,18 +409,24 @@ class MessageLookup extends MessageLookupByLibrary {
             "Hora de adicionar seu primeiro sonho!"),
         "msg_not_found_report_status": MessageLookupByLibrary.simpleMessage(
             "Não existe ainda ações semanais ou do tipo selecionado. Espere uma semana utilizando Revo para a geração do relatório."),
+        "msg_produce_more": MessageLookupByLibrary.simpleMessage(
+            "Produza mais com menos tempo."),
         "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
             "No Ano de 2022 toda a arrecadação com  assinaturas premium, será destinada a compras de cestas básicas."),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Você realizou seu sonho?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
             "Você realmente deseja arquivar esse sonho? Mesmo arquivado você pode reativa-lo a qualquer momento."),
+        "msg_rating_saved": MessageLookupByLibrary.simpleMessage(
+            "No próximo dia, seu planejamento já vai esta disponível, para visualizar e checar suas gratidões."),
         "msg_reward_required":
             MessageLookupByLibrary.simpleMessage("A recompensa é obrigatória"),
         "msg_sucess_forgot_password": MessageLookupByLibrary.simpleMessage(
             "Um e-mail foi enviado com orientações para reiniciar a sua senha."),
         "msg_sucess_user_created": MessageLookupByLibrary.simpleMessage(
             "Seu login foi criado com sucesso!"),
+        "msg_trial_test_end": MessageLookupByLibrary.simpleMessage(
+            "Faça a assinatura do app Revo para continuar a utilização da funcionalidade de planejamento diário, além de poder remover a publicidade ;)"),
         "name_app":
             MessageLookupByLibrary.simpleMessage("Revo - Metas com Foco"),
         "title_erro_purchase":
@@ -353,6 +438,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "title_register_email":
             MessageLookupByLibrary.simpleMessage("Cadastro"),
         "title_subscription_donated": MessageLookupByLibrary.simpleMessage(
-            "100% do valor será doado para @movimentodesperte")
+            "100% do valor será doado para @movimentodesperte"),
+        "title_trial_test_end": MessageLookupByLibrary.simpleMessage(
+            "Período de teste encerrado :(")
       };
 }

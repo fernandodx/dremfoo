@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "label_3_gratitude_day":
+            MessageLookupByLibrary.simpleMessage("3 Gratitude of the Day"),
         "label_a_month": MessageLookupByLibrary.simpleMessage("a month"),
         "label_a_year": MessageLookupByLibrary.simpleMessage("a year"),
         "label_access_new_features":
@@ -32,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_add": MessageLookupByLibrary.simpleMessage("Add"),
         "label_already_passed":
             MessageLookupByLibrary.simpleMessage("Already passed"),
+        "label_analysis_that_day":
+            MessageLookupByLibrary.simpleMessage("Analysis of that day"),
         "label_annual_subscription":
             MessageLookupByLibrary.simpleMessage("Annual Subscription"),
         "label_archive": MessageLookupByLibrary.simpleMessage("Archive"),
@@ -50,6 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Choose different reward for the week."),
         "label_choose_image_dream": MessageLookupByLibrary.simpleMessage(
             "Choose an image to represent the dream."),
+        "label_comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "label_completed_steps":
             MessageLookupByLibrary.simpleMessage("Completed Steps"),
         "label_confirm_email":
@@ -60,7 +65,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_daily_goal": MessageLookupByLibrary.simpleMessage("Daily goal"),
         "label_daily_goals":
             MessageLookupByLibrary.simpleMessage("Daily goals"),
+        "label_daily_planning":
+            MessageLookupByLibrary.simpleMessage("Daily Planning"),
         "label_dark_theme": MessageLookupByLibrary.simpleMessage("Dark theme"),
+        "label_day_prepared_saved": MessageLookupByLibrary.simpleMessage(
+            "Your preparation has been saved!"),
         "label_days": MessageLookupByLibrary.simpleMessage("Days"),
         "label_days_focusing":
             MessageLookupByLibrary.simpleMessage("days focusing on your dream"),
@@ -94,23 +103,38 @@ class MessageLookup extends MessageLookupByLibrary {
             "Payment pending on Revo subscription"),
         "label_error_subscription":
             MessageLookupByLibrary.simpleMessage("Signature Error"),
+        "label_evaluate_day":
+            MessageLookupByLibrary.simpleMessage("Evaluate the day"),
+        "label_exclusive_feature":
+            MessageLookupByLibrary.simpleMessage("Exclusive features"),
         "label_exit": MessageLookupByLibrary.simpleMessage("Logout"),
         "label_extraordinary":
             MessageLookupByLibrary.simpleMessage("Extraordinary"),
         "label_file_dream": MessageLookupByLibrary.simpleMessage("File Dream"),
         "label_finish": MessageLookupByLibrary.simpleMessage("Finish"),
         "label_focus": MessageLookupByLibrary.simpleMessage("Focus"),
+        "label_focus_day": MessageLookupByLibrary.simpleMessage("Foco do Dia"),
         "label_forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot the password"),
         "label_free_content":
             MessageLookupByLibrary.simpleMessage("Free content"),
+        "label_free_trial_7_days":
+            MessageLookupByLibrary.simpleMessage("Free trial for 7 days."),
         "label_friday": MessageLookupByLibrary.simpleMessage("Friday"),
         "label_fulfilled": MessageLookupByLibrary.simpleMessage("fulfilled"),
         "label_goal": MessageLookupByLibrary.simpleMessage("Goal"),
+        "label_grateful_for":
+            MessageLookupByLibrary.simpleMessage("I am grateful for"),
         "label_hist_daily_goal":
             MessageLookupByLibrary.simpleMessage("History of daily goals"),
         "label_home": MessageLookupByLibrary.simpleMessage("Home"),
         "label_hour": MessageLookupByLibrary.simpleMessage("Hour"),
+        "label_how_to_plan_day":
+            MessageLookupByLibrary.simpleMessage("How to plan your day"),
+        "label_how_was_learning_level":
+            MessageLookupByLibrary.simpleMessage("How was the learning level?"),
+        "label_how_was_your_day":
+            MessageLookupByLibrary.simpleMessage("How was your day?"),
         "label_inflection_point":
             MessageLookupByLibrary.simpleMessage("Inflection point"),
         "label_inflection_point_weekly":
@@ -147,6 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Monthly Signature"),
         "label_msg_thank_you_subscription": MessageLookupByLibrary.simpleMessage(
             "Thank you very much! You help us maintain the app and make donations of basic food baskets."),
+        "label_my_day": MessageLookupByLibrary.simpleMessage("My day"),
+        "label_my_focus_day":
+            MessageLookupByLibrary.simpleMessage("My Focus of the Day"),
         "label_name": MessageLookupByLibrary.simpleMessage("Name"),
         "label_new_dream": MessageLookupByLibrary.simpleMessage("New Dream"),
         "label_next": MessageLookupByLibrary.simpleMessage("Next"),
@@ -175,10 +202,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_password_no_match":
             MessageLookupByLibrary.simpleMessage("Password does not match"),
         "label_perfomed": MessageLookupByLibrary.simpleMessage("Performed"),
+        "label_plan_day": MessageLookupByLibrary.simpleMessage("Plan the day"),
+        "label_plan_next_day":
+            MessageLookupByLibrary.simpleMessage("Plan the next day"),
         "label_premium_access":
             MessageLookupByLibrary.simpleMessage("Premium Access"),
+        "label_preparing_next_day":
+            MessageLookupByLibrary.simpleMessage("Preparing the next day"),
         "label_previous": MessageLookupByLibrary.simpleMessage("Previous"),
         "label_rank": MessageLookupByLibrary.simpleMessage("Rank"),
+        "label_rate_my_day":
+            MessageLookupByLibrary.simpleMessage("Rate my day"),
+        "label_rate_of_the_day":
+            MessageLookupByLibrary.simpleMessage("Rating of the Day"),
+        "label_rating_saved":
+            MessageLookupByLibrary.simpleMessage("Rating saved successfully!"),
+        "label_remove_ad":
+            MessageLookupByLibrary.simpleMessage("Remove advertising"),
         "label_required_email":
             MessageLookupByLibrary.simpleMessage("E-mail is required"),
         "label_required_field":
@@ -189,12 +229,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_reward": MessageLookupByLibrary.simpleMessage("Reward"),
         "label_rewards": MessageLookupByLibrary.simpleMessage("Rewards"),
         "label_saturday": MessageLookupByLibrary.simpleMessage("Saturday"),
+        "label_save": MessageLookupByLibrary.simpleMessage("Save"),
         "label_search_gallery":
             MessageLookupByLibrary.simpleMessage("Search the gallery"),
         "label_search_internet":
             MessageLookupByLibrary.simpleMessage("Searching the Internet"),
         "label_setting": MessageLookupByLibrary.simpleMessage("Settings"),
         "label_settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "label_should_avoid":
+            MessageLookupByLibrary.simpleMessage("Should I avoid"),
         "label_site": MessageLookupByLibrary.simpleMessage("Site"),
         "label_social_media":
             MessageLookupByLibrary.simpleMessage("Social media"),
@@ -208,7 +251,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "label_step_to_conquer":
             MessageLookupByLibrary.simpleMessage("Steps to conquer"),
         "label_steps": MessageLookupByLibrary.simpleMessage("Steps"),
+        "label_subscribe_revo":
+            MessageLookupByLibrary.simpleMessage("Subscribe to the Revo app"),
         "label_sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
+        "label_task": MessageLookupByLibrary.simpleMessage("Task"),
+        "label_task_the_day":
+            MessageLookupByLibrary.simpleMessage("Tasks of the day"),
+        "label_tasks_accomplish_today":
+            MessageLookupByLibrary.simpleMessage("tasks to accomplish today"),
         "label_thursday": MessageLookupByLibrary.simpleMessage("Thursday"),
         "label_title_app":
             MessageLookupByLibrary.simpleMessage("REVO - Focused goals"),
@@ -233,8 +283,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Weekly report"),
         "label_weekly_reward":
             MessageLookupByLibrary.simpleMessage("Weekly reward"),
+        "label_what_will_avoid_today":
+            MessageLookupByLibrary.simpleMessage("What will I avoid today?"),
         "label_whats_your_dream":
             MessageLookupByLibrary.simpleMessage("What is your dream?"),
+        "label_will_avoid":
+            MessageLookupByLibrary.simpleMessage("I will avoid"),
         "label_year": MessageLookupByLibrary.simpleMessage("Year"),
         "label_yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "label_your_month": MessageLookupByLibrary.simpleMessage("Your months"),
@@ -247,6 +301,17 @@ class MessageLookup extends MessageLookupByLibrary {
             "Add at least one step to conquer"),
         "msg_choice_color_required": MessageLookupByLibrary.simpleMessage(
             "Choose a representation color"),
+        "msg_daily_planning_amount_proposed": MessageLookupByLibrary.simpleMessage(
+            "Trust the amount of proposed tasks and thanks. They have already been tested and several book authors."),
+        "msg_daily_planning_preparing_day": MessageLookupByLibrary.simpleMessage(
+            "Completing the assessment of the day and preparing for the day should always be done at the end of the previous day."),
+        "msg_daily_planning_subscriber_only":
+            MessageLookupByLibrary.simpleMessage(
+                "Daily planning is a subscriber-only feature"),
+        "msg_daily_planning_tools": MessageLookupByLibrary.simpleMessage(
+            "Daily planning is a powerful tool that will increase your productivity, but it is necessary to follow some rules."),
+        "msg_day_prepared_saved": MessageLookupByLibrary.simpleMessage(
+            "On the next day, your preparation will already be available, to view and perform your scheduled tasks."),
         "msg_dream_is_required":
             MessageLookupByLibrary.simpleMessage("Dream is required"),
         "msg_dream_not_archived":
@@ -255,12 +320,20 @@ class MessageLookup extends MessageLookupByLibrary {
             "The dream description is required"),
         "msg_email_invalid":
             MessageLookupByLibrary.simpleMessage("Invalid email."),
+        "msg_erro_focus_is_null": MessageLookupByLibrary.simpleMessage(
+            "The focus of the day is mandatory, it will dictate the direction. It is the most important function or task in your day."),
         "msg_erro_no_register_email": MessageLookupByLibrary.simpleMessage(
             "Unable to send an email, make sure you have configured the email app on your mobile."),
         "msg_erro_pending_purchase": MessageLookupByLibrary.simpleMessage(
             "Payment for your subscription is pending, check google play."),
+        "msg_erro_prevent_is_null": MessageLookupByLibrary.simpleMessage(
+            "Something needs to be avoided in your day. Choose something that kills your productivity or will detract from your focus in your day."),
         "msg_erro_purchase": MessageLookupByLibrary.simpleMessage(
             "An error purchasing your subscription to google play."),
+        "msg_erro_rate_the_day": MessageLookupByLibrary.simpleMessage(
+            "It is very important that you have the 3 gratitudes in your day, if it has been difficult, try to be grateful for the little things."),
+        "msg_erro_tasks_is_null": MessageLookupByLibrary.simpleMessage(
+            "The 5 tasks are the most important part of the your day. It is very important that 5 tasks are completed, but if you can\'t, it will not be mandatory to complete all of them."),
         "msg_error_already_credintial_in_use":
             MessageLookupByLibrary.simpleMessage("Incorrect login or password"),
         "msg_error_already_email_diff_credential":
@@ -300,14 +373,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "msg_error_user_or_password_incorrect":
             MessageLookupByLibrary.simpleMessage(
                 "The email or password is incorrect."),
+        "msg_experience_productivity": MessageLookupByLibrary.simpleMessage(
+            "Experience your productivity boost."),
         "msg_fill_email": MessageLookupByLibrary.simpleMessage(
             "Fill in the email to reset your password."),
+        "msg_have_more_time": MessageLookupByLibrary.simpleMessage(
+            "Have more time to do what you like!"),
         "msg_help_dream_hold": MessageLookupByLibrary.simpleMessage(
             "In this section, you still don\'t need to set goals and/or steps for achievement. Just set a preview of your dream so your subconscious knows what you want."),
         "msg_help_dream_with_focus": MessageLookupByLibrary.simpleMessage(
             "In this type of dream, you will need to set steps at different levels, like steps on a ladder, and create daily goals that move towards your dream."),
         "msg_img_required":
             MessageLookupByLibrary.simpleMessage("The dream image is required"),
+        "msg_increase_clarity": MessageLookupByLibrary.simpleMessage(
+            "Increase clarity of what you really want."),
         "msg_inflection_point_required": MessageLookupByLibrary.simpleMessage(
             "Inflection point is required"),
         "msg_info_settings_dream": MessageLookupByLibrary.simpleMessage(
@@ -330,18 +409,24 @@ class MessageLookup extends MessageLookupByLibrary {
             "Time to add your first dream!"),
         "msg_not_found_report_status": MessageLookupByLibrary.simpleMessage(
             "There are no weekly actions or actions of the selected type yet. Wait a week using Revo to generate the report."),
+        "msg_produce_more":
+            MessageLookupByLibrary.simpleMessage("Produce more in less time."),
         "msg_purchase_2022": MessageLookupByLibrary.simpleMessage(
             "In the Year 2022, all the proceeds from premium subscriptions will be used to purchase basic baskets."),
         "msg_question_dream_realized":
             MessageLookupByLibrary.simpleMessage("Did you fulfill your dream?"),
         "msg_question_file_dream": MessageLookupByLibrary.simpleMessage(
             "Do you really want to archive this dream? Even if it is archived, you can reactivate it at any time."),
+        "msg_rating_saved": MessageLookupByLibrary.simpleMessage(
+            "The next day, your schedule will be available, so you can view and check your gratitude."),
         "msg_reward_required":
             MessageLookupByLibrary.simpleMessage("The reward is required"),
         "msg_sucess_forgot_password": MessageLookupByLibrary.simpleMessage(
             "An email has been sent with directions to reset your password."),
         "msg_sucess_user_created": MessageLookupByLibrary.simpleMessage(
             "Your login was created successfully!"),
+        "msg_trial_test_end": MessageLookupByLibrary.simpleMessage(
+            "Subscribe to the Revo app to continue using the daily planning functionality, plus you can remove advertising ;)"),
         "name_app":
             MessageLookupByLibrary.simpleMessage("Revo - Focused Goals"),
         "title_erro_purchase":
@@ -353,6 +438,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "title_register_email":
             MessageLookupByLibrary.simpleMessage("Register"),
         "title_subscription_donated": MessageLookupByLibrary.simpleMessage(
-            "100% of the amount will be donated to @movimentodesperte")
+            "100% of the amount will be donated to @movimentodesperte"),
+        "title_trial_test_end":
+            MessageLookupByLibrary.simpleMessage("Trial period ended :(")
       };
 }

@@ -7,6 +7,8 @@ import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../login/infra/repositories/contract/iregister_user_repository.dart';
+
 class ReportDreamRepository implements IReportDreamRepository {
 
   IReportDreamDataSource _dataSource;

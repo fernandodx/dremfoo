@@ -40,10 +40,10 @@ class DreamsModule extends Module {
     Bind.lazySingleton((i) => ReportDreamDataSource(), export: true),
 
     Bind.lazySingleton((i) => DreamRespository(i.get<DreamFirebaseDatasource>())),
-    Bind.lazySingleton((i) => ReportDreamRepository(i.get<ReportDreamDataSource>()), export: true),
+    Bind.lazySingleton((i) => ReportDreamRepository(i.get<ReportDreamDataSource>(),), export: true),
 
     Bind.lazySingleton((i) => DreamUseCase(i.get<DreamRespository>(), i.get<UploadImageRepository>(), i.get<SharedPrefsRepository>(), i.get<RegisterUserRepository>())),
-    Bind.lazySingleton((i) => ReportDreamUseCase(i.get<ReportDreamRepository>()), export: true),
+    Bind.lazySingleton((i) => ReportDreamUseCase(i.get<ReportDreamRepository>(), i.get<RegisterUserRepository>()), export: true),
 
     Bind.lazySingleton((i) => DetailDreamStore(i.get<DreamUseCase>(), i.get<RegisterUserCase>(), i.get<SeoUserCase>())),
     Bind.lazySingleton((i) => RegisterDreamWithFocusStore(i.get<DreamUseCase>())),

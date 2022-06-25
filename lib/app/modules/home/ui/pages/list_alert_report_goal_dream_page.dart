@@ -66,7 +66,7 @@ class _ListAlertReportGoalDreamPageState
               tabs: [
                 Tab(
                   icon: FaIcon(
-                    Icons.build,
+                    FontAwesomeIcons.wrench,
                     size: 18,
                     color: Theme.of(context).primaryColorLight,
                   ),
@@ -88,6 +88,7 @@ class _ListAlertReportGoalDreamPageState
               Container(
                 child: Observer(
                   builder: (context) => ExpansionListWeekMonthReportWidget(
+                    isInflection: true,
                     listStatusPeriod: store.listStatusInflectionPeriod,
                     expansionCallback: store.updateItemStatusInflectionPeriodIsExpanded,
                     onCheckedPeriod: store.updateReportStatusInflectionPeriod,
@@ -97,6 +98,7 @@ class _ListAlertReportGoalDreamPageState
               Container(
                 child: Observer(
                   builder: (context) => ExpansionListWeekMonthReportWidget(
+                    isInflection: false,
                     listStatusPeriod: store.listStatusRewardPeriod,
                     expansionCallback: store.updateItemStatusRewardPeriodIsExpanded,
                     onCheckedPeriod: store.updateReportStatusRewardPeriod,
@@ -112,10 +114,11 @@ class _ListAlertReportGoalDreamPageState
 class ExpansionListWeekMonthReportWidget extends StatelessWidget {
   List<StatusDreamPeriod> listStatusPeriod;
   ExpansionPanelCallback? expansionCallback;
+  bool isInflection;
   Function(bool isChecked, StatusDreamPeriod statusPeriod) onCheckedPeriod;
 
   ExpansionListWeekMonthReportWidget(
-      {required this.listStatusPeriod, this.expansionCallback, required this.onCheckedPeriod});
+      {required this.listStatusPeriod, this.expansionCallback, required this.onCheckedPeriod, required this.isInflection});
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +141,14 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
       expansionCallback: expansionCallback,
       children: listStatusPeriod.map<ExpansionPanel>((status) {
         var periodName = status.periodStatusDream == PeriodStatusDream.WEEKLY ? Translate.i().get.label_week : Translate.i().get.label_month;
+        var inflectionOrReward = "";
+        var iconInflectionOrReward = FontAwesomeIcons.wrench;
+        if(isInflection) {
+          inflectionOrReward = PeriodStatusDream.WEEKLY == status.periodStatusDream ? status.dream?.inflectionWeek??"-" :  status.dream?.inflection??"-";
+        }else{
+          iconInflectionOrReward = FontAwesomeIcons.trophy;
+          inflectionOrReward = PeriodStatusDream.WEEKLY == status.periodStatusDream ? status.dream?.rewardWeek??"-" : status.dream?.reward??"-";
+        }
 
         return ExpansionPanel(
           headerBuilder: (BuildContext contex, bool isExpanded) {
@@ -175,7 +186,7 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       child: FaIcon(
-                        Icons.build,
+                        iconInflectionOrReward,
                         size: 18,
                         color: Theme.of(context).primaryColorLight,
                       ),
@@ -185,7 +196,7 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                       isSpaceRow: true,
                     ),
                     Flexible(
-                      child: TextUtil.textSubTitle(status.dream?.descriptionPropose ?? "",
+                      child: TextUtil.textSubTitle(inflectionOrReward,
                           fontSize: 14, maxLines: 3),
                     )
                   ],
@@ -215,7 +226,7 @@ class ExpansionListWeekMonthReportWidget extends StatelessWidget {
                         radius: 55,
                         colorText: Theme.of(context).canvasColor,
                         titleCenter: status.percentCompleted!.toIntPercent,
-                        value: status.percentCompleted!),
+                        value: status.percentCompleted! <= 1.0 ? status.percentCompleted! : 1.0),
                   ],
                 ),
                 Chip(label: TextUtil.textChip("${Translate.i().get.label_year} ${status.year}")),

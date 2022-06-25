@@ -112,6 +112,14 @@ abstract class _HomeStoreBase with Store {
 
   Future<bool> _checkReportGoalsMonth(BuildContext context) async {
 
+    var _userRevo = Modular.get<UserRevo>();
+    if(_userRevo.uid != null){
+      int countAcess = await  _reportDreamCase.findCountHitsUser(_userRevo.uid!);
+      if(countAcess < 35){
+        return false;
+      }
+    }
+
     DateTime now = DateTime.now();
     int year = now.year;
     int lastMonth = now.month - 1;
@@ -132,6 +140,15 @@ abstract class _HomeStoreBase with Store {
   }
 
   Future<bool> _checkReportGoalsWeek(BuildContext context) async {
+
+
+    var _userRevo = Modular.get<UserRevo>();
+    if(_userRevo.uid != null){
+      int countAcess = await  _reportDreamCase.findCountHitsUser(_userRevo.uid!);
+      if(countAcess < 14){
+       return false;
+      }
+    }
 
      DateTime now = DateTime.now();
      int lastWeekCheckGoals = DateUtil().getLastWeek(now.month, now.day, now.year);

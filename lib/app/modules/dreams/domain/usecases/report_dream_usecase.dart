@@ -1,3 +1,4 @@
+import 'package:dremfoo/app/model/user.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/error_msg.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/response_api.dart';
 import 'package:dremfoo/app/modules/core/domain/entities/type_alert.dart';
@@ -8,11 +9,15 @@ import 'package:dremfoo/app/modules/dreams/infra/repositories/contract/ireport_d
 import 'package:dremfoo/app/modules/login/domain/exceptions/revo_exceptions.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
 import 'package:dremfoo/app/utils/crashlytics_util.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../../login/infra/repositories/contract/iregister_user_repository.dart';
 
 class ReportDreamUseCase implements IReportDreamCase {
 
   IReportDreamRepository _repository;
-  ReportDreamUseCase(this._repository);
+  IRegisterUserRepository _userRepository;
+  ReportDreamUseCase(this._repository, this._userRepository);
 
   @override
   Future<ResponseApi<List<StatusDreamPeriod>>> findStatusDreamWithWeek(int numberWeek, int year) async {
@@ -139,5 +144,11 @@ class ReportDreamUseCase implements IReportDreamCase {
     var alert = MessageAlert.create(Translate.i().get.title_msg_error, Translate.i().get.msg_error_unexpected, TypeAlert.ERROR);
     return ResponseApi.error(messageAlert: alert);
   }
+
+  @override
+  Future<int> findCountHitsUser(String? uidUser) async {
+    return _userRepository.findCountHitsUser(uidUser);
+  }
+
 
 }

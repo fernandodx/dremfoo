@@ -39,7 +39,7 @@ abstract class _BottomNavigateStoreBase with Store {
       }
       case 3 : {
         showHideAppBar(false);
-        Modular.to.navigate('/home/subscriptionPlan');
+        Modular.to.navigate('/home/presentationDailyPlanning');
         break;
       }
     }

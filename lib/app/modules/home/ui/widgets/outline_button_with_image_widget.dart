@@ -8,13 +8,20 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
   late String? urlImage;
   late String title;
   late String? subTitle;
+  late String? lineExtraTitle;
   late IconData? icon;
+  late double width;
 
   OutlineButtonWithImageWidget(
-      {this.urlImage, this.icon, required this.title, required this.subTitle});
+      {this.urlImage, this.icon, required this.title, required this.subTitle, this.lineExtraTitle, this.width = 0});
 
   @override
   Widget build(BuildContext context) {
+
+    if(width <= 0){
+      width = MediaQuery.of(context).size.width / 2.5;
+    }
+
     if((urlImage == null && icon == null) || subTitle == null ) {
       return _getLoading();
     }else{
@@ -39,27 +46,30 @@ class OutlineButtonWithImageWidget extends StatelessWidget {
         ),
         border: Border.all(color: Theme.of(context).canvasColor, width: 1.5),
       ),
-      width: MediaQuery.of(context).size.width / 2.5,
+      width: width,
       alignment: Alignment.topLeft,
       padding: EdgeInsets.all(8),
       child: Row(
         children: [
           Container(
             child: CircleAvatar(
-              radius: 16,
+              radius: 18,
               backgroundColor: Theme.of(context).canvasColor,
-              child: ClipOval(
-                child: _getImage(context),
-              ),
+              child: _getImage(context),
             ),
             margin: EdgeInsets.only(right: 8),
           ),
           Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 TextUtil.textSubTitle(title, fontWeight: FontWeight.bold),
-                TextUtil.textSubTitle(subTitle??""),
+                TextUtil.textSubTitle(subTitle??"", ),
+                Visibility(
+                  visible: lineExtraTitle != null,
+                    child: TextUtil.textSubTitle(lineExtraTitle??"", ),
+                )
               ],
             ),
           ),

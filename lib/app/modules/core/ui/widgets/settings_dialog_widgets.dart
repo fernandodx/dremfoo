@@ -1,3 +1,5 @@
+import 'package:dremfoo/app/modules/core/ui/widgets/space_widget.dart';
+import 'package:dremfoo/app/modules/home/ui/widgets/outline_button_with_image_widget.dart';
 import 'package:dremfoo/app/modules/login/domain/entities/user_revo.dart';
 import 'package:dremfoo/app/modules/login/domain/stories/register_user_store.dart';
 import 'package:dremfoo/app/utils/Translate.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../home/ui/widgets/chip_button_widget.dart';
 import 'circle_avatar_user_revo_widget.dart';
 
 class SettingsDialogWidgets extends StatelessWidget {
@@ -112,6 +115,21 @@ class SettingsDialogWidgets extends StatelessWidget {
                       });
                 },
               ),
+              SpaceWidget(),
+              InkWell(
+                onTap: () {
+                   Navigator.of(context).pop();
+                   Modular.to.pushNamed("/home/subscriptionPlan",);
+                },
+                child: OutlineButtonWithImageWidget(
+                    title: Translate.i().get.label_subscribe_revo,
+                    subTitle: Translate.i().get.label_remove_ad,
+                    lineExtraTitle: Translate.i().get.label_exclusive_feature,
+                    icon: FontAwesomeIcons.creditCard,
+                  width: double.maxFinite,
+                   ),
+              ),
+              SpaceWidget(),
               Divider(
                 thickness: 2,
                 height: 8,

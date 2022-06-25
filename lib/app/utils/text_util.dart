@@ -157,7 +157,7 @@ class TextUtil {
       value,
       textAlign: align,
       style: TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.bold),
     );
   }

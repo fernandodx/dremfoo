@@ -69,14 +69,14 @@ abstract class _LoginStoreBase with Store {
     formKey.currentState!.save();
     isLoading = true;
     ResponseApi<User> responseApi = await _loginCase.loginWithEmailAndPassword(user);
-    handlerResponseApiUser(responseApi);
     isLoading = false;
+    handlerResponseApiUser(responseApi);
   }
 
   void handlerResponseApiUser(ResponseApi<User> responseApi) {
     if(responseApi.ok){
       // userSingIn = responseApi.result;
-      Modular.to.navigate("/home");
+      Modular.to.navigate("/home/dashboard");
     }else{
       msgAlert = responseApi.messageAlert;
     }

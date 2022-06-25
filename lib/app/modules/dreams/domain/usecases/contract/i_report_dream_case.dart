@@ -17,5 +17,7 @@ abstract class IReportDreamCase {
 
   Future<ResponseApi<void>> updateStatusDreamPeriod(StatusDreamPeriod status);
 
+  Future<int> findCountHitsUser(String? uidUser);
+
 
 }

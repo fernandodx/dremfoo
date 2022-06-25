@@ -16,6 +16,7 @@ import 'package:dremfoo/app/resources/app_colors.dart';
 import 'package:dremfoo/app/utils/date_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
@@ -54,6 +55,11 @@ abstract class _ReportDreamWeekStoreBase with Store {
       List<StatusDreamPeriod> listStatusPeriod = [];
       RegisterUserStore _registerUserStore = Modular.get<RegisterUserStore>();
 
+      if(listDreamResult.isEmpty) {
+        SystemNavigator.pop();
+        return;
+      }
+
       for (Dream dream in listDreamResult) {
 
         if(dream.isDreamWait == true){
@@ -72,7 +78,12 @@ abstract class _ReportDreamWeekStoreBase with Store {
            _reportDreamCase.saveStatusDreamWithMonth(period);
         }
       }
-      
+
+      if(listStatusPeriod.isEmpty) {
+        SystemNavigator.pop();
+        return;
+      }
+
       listStatusDreamPeriod = ObservableList.of(listStatusPeriod);
 
     }

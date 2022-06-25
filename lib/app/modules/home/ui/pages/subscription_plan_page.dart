@@ -289,7 +289,7 @@ class _SubscriptionPlanPageState extends ModularState<SubscriptionPlanPage, Subs
             name: "Restaurar compra anterior",
             size: 250,
             fontSize: 14,
-            icon: FontAwesomeIcons.history,
+            icon: FontAwesomeIcons.clockRotateLeft,
             onTap: () {
               store.restorePurchase();
             }),
