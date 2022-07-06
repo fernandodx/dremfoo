@@ -60,7 +60,7 @@ class ChartWeekWidget extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 8, top: 25, bottom: 16),
+                  padding: const EdgeInsets.only(left: 16, right: 8, top: 25, bottom: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -71,11 +71,8 @@ class ChartWeekWidget extends StatelessWidget {
                       SpaceWidget(),
                       SpaceWidget(),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: BarChart(
-                            mainBarData,
-                          ),
+                        child: BarChart(
+                          mainBarData,
                         ),
                       ),
                     ],
@@ -168,12 +165,12 @@ class ChartWeekWidget extends StatelessWidget {
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 16,
+          reservedSize: 19,
           getTitlesWidget: (double value, TitleMeta meta) {
             const style = TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 8,
             );
             Widget text;
             switch (value.toInt()) {
@@ -204,7 +201,6 @@ class ChartWeekWidget extends StatelessWidget {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 16,
               child: text,
             );
           }
@@ -216,12 +212,12 @@ class ChartWeekWidget extends StatelessWidget {
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 16,
+          reservedSize: 19,
           getTitlesWidget: (double value, TitleMeta meta) {
             const style = TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 8,
             );
             Widget text;
             switch (value.toInt()) {
@@ -267,7 +263,6 @@ class ChartWeekWidget extends StatelessWidget {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 16,
               child: text,
             );
           }

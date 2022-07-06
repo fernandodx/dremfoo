@@ -71,12 +71,12 @@ class ChartGoals {
     return AxisTitles(
       sideTitles: SideTitles(
         showTitles: true,
-        reservedSize: 16,
+        reservedSize: 19,
         getTitlesWidget: (double value, TitleMeta meta) {
           const style = TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: 8,
           );
           Widget text;
           switch (value.toInt()) {
@@ -107,7 +107,6 @@ class ChartGoals {
           }
           return SideTitleWidget(
             axisSide: meta.axisSide,
-            space: 16,
             child: text,
           );
         }
@@ -119,12 +118,12 @@ class ChartGoals {
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 16,
+          reservedSize: 19,
           getTitlesWidget: (double value, TitleMeta meta) {
             const style = TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 8,
             );
             Widget text;
             switch (value.toInt()) {
@@ -152,7 +151,6 @@ class ChartGoals {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 16,
               child: text,
             );
           }
@@ -344,12 +342,12 @@ class ChartGoals {
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 16,
+          reservedSize: 19,
           getTitlesWidget: (double value, TitleMeta meta) {
             const style = TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 8,
             );
             Widget text;
             switch (value.toInt()) {
@@ -395,7 +393,6 @@ class ChartGoals {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 16,
               child: text,
             );
           }
@@ -407,12 +404,12 @@ class ChartGoals {
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 16,
+          reservedSize: 19,
           getTitlesWidget: (double value, TitleMeta meta) {
             const style = TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 8,
             );
             Widget text;
             switch (value.toInt()) {
@@ -440,7 +437,6 @@ class ChartGoals {
             }
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 16,
               child: text,
             );
           }
@@ -505,11 +501,12 @@ class ChartGoals {
                         rightTitles: AxisTitles(
                           sideTitles: SideTitles(
                               showTitles: true,
+                              reservedSize: 19,
                               getTitlesWidget:  (double value, TitleMeta meta) {
                                 const style = TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 8,
                                 );
                                 Widget text;
 
@@ -520,7 +517,6 @@ class ChartGoals {
                                 }
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
-                                  space: 16,
                                   child: text,
                                 );
                               }
@@ -630,12 +626,13 @@ class ChartGoals {
                         show: true,
                         rightTitles: AxisTitles(
                           sideTitles: SideTitles(
+                            reservedSize: 19,
                               showTitles: true,
                               getTitlesWidget:  (double value, TitleMeta meta) {
                                 const style = TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 8,
                                 );
                                 Widget text;
 
@@ -646,7 +643,6 @@ class ChartGoals {
                                 }
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
-                                  space: 16,
                                   child: text,
                                 );
                               }
